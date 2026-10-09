@@ -60,7 +60,7 @@ export function notifyHouseRentReminder(player: Player): void {
     );
     player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用。");
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -97,7 +97,7 @@ async function runRentForfeiture(source: "startup" | "midnight"): Promise<void> 
     houseIds = await forfeitExpiredHouses();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] аренда домов (${source}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 房屋租赁 (${source}): ${message}`);
     return;
   }
 
@@ -105,7 +105,7 @@ async function runRentForfeiture(source: "startup" | "midnight"): Promise<void> 
     return;
   }
 
-  omp.log(`[${SERVER_TAG}] аренда домов (${source}): изъято ${houseIds.length}`);
+  omp.log(`[${SERVER_TAG}] 房屋租赁 (${source}): 已收回 ${houseIds.length}`);
 
   for (const houseId of houseIds) {
     applyForfeitedHouse(houseId);
@@ -119,15 +119,15 @@ type VacateHouseMessages = {
 
 export function applyForfeitedHouse(houseId: number): void {
   applyHouseVacated(houseId, {
-    insideMessage: `Дом №${houseId} изъят государством за неуплату.`,
-    ownerMessage: `Дом №${houseId} изъят государством за неуплату. Компенсация не выплачивается.`,
+    insideMessage: `房屋编号 ${houseId} 因未付款被政府收回。`,
+    ownerMessage: `房屋编号 ${houseId} 因未付款被政府收回，不予赔偿。`,
   });
 }
 
 export function applyAdminVacatedHouse(houseId: number): void {
   applyHouseVacated(houseId, {
-    insideMessage: `Дом №${houseId} освобождён администрацией.`,
-    ownerMessage: `Ваш дом №${houseId} продан государству администратором.`,
+    insideMessage: `房屋编号 ${houseId} 已由管理员清空。`,
+    ownerMessage: `您的房屋编号 ${houseId} 已由管理员出售给政府。`,
   });
 }
 
@@ -192,7 +192,7 @@ function evictPlayersFromHouse(
       refreshStreamForPlayer(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
   });
 }
@@ -216,7 +216,7 @@ function notifyHouseOwner(ownerId: number, houseId: number, message: string): vo
     try {
       player.sendClientMessage(Color.error, message);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
   });
 }

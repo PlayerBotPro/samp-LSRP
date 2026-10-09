@@ -54,9 +54,9 @@ export function showHouseRentMenu(player: Player): void {
         player,
         BANK_HOUSE_RENT_EMPTY_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
-        "Оплата дома",
-        "У вас нет дома.",
-        "Назад",
+        "房屋付款",
+        "您没有房屋。",
+        "返回",
         ""
       );
     } catch {
@@ -67,15 +67,15 @@ export function showHouseRentMenu(player: Player): void {
 
   const daily = dailyHouseRent(house.price);
   const lines = [
-    `Дом №${house.id} (${houseClassLabel(house.classId)})`,
-    `Оплачено до: ${formatRentDate(house.rentPaidUntil)}`,
-    `Ежедневная плата: ${formatMoney(daily)}`,
+    `房屋编号 ${house.id}（${houseClassLabel(house.classId)}）`,
+    `已付款至：${formatRentDate(house.rentPaidUntil)}`,
+    `每日费用：${formatMoney(daily)}`,
   ];
 
   if (isRentLastDay(house)) {
     lines.push("");
-    lines.push("Сегодня последний оплаченный день.");
-    lines.push("Завтра в 00:00 дом будет изъят, если не оплатите.");
+    lines.push("今天是已付款的最后一天。");
+    lines.push("若未付款，房屋将于明日 00:00 被收回。");
   }
 
   try {
@@ -83,10 +83,10 @@ export function showHouseRentMenu(player: Player): void {
       player,
       BANK_HOUSE_RENT_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Оплата дома",
+      "房屋付款",
       lines.join("\n"),
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开房屋付款页面。");
@@ -108,11 +108,11 @@ function showDaysInputDialog(player: Player): void {
   const daily = dailyHouseRent(house.price);
   const bank = Math.max(0, Math.floor(account.bank));
   const body = [
-    `Дом №${house.id}`,
-    `Ежедневная плата: ${formatMoney(daily)}`,
-    `Банковский счёт: ${formatMoney(bank)}`,
+    `房屋编号 ${house.id}`,
+    `每日费用：${formatMoney(daily)}`,
+    `银行账户：${formatMoney(bank)}`,
     "",
-    "Введите количество дней:",
+    "请输入天数：",
   ].join("\n");
 
   try {
@@ -120,10 +120,10 @@ function showDaysInputDialog(player: Player): void {
       player,
       BANK_HOUSE_RENT_DAYS_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Оплата дома",
+      "房屋付款",
       body,
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开天数输入页面。");
@@ -207,16 +207,16 @@ export function handleHouseRentDialog(
         player,
         BANK_HOUSE_RENT_CONFIRM_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
-        "Подтверждение",
+        "确认",
         [
-          `Дом №${house.id}`,
-          `Оплата: ${days} ${dayLabel(days)} — ${formatMoney(amount)}`,
-          `Новая дата оплаты: ${formatRentDate(paidUntil)}`,
+          `房屋编号 ${house.id}`,
+          `付款： ${days} ${dayLabel(days)} — ${formatMoney(amount)}`,
+          `新的付款日期：${formatRentDate(paidUntil)}`,
           "",
-          "Списание с банковского счёта.",
+          "将从银行账户扣款。",
         ].join("\n"),
-        "Оплатить",
-        "Назад"
+        "付款",
+        "返回"
       );
     } catch {
       clearHouseRentPending(player);
@@ -266,7 +266,7 @@ async function confirmHouseRent(player: Player): Promise<void> {
   } catch (error: unknown) {
     payingRent.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] оплата дома ${house.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 房屋付款 ${house.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
   }
@@ -301,7 +301,7 @@ async function confirmHouseRent(player: Player): Promise<void> {
 
   void saveUserMoney(account.id, account.money, result.bankLeft).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить банк ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存银行余额 ${account.name}: ${message}`);
   });
 
   player.sendClientMessage(
@@ -332,10 +332,10 @@ function dayLabel(days: number): string {
   const mod10 = days % 10;
   const mod100 = days % 100;
   if (mod10 === 1 && mod100 !== 11) {
-    return "день";
+    return "天";
   }
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
-    return "дня";
+    return "天";
   }
-  return "дней";
+  return "天";
 }

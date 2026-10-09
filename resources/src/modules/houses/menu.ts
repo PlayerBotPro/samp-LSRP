@@ -100,9 +100,9 @@ export function showHouseMenu(player: Player): void {
   }
 
   const items = [
-    `Статус (${houseLockStatusLabel(house.isLocked)})`,
-    "Аптечка",
-    "Информация",
+    `状态（${houseLockStatusLabel(house.isLocked)}）`,
+    "急救箱",
+    "信息",
   ];
 
   try {
@@ -110,10 +110,10 @@ export function showHouseMenu(player: Player): void {
       player,
       HOUSE_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `${MENU_TITLE}Меню дома`,
+      `${MENU_TITLE}房屋菜单`,
       items.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开房屋菜单。");
@@ -144,7 +144,7 @@ async function toggleHouseLock(player: Player, houseId: number): Promise<void> {
     saved = await saveHouseLock(houseId, account.id, nextLocked);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] замок дома ${houseId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 房屋门锁 ${houseId} (${account.name}): ${message}`);
   } finally {
     savingLock.delete(account.id);
   }
@@ -239,7 +239,7 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
   } catch (error: unknown) {
     buyingMedkit.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] аптечка дома ${houseId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 房屋急救箱 ${houseId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
@@ -272,7 +272,7 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить деньги ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存金钱 ${account.name}: ${message}`);
   });
 
   player.sendClientMessage(Color.info, `已购买急救包，花费 ${formatMoney(MEDKIT_PRICE)}.`);
@@ -287,9 +287,9 @@ function showHouseInfoDialog(player: Player, house: ReturnType<typeof findOwnedH
   const daysLeft = rentDaysRemaining(house.rentPaidUntil);
   const rentLines = buildRentInfoLines(house.rentPaidUntil, daysLeft);
   const body = [
-    `${MENU_LABEL}Номер дома:\t\t${MENU_VALUE}${house.id}`,
-    `${MENU_LABEL}Класс:\t\t\t${MENU_VALUE}${houseClassLabel(house.classId)}`,
-    `${MENU_LABEL}Гос. стоимость:\t${MENU_VALUE}${formatMoney(house.price)}`,
+    `${MENU_LABEL}房屋编号：\t\t${MENU_VALUE}${house.id}`,
+    `${MENU_LABEL}等级：\t\t\t${MENU_VALUE}${houseClassLabel(house.classId)}`,
+    `${MENU_LABEL}政府价格：\t${MENU_VALUE}${formatMoney(house.price)}`,
     ...rentLines,
   ].join("\n");
 
@@ -298,9 +298,9 @@ function showHouseInfoDialog(player: Player, house: ReturnType<typeof findOwnedH
       player,
       HOUSE_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${MENU_TITLE}Информация о доме`,
+      `${MENU_TITLE}房屋信息`,
       body,
-      "Назад",
+      "返回",
       ""
     );
   } catch {
@@ -313,11 +313,11 @@ function buildRentInfoLines(
   daysLeft: number | null
 ): string[] {
   if (rentPaidUntil === null) {
-    return [`${MENU_LABEL}Оплата:\t\t${MENU_VALUE}не оплачен`];
+    return [`${MENU_LABEL}付款：\t\t${MENU_VALUE}未付款`];
   }
 
   const lines = [
-    `${MENU_LABEL}Оплачено до:\t\t${MENU_VALUE}${formatRentDate(rentPaidUntil)}`,
+    `${MENU_LABEL}已付款至：\t\t${MENU_VALUE}${formatRentDate(rentPaidUntil)}`,
   ];
 
   if (daysLeft === null) {
@@ -325,12 +325,12 @@ function buildRentInfoLines(
   }
 
   if (daysLeft === 0) {
-    lines.push(`${MENU_LABEL}Срок:\t\t\t${MENU_VALUE}сегодня последний день`);
+    lines.push(`${MENU_LABEL}期限：\t\t\t${MENU_VALUE}今天是最后一天`);
     return lines;
   }
 
   lines.push(
-    `${MENU_LABEL}Осталось:\t\t${MENU_VALUE}${daysLeft} ${rentDaysLeftLabel(daysLeft)}`
+    `${MENU_LABEL}剩余：\t\t${MENU_VALUE}${daysLeft} ${rentDaysLeftLabel(daysLeft)}`
   );
   return lines;
 }

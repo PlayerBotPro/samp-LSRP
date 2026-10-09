@@ -43,10 +43,10 @@ type PendingTransfer = {
 };
 
 const ITEM_LABEL: Record<StockItem, string> = {
-  ammo: "патроны",
-  metal: "металл",
-  drugs: "наркотики",
-  money: "деньги",
+  ammo: "弹药",
+  metal: "金属",
+  drugs: "毒品",
+  money: "金钱",
 };
 
 const pendingByPlayer = new Map<number, PendingTransfer>();
@@ -92,12 +92,12 @@ export function bindHouseStoreDialogs(): void {
   });
 }
 
-/** Вызывается при изъятии/продаже дома. */
+/** 在房屋被收回或出售时调用。 */
 export function onHouseStoreVacated(houseId: number): void {
   removeHouseStoreLabel(houseId);
 }
 
-/** Открыть меню шкафа (/use). */
+/** 打开储物柜菜单（/use）。 */
 export function tryOpenHouseStore(player: Player): void {
   if (!isAuthenticated(player)) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -151,14 +151,14 @@ function showMenu(player: Player, houseId: number): void {
   }
 
   const body = [
-    "Положить патроны",
-    "Положить металл",
-    "Положить наркотики",
-    "Положить деньги",
-    `${LIME}Взять патроны`,
-    `${LIME}Взять металл`,
-    `${LIME}Взять наркотики`,
-    `${LIME}Взять деньги`,
+    "存入弹药",
+    "存入金属",
+    "存入毒品",
+    "存入金钱",
+    `${LIME}取出弹药`,
+    `${LIME}取出金属`,
+    `${LIME}取出毒品`,
+    `${LIME}取出金钱`,
   ].join("\n");
 
   try {
@@ -167,10 +167,10 @@ function showMenu(player: Player, houseId: number): void {
       player,
       HOUSE_STORE_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Шкаф дома №${houseId}`,
+      `房屋编号 ${houseId} 的储物柜`,
       body,
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     setDialogBusy(player, false);
@@ -242,14 +242,14 @@ function showAmountDialog(
   }
 
   pendingByPlayer.set(id, { houseId, action, item });
-  const verb = action === "put" ? "положить в шкаф" : "взять из шкафа";
+  const verb = action === "put" ? "存入储物柜" : "从储物柜取出";
   const maxTransfer = item === "money" ? MAX_MONEY_TRANSFER : MAX_TRANSFER;
 
   let playerHaveText: string;
   let stockHaveText: string;
   if (item === "money") {
-    playerHaveText = `У вас: ${formatMoney(account.money)}`;
-    stockHaveText = `В шкафу: ${formatMoney(house.storeMoney)}`;
+    playerHaveText = `您有： ${formatMoney(account.money)}`;
+    stockHaveText = `储物柜中： ${formatMoney(house.storeMoney)}`;
   } else {
     const playerHave =
       item === "ammo" ? account.ammo : item === "metal" ? account.metal : account.drugs;
@@ -259,8 +259,8 @@ function showAmountDialog(
         : item === "metal"
           ? house.storeMetal
           : house.storeDrugs;
-    playerHaveText = `У вас: ${playerHave} шт.`;
-    stockHaveText = `В шкафу: ${stockHave} шт.`;
+    playerHaveText = `您有： ${playerHave} 件`;
+    stockHaveText = `储物柜中： ${stockHave} 件`;
   }
 
   try {
@@ -332,7 +332,7 @@ async function onAmountResponse(
   }
 
   if (id !== null && transferBusy.has(id)) {
-    // Не оставляем dialogBusy=true навечно (pending ещё жив).
+    // 不要让 dialogBusy=true 一直保持（pending 仍在进行）。
     setDialogBusy(player, false);
     player.sendClientMessage(Color.error, "请等待操作完成。");
     return;
@@ -406,7 +406,7 @@ async function applyPut(
       return;
     }
 
-    // Дом могли изъять между saveUserMoney и add.
+    // 房屋可能在 saveUserMoney 和 add 之间被收回。
     if (!assertStoreOwner(player, houseId)) {
       await saveUserMoney(account.id, account.money, account.bank).catch(() => undefined);
       if (isPlayerActive(player) && getAccount(player)?.id === account.id) {

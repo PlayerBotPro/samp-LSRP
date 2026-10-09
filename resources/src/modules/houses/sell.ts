@@ -99,7 +99,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
   } catch (error: unknown) {
     selling.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] продажа дома ${house.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 出售房屋 ${house.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
@@ -114,7 +114,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
     return;
   }
 
-  // БД уже продала дом — кэш/лейбл/шкаф чистим всегда (даже если игрок отошёл).
+  // 数据库已出售房屋，始终清理缓存/标签/储物柜（即使玩家已离开）。
   const cleared = clearHouseForSale(house.id);
   updateEntrancePickup(house.id);
   refreshAllHouseMapIcons();
@@ -146,7 +146,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить деньги ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存金钱 ${account.name}: ${message}`);
   });
 
   const sold = getHouse(house.id);

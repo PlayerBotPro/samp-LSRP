@@ -58,7 +58,7 @@ export function updateEntrancePickup(houseId: number): void {
     try {
       current.destroy();
     } catch {
-      // Пикап уже уничтожен.
+      // 拾取物已销毁。
     }
   }
 
@@ -165,7 +165,7 @@ function tickHouseEntrances(): void {
       pendingEnterHouse.set(id, house.id);
       showOccupiedHouseDialog(player, house);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 位置为空或玩家已离开。
     }
   });
 }
@@ -189,13 +189,13 @@ function findHouseAt(x: number, y: number, z: number): HouseRecord | null {
 
 function showFreeHouseDialog(player: Player, house: HouseRecord): void {
   const body = [
-    `${LABEL}Тип:\t\t\t${VALUE}${houseClassLabel(house.classId)}`,
-    `${LABEL}Номер дома:\t\t${VALUE}${house.id}`,
-    `${LABEL}Стоимость:\t\t${VALUE}${formatMoney(house.price)}`,
-    `${LABEL}Аренда:\t\t${VALUE}${formatMoney(dailyHouseRent(house.price))}/день`,
+    `${LABEL}类型：\t\t\t${VALUE}${houseClassLabel(house.classId)}`,
+    `${LABEL}房屋编号：\t\t${VALUE}${house.id}`,
+    `${LABEL}价格：\t\t${VALUE}${formatMoney(house.price)}`,
+    `${LABEL}租金：\t\t${VALUE}${formatMoney(dailyHouseRent(house.price))}/天`,
     "",
-    `${LABEL}При покупке дом оплачен на сегодня.`,
-    `${LABEL}Продление — в банке.`,
+    `${LABEL}购买房屋后，当天租金已付。`,
+    `${LABEL}可在银行续费。`,
   ].join("\n");
 
   try {
@@ -203,10 +203,10 @@ function showFreeHouseDialog(player: Player, house: HouseRecord): void {
       player,
       HOUSE_BUY_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${FREE_TITLE}Дом свободен`,
+      `${FREE_TITLE}空置房屋`,
       body,
-      "Купить",
-      "Закрыть"
+      "购买",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开房屋窗口。");
@@ -214,13 +214,13 @@ function showFreeHouseDialog(player: Player, house: HouseRecord): void {
 }
 
 function showOccupiedHouseDialog(player: Player, house: HouseRecord): void {
-  const owner = house.ownerName ?? "Неизвестно";
+  const owner = house.ownerName ?? "未知";
   const body = [
-    `${LABEL}Владелец:\t\t${OWNER_VALUE}${owner}`,
-    `${LABEL}Тип:\t\t\t${VALUE}${houseClassLabel(house.classId)}`,
-    `${LABEL}Номер дома:\t\t${VALUE}${house.id}`,
-    `${LABEL}Стоимость:\t\t${VALUE}${formatMoney(house.price)}`,
-    `${LABEL}Статус:\t\t${VALUE}${houseLockStatusLabel(house.isLocked)}`,
+    `${LABEL}房主：\t\t${OWNER_VALUE}${owner}`,
+    `${LABEL}类型：\t\t\t${VALUE}${houseClassLabel(house.classId)}`,
+    `${LABEL}房屋编号：\t\t${VALUE}${house.id}`,
+    `${LABEL}价格：\t\t${VALUE}${formatMoney(house.price)}`,
+    `${LABEL}状态：\t\t${VALUE}${houseLockStatusLabel(house.isLocked)}`,
   ].join("\n");
 
   try {
@@ -228,10 +228,10 @@ function showOccupiedHouseDialog(player: Player, house: HouseRecord): void {
       player,
       HOUSE_ENTER_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${OCCUPIED_TITLE}Дом занят`,
+      `${OCCUPIED_TITLE}有人居住的房屋`,
       body,
-      "Войти",
-      "Отмена"
+      "进入",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开房屋窗口。");

@@ -13,14 +13,14 @@ import { setInsideHouse } from "./session";
 import { houseVirtualWorld } from "./world";
 
 export function houseLockStatusLabel(isLocked: boolean): string {
-  return isLocked ? "Закрыт" : "Открыт";
+  return isLocked ? "已上锁" : "未上锁";
 }
 
 export function isHouseOwner(userId: number, house: HouseRecord): boolean {
   return house.ownerId === userId;
 }
 
-/** Владелец и law (LSPD / обл. полиция / FBI) — всегда; гости — только если открыт. */
+/** 房主和执法部门（LSPD / 地区警察 / FBI）始终可以进入；访客仅在房屋未上锁时可进入。 */
 export function canEnterHouse(player: Player, house: HouseRecord): boolean {
   if (house.ownerId === null) {
     return false;

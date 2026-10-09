@@ -77,7 +77,7 @@ export type HouseRecord = {
   isLocked: boolean;
   classId: number;
   rentPaidUntil: string | null;
-  /** null — шкаф ещё не установлен. */
+  /** null — 储物柜尚未安装。 */
   storeX: number | null;
   storeY: number | null;
   storeZ: number | null;
@@ -263,7 +263,7 @@ export async function saveHouseStorePosition(
   return result.affectedRows === 1;
 }
 
-/** Потолок содержимого шкафа (INT UNSIGNED / safe JS). */
+/** 储物柜内容上限（INT UNSIGNED / JavaScript 安全值）。 */
 const MAX_STORE_AMOUNT = 2_147_483_647;
 
 export async function addHouseStoreItem(
@@ -278,7 +278,7 @@ export async function addHouseStoreItem(
   }
 
   const column = storeColumn(item);
-  // Не даём переполнить INT: только если column + value помещается.
+  // 避免 INT 溢出：仅当 column + value 不超出范围时才执行。
   const result = await execute(
     `UPDATE houses
      SET ${column} = ${column} + ?
@@ -295,7 +295,7 @@ export async function addHouseStoreItem(
     return readStoreItem(house, item);
   }
 
-  // БД уже обновлена — не откатываем вызывающему «null» как полный fail.
+  // 数据库已更新，不将「null」回滚并视为完全失败。
   return value;
 }
 
@@ -722,7 +722,7 @@ export async function forfeitExpiredHouses(): Promise<number[]> {
     return forfeited;
   } catch {
     await conn.rollback();
-    throw new Error("не удалось изъять просроченные дома");
+    throw new Error("无法收回逾期房屋");
   } finally {
     conn.release();
   }
@@ -792,7 +792,7 @@ async function migrateHousesTable(): Promise<void> {
         "ALTER TABLE houses ADD UNIQUE KEY uq_houses_owner_id (owner_id)"
       );
     } catch {
-      // Уже есть дубликаты owner_id — индекс добавит админ вручную.
+      // owner_id 已存在重复值，管理员将手动添加索引。
     }
   }
 }
@@ -830,12 +830,12 @@ async function seedHouses(): Promise<void> {
 function loadHousesSeedSql(): string {
   const seedPath = join(process.cwd(), "sql", "houses_seed.sql");
   if (!existsSync(seedPath)) {
-    throw new Error("sql/houses_seed.sql не найден");
+    throw new Error("未找到 sql/houses_seed.sql");
   }
 
   const sql = readFileSync(seedPath, "utf8").trim();
   if (!sql.toUpperCase().startsWith("INSERT INTO HOUSES")) {
-    throw new Error("seed houses повреждён");
+    throw new Error("houses seed 数据已损坏");
   }
 
   return sql;

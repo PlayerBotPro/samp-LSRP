@@ -5,7 +5,7 @@ import { STREET_WORLD } from "../spawn/point";
 import type { HouseRecord } from "./repository";
 import { listHouses } from "./repository";
 
-/** Слоты 50–99 заняты маркерами бизнесов. */
+/** 位置 50–99 已由商店标记占用。 */
 const MAP_ICON_SLOT_MIN = 11;
 const MAP_ICON_SLOT_MAX = 49;
 const ICON_FOR_SALE = 31;
@@ -78,7 +78,7 @@ export function refreshHouseMapIcons(player: Player): void {
     const interior = player.getInterior();
     updatePlayerIcons(player, id, pos.x, pos.y, world, interior);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -104,7 +104,7 @@ function tickHouseIcons(): void {
       const interior = player.getInterior();
       updatePlayerIcons(player, id, pos.x, pos.y, world, interior, houses);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 位置为空或玩家已离开。
     }
   });
 }
@@ -206,7 +206,7 @@ function showHouseIcon(
       MAPICON_LOCAL
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -219,7 +219,7 @@ function hideHouseIcon(
   try {
     player.removeMapIcon(slot);
   } catch {
-    // Иконки не было.
+    // 图标不存在。
   }
 
   state.active.delete(houseId);

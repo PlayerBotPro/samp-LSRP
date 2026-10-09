@@ -1,12 +1,12 @@
 const HOUSE_CLASS_LABELS: Readonly<Record<number, string>> = {
-  0: "Эконом",
-  1: "Средний",
-  2: "Стандарт",
-  3: "Комфорт",
-  4: "Премиум",
-  5: "Элитный",
+  0: "经济型",
+  1: "中档",
+  2: "标准型",
+  3: "舒适型",
+  4: "高级型",
+  5: "豪华型",
 };
 
 export function houseClassLabel(classId: number): string {
-  return HOUSE_CLASS_LABELS[classId] ?? `Класс ${classId}`;
+  return HOUSE_CLASS_LABELS[classId] ?? `等级 ${classId}`;
 }
