@@ -1028,7 +1028,7 @@ SetDynamicObjectMaterial(cityhall, 0, 18202, "w_towncs_t", "hatwall256hi", 0);
 cityhall = CreateDynamicObject(19174, -813.916016, -685.140015, 4004.620117, 0.000000, 0.000000, 90.000000, -1, -1, -1, 300.00, 300.00);
 SetDynamicObjectMaterial(cityhall, 0, 15034, "genhotelsave", "AH_windows", 0);
 cityhall = CreateDynamicObject(19479, -776.362976, -694.854980, 4001.667969, 0.000000, 0.000000, 90.399002, -1, -1, -1, 300.00, 300.00);
-SetDynamicObjectMaterialText(cityhall, 0, "ы", 130, "Webdings", 125, 0, 0xFFFFFFFF, 0, 1);
+SetDynamicObjectMaterialText(cityhall, 0, "会议", 130, "Microsoft YaHei", 125, 0, 0xFFFFFFFF, 0, 1);
 cityhall = CreateDynamicObject(1715, -774.268005, -693.906006, 4000.263916, 0.000000, 0.000000, 180.000000, -1, -1, -1, 300.00, 300.00);
 SetDynamicObjectMaterial(cityhall, 0, 2423, "cj_ff_counters", "CJ_Laminate1", 0);
 cityhall = CreateDynamicObject(19479, -776.362976, -694.864990, 4003.209961, 0.000000, 0.000000, 90.099998, -1, -1, -1, 300.00, 300.00);

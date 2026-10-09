@@ -16,7 +16,7 @@ SetDynamicObjectMaterial(hospital, 0, 1426, "break_scaffold", "CJ_BLUE_WOOD", 0x
 hospital = CreateDynamicObject(19482, 1166.697021, -1330.951050, 4000.645996, 0.000000, 0.000000, 0.000000);
 SetDynamicObjectMaterialText(hospital, 0, "挂号处", 130, "Microsoft YaHei", 35, 0, 0xff191970, 0x00000000, 1);
 hospital = CreateDynamicObject(19475, 1166.376953, -1330.010010, 4001.493896, 0.000000, 13.100000, 29.700001);
-SetDynamicObjectMaterialText(hospital, 0, "я", 100, "Wingdings", 199, 0, 0xff191970, 0x00000000, 1);
+SetDynamicObjectMaterialText(hospital, 0, "医疗", 100, "Microsoft YaHei", 199, 0, 0xff191970, 0x00000000, 1);
 hospital = CreateDynamicObject(19610, 1166.373047, -1329.987061, 4001.157959, 281.937988, 0.000000, 300.000000);
 hospital = CreateDynamicObject(19309, 1166.375000, -1329.984009, 4000.996094, 0.000000, 0.000000, 30.000000);
 hospital = CreateDynamicObject(19808, 1166.218994, -1330.442993, 4001.131104, 0.000000, 0.000000, 280.000000);
