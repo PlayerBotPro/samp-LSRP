@@ -29,7 +29,7 @@ const BED_USE_RADIUS = 2;
 const TICK_MS = 200;
 const HEAL_MS = 4500;
 const HEAL_AMOUNT = 10;
-/** Звук тика лечения (PlayerPlaySound). */
+/** 治疗周期音效（PlayerPlaySound）。 */
 const HEAL_SOUND_ID = 17803;
 const HOSPITAL_MAP_ICON_SLOT = 0;
 const HOSPITAL_MAP_ICON_TYPE = 22;
@@ -77,7 +77,7 @@ const FROM_INTERIOR: SpawnPoint = {
   world: STREET_WORLD,
 };
 
-/** Холл приёмного → служебный блок (кадры, оперблок, руководство…). */
+/** 接待大厅 → 医院内部区域（病房、手术室、管理办公室等）。 */
 const HALL_TO_SERVICE_PICKUP = {
   x: 1165.1902,
   y: -1322.7876,
@@ -93,7 +93,7 @@ const TO_SERVICE_BLOCK: SpawnPoint = {
   world: HOSPITAL_WORLD,
 };
 
-/** Служебный блок → холл приёмного. */
+/** 医院内部区域 → 接待大厅。 */
 const SERVICE_TO_HALL_PICKUP = {
   x: 1151.0732,
   y: -1366.5275,
@@ -134,9 +134,9 @@ const BEDS: readonly SpawnPoint[] = [
 const lastTeleportAt = new Map<number, number>();
 const lastExitMsgAt = new Map<number, number>();
 const iconShown = new Set<number>();
-/** Слот → индекс койки (пока лежит на ней). */
+/** 玩家槽位 → 病床索引（玩家躺在床上时）。 */
 const bedByPlayer = new Map<number, number>();
-/** Слоты, начавшие лечение через /hospital — ходят по интерьеру, пока hospitalized. */
+/** 通过 /hospital 开始治疗的玩家槽位；住院期间可以在室内走动。 */
 const treatingPlayers = new Set<number>();
 const occupantByBed: Array<number | null> = BEDS.map(() => null);
 const bedLabels: BedLabelSet[] = [];
@@ -162,8 +162,8 @@ export const hospitalModule: GameModule = {
       HOSPITAL_WORLD
     );
 
-    createPickupLabel(STREET_PICKUP, STREET_WORLD, "Городская больница\nВход");
-    createPickupLabel(INTERIOR_PICKUP, HOSPITAL_WORLD, "Выход на улицу");
+    createPickupLabel(STREET_PICKUP, STREET_WORLD, "城市医院\n入口");
+    createPickupLabel(INTERIOR_PICKUP, HOSPITAL_WORLD, "出口（街道）");
 
     new Pickup(
       PICKUP_MODEL,
@@ -181,8 +181,8 @@ export const hospitalModule: GameModule = {
       SERVICE_TO_HALL_PICKUP.z,
       HOSPITAL_WORLD
     );
-    createPickupLabel(HALL_TO_SERVICE_PICKUP, HOSPITAL_WORLD, "Служебный блок\nВход");
-    createPickupLabel(SERVICE_TO_HALL_PICKUP, HOSPITAL_WORLD, "Приёмный холл\nВыход");
+    createPickupLabel(HALL_TO_SERVICE_PICKUP, HOSPITAL_WORLD, "医院内部区域\n入口");
+    createPickupLabel(SERVICE_TO_HALL_PICKUP, HOSPITAL_WORLD, "接待大厅\n出口");
 
     for (let i = 0; i < BEDS.length; i++) {
       const bed = BEDS[i];
@@ -204,7 +204,7 @@ export const hospitalModule: GameModule = {
       clearHospitalSlot(player);
     });
 
-    // Смерть сбрасывает сессию койки — после респавна снова нужен /hospital.
+    // 死亡会重置病床会话，重生后需要再次使用 /hospital。
     omp.on("playerDeath", (player) => {
       clearHospitalSlot(player);
     });
@@ -212,8 +212,8 @@ export const hospitalModule: GameModule = {
 };
 
 /**
- * Снять hospitalized после внешнего полного лечения (/medhelp и т.п.).
- * Иначе пациент с 100 HP остаётся заперт в интерьере.
+ * 通过外部方式完全治愈后（例如 /medhelp）清除住院状态。
+ * 否则生命值已满的患者仍会被困在医院内部。
  */
 export function dischargeHospitalPatient(player: Player): void {
   const id = playerId(player);
@@ -294,7 +294,7 @@ export function tryOccupyHospitalBed(player: Player): void {
     if (dist <= nearestBusyDist) {
       nearestBusyDist = dist;
       const other = getAccountBySlot(occupant);
-      nearestBusyName = other?.name ?? "Игрок";
+      nearestBusyName = other?.name ?? "玩家";
     }
   }
 
@@ -433,7 +433,7 @@ function updateBedLabel(index: number): void {
   }
 
   const occupant = occupantByBed[index];
-  const name = occupant === null ? null : getAccountBySlot(occupant)?.name ?? "Игрок";
+  const name = occupant === null ? null : getAccountBySlot(occupant)?.name ?? "玩家";
 
   try {
     if (name) {
@@ -444,7 +444,7 @@ function updateBedLabel(index: number): void {
       labels.hint.updateText(Color.gray, "/hospital");
     }
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已经销毁。
   }
 }
 
@@ -540,7 +540,7 @@ function tickHospital(): void {
         teleport(player, TO_RECEPTION_HALL);
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 玩家槽位为空，或玩家已经离开。
     }
   });
 }
@@ -567,7 +567,7 @@ function healTreatingPatients(): void {
 
     try {
       if (player.getVirtualWorld() !== HOSPITAL_WORLD) {
-        // Выход из VW без улицы (админ и т.п.) — койку освобождаем, лечение на паузе.
+        // 玩家离开虚拟世界但没有前往街道（例如管理员操作）：释放病床并暂停治疗。
         releaseBed(id);
         continue;
       }
@@ -577,7 +577,7 @@ function healTreatingPatients(): void {
       if (bed) {
         const pos = player.getPos();
         if (distance3d(pos.x, pos.y, pos.z, bed.x, bed.y, bed.z) > BED_USE_RADIUS) {
-          // Отошёл от койки — можно ходить по интерьеру, лечение продолжается.
+          // 玩家离开病床后可以在室内走动，治疗继续进行。
           releaseBed(id);
         }
       }
@@ -589,7 +589,7 @@ function healTreatingPatients(): void {
     try {
       live = player.getHealth();
     } catch {
-      // Берём из аккаунта.
+      // 从账号数据中读取。
     }
 
     const next = Math.min(MAX_HEALTH, live + HEAL_AMOUNT);
@@ -605,7 +605,7 @@ function healTreatingPatients(): void {
     try {
       player.playGameSound(HEAL_SOUND_ID, 0, 0, 0);
     } catch {
-      // Слот пустой.
+      // 玩家槽位为空。
     }
 
     if (next >= MAX_HEALTH) {
@@ -673,7 +673,7 @@ function updateHospitalIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已经离开。
     }
     return;
   }
@@ -685,7 +685,7 @@ function updateHospitalIcon(
   try {
     player.removeMapIcon(HOSPITAL_MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
   iconShown.delete(id);
 }
@@ -723,6 +723,6 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }

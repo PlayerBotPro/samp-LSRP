@@ -74,7 +74,7 @@ function spawnDealer(): void {
   actor.setInvulnerable(true);
   dealerActor = actor;
   applyDealerAnimation(actor);
-  // Первый вызов часто только грузит библиотеку — повтор через тик.
+  // 第一次调用通常只会加载动画库，下一帧再试一次。
   setTimeout(() => applyDealerAnimation(actor), 250);
 
   new TextLabel(
@@ -89,13 +89,13 @@ function spawnDealer(): void {
   );
 }
 
-/** У игрока должна быть загружена библиотека DEALER, иначе анимацию актора не видно. */
+/** 玩家必须已加载 DEALER 动画库，否则看不到角色动画。 */
 function preloadDealerLibrary(player: Player): void {
   try {
     player.applyAnimation("DEALER", "DEALER_IDLE", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Слот ещё не готов / библиотека подтянется на стриме.
+    // 玩家槽位尚未就绪，动画库会在流式加载时加载。
   }
 }
 
@@ -104,7 +104,7 @@ function applyDealerAnimation(actor: Actor): void {
     // Actor API: (animName, animLib, ...)
     actor.applyAnimation("DEALER_IDLE", "DEALER", 4.1, true, false, false, false, 0);
   } catch {
-    // Актор ещё не готов.
+    // 角色尚未就绪。
   }
 }
 
@@ -191,9 +191,9 @@ function onInteract(player: Player): void {
 
 function showMenu(player: Player): void {
   const body = [
-    "Товар\tЦена",
-    `Наркотики\t${formatMoney(DRUG_PRICE)} / шт.`,
-    `Форма армии\t${formatMoney(FORM_PRICE)}`,
+    "商品\t价格",
+    `毒品\t${formatMoney(DRUG_PRICE)} / 个`,
+    `军装\t${formatMoney(FORM_PRICE)}`,
   ].join("\n");
 
   try {
@@ -203,8 +203,8 @@ function showMenu(player: Player): void {
       DIALOG_STYLE_TABLIST_HEADERS,
       DEALER_NAME,
       body,
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -268,7 +268,7 @@ function buyArmyForm(player: Player): void {
     return;
   }
 
-  // Сначала форма — иначе при сбое выдачи деньги уже списаны.
+  // 先发放军装，否则发放失败时钱已经扣掉了。
   if (!startArmyDisguise(player)) {
     player.sendClientMessage(Color.error, "无法发放服装。");
     return;
@@ -282,7 +282,7 @@ function buyArmyForm(player: Player): void {
   }
 
   void saveUserMoney(account.id, nextMoney, account.bank).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   player.sendClientMessage(
@@ -379,7 +379,7 @@ function onBuyResponse(player: Player, accepted: boolean, rawInput: string): voi
     saveUserMoney(account.id, nextMoney, account.bank),
     saveUserInventory(account.id, nextDrugs, account.ammo, account.metal),
   ]).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   player.sendClientMessage(

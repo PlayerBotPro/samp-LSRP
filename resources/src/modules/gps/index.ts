@@ -22,9 +22,9 @@ const MAPICON_GLOBAL = 1;
 const ARRIVE_RADIUS = 8;
 const CHECKPOINT_RADIUS = 4;
 const TICK_MS = 200;
-/** Категории в корневом меню. */
+/** 主菜单中的分类。 */
 const C_CAT = "{FFFFFF}";
-/** «Найти ближайший…». */
+/** “寻找最近的……”选项。 */
 const C_NEAR = "{33CCFF}";
 
 type GpsTarget = {
@@ -48,52 +48,52 @@ type GpsCategory = {
 };
 
 const TARGETS = {
-  hall: { key: "hall", label: "Мэрия", x: 1481.1039, y: -1767.4878, z: 18.7958 },
+  hall: { key: "hall", label: "市政厅", x: 1481.1039, y: -1767.4878, z: 18.7958 },
   hospital: {
     key: "hospital",
-    label: "Городская больница",
+    label: "城市医院",
     x: 1177.869,
     y: -1323.4761,
     z: 14.092,
   },
   mine: {
     key: "mine",
-    label: "Шахта",
+    label: "矿场",
     x: 1023.8627,
     y: -368.1405,
     z: 73.8935,
   },
   loader: {
     key: "loader",
-    label: "Склад (грузчик)",
+    label: "仓库（搬运工）",
     x: 2236.532,
     y: -2212.7854,
     z: 13.5469,
   },
   busDriver: {
     key: "busDriver",
-    label: "Водитель автобуса",
+    label: "公交车司机",
     x: 1269.8052,
     y: -1840.6724,
     z: 13.3936,
   },
   station: {
     key: "station",
-    label: "ЖД ЛС",
+    label: "洛圣都火车站",
     x: 1814.2401,
     y: -1889.4424,
     z: 13.4141,
   },
   prison: {
     key: "prison",
-    label: "Тюрьма",
+    label: "监狱",
     x: 1810.8636,
     y: -1576.4412,
     z: 13.5167,
   },
   police: {
     key: "police",
-    label: "Областная полиция",
+    label: "州警局",
     x: 635.6895,
     y: -571.6663,
     z: 16.3359,
@@ -114,14 +114,14 @@ const TARGETS = {
   },
   autoschool: {
     key: "autoschool",
-    label: "Автошкола",
+    label: "驾校",
     x: 738.8304,
     y: -1412.7374,
     z: 13.5284,
   },
   bank: {
     key: "bank",
-    label: "Банк",
+    label: "银行",
     x: 1458.5426,
     y: -1024.3342,
     z: 23.8281,
@@ -142,7 +142,7 @@ const TARGETS = {
   },
   russian_mafia: {
     key: "russian_mafia",
-    label: "Русская мафия",
+    label: "俄罗斯黑手党",
     x: 962.1949,
     y: -946.551,
     z: 40.2929,
@@ -187,12 +187,12 @@ const TARGETS = {
 const CATEGORIES: readonly GpsCategory[] = [
   {
     key: "public",
-    label: "Общественные места",
+    label: "公共场所",
     targets: [TARGETS.station, TARGETS.bank],
   },
   {
     key: "gov",
-    label: "Государственные организации",
+    label: "政府机构",
     targets: [
       TARGETS.hall,
       TARGETS.hospital,
@@ -205,7 +205,7 @@ const CATEGORIES: readonly GpsCategory[] = [
   },
   {
     key: "crime",
-    label: "Банды и мафии",
+    label: "帮派与黑手党",
     targets: [
       TARGETS.lcn,
       TARGETS.yakuza,
@@ -219,36 +219,36 @@ const CATEGORIES: readonly GpsCategory[] = [
   },
   {
     key: "jobs",
-    label: "По работе",
+    label: "工作地点",
     targets: [TARGETS.mine, TARGETS.loader, TARGETS.busDriver],
   },
 ];
 
-/** Только типы бизнесов, которые реально есть в системе. */
+/** 仅包含系统中实际存在的商店类型。 */
 const NEAREST_BIZ: readonly NearestBizItem[] = [
   {
     key: "nearest_gas",
-    label: "Найти ближайшую АЗС",
+    label: "寻找最近的加油站",
     typeIds: [BusinessType.GAS],
   },
   {
     key: "nearest_247",
-    label: "Найти ближайший магазин 24/7",
+    label: "寻找最近的 24/7 便利店",
     typeIds: [BusinessType.SHOP_247],
   },
   {
     key: "nearest_ammu",
-    label: "Найти ближайший магазин оружия",
+    label: "寻找最近的武器店",
     typeIds: [BusinessType.AMMU],
   },
   {
     key: "nearest_rent",
-    label: "Найти ближайший прокат авто",
+    label: "寻找最近的汽车租赁点",
     typeIds: [BusinessType.VEHICLE_RENT],
   },
   {
     key: "nearest_food",
-    label: "Найти ближайшее заведение питания",
+    label: "寻找最近的餐饮店",
     typeIds: [BusinessType.FASTFOOD, BusinessType.STREET_FOOD],
   },
 ];
@@ -260,7 +260,7 @@ type MenuState =
 const activeByPlayer = new Map<number, GpsTarget>();
 const menuState = new Map<number, MenuState>();
 
-/** Сброс метки `/findid*` при установке GPS (без циклического импорта). */
+/** 设置 GPS 时清除 `/findid*` 标记（避免循环导入）。 */
 let clearFindIdMark: ((player: Player) => void) | null = null;
 
 export function setFindIdMarkClearer(
@@ -269,7 +269,7 @@ export function setFindIdMarkClearer(
   clearFindIdMark = clearer;
 }
 
-/** Снять GPS-маршрут (для `/findidhouse` / `/findidbiz`). */
+/** 清除 GPS 路线（用于 `/findidhouse` / `/findidbiz`）。 */
 export function clearGpsRouteForPlayer(player: Player): void {
   const id = playerId(player);
   if (id === null || !activeByPlayer.has(id)) {
@@ -356,8 +356,8 @@ function showMainMenu(player: Player): void {
       DIALOG_STYLE_LIST,
       "GPS",
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     menuState.delete(id);
@@ -384,8 +384,8 @@ function showCategoryMenu(player: Player, category: GpsCategory): void {
       DIALOG_STYLE_LIST,
       category.label,
       lines.join("\n"),
-      "Выбрать",
-      "Назад"
+      "选择",
+      "返回"
     );
   } catch {
     menuState.delete(id);
@@ -511,7 +511,7 @@ function setRoute(player: Player, target: GpsTarget): void {
   try {
     clearFindIdMark?.(player);
   } catch {
-    // Метка findid опциональна.
+    // findid 标记为可选项。
   }
 
   let pos;
@@ -584,7 +584,7 @@ function tickGps(): void {
         Checkpoint.set(player, target.x, target.y, target.z, CHECKPOINT_RADIUS);
       }
     } catch {
-      // Игрок уже вышел.
+      // 玩家已经离开。
     }
   });
 }
@@ -621,6 +621,6 @@ function clearRoute(player: Player, id: number): void {
       Checkpoint.disable(player);
     }
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
