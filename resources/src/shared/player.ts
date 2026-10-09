@@ -2,9 +2,9 @@ import type { Player } from "@omp-node/core";
 
 export function playerName(player: Player): string {
   try {
-    return player.getName().name || "Неизвестный";
+    return player.getName().name || "未知玩家";
   } catch {
-    return "Неизвестный";
+    return "未知玩家";
   }
 }
 
@@ -51,7 +51,7 @@ export function kickSamePlayer(player: Player, delayMs = 120): void {
     try {
       player.kick();
     } catch {
-      // Уже вышел.
+      // 玩家已经离线。
     }
   }, delayMs);
 }
