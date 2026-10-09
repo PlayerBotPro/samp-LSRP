@@ -102,7 +102,7 @@ const DOORS: readonly PoliceDoor[] = [
       interior: POLICE_INTERIOR,
       world: STREET_WORLD,
     },
-    label: "Областная полиция\nВход",
+    label: "州警\n入口",
     staffOnly: false,
   },
   {
@@ -122,14 +122,14 @@ const DOORS: readonly PoliceDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на улицу",
+    label: "街道出口",
     staffOnly: false,
   },
   {
     kind: "parkingIn",
     pickup: { x: 611.0726, y: -583.5037, z: 18.2109, interior: 0, world: STREET_WORLD },
     dest: OFFICE_FROM_PARKING,
-    label: "Парковка\nСлужебный вход",
+    label: "停车场\n员工入口",
     staffOnly: true,
   },
   {
@@ -142,7 +142,7 @@ const DOORS: readonly PoliceDoor[] = [
       world: STREET_WORLD,
     },
     dest: PARKING_STREET,
-    label: "Парковка\nСлужебный выход",
+    label: "停车场\n员工出口",
     staffOnly: true,
   },
   {

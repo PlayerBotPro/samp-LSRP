@@ -69,13 +69,13 @@ function hqDoors(
         world,
       },
       dest: streetExit,
-      label: "Выход на улицу",
+      label: "街道出口",
     },
   ];
 }
 
 const DOORS: readonly MafiaDoor[] = [
-  ...hqDoors("LCN\nВход", LCN_WORLD, { x: 1122.7086, y: -2036.9874, z: 69.8942 }, {
+  ...hqDoors("LCN\n入口", LCN_WORLD, { x: 1122.7086, y: -2036.9874, z: 69.8942 }, {
     x: 1125.1136,
     y: -2036.9993,
     z: 69.8822,
@@ -83,7 +83,7 @@ const DOORS: readonly MafiaDoor[] = [
     interior: 0,
     world: STREET_WORLD,
   }),
-  ...hqDoors("Yakuza\nВход", YAKUZA_WORLD, { x: 678.3608, y: -1281.7167, z: 13.6332 }, {
+  ...hqDoors("Yakuza\n入口", YAKUZA_WORLD, { x: 678.3608, y: -1281.7167, z: 13.6332 }, {
     x: 675.7552,
     y: -1281.6864,
     z: 13.6332,
@@ -92,7 +92,7 @@ const DOORS: readonly MafiaDoor[] = [
     world: STREET_WORLD,
   }),
   ...hqDoors(
-    "Русская мафия\nВход",
+    "俄罗斯黑手党\n入口",
     RUSSIAN_MAFIA_WORLD,
     { x: 952.5553, y: -909.2405, z: 45.7656 },
     {
