@@ -147,17 +147,17 @@ export function showSellStateConfirm(
       player,
       CAR_SELL_STATE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Продажа транспорта`,
+      `${TITLE}出售车辆`,
       [
-        `Вы хотите продать транспорт #${vehicle.id} (модель ${vehicle.modelId})?`,
+        `确定要出售车辆 #${vehicle.id} (型号 ${vehicle.modelId})吗?`,
         "",
-        `Цена покупки: ${formatMoney(vehicle.purchasePrice)}`,
-        `Возврат: ${formatMoney(refund)} (${refundPct}%)`,
+        `购买价格: ${formatMoney(vehicle.purchasePrice)}`,
+        `退款: ${formatMoney(refund)} (${refundPct}%)`,
         "",
-        "Машина будет удалена безвозвратно.",
+        "车辆将被永久删除.",
       ].join("\n"),
-      "Продать",
-      "Отмена"
+      "出售",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开出售窗口。");
@@ -215,15 +215,15 @@ export function showSellPlayerInput(
       player,
       CAR_SELL_PLAYER_INPUT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      `${TITLE}Продажа игроку`,
+      `${TITLE}出售给玩家`,
       [
-        `Транспорт #${vehicle.id} (модель ${vehicle.modelId})`,
+        `车辆 #${vehicle.id} (型号 ${vehicle.modelId})`,
         "",
-        "Введите ID игрока и цену через запятую.",
-        "Пример: 2,150000",
+        "输入玩家 ID 和价格, 用逗号分隔.",
+        "示例: 2,150000",
       ].join("\n"),
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     pendingPlayerSale.delete(slotId);
@@ -437,16 +437,16 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
       player,
       CAR_SELL_PLAYER_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Подтверждение`,
+      `${TITLE}确认`,
       [
-        `Транспорт #${vehicle.id} (модель ${vehicle.modelId})`,
-        `Покупатель: ${playerName(buyer)}[${parsed.slot}]`,
-        `Цена: ${formatMoney(parsed.price)}`,
+        `车辆 #${vehicle.id} (型号 ${vehicle.modelId})`,
+        `买家: ${playerName(buyer)}[${parsed.slot}]`,
+        `价格: ${formatMoney(parsed.price)}`,
         "",
-        "Действительно хотите продать этот транспорт игроку?",
+        "确定要将此车辆出售给该玩家吗?",
       ].join("\n"),
-      "Отправить",
-      "Отмена"
+      "发送",
+      "取消"
     );
   } catch {
     pendingPlayerSale.delete(slotId);

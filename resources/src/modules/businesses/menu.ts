@@ -153,10 +153,10 @@ function showBusinessMenu(player: Player): void {
       player,
       BIZ_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `${TITLE}Меню бизнеса`,
-      ["Статистика", "Продать бизнес", "Продать бизнес игроку"].join("\n"),
-      "Выбрать",
-      "Закрыть"
+      `${TITLE}企业菜单`,
+      ["统计", "出售企业", "将企业出售给玩家"].join("\n"),
+      "选择",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开企业菜单。");
@@ -268,10 +268,10 @@ function showBusinessStats(player: Player, business: BusinessRecord): void {
       player,
       BIZ_STATS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Статистика бизнеса`,
+      `${TITLE}企业统计`,
       body,
-      "Назад",
-      "Закрыть"
+      "返回",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开统计信息。");
@@ -284,15 +284,15 @@ function showSellStateConfirm(player: Player, business: BusinessRecord): void {
       player,
       BIZ_SELL_STATE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Продажа бизнеса`,
+      `${TITLE}出售企业`,
       [
-        `Вы хотите продать бизнес «${business.name}» (#${business.id}) государству?`,
+        `确定要将企业「${business.name}」(#${business.id})出售给政府吗?`,
         "",
-        `Возврат: ${formatMoney(business.price)}`,
-        "Прибыль бизнеса не будет возвращена.",
+        `退款: ${formatMoney(business.price)}`,
+        "企业利润不予退还.",
       ].join("\n"),
-      "Продать",
-      "Отмена"
+      "出售",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开出售窗口。");
@@ -317,15 +317,15 @@ function showSellPlayerInput(player: Player, business: BusinessRecord): void {
       player,
       BIZ_SELL_PLAYER_INPUT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      `${TITLE}Продажа игроку`,
+      `${TITLE}出售给玩家`,
       [
-        `Бизнес: ${business.name} (#${business.id})`,
+        `企业: ${business.name} (#${business.id})`,
         "",
-        "Введите ID игрока и цену через запятую.",
-        "Пример: 2,150000",
+        "输入玩家 ID 和价格, 用逗号分隔.",
+        "示例: 2,150000",
       ].join("\n"),
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     pendingPlayerSale.delete(slotId);
@@ -410,16 +410,16 @@ function prepareSellToPlayer(player: Player, inputText: string): void {
       player,
       BIZ_SELL_PLAYER_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Подтверждение`,
+      `${TITLE}确认`,
       [
-        `Бизнес: ${business.name} (#${business.id})`,
-        `Покупатель: ${playerName(buyer)}[${parsed.slot}]`,
-        `Цена: ${formatMoney(parsed.price)}`,
+        `企业: ${business.name} (#${business.id})`,
+        `买家: ${playerName(buyer)}[${parsed.slot}]`,
+        `价格: ${formatMoney(parsed.price)}`,
         "",
-        "Отправить предложение игроку?",
+        "向玩家发送报价吗?",
       ].join("\n"),
-      "Отправить",
-      "Отмена"
+      "发送",
+      "取消"
     );
   } catch {
     pendingPlayerSale.delete(slotId);

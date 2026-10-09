@@ -185,11 +185,11 @@ function showConfirmDialog(player: Player): void {
   }
 
   const body =
-    `Регистрация семьи в мэрии.\n\n` +
-    `Стоимость: ${formatMoney(FAMILY_CREATE_COST)}\n` +
-    `Требования: паспорт, уровень ${FAMILY_CREATE_MIN_LEVEL}+\n` +
-    `Оплата списывается с наличных.\n\n` +
-    `Продолжить регистрацию?`;
+    `在市政厅注册家族.\n\n` +
+    `费用: ${formatMoney(FAMILY_CREATE_COST)}\n` +
+    `要求: 护照, 等级 ${FAMILY_CREATE_MIN_LEVEL}+\n` +
+    `费用将从现金中扣除.\n\n` +
+    `继续注册吗?`;
 
   try {
     dialogOpen.add(id);
@@ -197,10 +197,10 @@ function showConfirmDialog(player: Player): void {
       player,
       FAMILY_CREATE_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Регистрация семьи",
+      "注册家族",
       body,
-      "Принять",
-      "Отмена"
+      "接受",
+      "取消"
     );
   } catch {
     dialogOpen.delete(id);
@@ -266,11 +266,11 @@ function showNameDialog(player: Player): void {
   }
 
   const body =
-    `Введите название семьи.\n` +
-    `Только английские буквы и пробелы.\n` +
-    `Пример: Woozie Family\n` +
-    `Длина: ${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX} символов.\n` +
-    `Стоимость: ${formatMoney(FAMILY_CREATE_COST)}`;
+    `输入家族名称.\n` +
+    `仅限英文字母和空格.\n` +
+    `示例: Woozie Family\n` +
+    `长度: ${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX} 个字符.\n` +
+    `费用: ${formatMoney(FAMILY_CREATE_COST)}`;
 
   try {
     dialogOpen.add(id);
@@ -278,10 +278,10 @@ function showNameDialog(player: Player): void {
       player,
       FAMILY_CREATE_NAME_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Название семьи",
+      "家族名称",
       body,
-      "Создать",
-      "Отмена"
+      "创建",
+      "取消"
     );
   } catch {
     dialogOpen.delete(id);

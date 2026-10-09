@@ -57,10 +57,10 @@ type PendingTransfer = {
 };
 
 const ITEM_LABEL: Record<StockItem, string> = {
-  ammo: "патроны",
-  metal: "металл",
-  drugs: "наркотики",
-  money: "деньги",
+  ammo: "子弹",
+  metal: "金属",
+  drugs: "毒品",
+  money: "钱",
 };
 
 const STANDING_TICK_MS = 200;
@@ -181,16 +181,16 @@ function showMenu(player: Player, familyId: number): void {
     return;
   }
 
-  const lockLabel = family.isLocked ? "Открыть склад" : "Закрыть склад";
+  const lockLabel = family.isLocked ? "打开仓库" : "关闭仓库";
   const body = [
-    "Положить патроны",
-    "Положить металл",
-    "Положить наркотики",
-    "Положить деньги",
-    `${LIME}Взять патроны`,
-    `${LIME}Взять металл`,
-    `${LIME}Взять наркотики`,
-    `${LIME}Взять деньги`,
+    "存入子弹",
+    "存入金属",
+    "存入毒品",
+    "存入钱",
+    `${LIME}取出子弹`,
+    `${LIME}取出金属`,
+    `${LIME}取出毒品`,
+    `${LIME}取出钱`,
     lockLabel,
   ].join("\n");
 
@@ -200,10 +200,10 @@ function showMenu(player: Player, familyId: number): void {
       player,
       FAMILY_WAREHOUSE_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Склад: ${family.name}`,
+      `仓库: ${family.name}`,
       body,
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     setDialogBusy(player, false);
@@ -288,21 +288,21 @@ function showAmountDialog(
   }
 
   pendingByPlayer.set(id, { familyId, action, item });
-  const verb = action === "put" ? "положить на склад" : "взять со склада";
+  const verb = action === "put" ? "存入仓库" : "从仓库取出";
   const maxTransfer = item === "money" ? MAX_MONEY_TRANSFER : MAX_TRANSFER;
 
   let playerHaveText: string;
   let stockHaveText: string;
   if (item === "money") {
-    playerHaveText = `У вас: ${formatMoney(account.money)}`;
-    stockHaveText = `На складе: ${formatMoney(family.money)}`;
+    playerHaveText = `你拥有: ${formatMoney(account.money)}`;
+    stockHaveText = `仓库中: ${formatMoney(family.money)}`;
   } else {
     const playerHave =
       item === "ammo" ? account.ammo : item === "metal" ? account.metal : account.drugs;
     const stockHave =
       item === "ammo" ? family.ammo : item === "metal" ? family.metal : family.drugs;
-    playerHaveText = `У вас: ${playerHave} шт.`;
-    stockHaveText = `На складе: ${stockHave} шт.`;
+    playerHaveText = `你拥有: ${playerHave} 件`;
+    stockHaveText = `仓库中: ${stockHave} 件`;
   }
 
   try {
@@ -311,12 +311,12 @@ function showAmountDialog(
       player,
       FAMILY_WAREHOUSE_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Склад семьи",
-      `Сколько ${ITEM_LABEL[item]} ${verb}?\n` +
+      "家族仓库",
+      `${verb}多少${ITEM_LABEL[item]}?\n` +
         `${playerHaveText}\n${stockHaveText}\n` +
-        `Максимум за раз: ${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
+        `单次最多: ${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
       "OK",
-      "Отмена"
+      "取消"
     );
   } catch {
     setDialogBusy(player, false);
