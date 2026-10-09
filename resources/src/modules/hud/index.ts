@@ -19,7 +19,7 @@ function tryDraw(build: () => TextDraw): TextDraw | null {
 function createLogo(): TextDraw[] {
   const draws: TextDraw[] = [];
   const logo = tryDraw(() => {
-    const draw = new TextDraw(545.0, 4.0, "Los_Santos_RP");
+    const draw = new TextDraw(545.0, 4.0, "Los_Santos_RP_测试");
     draw.setLetterSize(0.33, 1.5);
     draw.setTextSize(1280.0, 1280.0);
     draw.setAlignment(0);
