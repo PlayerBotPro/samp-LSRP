@@ -87,7 +87,7 @@ export const defaultConfig: AcConfig = {
   maxPing: 550,
   maxPingWarnings: 10,
   maxConnectsPerIp: 4,
-  kickOnDetect: true,
+  kickOnDetect: false,
   softStrikeMax: 1,
   softStrikeDecayMs: 90_000,
   reconnectMinMs: 8_000,
