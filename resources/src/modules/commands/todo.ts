@@ -5,7 +5,7 @@ import { byGender } from "../auth/gender";
 import { getGender } from "../auth/session";
 import { registerCommand } from "./registry";
 
-registerCommand("todo", "Реплика и действие через *", (player, args) => {
+registerCommand("todo", "通过 * 描述台词和动作", (player, args) => {
   const split = args.indexOf("*");
   const speech = sanitizeChatText((split === -1 ? args : args.slice(0, split)).trim()).slice(0, CHAT_MAX_LENGTH);
   const action = sanitizeChatText((split === -1 ? "" : args.slice(split + 1).trim())).slice(0, CHAT_MAX_LENGTH);
@@ -19,7 +19,7 @@ registerCommand("todo", "Реплика и действие через *", (play
     return;
   }
 
-  const said = byGender(getGender(player), "сказал", "сказала");
+  const said = byGender(getGender(player), "说道", "说道");
 
   sendNearby(
     player,

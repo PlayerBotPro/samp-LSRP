@@ -6,7 +6,7 @@ import { getAccount } from "../auth/session";
 import { MAX_ORG_RANK, getMembership } from "../org";
 import { registerCommand } from "./registry";
 
-registerCommand("gov", "Гос. новости", (player, args) => {
+registerCommand("gov", "政府新闻", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership || !membership.org.gov) {
@@ -31,7 +31,7 @@ registerCommand("gov", "Гос. новости", (player, args) => {
     return;
   }
 
-  const line = clipClientMessage(`Гос. новости ${playerChatName(player)}: ${text}`);
+  const line = clipClientMessage(`政府新闻 ${playerChatName(player)}: ${text}`);
 
   omp.players.forEach((other) => {
     if (!isPlayerActive(other)) {
@@ -41,7 +41,7 @@ registerCommand("gov", "Гос. новости", (player, args) => {
     try {
       other.sendClientMessage(Color.govNews, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 });

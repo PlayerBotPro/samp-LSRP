@@ -7,55 +7,55 @@ import { isLawOfficer, lawOfficerLabel, notifyLawStaff } from "../org/law";
 import { registerCommand } from "./registry";
 
 /**
- * Снять розыск с цели (логика /clear).
- * @returns текст ошибки или `null` при успехе.
+ * 解除目标通缉（/clear 逻辑）。
+ * @returns 错误文本；成功时返回 `null`。
  */
 export function clearWantedByOfficer(officer: Player, target: Player): string | null {
   if (!isAuthenticated(officer) || !isLawOfficer(officer)) {
-    return "Команда доступна сотрудникам полиции и FBI.";
+    return "仅警察和 FBI 成员可使用此命令。";
   }
 
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   try {
     if (target.isNPC()) {
-      return "Игрок не найден.";
+      return "未找到玩家。";
     }
   } catch {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   if (playerId(target) === playerId(officer)) {
-    return "Нельзя снять розыск с себя.";
+    return "不能解除自己的通缉。";
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount) {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    return "Этот игрок не в розыске.";
+    return "该玩家未被通缉。";
   }
 
   setPlayerWantedLevel(target, 0);
 
   notifyLawStaff(
-    `${lawOfficerLabel(officer)} ${playerChatName(officer)} снял розыск у игрока ${playerChatName(target)}.`
+    `${lawOfficerLabel(officer)} ${playerChatName(officer)} 解除了玩家的通缉 ${playerChatName(target)}.`
   );
 
   try {
     target.sendClientMessage(Color.info, "你的通缉已被解除。");
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 
   return null;
 }
 
-registerCommand("clear", "Снять розыск с игрока (полиция / FBI)", (player, args) => {
+registerCommand("clear", "解除玩家通缉（警察 / FBI）", (player, args) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(
       Color.error,

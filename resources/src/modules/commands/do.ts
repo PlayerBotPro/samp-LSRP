@@ -3,7 +3,7 @@ import { CHAT_MAX_LENGTH, CHAT_RADIUS, sanitizeChatText, sendNearby } from "../.
 import { playerName } from "../../shared/player";
 import { registerCommand } from "./registry";
 
-registerCommand("do", "Обстановка или событие рядом", (player, args) => {
+registerCommand("do", "描述附近的场景或事件", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
     player.sendClientMessage(Color.error, "用法: /do [描述]");

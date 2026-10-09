@@ -10,7 +10,7 @@ import {
 import { isJailed } from "../prison/sentence";
 import { registerCommand } from "./registry";
 
-registerCommand("mask", "Надеть или снять маску", (player) => {
+registerCommand("mask", "戴上或摘下面具", (player) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");

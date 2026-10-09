@@ -15,7 +15,7 @@ import { registerCommand } from "./registry";
 const CHECKPOINT_RADIUS = 4;
 const ARRIVE_RADIUS = 8;
 const TICK_MS = 200;
-/** Тот же слот, что у GPS — одновременно одна метка маршрута. */
+/** 与 GPS 共用同一槽位，因此同一时间只能有一个路线标记。 */
 const MAP_ICON_SLOT = 2;
 const MAP_ICON_TYPE = 0;
 const MAP_ICON_COLOR = 0xff0000ff;
@@ -75,7 +75,7 @@ function clearMark(player: Player, slot: number): void {
       Checkpoint.disable(player);
     }
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 }
 
@@ -85,7 +85,7 @@ function setMark(player: Player, mark: FindMark): void {
     return;
   }
 
-  // Общий слот иконки/чекпоинта с GPS.
+  // 与 GPS 共用图标和检查点槽位。
   clearGpsRouteForPlayer(player);
 
   let pos;
@@ -157,7 +157,7 @@ function handleFind(
     setMark(player, {
       kind,
       entityId,
-      label: `Дом №${house.id}`,
+      label: `房屋编号 ${house.id}`,
       x: house.entranceX,
       y: house.entranceY,
       z: house.entranceZ,
@@ -174,7 +174,7 @@ function handleFind(
   setMark(player, {
     kind,
     entityId,
-    label: `Бизнес №${business.id}: ${business.name}`,
+    label: `企业 №${business.id}: ${business.name}`,
     x: business.entranceX,
     y: business.entranceY,
     z: business.entranceZ,
@@ -209,17 +209,17 @@ function tickFindMarks(): void {
         Checkpoint.set(player, mark.x, mark.y, mark.z, CHECKPOINT_RADIUS);
       }
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离线。
     }
   });
 }
 
-registerCommand("findidhouse", "Метка на дом по ID", (player, args) => {
-  handleFind(player, "house", args, "Использование: /findidhouse [id]");
+registerCommand("findidhouse", "按 ID 标记房屋位置", (player, args) => {
+  handleFind(player, "house", args, "用法： /findidhouse [id]");
 });
 
-registerCommand("findidbiz", "Метка на бизнес по ID", (player, args) => {
-  handleFind(player, "biz", args, "Использование: /findidbiz [id]");
+registerCommand("findidbiz", "按 ID 标记企业位置", (player, args) => {
+  handleFind(player, "biz", args, "用法： /findidbiz [id]");
 });
 
 export function bindFindIdMarks(): void {

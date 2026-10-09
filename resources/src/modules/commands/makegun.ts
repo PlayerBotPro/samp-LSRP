@@ -12,7 +12,7 @@ import { findTurfAtPlayer, isGangOrgId } from "../zones/turf";
 import { registerCommand } from "./registry";
 
 const USAGE_LINES = [
-  "Использование: /makegun [1-7] [патроны 1-500]",
+  "用法： /makegun [1-7] [弹药 1-500]",
   "1 Deagle, 2 AK-47, 3 M4, 4 Shotgun, 5 SD Pistol, 6 MP5, 7 Sniper",
 ] as const;
 
@@ -25,11 +25,11 @@ const MAX_AMMO = 500;
 type GunRecipe = {
   label: string;
   weaponId: number;
-  /** Металл за 1 патрон в стволе. */
+  /** 每发枪膛弹药消耗的金属数量。 */
   metalPerRound: number;
 };
 
-/** ID в команде → рецепт. Патроны игрока списываются 1:1 с выданными. */
+/** 命令中的 ID 对应制造配方。玩家弹药按 1:1 扣除。 */
 const RECIPES: ReadonlyMap<number, GunRecipe> = new Map([
   [1, { label: "Desert Eagle", weaponId: 24, metalPerRound: 2 }],
   [2, { label: "AK-47", weaponId: 30, metalPerRound: 3 }],
@@ -40,13 +40,13 @@ const RECIPES: ReadonlyMap<number, GunRecipe> = new Map([
   [7, { label: "Sniper Rifle", weaponId: 34, metalPerRound: 10 }],
 ]);
 
-/** Слот → id текущей сборки (защита от гонки смерть→новый /makegun). */
+/** 槽位映射到当前制造任务 ID（防止死亡后开始新的 /makegun 时发生竞态）。 */
 const craftSession = new Map<number, number>();
 let nextCraftSession = 1;
 
 registerCommand(
   "makegun",
-  "Собрать оружие на территории банды (патроны + металл)",
+  "在帮派地盘制造武器（弹药 + 金属）",
   (player, args) => {
     void handleMakeGun(player, args);
   }
@@ -225,7 +225,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   const nextMetal = prevMetal - metalCost;
   patchAccount(player, { ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(live.id, prevDrugs, nextAmmo, nextMetal).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   if (!grantWeapon(player, recipe.weaponId, ammoCost)) {
@@ -247,7 +247,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     player,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(player)} достал детали и собрал оружие.`
+    `${playerName(player)} 取出零件并组装了武器。`
   );
 }
 
@@ -290,7 +290,7 @@ function finishCraft(player: Player, slot: number, session: number): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 }
 
@@ -312,7 +312,7 @@ function playCraftAnim(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // Анимация опциональна.
+    // 动画为可选项。
   }
 }
 
@@ -320,7 +320,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 

@@ -61,7 +61,7 @@ function driverVehicleId(player: Player): number | null {
 
 registerCommand(
   "eject",
-  "Выкинуть игрока из своего транспорта",
+  "将玩家赶下自己的车辆",
   (player, args) => {
     if (!isPlayerActive(player) || !isAuthenticated(player)) {
       return;
@@ -103,7 +103,7 @@ registerCommand(
         return;
       }
 
-      // Повторная проверка: водитель мог выйти / сменить ТС между проверками.
+      // 再次检查：驾驶员可能在两次检查之间下车或更换车辆。
       if (driverVehicleId(player) !== vehicleId) {
         player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
         return;
@@ -125,7 +125,7 @@ registerCommand(
         `${playerName(player)} 把你踢出了车。`
       );
     } catch {
-      // Уже вышел.
+      // 已离线。
     }
   }
 );

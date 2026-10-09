@@ -14,7 +14,7 @@ const COOLDOWN_MS = 30_000;
 
 const lastReportAt = new Map<number, number>();
 
-registerCommand("report", "Связь с администрацией", (player) => {
+registerCommand("report", "联系管理员", (player) => {
   showReportDialog(player);
 });
 
@@ -56,10 +56,10 @@ export function showReportDialog(player: Player, error?: string): void {
       player,
       REPORT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Связь с администрацией",
-      `${prefix}Опишите вопрос или жалобу.`,
-      "Отправить",
-      "Отмена"
+      "联系管理员",
+      `${prefix}请描述你的问题或投诉。`,
+      "发送",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开举报窗口。");
@@ -83,14 +83,14 @@ function sendReport(player: Player, raw: string): void {
 
   const text = sanitizeChatText(raw.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    showReportDialog(player, "Введите текст.");
+    showReportDialog(player, "请输入内容。");
     return;
   }
 
-  const verb = byGender(account.gender, "написал", "написала");
+  const verb = byGender(account.gender, "提交了", "提交了");
   const authorId = playerId(player);
   const authorLine = clipClientMessage(`${playerChatName(player)}: ${text}`);
-  const adminLine = clipClientMessage(`Игрок ${playerChatName(player)} ${verb}: ${text}`);
+  const adminLine = clipClientMessage(`玩家 ${playerChatName(player)} ${verb}：${text}`);
 
   try {
     player.sendClientMessage(Color.info, authorLine);
@@ -112,7 +112,7 @@ function sendReport(player: Player, raw: string): void {
     try {
       other.sendClientMessage(Color.info, adminLine);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -129,5 +129,5 @@ function reportWaitMs(player: Player): number {
 
 function formatWait(ms: number): string {
   const seconds = Math.max(1, Math.ceil(ms / 1000));
-  return `${seconds} сек.`;
+  return `${seconds} 秒`;
 }

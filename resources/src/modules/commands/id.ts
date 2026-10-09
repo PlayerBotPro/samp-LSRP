@@ -8,7 +8,7 @@ const MAX_RESULTS = 10;
 
 registerCommand(
   "id",
-  "Поиск игроков онлайн по ID или части ника",
+  "按 ID 或昵称片段搜索在线玩家",
   (player, args) => {
     if (!isAuthenticated(player)) {
       player.sendClientMessage(Color.error, "请先登录账号。");

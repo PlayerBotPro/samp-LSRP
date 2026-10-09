@@ -8,11 +8,11 @@ import { isJailed } from "../prison/sentence";
 import { resolveLawNearbyTarget } from "./law-target";
 import { registerCommand } from "./registry";
 
-registerCommand("cuff", "Надеть наручники (полиция / FBI)", (player, args) => {
+registerCommand("cuff", "给玩家戴上手铐（警察 / FBI）", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "Использование: /cuff [id]"
+    "用法： /cuff [id]"
   );
   if (!resolved.ok) {
     return;
@@ -30,7 +30,7 @@ registerCommand("cuff", "Надеть наручники (полиция / FBI)"
     return;
   }
 
-  // Повторно: цель могла отойти между проверками.
+  // 再次检查：目标可能在两次检查之间离开。
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
     officer.sendClientMessage(Color.error, "玩家距离太远。");
     return;
@@ -45,30 +45,30 @@ registerCommand("cuff", "Надеть наручники (полиция / FBI)"
   const targetName = playerName(target);
   const verb = byGender(
     getAccount(officer)?.gender ?? null,
-    "надел",
-    "надела"
+    "戴上了",
+    "戴上了"
   );
 
   sendNearby(
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${officerName} ${verb} наручники на ${targetName}.`
+    `${officerName} 为 ${targetName} 戴上了手铐。`
   );
 
   officer.sendClientMessage(Color.info, `你给 ${targetName} 戴上了手铐。`);
   try {
     target.sendClientMessage(Color.error, "你被戴上了手铐。");
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 });
 
-registerCommand("uncuff", "Снять наручники (полиция / FBI)", (player, args) => {
+registerCommand("uncuff", "给玩家解开手铐（警察 / FBI）", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "Использование: /uncuff [id]"
+    "用法： /uncuff [id]"
   );
   if (!resolved.ok) {
     return;
@@ -95,21 +95,21 @@ registerCommand("uncuff", "Снять наручники (полиция / FBI)"
   const targetName = playerName(target);
   const verb = byGender(
     getAccount(officer)?.gender ?? null,
-    "снял",
-    "сняла"
+    "摘下了",
+    "摘下了"
   );
 
   sendNearby(
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${officerName} ${verb} наручники с ${targetName}.`
+    `${officerName} 解开了 ${targetName} 的手铐。`
   );
 
   officer.sendClientMessage(Color.info, `你解开了 ${targetName} 的手铐。`);
   try {
     target.sendClientMessage(Color.info, "你的手铐已被解开。");
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 });

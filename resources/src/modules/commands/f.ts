@@ -13,7 +13,7 @@ import { registerCommand } from "./registry";
 
 const BUBBLE_MS = 3000;
 
-registerCommand("f", "Чат банды или мафии", (player, args) => {
+registerCommand("f", "帮派或黑手党聊天", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership || !(membership.org.illegal || membership.org.mafia)) {
@@ -54,13 +54,13 @@ registerCommand("f", "Чат банды или мафии", (player, args) => {
     try {
       other.sendClientMessage(Color.radio, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 
   try {
     player.setChatBubble(bubble, Color.radio, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // Пузырь не обязателен.
+    // 聊天气泡不是必需的。
   }
 });

@@ -10,10 +10,10 @@ import { isLawOfficer } from "../org/law";
 import { isJailed } from "../prison/sentence";
 import { registerCommand } from "./registry";
 
-const DENY = "Команда доступна сотрудникам полиции и FBI.";
+const DENY = "仅警察和 FBI 成员可使用此命令。";
 const PLAYER_STATE_WASTED = 7;
 
-registerCommand("unmask", "Сорвать маску с игрока (полиция / FBI)", (player, args) => {
+registerCommand("unmask", "摘下玩家的面具（警察 / FBI）", (player, args) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(Color.error, DENY);
     return;
@@ -83,20 +83,20 @@ registerCommand("unmask", "Сорвать маску с игрока (полиц
   const targetName = playerName(target);
   const verb = byGender(
     getAccount(player)?.gender ?? null,
-    "сорвал",
-    "сорвала"
+    "摘下了",
+    "摘下了"
   );
   sendNearby(
     player,
     CHAT_RADIUS,
     Color.action,
-    `${officerName} резко ${verb} маску с лица ${targetName}.`
+    `${officerName} 猛地摘下了 ${targetName} 的面具。`
   );
 
   try {
     target.sendClientMessage(Color.error, "你的面具被摘掉了。");
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 
   player.sendClientMessage(Color.info, `你摘掉了 ${targetName} 的面具。`);

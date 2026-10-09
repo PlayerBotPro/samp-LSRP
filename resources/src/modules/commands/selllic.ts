@@ -28,7 +28,7 @@ import { registerCommand } from "./registry";
 
 export const SELL_LIC_LIST_DIALOG_ID = 29;
 export const SELL_LIC_PRICE_DIALOG_ID = 30;
-/** @deprecated Предложение покупателю теперь через Y/N. */
+/** @deprecated 现在通过 Y/N 向买家发送提议。 */
 export const SELL_LIC_OFFER_DIALOG_ID = 31;
 
 const DIALOG_STYLE_INPUT = 1;
@@ -69,7 +69,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -118,25 +118,25 @@ function atLicenseDesk(player: Player): boolean {
 
 function saleReady(seller: Player, buyer: Player): string | null {
   if (!isAutoschoolStaff(seller)) {
-    return "Команда доступна сотрудникам автошколы.";
+    return "仅驾校工作人员可使用此命令。";
   }
 
   if (!atLicenseDesk(seller)) {
-    return "Продать лицензию можно только у стойки в автошколе.";
+    return "只能在驾校柜台出售许可证。";
   }
 
   if (!arePlayersNearby(seller, buyer, BUYER_RADIUS)) {
-    return "Игрок слишком далеко.";
+    return "玩家距离太远。";
   }
 
   const sellerAccount = getAccount(seller);
   const buyerAccount = getAccount(buyer);
   if (sellerAccount?.hospitalized) {
-    return "Вам нужно лечение. Займите койку: /hospital.";
+    return "你需要治疗，请使用病床：/hospital。";
   }
 
   if (buyerAccount?.hospitalized) {
-    return "Игроку нужно лечение.";
+    return "该玩家需要治疗。";
   }
 
   return null;
@@ -170,12 +170,12 @@ function clearBuyerOffer(player: Player, notify: boolean): void {
 
   const buyer = findPlayer(offer.buyerSlot);
   if (buyer && getAccount(buyer)?.id === offer.buyerAccountId) {
-    tell(buyer, Color.error, "Предложение лицензии отменено.");
+    tell(buyer, Color.error, "许可证交易提议已取消。");
   }
 
   const seller = findPlayer(offer.sellerSlot);
   if (seller && getAccount(seller)?.id === offer.sellerAccountId) {
-    tell(seller, Color.info, "Предложение лицензии отменено.");
+    tell(seller, Color.info, "许可证交易提议已取消。");
   }
 }
 
@@ -191,12 +191,12 @@ function expireOffer(buyerSlot: number, buyerAccountId: number): void {
 
   const buyer = findPlayer(buyerSlot);
   if (buyer && getAccount(buyer)?.id === buyerAccountId) {
-    tell(buyer, Color.error, "Предложение лицензии истекло.");
+    tell(buyer, Color.error, "许可证交易提议已过期。");
   }
 
   const seller = findPlayer(offer.sellerSlot);
   if (seller && getAccount(seller)?.id === offer.sellerAccountId) {
-    tell(seller, Color.error, "Предложение лицензии истекло.");
+    tell(seller, Color.error, "许可证交易提议已过期。");
   }
 }
 
@@ -216,7 +216,7 @@ function cancelOffersFromSeller(sellerSlot: number, sellerAccountId?: number): v
 
     const buyer = findPlayer(buyerSlot);
     if (buyer && getAccount(buyer)?.id === offer.buyerAccountId) {
-      tell(buyer, Color.error, "Предложение лицензии отменено.");
+      tell(buyer, Color.error, "许可证交易提议已取消。");
     }
   }
 }
@@ -227,14 +227,14 @@ function showLicenseList(seller: Player, options: LicenseDef[]): boolean {
       seller,
       SELL_LIC_LIST_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Продажа лицензии",
+      "出售许可证",
       options.map((row) => row.label).join("\n"),
-      "Далее",
-      "Отмена"
+      "下一步",
+      "取消"
     );
     return true;
   } catch {
-    tell(seller, Color.error, "Не удалось открыть список лицензий.");
+    tell(seller, Color.error, "无法打开许可证列表。");
     return false;
   }
 }
@@ -245,14 +245,14 @@ function showPriceDialog(seller: Player, license: LicenseDef): boolean {
       seller,
       SELL_LIC_PRICE_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Цена лицензии",
-      `Лицензия: ${license.label}\nДиапазон: $${license.min} - $${license.max}`,
-      "Предложить",
-      "Отмена"
+      "许可证价格",
+      `许可证： ${license.label}\n价格范围： $${license.min} - $${license.max}`,
+      "提议",
+      "取消"
     );
     return true;
   } catch {
-    tell(seller, Color.error, "Не удалось открыть окно цены.");
+    tell(seller, Color.error, "无法打开价格窗口。");
     return false;
   }
 }
@@ -267,27 +267,27 @@ function parsePrice(raw: string, license: LicenseDef): number | null {
   return amount;
 }
 
-registerCommand("selllic", "Продать лицензию ученику", (player, args) => {
+registerCommand("selllic", "向学员出售许可证", (player, args) => {
   if (!isAutoschoolStaff(player)) {
-    tell(player, Color.error, "Команда доступна сотрудникам автошколы.");
+    tell(player, Color.error, "仅驾校工作人员可使用此命令。");
     return;
   }
 
   const rawId = args.trim();
   const slot = Number(rawId);
   if (!rawId || !Number.isInteger(slot) || slot < 0) {
-    tell(player, Color.error, "Использование: /selllic [id]");
+    tell(player, Color.error, "用法： /selllic [id]");
     return;
   }
 
   const target = findPlayer(slot);
   if (!target) {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到玩家。");
     return;
   }
 
   if (playerId(target) === playerId(player)) {
-    tell(player, Color.error, "Нельзя продать лицензию себе.");
+    tell(player, Color.error, "不能向自己出售许可证。");
     return;
   }
 
@@ -305,13 +305,13 @@ registerCommand("selllic", "Продать лицензию ученику", (pl
   }
 
   if (pendingOfferByBuyer.has(buyerId) || getYnOfferKind(buyerId) !== undefined) {
-    tell(player, Color.error, "У игрока уже есть активное предложение.");
+    tell(player, Color.error, "该玩家已有待处理的提议。");
     return;
   }
 
   const options = missingLicenses(targetAccount.licenses);
   if (options.length === 0) {
-    tell(player, Color.error, "У игрока уже есть все лицензии.");
+    tell(player, Color.error, "该玩家已拥有所有许可证。");
     return;
   }
 
@@ -383,21 +383,21 @@ export function bindSellLic(): void {
 
     if (!accepted) {
       releaseYnOffer(buyerId, "selllic");
-      tell(player, Color.info, "Вы отклонили предложение.");
+      tell(player, Color.info, "你拒绝了提议。");
       if (sellerOk && seller) {
         const verb = byGender(
           getAccount(player)?.gender ?? null,
-          "отклонил",
-          "отклонила"
+          "拒绝了",
+          "拒绝了"
         );
-        tell(seller, Color.info, `${buyerTag} ${verb} предложение лицензии.`);
+        tell(seller, Color.info, `${buyerTag} ${verb}许可证交易提议。`);
       }
       return;
     }
 
     if (!sellerOk || !seller || !license) {
       releaseYnOffer(buyerId, "selllic");
-      tell(player, Color.error, "Предложение уже неактуально.");
+      tell(player, Color.error, "该提议已失效。");
       return;
     }
 
@@ -457,7 +457,7 @@ function onLicensePicked(
   const target = findPlayer(pending.targetSlot);
   if (!target || getAccount(target)?.id !== pending.targetAccountId) {
     pendingSelect.delete(sellerId);
-    tell(seller, Color.error, "Игрок не найден.");
+    tell(seller, Color.error, "未找到玩家。");
     return;
   }
 
@@ -488,7 +488,7 @@ function onLicensePicked(
   const license = key ? findLicense(key) : null;
   if (!license || live.licenses[license.key]) {
     pendingSelect.delete(sellerId);
-    tell(seller, Color.error, "Эту лицензию нельзя продать этому игроку.");
+    tell(seller, Color.error, "不能向该玩家出售此许可证。");
     return;
   }
 
@@ -521,7 +521,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
 
   const target = findPlayer(pending.targetSlot);
   if (!target || getAccount(target)?.id !== pending.targetAccountId) {
-    tell(seller, Color.error, "Игрок не найден.");
+    tell(seller, Color.error, "未找到玩家。");
     return;
   }
 
@@ -533,7 +533,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
 
   const live = getAccount(target);
   if (!live || live.licenses[license.key]) {
-    tell(seller, Color.error, "У игрока уже есть эта лицензия.");
+    tell(seller, Color.error, "该玩家已有此许可证。");
     return;
   }
 
@@ -542,7 +542,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
     tell(
       seller,
       Color.error,
-      `Цена ${license.label}: $${license.min} - $${license.max}.`
+      `${license.label} 的价格：$${license.min} - $${license.max}。`
     );
     if (sellerId !== null) {
       pendingSelect.set(sellerId, pending);
@@ -560,7 +560,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
   cancelOffersFromSeller(sellerId, sellerAccount.id);
 
   if (!claimYnOffer(buyerId, "selllic")) {
-    tell(seller, Color.error, "У игрока уже есть активное предложение.");
+    tell(seller, Color.error, "该玩家已有待处理的提议。");
     return;
   }
 
@@ -581,7 +581,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
   tell(
     seller,
     Color.info,
-    `Вы предложили ${playerChatName(target)} лицензию ${license.label} за $${price}.`
+    `你向 ${playerChatName(target)} 提议以 $${price} 出售 ${license.label}。`
   );
   tell(
     target,
@@ -591,7 +591,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
   tell(
     target,
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы купить или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}购买，或按 {FF6600}N {FFFFFF}拒绝"
   );
 }
 
@@ -608,28 +608,28 @@ async function completeSale(
   }
 
   if (busy.has(sellerAccount.id) || busy.has(buyerAccount.id)) {
-    tell(seller, Color.error, "Подождите, идёт другая операция.");
-    tell(buyer, Color.error, "Подождите, идёт другая операция.");
+    tell(seller, Color.error, "请等待其他操作完成。");
+    tell(buyer, Color.error, "请等待其他操作完成。");
     return;
   }
 
   if (buyerAccount.licenses[license.key]) {
-    tell(seller, Color.error, "У игрока уже есть эта лицензия.");
-    tell(buyer, Color.error, "У вас уже есть эта лицензия.");
+    tell(seller, Color.error, "该玩家已有此许可证。");
+    tell(buyer, Color.error, "你已有此许可证。");
     return;
   }
 
   const sellerCash = Math.max(0, Math.floor(sellerAccount.money));
   const buyerCash = Math.max(0, Math.floor(buyerAccount.money));
   if (buyerCash < price) {
-    tell(buyer, Color.error, "Недостаточно наличных.");
-    tell(seller, Color.error, "У игрока недостаточно наличных.");
+    tell(buyer, Color.error, "现金不足。");
+    tell(seller, Color.error, "该玩家现金不足。");
     return;
   }
 
   if (sellerCash > MAX_MONEY - price) {
-    tell(seller, Color.error, "Вы не можете принять столько наличных.");
-    tell(buyer, Color.error, "Сотрудник не может принять оплату.");
+    tell(seller, Color.error, "你无法收取这么多现金。");
+    tell(buyer, Color.error, "工作人员无法收取这笔款项。");
     return;
   }
 
@@ -654,8 +654,8 @@ async function completeSale(
     busy.delete(buyerAccount.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] selllic ${sellerAccount.name}: ${message}`);
-    tell(seller, Color.error, "Сделка не прошла. Попробуйте ещё раз.");
-    tell(buyer, Color.error, "Сделка не прошла. Попробуйте ещё раз.");
+    tell(seller, Color.error, "交易未能完成，请重试。");
+    tell(buyer, Color.error, "交易未能完成，请重试。");
     return;
   }
 
@@ -671,7 +671,7 @@ async function completeSale(
     tell(
       seller,
       Color.info,
-      `Вы продали ${playerChatName(buyer)} лицензию ${license.label} за $${price}.`
+      `你以 $${price} 向 ${playerChatName(buyer)} 出售了 ${license.label}。`
     );
   }
 

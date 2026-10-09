@@ -9,7 +9,7 @@ import { registerCommand } from "./registry";
 
 const MIN_AMOUNT = 1;
 const MAX_AMOUNT = 5000;
-/** Потолок наличных как у админ `/givemoney`. */
+/** 现金上限与管理员命令 `/givemoney` 相同。 */
 const MAX_CASH = 2_147_483_647;
 const LABEL_MS = 3500;
 const LABEL_OFFSET_Z = 1.1;
@@ -25,7 +25,7 @@ type FloatLabel = {
 const labels = new Map<number, FloatLabel>();
 const busy = new Set<number>();
 
-registerCommand("pay", "Передать наличные игроку рядом", (player, args) => {
+registerCommand("pay", "向附近玩家转账现金", (player, args) => {
   void handlePay(player, args);
 });
 
@@ -130,7 +130,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
           "无法转账。请稍后重试。"
         );
       } catch {
-        // Отправитель уже вышел.
+        // 发送者已离线。
       }
       return;
     }
@@ -139,12 +139,12 @@ async function handlePay(player: Player, args: string): Promise<void> {
       try {
         player.sendClientMessage(Color.error, "现金不足。");
       } catch {
-        // Отправитель уже вышел.
+        // 发送者已离线。
       }
       return;
     }
 
-    // Память только после успеха БД: дельта от текущего снимка (учитывает гонки).
+    // 仅在数据库操作成功后更新内存：以当前快照计算差额（处理竞态）。
     applyCashDelta(player, -amount);
     applyCashDelta(target, amount);
 
@@ -153,7 +153,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
     if (isPlayerActive(player) && getAccount(player)) {
       const targetTag = isPlayerActive(target)
         ? playerChatName(target)
-        : "игроку";
+        : "玩家";
       try {
         player.sendClientMessage(
           Color.info,
@@ -161,14 +161,14 @@ async function handlePay(player: Player, args: string): Promise<void> {
         );
         showPayLabel(player, `-${pretty}`, COLOR_PAY_OUT);
       } catch {
-        // Слот уже пуст.
+        // 槽位已为空。
       }
     }
 
     if (isPlayerActive(target) && getAccount(target)) {
       const senderTag = isPlayerActive(player)
         ? playerChatName(player)
-        : "Игрок";
+        : "玩家";
       try {
         target.sendClientMessage(
           Color.info,
@@ -176,7 +176,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
         );
         showPayLabel(target, `+${pretty}`, COLOR_PAY_IN);
       } catch {
-        // Слот уже пуст.
+        // 槽位已为空。
       }
     }
   } finally {
@@ -267,7 +267,7 @@ function showPayLabel(player: Player, text: string, color: number): void {
 
     labels.set(id, { label, timer });
   } catch {
-    // Слот уже невалиден.
+    // 槽位已失效。
   }
 }
 
@@ -291,6 +291,6 @@ function hidePayLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // Уже снята.
+    // 已解除。
   }
 }

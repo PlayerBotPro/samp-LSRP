@@ -18,12 +18,12 @@ const PASSENGER_SEATS = [1, 2, 3] as const;
 
 registerCommand(
   "putpl",
-  "Посадить игрока в свой транспорт (полиция / FBI)",
+  "将玩家带上自己的车辆（警察 / FBI）",
   (player, args) => {
     const resolved = resolveLawNearbyTarget(
       player,
       args,
-      "Использование: /putpl [id]"
+      "用法： /putpl [id]"
     );
     if (!resolved.ok) {
       return;
@@ -110,22 +110,22 @@ registerCommand(
     const targetName = playerName(target);
     const verb = byGender(
       getAccount(officer)?.gender ?? null,
-      "посадил",
-      "посадила"
+      "送入监狱",
+      "送入监狱"
     );
 
     sendNearby(
       officer,
       CHAT_RADIUS,
       Color.action,
-      `${officerName} ${verb} ${targetName} в транспорт.`
+      `${officerName} 将 ${targetName} 带上了车辆。`
     );
 
     officer.sendClientMessage(Color.info, `你将 ${targetName} 带上了载具。`);
     try {
       target.sendClientMessage(Color.info, `${officerName} ${verb}你上了载具。`);
     } catch {
-      // Уже вышел.
+      // 已离线。
     }
   }
 );
@@ -148,7 +148,7 @@ function findFreePassengerSeat(vehicleId: number): number | null {
         taken.add(seat);
       }
     } catch {
-      // Слот пуст.
+      // 槽位为空。
     }
   });
 

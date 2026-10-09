@@ -25,7 +25,7 @@ registerDocShowHandler("vbilet", (viewer, owner) => {
   }
 
   showMilitaryId(viewer, account);
-  const verb = byGender(account.gender, "показал", "показала");
+  const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(
     Color.gray,
     `你${verb}了军人证: ${playerName(viewer)}.`
@@ -36,7 +36,7 @@ registerDocShowHandler("vbilet", (viewer, owner) => {
   );
 });
 
-registerCommand("vbilet", "Военный билет: посмотреть или показать по id", (player, args) => {
+registerCommand("vbilet", "查看军人证或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -81,7 +81,7 @@ registerCommand("vbilet", "Военный билет: посмотреть ил�
 
 registerCommand(
   "givevbilet",
-  "Выдать военный билет (Армия, ранг 8+)",
+  "签发军人证（军队，等级 8+）",
   (player, args) => {
     const account = getAccount(player);
     const membership = account ? getMembership(account) : null;
@@ -128,7 +128,7 @@ registerCommand(
 
     patchAccount(target, { militaryId: true });
     void saveUserMilitaryId(targetAccount.id, true).catch(() => {
-      // Кэш уже обновлён.
+      // 缓存已更新。
     });
 
     player.sendClientMessage(
@@ -143,11 +143,11 @@ registerCommand(
 );
 
 function showMilitaryId(viewer: Player, owner: Account): void {
-  const served = byGender(owner.gender, "Отслужил", "Отслужила");
+  const served = byGender(owner.gender, "已服役", "已服役");
   const body = [
-    row("Имя", owner.name),
-    row("Статус", "Военный билет получен"),
-    row("Служба", served),
+    row("姓名", owner.name),
+    row("状态", "军人证已签发"),
+    row("服役记录", served),
   ].join("\n");
 
   try {
@@ -155,9 +155,9 @@ function showMilitaryId(viewer: Player, owner: Account): void {
       viewer,
       VBILET_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Военный билет ${owner.name}`,
+      `${TITLE}军人证 ${owner.name}`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {

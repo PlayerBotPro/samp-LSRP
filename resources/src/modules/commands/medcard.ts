@@ -35,7 +35,7 @@ const TITLE = "{FFCC00}";
 const LABEL = "{FFFFFF}";
 const VALUE = "{33CCFF}";
 
-/** Зона выдачи медкарт в больнице (весь служебный блок ~20 м). */
+/** 医院医疗卡签发区域（整个服务区，约 20 米）。 */
 const ISSUE_POINT = {
   x: 1165.0743,
   y: -1350.3879,
@@ -49,7 +49,7 @@ type MedcardOffer = {
   expiresAt: number;
 };
 
-/** Предложения медкарты: slot цели → оффер. */
+/** 医疗卡提议：目标槽位 → 提议。 */
 const pendingOffers = new Map<number, MedcardOffer>();
 
 registerDocShowHandler("show_medcard", (viewer, owner) => {
@@ -60,12 +60,12 @@ registerDocShowHandler("show_medcard", (viewer, owner) => {
   }
 
   showMedcard(viewer, account);
-  const verb = byGender(account.gender, "показал", "показала");
+  const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(Color.gray, `你${verb}了医疗卡: ${playerName(viewer)}.`);
   viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的医疗卡。`);
 });
 
-registerCommand("medcard", "Медкарта: посмотреть или показать по id", (player, args) => {
+registerCommand("medcard", "查看医疗卡或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -110,7 +110,7 @@ registerCommand("medcard", "Медкарта: посмотреть или пок
 
 registerCommand(
   "givemedcard",
-  "Выдать медкарту (Больница, ранг 6+)",
+  "签发医疗卡（医院，等级 6+）",
   (player, args) => {
     const account = getAccount(player);
     const membership = account ? getMembership(account) : null;
@@ -358,7 +358,7 @@ function acceptOffer(target: Player, targetSlot: number, offer: MedcardOffer): v
     saveUserMoney(issuerAccount.id, nextIssuerMoney, issuerAccount.bank),
     saveUserMedcard(targetAccount.id, true),
   ]).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   issuer.sendClientMessage(
@@ -404,9 +404,9 @@ function isInMedcardIssueZone(player: Player): boolean {
 
 function showMedcard(viewer: Player, owner: Account): void {
   const body = [
-    row("Имя", owner.name),
-    row("Статус", "Медицинская карта оформлена"),
-    row("Годность", "Годен"),
+    row("姓名", owner.name),
+    row("状态", "医疗卡已签发"),
+    row("健康状况", "合格"),
   ].join("\n");
 
   try {
@@ -414,9 +414,9 @@ function showMedcard(viewer: Player, owner: Account): void {
       viewer,
       MEDCARD_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Медкарта ${owner.name}`,
+      `${TITLE}医疗卡 ${owner.name}`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {

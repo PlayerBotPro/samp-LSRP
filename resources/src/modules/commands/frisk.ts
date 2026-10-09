@@ -14,11 +14,11 @@ const LABEL = "{FFFFFF}";
 const VALUE = "{33CCFF}";
 const EMPTY = "{AAAAAA}";
 
-registerCommand("frisk", "Обыскать игрока (полиция / FBI)", (player, args) => {
+registerCommand("frisk", "搜查玩家（警察 / FBI）", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "Использование: /frisk [id]"
+    "用法： /frisk [id]"
   );
   if (!resolved.ok) {
     return;
@@ -37,20 +37,20 @@ registerCommand("frisk", "Обыскать игрока (полиция / FBI)",
 
   const frisked = byGender(
     getAccount(officer)?.gender ?? null,
-    "обыскал",
-    "обыскала"
+    "搜查了",
+    "搜查了"
   );
   sendNearby(
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(officer)} тщательно ${frisked} ${playerName(target)}.`
+    `${playerName(officer)} 仔细搜查了 ${playerName(target)}。`
   );
 
   try {
     target.sendClientMessage(Color.gray, `${playerName(officer)} 正在搜查你。`);
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 });
 
@@ -65,10 +65,10 @@ function showFriskResult(
   }
 ): boolean {
   const body = [
-    row("Телефон", account.phone ? account.phone : "Нет", !account.phone),
-    row("Металл", `${account.metal} шт.`, account.metal <= 0),
-    row("Наркотики", `${account.drugs} шт.`, account.drugs <= 0),
-    row("Патроны", `${account.ammo} шт.`, account.ammo <= 0),
+    row("电话", account.phone ? account.phone : "无", !account.phone),
+    row("金属", `${account.metal} 件`, account.metal <= 0),
+    row("毒品", `${account.drugs} 件`, account.drugs <= 0),
+    row("弹药", `${account.ammo} 件`, account.ammo <= 0),
   ].join("\n");
 
   try {
@@ -76,9 +76,9 @@ function showFriskResult(
       viewer,
       FRISK_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `{FFCC00}Обыск: ${ownerName}`,
+      `{FFCC00}搜查：${ownerName}`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
     return true;

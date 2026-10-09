@@ -17,7 +17,7 @@ const busy = new Set<number>();
 
 registerCommand(
   "makestore",
-  "Установить или переставить шкаф в своём доме",
+  "在自己家中放置或移动储物柜",
   (player) => {
     void handleMakeStore(player);
   }

@@ -8,13 +8,13 @@ import { getMembership, isLawOfficer, notifyLawStaff } from "../org";
 import { isJailed } from "../prison/sentence";
 import { registerCommand } from "./registry";
 
-const USAGE = "Использование: /su [id] [1-6] [причина]";
-const DENY = "Команда доступна сотрудникам полиции и FBI.";
+const USAGE = "用法： /su [id] [1-6] [原因]";
+const DENY = "仅警察和 FBI 成员可使用此命令。";
 const MAX_WANTED = 6;
 
 registerCommand(
   "su",
-  "Выдать розыск игроку (полиция / FBI)",
+  "通缉玩家（警察 / FBI）",
   (player, args) => {
     if (!isAuthenticated(player) || !isLawOfficer(player)) {
       player.sendClientMessage(Color.error, DENY);
@@ -84,7 +84,7 @@ registerCommand(
 
     const rankTitle = officerMembership.rank.title;
     notifyLawStaff(
-      `Диспетчер: ${rankTitle} ${playerChatName(player)} объявил розыск на ${playerChatName(target)} (+${added}, итого ${next}). Причина: ${parsed.reason}`
+      `调度：${rankTitle} ${playerChatName(player)} 通缉了 ${playerChatName(target)}（+${added}，合计 ${next}）。原因：${parsed.reason}`
     );
 
     try {
@@ -93,7 +93,7 @@ registerCommand(
         `你已被通缉 (+${added}, 共 ${next})。原因: ${parsed.reason}`
       );
     } catch {
-      // Уже вышел.
+      // 已离线。
     }
 
     player.sendClientMessage(

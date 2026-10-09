@@ -32,14 +32,14 @@ type PendingTake = {
 };
 
 const pending = new Map<number, PendingTake>();
-/** Один apply на офицера — иначе параллельные saveUserInventory перетирают друг друга. */
+/** 每位警官只执行一次 apply，否则并行的 saveUserInventory 会互相覆盖。 */
 const busy = new Set<number>();
 
-registerCommand("take", "Изъять предметы у игрока (полиция / FBI)", (player, args) => {
+registerCommand("take", "没收玩家物品（警察 / FBI）", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "Использование: /take [id]"
+    "用法： /take [id]"
   );
   if (!resolved.ok) {
     return;
@@ -76,10 +76,10 @@ registerCommand("take", "Изъять предметы у игрока (поли
       officer,
       TAKE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `{FFCC00}Изъятие: ${account.name}`,
+      `{FFCC00}没收物品：${account.name}`,
       lines.join("\n"),
-      "Изъять",
-      "Отмена"
+      "没收",
+      "取消"
     );
   } catch {
     pending.delete(officerId);
@@ -182,7 +182,7 @@ async function applyTake(
     return;
   }
 
-  const took = byGender(getAccount(officer)?.gender ?? null, "изъял", "изъяла");
+  const took = byGender(getAccount(officer)?.gender ?? null, "没收了", "没收了");
 
   if (item.kind === "drugs") {
     if (account.drugs <= 0) {
@@ -205,7 +205,7 @@ async function applyTake(
       return;
     }
 
-    roleplayTake(officer, target, took, `наркотики (${amount} шт.)`);
+    roleplayTake(officer, target, took, `毒品 (${amount} 件)`);
     return;
   }
 
@@ -230,7 +230,7 @@ async function applyTake(
       return;
     }
 
-    roleplayTake(officer, target, took, `патроны (${amount} шт.)`);
+    roleplayTake(officer, target, took, `弹药 (${amount} 件)`);
     return;
   }
 
@@ -255,7 +255,7 @@ async function applyTake(
     officer,
     target,
     took,
-    `лицензию (${item.label.replace(/^Лицензия:\s*/, "")})`
+    `许可证（${item.label.replace(/^Лицензия:\s*/, "")}）`
   );
 }
 
@@ -269,7 +269,7 @@ function roleplayTake(
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(officer)} ${verb} у ${playerName(target)} ${what}.`
+    `${playerName(officer)} ${verb} ${what}（目标：${playerName(target)}）。`
   );
 
   try {
@@ -278,7 +278,7 @@ function roleplayTake(
       `${playerName(officer)} ${verb}了你的${what}.`
     );
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 
   officer.sendClientMessage(Color.info, `你没收了${what}.`);
@@ -291,17 +291,17 @@ function buildTakeItems(account: {
 }): TakeItem[] {
   const items: TakeItem[] = [];
   if (account.drugs > 0) {
-    items.push({ kind: "drugs", label: `Наркотики (${account.drugs} шт.)` });
+    items.push({ kind: "drugs", label: `毒品 (${account.drugs} 件)` });
   }
   if (account.ammo > 0) {
-    items.push({ kind: "ammo", label: `Патроны (${account.ammo} шт.)` });
+    items.push({ kind: "ammo", label: `弹药 (${account.ammo} 件)` });
   }
   for (const row of LICENSE_ROWS) {
     if (account.licenses[row.key]) {
       items.push({
         kind: "license",
         key: row.key,
-        label: `Лицензия: ${row.label.toLowerCase()}`,
+        label: `许可证： ${row.label.toLowerCase()}`,
       });
     }
   }

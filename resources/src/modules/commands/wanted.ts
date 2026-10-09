@@ -16,7 +16,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const PLAYER_STATE_WASTED = 7;
 const CHECKPOINT_RADIUS = 3;
 const PURSUIT_TICK_MS = 5000;
-const DENY = "Команда доступна сотрудникам полиции и FBI.";
+const DENY = "仅警察和 FBI 成员可使用此命令。";
 
 type WantedRow = {
   slot: number;
@@ -41,7 +41,7 @@ const pendingTarget = new Map<number, PendingTarget>();
 const wantedLists = new Map<number, PendingTarget[]>();
 const pursuits = new Map<number, Pursuit>();
 
-registerCommand("wanted", "Список игроков в розыске", (player) => {
+registerCommand("wanted", "通缉玩家列表", (player) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(Color.error, DENY);
     return;
@@ -63,7 +63,7 @@ registerCommand("wanted", "Список игроков в розыске", (play
     rows.map((row) => ({ slot: row.slot, accountId: row.accountId }))
   );
 
-  const body = ["Имя\tУровень розыска", ...rows.map((row) => row.line)].join(
+  const body = ["姓名\t通缉等级", ...rows.map((row) => row.line)].join(
     "\n"
   );
 
@@ -72,10 +72,10 @@ registerCommand("wanted", "Список игроков в розыске", (play
       player,
       WANTED_LIST_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `В розыске: ${rows.length}`,
+      `通缉人数：${rows.length}`,
       body,
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     wantedLists.delete(officerId);
@@ -83,7 +83,7 @@ registerCommand("wanted", "Список игроков в розыске", (play
   }
 });
 
-registerCommand("pursuit", "Прекратить слежку за розыскным", (player) => {
+registerCommand("pursuit", "停止追踪通缉犯", (player) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(Color.error, DENY);
     return;
@@ -95,7 +95,7 @@ registerCommand("pursuit", "Прекратить слежку за розыск�
     return;
   }
 
-  stopPursuit(player, officerId, "Слежка прекращена.");
+  stopPursuit(player, officerId, "追踪已停止。");
 });
 
 export function bindWantedDialogs(): void {
@@ -150,9 +150,9 @@ export function bindWantedDialogs(): void {
           WANTED_ACTION_DIALOG_ID,
           DIALOG_STYLE_LIST,
           playerChatName(target),
-          "1. Найти\n2. Снять розыск",
-          "Выбрать",
-          "Отмена"
+          "1. 查找\n2. 解除通缉",
+          "选择",
+          "取消"
         );
       } catch {
         pendingTarget.delete(officerId);
@@ -197,15 +197,15 @@ export function bindWantedDialogs(): void {
 
   omp.on("playerDisconnect", (player) => {
     onOfficerGone(player);
-    onTargetGone(player, "Цель вышла из игры. Слежка прекращена.");
+    onTargetGone(player, "目标已离线，追踪已停止。");
   });
 
   omp.on("playerDeath", (player) => {
-    onTargetGone(player, "Цель погибла. Слежка прекращена.");
+    onTargetGone(player, "目标已死亡，追踪已停止。");
   });
 }
 
-/** Срыв слежки у всех офицеров, когда с цели сняли розыск. */
+/** 目标解除通缉后，停止所有警员对其进行的追踪。 */
 function stopPursuitsOfTarget(
   accountId: number | undefined,
   slot: number | null
@@ -220,7 +220,7 @@ function stopPursuitsOfTarget(
 
     const officer = findPlayer(officerId);
     if (officer) {
-      stopPursuit(officer, officerId, "У цели сняли розыск. Слежка прекращена.");
+      stopPursuit(officer, officerId, "目标已解除通缉，追踪已停止。");
     } else {
       clearPursuitById(officerId);
     }
@@ -304,7 +304,7 @@ function startPursuit(officer: Player, target: Player): void {
   });
 
   if (!updatePursuitCheckpoint(officer, target)) {
-    stopPursuit(officer, officerId, "Не удалось начать слежку.");
+    stopPursuit(officer, officerId, "无法开始追踪。");
     return;
   }
 
@@ -333,48 +333,48 @@ function tickPursuit(officerId: number): void {
   const target = findPlayer(pursuit.targetSlot);
   const targetAccount = target ? getAccount(target) : null;
   if (!target || !targetAccount || targetAccount.id !== pursuit.targetAccountId) {
-    stopPursuit(officer, officerId, "Цель вышла из игры. Слежка прекращена.");
+    stopPursuit(officer, officerId, "目标已离线，追踪已停止。");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    stopPursuit(officer, officerId, "У цели сняли розыск. Слежка прекращена.");
+    stopPursuit(officer, officerId, "目标已解除通缉，追踪已停止。");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      stopPursuit(officer, officerId, "Цель погибла. Слежка прекращена.");
+      stopPursuit(officer, officerId, "目标已死亡，追踪已停止。");
       return;
     }
   } catch {
-    stopPursuit(officer, officerId, "Цель вышла из игры. Слежка прекращена.");
+    stopPursuit(officer, officerId, "目标已离线，追踪已停止。");
     return;
   }
 
   const hidden = trackBlockReason(target);
   if (hidden) {
-    stopPursuit(officer, officerId, "Цель скрылась. Слежка прекращена.");
+    stopPursuit(officer, officerId, "目标已逃脱，追踪已停止。");
     return;
   }
 
   updatePursuitCheckpoint(officer, target);
 }
 
-/** `null` — можно следить (улица, VW 0). */
+/** `null` 表示可以追踪（室外，VW 0）。 */
 function trackBlockReason(target: Player): string | null {
   try {
     if (target.getInterior() > 0) {
-      return "Нельзя следить за игроком в интерьере.";
+      return "无法追踪位于室内的玩家。";
     }
 
     if (target.getVirtualWorld() !== STREET_WORLD) {
-      return "Нельзя следить за игроком в виртуальном мире.";
+      return "无法追踪位于虚拟世界中的玩家。";
     }
 
     return null;
   } catch {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 }
 
@@ -397,7 +397,7 @@ function stopPursuit(
   try {
     Checkpoint.disable(officer);
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 
   if (message) {
@@ -406,7 +406,7 @@ function stopPursuit(
         officer.sendClientMessage(Color.info, message);
       }
     } catch {
-      // Слот пуст.
+      // 槽位为空。
     }
   }
 }

@@ -11,7 +11,7 @@ import {
 
 const PLAYER_STATE_DRIVER = 2;
 
-registerCommand("limit", "Ограничитель скорости машины", (player, args) => {
+registerCommand("limit", "车辆速度限制器", (player, args) => {
   let vehicle;
   try {
     if (player.getState() !== PLAYER_STATE_DRIVER) {

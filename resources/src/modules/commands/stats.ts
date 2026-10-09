@@ -16,7 +16,7 @@ const TITLE = "{FFCC00}";
 const LABEL = "{FFFFFF}";
 const VALUE = "{33CCFF}";
 
-/** Статистика: себе (из /mn) или цель (админ /stats). */
+/** 统计：查看自己（通过 /mn）或其他玩家（管理员 /stats）。 */
 export function showStatsDialog(viewer: Player, target?: Player): void {
   const subject = target ?? viewer;
   const account = getAccount(subject);
@@ -32,38 +32,38 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
       health = Math.round(live);
     }
   } catch {
-    // Статы мира недоступны — покажем данные аккаунта.
+    // 世界统计数据不可用，将显示账号信息。
   }
 
   const membership = getMembership(account);
   const rank = membership
     ? `${membership.rank.title} (${membership.rank.id})`
-    : "Нет";
+    : "无";
   const body = [
-    statsRow("Имя", account.name),
-    statsRow("Проживание", residenceLabel(account.id)),
-    statsRow("Бизнес", businessOwnershipLabel(account.id)),
-    statsRow("Пол", genderLabel(account.gender)),
-    statsRow("Уровень", String(account.level)),
-    statsRow("Опыт", `${account.exp}/${expForNextLevel(account.level)}`),
-    statsRow("Законопослушность", String(account.lawfulness)),
-    statsRow("Скин", String(resolvePlayerSkin(account))),
-    statsRow("Дата рождения", formatBirthDate(account.birthDate)),
-    statsRow("Почта", account.email),
-    statsRow("Деньги", formatMoney(account.money)),
-    statsRow("Банк", formatMoney(account.bank)),
-    statsRow("Донат-счёт", String(account.donate)),
-    statsRow("Наркотики", `${account.drugs} шт.`),
-    statsRow("Патроны", `${account.ammo} шт.`),
-    statsRow("Металл", `${account.metal} шт.`),
-    statsRow("Розыск", String(account.wantedLevel)),
-    statsRow("Военный билет", account.militaryId ? "Есть" : "Нет"),
-    statsRow("Медкарта", account.medcard ? "Есть" : "Нет"),
-    statsRow("Здоровье", String(health)),
-    statsRow("Голод", `${normalizeHunger(account.hunger)}/${MAX_HUNGER}`),
-    statsRow("Организация", membership?.org.name ?? "Нет"),
-    statsRow("Должность", rank),
-    statsRow("Работа", jobLabel(account.jobId, account.gender)),
+    statsRow("姓名", account.name),
+    statsRow("住所", residenceLabel(account.id)),
+    statsRow("企业", businessOwnershipLabel(account.id)),
+    statsRow("性别", genderLabel(account.gender)),
+    statsRow("等级", String(account.level)),
+    statsRow("经验", `${account.exp}/${expForNextLevel(account.level)}`),
+    statsRow("守法值", String(account.lawfulness)),
+    statsRow("皮肤", String(resolvePlayerSkin(account))),
+    statsRow("出生日期", formatBirthDate(account.birthDate)),
+    statsRow("邮箱", account.email),
+    statsRow("现金", formatMoney(account.money)),
+    statsRow("银行", formatMoney(account.bank)),
+    statsRow("捐赠账户", String(account.donate)),
+    statsRow("毒品", `${account.drugs} 件`),
+    statsRow("弹药", `${account.ammo} 件`),
+    statsRow("金属", `${account.metal} 件`),
+    statsRow("通缉等级", String(account.wantedLevel)),
+    statsRow("军人证", account.militaryId ? "有" : "无"),
+    statsRow("医疗卡", account.medcard ? "有" : "无"),
+    statsRow("健康", String(health)),
+    statsRow("饥饿值", `${normalizeHunger(account.hunger)}/${MAX_HUNGER}`),
+    statsRow("组织", membership?.org.name ?? "无"),
+    statsRow("职位", rank),
+    statsRow("职业", jobLabel(account.jobId, account.gender)),
   ].join("\n");
 
   try {
@@ -71,9 +71,9 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
       viewer,
       STATS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Статистика ${account.name}`,
+      `${TITLE}统计 ${account.name}`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {

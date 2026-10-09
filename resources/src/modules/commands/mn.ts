@@ -22,14 +22,14 @@ const DIALOG_STYLE_LIST = 2;
 type MenuKey = "stats" | "commands" | "rules" | "report" | "invite";
 
 const MENU_ITEMS: Record<MenuKey, string> = {
-  stats: "Статистика",
-  commands: "Список команд",
-  rules: "Правила сервера",
-  report: "Связь с администрацией",
-  invite: "Кто пригласил",
+  stats: "统计",
+  commands: "命令列表",
+  rules: "服务器规则",
+  report: "联系管理员",
+  invite: "邀请人",
 };
 
-registerCommand("mn", "Меню: статистика, команды, правила", (player) => {
+registerCommand("mn", "菜单：统计、命令、规则", (player) => {
   showMenu(player);
 });
 
@@ -101,10 +101,10 @@ function showMenu(player: Player): void {
       player,
       MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Меню",
+      "菜单",
       body,
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开菜单。");
@@ -119,7 +119,7 @@ function showRulesDialog(player: Player): void {
       DIALOG_STYLE_MSGBOX,
       RULES_TITLE,
       SERVER_RULES,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {
@@ -139,10 +139,10 @@ function showInviteDialog(player: Player, error?: string): void {
       player,
       INVITE_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Кто пригласил",
-      `${prefix}Введи ник игрока, который тебя пригласил.\nФормат: Name_Surname`,
-      "Сохранить",
-      "Отмена"
+      "邀请人",
+      `${prefix}请输入邀请你的玩家昵称。\n格式：Name_Surname`,
+      "保存",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开表格。");
@@ -175,17 +175,17 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
 
   const nick = raw.trim();
   if (!nick) {
-    showInviteDialog(player, "Введи ник.");
+    showInviteDialog(player, "请输入昵称。");
     return;
   }
 
   if (!isRoleplayName(nick)) {
-    showInviteDialog(player, "Ник в формате Name_Surname.");
+    showInviteDialog(player, "昵称格式应为 Name_Surname。");
     return;
   }
 
   if (nick.toLowerCase() === account.name.toLowerCase()) {
-    showInviteDialog(player, "Нельзя указать себя.");
+    showInviteDialog(player, "不能填写自己。");
     return;
   }
 
@@ -201,7 +201,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     }
 
     if (!row) {
-      showInviteDialog(player, "Такой ник не зарегистрирован.");
+      showInviteDialog(player, "该昵称未注册。");
       return;
     }
 
@@ -222,7 +222,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] ошибка рефералки ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 推荐系统错误 ${account.name}：${message}`);
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.error,

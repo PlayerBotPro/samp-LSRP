@@ -18,7 +18,7 @@ type WatchLabel = {
 
 const labels = new Map<number, WatchLabel>();
 
-registerCommand("time", "Посмотреть время, мут и срок", (player) => {
+registerCommand("time", "查看时间、禁言状态和刑期", (player) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -43,8 +43,8 @@ registerCommand("time", "Посмотреть время, мут и срок", (
     );
   }
 
-  const verb = byGender(account.gender, "Посмотрел", "Посмотрела");
-  showWatchLabel(player, `${verb} на часы.`);
+  const verb = byGender(account.gender, "看了", "看了");
+  showWatchLabel(player, `${verb}手表。`);
 });
 
 export function bindTimeLabels(): void {
@@ -88,7 +88,7 @@ function showWatchLabel(player: Player, text: string): void {
 
     labels.set(id, { label, timer });
   } catch {
-    // Слот уже невалиден.
+    // 槽位已失效。
   }
 }
 
@@ -112,6 +112,6 @@ function hideWatchLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // Уже снята.
+    // 已解除。
   }
 }

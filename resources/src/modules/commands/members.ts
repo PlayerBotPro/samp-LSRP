@@ -10,7 +10,7 @@ export const ORG_MEMBERS_DIALOG_ID = 125;
 
 const DIALOG_STYLE_MSGBOX = 0;
 
-registerCommand("members", "Состав организации в сети", (player) => {
+registerCommand("members", "在线组织成员列表", (player) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership) {
@@ -65,13 +65,13 @@ registerCommand("members", "Состав организации в сети", (p
   }
 
   const lines = rows.map((row) => {
-    const phone = row.phone ? ` | тел. ${row.phone}` : "";
+    const phone = row.phone ? ` | 电话：${row.phone}` : "";
     return `[${row.rankId}] ${row.rankTitle} ${row.name}${phone}${row.status}`;
   });
 
   const body =
-    `Организация: ${membership.org.name}\n` +
-    `В сети: ${rows.length}\n\n` +
+    `组织: ${membership.org.name}\n` +
+    `在线人数：${rows.length}\n\n` +
     lines.join("\n");
 
   try {
@@ -79,7 +79,7 @@ registerCommand("members", "Состав организации в сети", (p
       player,
       ORG_MEMBERS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Организация в сети",
+      "在线组织成员",
       body,
       "OK",
       ""

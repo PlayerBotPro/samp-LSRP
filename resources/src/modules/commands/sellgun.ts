@@ -31,11 +31,11 @@ import {
 import { registerCommand } from "./registry";
 
 const USAGE =
-  `Использование: /sellgun [id] [патроны 1-500] [цена ${GANG_DEAL_MIN_PRICE}-${GANG_DEAL_MAX_PRICE}]`;
+  `用法：/sellgun [id] [弹药 1-500] [价格 ${GANG_DEAL_MIN_PRICE}-${GANG_DEAL_MAX_PRICE}]`;
 
 const MAX_AMMO = 500;
 
-/** Оружие из /makegun — только его можно продавать. */
+/** 只能出售通过 /makegun 制造的武器。 */
 const SELLABLE_GUNS: ReadonlyMap<number, string> = new Map([
   [24, "Desert Eagle"],
   [30, "AK-47"],
@@ -65,7 +65,7 @@ const pendingByBuyer = new Map<number, PendingGunOffer>();
 
 registerCommand(
   "sellgun",
-  "Продать оружие в руках на территории банды",
+  "在帮派地盘出售手持武器",
   (player, args) => {
     const sellerBlock = gangSellerGate(player);
     if (sellerBlock) {
@@ -85,13 +85,13 @@ registerCommand(
     }
 
     if (parsed.slot === sellerId) {
-      tellDeal(player, Color.error, "Нельзя продать оружие себе.");
+      tellDeal(player, Color.error, "不能向自己出售武器。");
       return;
     }
 
     const buyer = findDealPlayer(parsed.slot);
     if (!buyer) {
-      tellDeal(player, Color.error, "Игрок не найден.");
+      tellDeal(player, Color.error, "未找到玩家。");
       return;
     }
 
@@ -106,7 +106,7 @@ registerCommand(
       tellDeal(
         player,
         Color.error,
-        "Возьмите в руки продаваемое оружие (Deagle, AK, M4, Shotgun, SD, MP5, Sniper)."
+        "请手持要出售的武器（Deagle、AK、M4、Shotgun、SD、MP5、Sniper）。"
       );
       return;
     }
@@ -115,7 +115,7 @@ registerCommand(
       tellDeal(
         player,
         Color.error,
-        `Недостаточно патронов в оружии. Сейчас: ${held.ammo}.`
+        `武器弹药不足。当前：${held.ammo}。`
       );
       return;
     }
@@ -131,25 +131,25 @@ registerCommand(
       tellDeal(
         player,
         Color.error,
-        `У игрока недостаточно наличных. Нужно ${formatMoney(parsed.price)}.`
+        `该玩家现金不足。需要 ${formatMoney(parsed.price)}。`
       );
       return;
     }
 
     if (isDealBusy(sellerId, buyerId)) {
-      tellDeal(player, Color.error, "Подождите завершения предыдущей сделки.");
+      tellDeal(player, Color.error, "请等待上一笔交易完成。");
       return;
     }
 
     if (pendingByBuyer.has(buyerId) || getYnOfferKind(buyerId) !== undefined) {
-      tellDeal(player, Color.error, "У игрока уже есть активное предложение.");
+      tellDeal(player, Color.error, "该玩家已有待处理的提议。");
       return;
     }
 
     cancelOffersFromSeller(sellerId, sellerAccount.id);
 
     if (!claimYnOffer(buyerId, "sellgun")) {
-      tellDeal(player, Color.error, "У игрока уже есть активное предложение.");
+      tellDeal(player, Color.error, "该玩家已有待处理的提议。");
       return;
     }
 
@@ -172,17 +172,17 @@ registerCommand(
     tellDeal(
       player,
       Color.info,
-      `Вы предложили ${held.label} (${parsed.ammo} патр.) игроку ${playerName(buyer)} за ${pretty}.`
+      `你向 ${playerName(buyer)} 提议以 ${pretty} 出售 ${held.label}（${parsed.ammo} 发弹药）。`
     );
     tellDeal(
       buyer,
       Color.white,
-      `${playerName(player)} предлагает ${held.label} (${parsed.ammo} патр.) за ${pretty}.`
+      `${playerName(player)} 提议以 ${pretty} 出售 ${held.label}（${parsed.ammo} 发弹药）。`
     );
     tellDeal(
       buyer,
       Color.white,
-      "Нажмите {00CC00}Y {FFFFFF}чтобы купить или {FF6600}N {FFFFFF}чтобы отказаться"
+      "按 {00CC00}Y {FFFFFF}购买，或按 {FF6600}N {FFFFFF}拒绝"
     );
   }
 );
@@ -228,17 +228,17 @@ export function bindSellGunOffers(): void {
       clearTimeout(offer.timer);
       pendingByBuyer.delete(buyerId);
       releaseYnOffer(buyerId, "sellgun");
-      tellDeal(player, Color.info, "Вы отклонили предложение.");
+      tellDeal(player, Color.info, "你拒绝了提议。");
       if (sellerOk && seller) {
         const verb = byGender(
           getAccount(player)?.gender ?? null,
-          "отклонил",
-          "отклонила"
+          "拒绝了",
+          "拒绝了"
         );
         tellDeal(
           seller,
           Color.info,
-          `${playerChatName(player)} ${verb} предложение оружия.`
+          `${playerChatName(player)} ${verb} 武器交易提议。`
         );
       }
       return;
@@ -248,17 +248,17 @@ export function bindSellGunOffers(): void {
       clearTimeout(offer.timer);
       pendingByBuyer.delete(buyerId);
       releaseYnOffer(buyerId, "sellgun");
-      tellDeal(player, Color.error, "Предложение уже неактуально.");
+      tellDeal(player, Color.error, "该提议已失效。");
       return;
     }
 
     if (isDealBusy(buyerId, offer.sellerSlot)) {
-      tellDeal(player, Color.error, "Подождите завершения предыдущей сделки.");
+      tellDeal(player, Color.error, "请等待上一笔交易完成。");
       return;
     }
 
     if (!claimDealBusy(buyerId, offer.sellerSlot)) {
-      tellDeal(player, Color.error, "Подождите завершения предыдущей сделки.");
+      tellDeal(player, Color.error, "请等待上一笔交易完成。");
       return;
     }
 
@@ -303,7 +303,7 @@ async function completeGunSale(
     sellerAccount.id !== offer.sellerAccountId ||
     buyerAccount.id !== offer.buyerAccountId
   ) {
-    tellDeal(buyer, Color.error, "Предложение уже неактуально.");
+    tellDeal(buyer, Color.error, "该提议已失效。");
     return;
   }
 
@@ -313,17 +313,17 @@ async function completeGunSale(
     heldWeapon = Number(seller.getWeapon());
     heldAmmo = readWeaponAmmo(seller, offer.weaponId);
   } catch {
-    tellDeal(buyer, Color.error, "Продавец больше не держит оружие.");
-    tellDeal(seller, Color.error, "Возьмите оружие в руки для продажи.");
+    tellDeal(buyer, Color.error, "卖家已不再手持武器。");
+    tellDeal(seller, Color.error, "请手持要出售的武器。");
     return;
   }
 
   if (heldWeapon !== offer.weaponId || heldAmmo < offer.ammo) {
-    tellDeal(buyer, Color.error, "Продавец больше не держит нужное оружие.");
+    tellDeal(buyer, Color.error, "卖家已不再手持所需武器。");
     tellDeal(
       seller,
       Color.error,
-      "Сделка отменена: нужно держать то же оружие с достаточным числом патронов."
+      "交易已取消：你必须手持同一把武器并确保弹药充足。"
     );
     return;
   }
@@ -332,15 +332,15 @@ async function completeGunSale(
     tellDeal(
       buyer,
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(offer.price)}.`
+      `现金不足。需要 ${formatMoney(offer.price)}。`
     );
-    tellDeal(seller, Color.error, "У покупателя недостаточно наличных.");
+    tellDeal(seller, Color.error, "买家现金不足。");
     return;
   }
 
   if (sellerAccount.money > GANG_DEAL_MAX_CASH - offer.price) {
-    tellDeal(buyer, Color.error, "Сделка невозможна: у продавца слишком много наличных.");
-    tellDeal(seller, Color.error, "У вас слишком много наличных для этой сделки.");
+    tellDeal(buyer, Color.error, "无法交易：卖家持有的现金过多。");
+    tellDeal(seller, Color.error, "你的现金过多，无法进行此交易。");
     return;
   }
 
@@ -348,8 +348,8 @@ async function completeGunSale(
   const remaining = heldAmmo - offer.ammo;
 
   if (!revokeWeapon(seller, offer.weaponId)) {
-    tellDeal(buyer, Color.error, "Не удалось забрать оружие у продавца.");
-    tellDeal(seller, Color.error, "Не удалось передать оружие.");
+    tellDeal(buyer, Color.error, "无法从卖家处取走武器。");
+    tellDeal(seller, Color.error, "无法转交武器。");
     return;
   }
 
@@ -358,8 +358,8 @@ async function completeGunSale(
       weaponId: offer.weaponId,
       ammo: heldAmmo,
     });
-    tellDeal(buyer, Color.error, "Не удалось завершить передачу оружия.");
-    tellDeal(seller, Color.error, "Не удалось завершить передачу оружия.");
+    tellDeal(buyer, Color.error, "无法完成武器转交。");
+    tellDeal(seller, Color.error, "无法完成武器转交。");
     return;
   }
 
@@ -369,8 +369,8 @@ async function completeGunSale(
       weaponId: offer.weaponId,
       ammo: heldAmmo,
     });
-    tellDeal(buyer, Color.error, "Не удалось выдать оружие.");
-    tellDeal(seller, Color.error, "Не удалось выдать оружие покупателю.");
+    tellDeal(buyer, Color.error, "无法发放武器。");
+    tellDeal(seller, Color.error, "无法向买家发放武器。");
     return;
   }
 
@@ -383,8 +383,8 @@ async function completeGunSale(
       weaponId: offer.weaponId,
       ammo: heldAmmo,
     });
-    tellDeal(buyer, Color.error, "Не удалось провести оплату. Оружие возвращено.");
-    tellDeal(seller, Color.error, "Не удалось провести оплату.");
+    tellDeal(buyer, Color.error, "付款失败，武器已退回。");
+    tellDeal(seller, Color.error, "付款失败。");
     return;
   }
 
@@ -394,8 +394,8 @@ async function completeGunSale(
       weaponId: offer.weaponId,
       ammo: heldAmmo,
     });
-    tellDeal(buyer, Color.error, "Недостаточно наличных.");
-    tellDeal(seller, Color.error, "У покупателя недостаточно наличных.");
+    tellDeal(buyer, Color.error, "现金不足。");
+    tellDeal(seller, Color.error, "买家现金不足。");
     return;
   }
 
@@ -406,12 +406,12 @@ async function completeGunSale(
   tellDeal(
     buyer,
     Color.info,
-    `Вы купили ${offer.weaponLabel} (${offer.ammo} патр.) за ${pretty}.`
+    `你以 ${pretty} 购买了 ${offer.weaponLabel}（${offer.ammo} 发弹药）。`
   );
   tellDeal(
     seller,
     Color.info,
-    `Вы продали ${offer.weaponLabel} (${offer.ammo} патр.) игроку ${playerName(buyer)} за ${pretty}.`
+    `你以 ${pretty} 向 ${playerName(buyer)} 出售了 ${offer.weaponLabel}（${offer.ammo} 发弹药）。`
   );
 }
 
@@ -472,7 +472,7 @@ function readWeaponAmmo(player: Player, weaponId: number): number {
   return snap.weaponId === weaponId ? snap.ammo : 0;
 }
 
-/** Снимок слота оружия (для отката, если у покупателя уже был ствол в том же слоте). */
+/** 武器槽位快照（若买家在同一槽位已有武器，用于回滚）。 */
 function readSlotSnap(player: Player, forWeaponId: number): SlotSnap {
   try {
     const slot = weaponSlot(forWeaponId);
@@ -499,8 +499,8 @@ function readSlotSnap(player: Player, forWeaponId: number): SlotSnap {
 }
 
 /**
- * Откат слота: снять выданное оружие и вернуть то, что было до сделки
- * (в т.ч. другой ствол того же слота или прежние патроны).
+ * 回滚槽位：移除已发放的武器，并恢复交易前的状态。
+ * （包括同槽位的其他武器或原有弹药）。
  */
 function restoreSlotWeapon(
   player: Player,
@@ -533,12 +533,12 @@ function expireOffer(buyerSlot: number, buyerAccountId: number): void {
 
   const buyer = findDealPlayer(buyerSlot);
   if (buyer && getAccount(buyer)?.id === buyerAccountId) {
-    tellDeal(buyer, Color.error, "Предложение оружия истекло.");
+    tellDeal(buyer, Color.error, "武器交易提议已过期。");
   }
 
   const seller = findDealPlayer(offer.sellerSlot);
   if (seller && getAccount(seller)?.id === offer.sellerAccountId) {
-    tellDeal(seller, Color.error, "Предложение оружия истекло.");
+    tellDeal(seller, Color.error, "武器交易提议已过期。");
   }
 }
 
@@ -558,12 +558,12 @@ function clearBuyerOffer(buyerSlot: number, notify: boolean): void {
 
   const buyer = findDealPlayer(offer.buyerSlot);
   if (buyer && getAccount(buyer)?.id === offer.buyerAccountId) {
-    tellDeal(buyer, Color.error, "Предложение оружия отменено.");
+    tellDeal(buyer, Color.error, "武器交易提议已取消。");
   }
 
   const seller = findDealPlayer(offer.sellerSlot);
   if (seller && getAccount(seller)?.id === offer.sellerAccountId) {
-    tellDeal(seller, Color.info, "Предложение оружия отменено.");
+    tellDeal(seller, Color.info, "武器交易提议已取消。");
   }
 }
 
@@ -586,7 +586,7 @@ function cancelOffersFromSeller(sellerSlot: number, sellerAccountId?: number): v
 
     const buyer = findDealPlayer(buyerSlot);
     if (buyer && getAccount(buyer)?.id === offer.buyerAccountId) {
-      tellDeal(buyer, Color.error, "Предложение оружия отменено.");
+      tellDeal(buyer, Color.error, "武器交易提议已取消。");
     }
   }
 }

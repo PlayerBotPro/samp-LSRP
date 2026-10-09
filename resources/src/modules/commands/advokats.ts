@@ -15,7 +15,7 @@ type OnlineAdvokat = {
   slot: number;
 };
 
-registerCommand("advokats", "Список адвокатов online", (player) => {
+registerCommand("advokats", "在线律师列表", (player) => {
   const list: OnlineAdvokat[] = [];
 
   omp.players.forEach((other) => {
@@ -46,7 +46,7 @@ registerCommand("advokats", "Список адвокатов online", (player) =
     }
 
     const name = playerChatName(other);
-    const phone = account.phone ? ` | тел. ${account.phone}` : "";
+    const phone = account.phone ? ` | 电话：${account.phone}` : "";
     const slot = playerId(other) ?? 0;
     list.push({
       name,
@@ -63,14 +63,14 @@ registerCommand("advokats", "Список адвокатов online", (player) =
   }
 
   const lines = list.map((row) => row.line);
-  const body = `В сети: ${list.length}\n\n${lines.join("\n")}`;
+  const body = `在线人数：${list.length}\n\n${lines.join("\n")}`;
 
   try {
     Dialog.show(
       player,
       ADVOKATS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Адвокаты online",
+      "在线律师",
       body,
       "OK",
       ""

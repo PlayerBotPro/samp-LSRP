@@ -23,12 +23,12 @@ registerDocShowHandler("lic", (viewer, owner) => {
   }
 
   showLicenses(viewer, account);
-  const verb = byGender(account.gender, "показал", "показала");
+  const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(Color.gray, `你${verb}了证件: ${playerName(viewer)}.`);
   viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的证件。`);
 });
 
-registerCommand("lic", "Лицензии: посмотреть или показать по id", (player, args) => {
+registerCommand("lic", "查看许可证或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -77,7 +77,7 @@ function licRow(label: string, value: string): string {
 
 function showLicenses(viewer: Player, owner: Account): void {
   const body = LICENSE_ROWS.map((row) =>
-    licRow(row.label, owner.licenses[row.key] ? "Есть" : "Нет")
+    licRow(row.label, owner.licenses[row.key] ? "有" : "无")
   ).join("\n");
 
   try {
@@ -85,9 +85,9 @@ function showLicenses(viewer: Player, owner: Account): void {
       viewer,
       LICENSES_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Лицензии ${owner.name}`,
+      `${TITLE}${owner.name} 的许可证`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {

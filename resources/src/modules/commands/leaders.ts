@@ -16,7 +16,7 @@ type OnlineLeader = {
   slot: number;
 };
 
-registerCommand("leaders", "Список лидеров online", (player) => {
+registerCommand("leaders", "在线领导者列表", (player) => {
   const list: OnlineLeader[] = [];
 
   omp.players.forEach((other) => {
@@ -42,7 +42,7 @@ registerCommand("leaders", "Список лидеров online", (player) => {
       return;
     }
 
-    const phone = account.phone ? ` | тел. ${account.phone}` : "";
+    const phone = account.phone ? ` | 电话：${account.phone}` : "";
     const afk = afkStatusSuffix(other);
     list.push({
       orgName: membership.org.name,
@@ -59,14 +59,14 @@ registerCommand("leaders", "Список лидеров online", (player) => {
   }
 
   const lines = list.map((row) => row.line);
-  const body = `В сети: ${list.length}\n\n${lines.join("\n")}`;
+  const body = `在线人数：${list.length}\n\n${lines.join("\n")}`;
 
   try {
     Dialog.show(
       player,
       LEADERS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Лидеры online",
+      "在线领导者",
       body,
       "OK",
       ""

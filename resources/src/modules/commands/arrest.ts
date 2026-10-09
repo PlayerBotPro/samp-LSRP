@@ -29,7 +29,7 @@ import { STREET_WORLD } from "../spawn/point";
 import { resolveLawNearbyTarget } from "./law-target";
 import { registerCommand } from "./registry";
 
-/** Как у добровольной сдачи: 1★ = 10 мин. */
+/** 与自首规则相同：1★ = 10 分钟。 */
 const MINUTES_PER_WANTED = 10;
 const REWARD_PER_STAR = 500;
 const STATION_RADIUS = 10;
@@ -45,11 +45,11 @@ type ArrestStation = {
   z: number;
 };
 
-/** Точки сдачи у гаражей участков. */
+/** 警局车库附近的自首点。 */
 const STATIONS: readonly ArrestStation[] = [
   {
     key: "police",
-    name: "Областная полиция",
+    name: "州警察局",
     x: 626.0856,
     y: -590.1869,
     z: 16.7614,
@@ -75,12 +75,12 @@ const busy = new Set<number>();
 
 registerCommand(
   "arrest",
-  "Арестовать игрока у участка (полиция / FBI)",
+  "在警局逮捕玩家（警察 / FBI）",
   (player, args) => {
     const resolved = resolveLawNearbyTarget(
       player,
       args,
-      "Использование: /arrest [id]"
+      "用法： /arrest [id]"
     );
     if (!resolved.ok) {
       return;
@@ -133,7 +133,7 @@ registerCommand(
       return;
     }
 
-    // Сбрасываем прошлый арест вместе с CP (иначе при ошибке set останется чужой маркер).
+    // 清除上次逮捕状态和检查点（否则 set 失败时会残留其他人的标记）。
     clearPending(officerId, true);
 
     try {
@@ -160,15 +160,15 @@ registerCommand(
     const targetName = playerName(target);
     const verb = byGender(
       getAccount(officer)?.gender ?? null,
-      "повёл",
-      "повела"
+      "带领了",
+      "带领了"
     );
 
     sendNearby(
       officer,
       CHAT_RADIUS,
       Color.action,
-      `${officerName} ${verb} ${targetName} в участок (${station.name}).`
+      `${officerName} ${verb} ${targetName} 前往警局（${station.name}）。`
     );
 
     officer.sendClientMessage(
@@ -181,10 +181,10 @@ registerCommand(
         `${officerName} 正押送你前往警局 (${station.name}).`
       );
     } catch {
-      // Уже вышел.
+      // 已离线。
     }
 
-    // Если уже за рулём с задержанным в радиусе CP — enter может не прийти повторно.
+    // 如果已经载着被捕者在检查点范围内驾驶，可能不会再次触发 enter。
     void onArrestCheckpoint(officer, true);
   }
 );
@@ -229,7 +229,7 @@ async function onArrestCheckpoint(
 
   if (Date.now() > state.expiresAt) {
     clearPending(officerId, true);
-    tell(player, Color.error, "Время на арест истекло. Начните заново: /arrest.");
+    tell(player, Color.error, "逮捕时间已到，请重新开始：/arrest。");
     return;
   }
 
@@ -241,21 +241,21 @@ async function onArrestCheckpoint(
   try {
     if (!player.isInAnyVehicle() || player.getState() !== PLAYER_STATE_DRIVER) {
       if (!silentIfNotReady) {
-        tell(player, Color.error, "Завершить арест можно только за рулём.");
+        tell(player, Color.error, "只能在驾驶时完成逮捕。");
       }
       return;
     }
     vehicleId = player.getVehicleID();
   } catch {
     if (!silentIfNotReady) {
-      tell(player, Color.error, "Завершить арест можно только за рулём.");
+      tell(player, Color.error, "只能在驾驶时完成逮捕。");
     }
     return;
   }
 
   if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
     if (!silentIfNotReady) {
-      tell(player, Color.error, "Завершить арест можно только за рулём.");
+      tell(player, Color.error, "只能在驾驶时完成逮捕。");
     }
     return;
   }
@@ -274,25 +274,25 @@ async function onArrestCheckpoint(
     targetAccount.id !== state.targetAccountId
   ) {
     clearPending(officerId, true);
-    tell(player, Color.error, "Задержанный вышел из игры. Арест отменён.");
+    tell(player, Color.error, "被捕者已离线，逮捕已取消。");
     return;
   }
 
   if (isLawOfficer(target) || isJailed(target)) {
     clearPending(officerId, true);
-    tell(player, Color.error, "Арест больше недоступен.");
+    tell(player, Color.error, "逮捕已无法继续。");
     return;
   }
 
   if (!isCuffed(target)) {
     clearPending(officerId, true);
-    tell(player, Color.error, "С задержанного сняли наручники. Арест отменён.");
+    tell(player, Color.error, "被捕者的手铐已解开，逮捕已取消。");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
     clearPending(officerId, true);
-    tell(player, Color.error, "У задержанного нет розыска. Арест отменён.");
+    tell(player, Color.error, "被捕者不再被通缉，逮捕已取消。");
     return;
   }
 
@@ -302,14 +302,14 @@ async function onArrestCheckpoint(
         tell(
           player,
           Color.error,
-          "Задержанный должен быть в вашем транспорте (/putpl)."
+          "被捕者必须在你的车辆中（/putpl）。"
         );
       }
       return;
     }
   } catch {
     clearPending(officerId, true);
-    tell(player, Color.error, "Задержанный вышел из игры. Арест отменён.");
+    tell(player, Color.error, "被捕者已离线，逮捕已取消。");
     return;
   }
 
@@ -321,7 +321,7 @@ async function onArrestCheckpoint(
   try {
     const ok = await applyJail(target, minutes);
     if (!ok) {
-      tell(player, Color.error, "Не удалось посадить игрока. Попробуйте ещё раз.");
+      tell(player, Color.error, "无法将玩家送入监狱，请重试。");
       return;
     }
 
@@ -337,25 +337,25 @@ async function onArrestCheckpoint(
     const targetLabel = playerChatName(target);
     const verb = byGender(
       officerAccount?.gender ?? null,
-      "посадил",
-      "посадила"
+      "送入监狱",
+      "送入监狱"
     );
 
     notifyLawStaff(
-      `Диспетчер: ${rankTitle} ${officerLabel} ${verb} ${targetLabel} в тюрьму (${state.station.name}).`
+      `调度：${rankTitle} ${officerLabel} ${verb} ${targetLabel} 入狱（${state.station.name}）。`
     );
 
     sendNearby(
       player,
       CHAT_RADIUS,
       Color.action,
-      `${playerName(player)} ${verb} ${playerName(target)} в тюрьму.`
+      `${playerName(player)} ${verb} ${playerName(target)} 入狱。`
     );
 
     tell(
       player,
       Color.info,
-      `Вы посадили ${playerName(target)}. Срок: ${minutes} мин. Награда: ${formatMoney(reward)}.`
+      `你已将 ${playerName(target)} 送入监狱。刑期：${minutes} 分钟。奖励：${formatMoney(reward)}。`
     );
 
     try {
@@ -364,7 +364,7 @@ async function onArrestCheckpoint(
         `你被 ${playerName(player)} 逮捕了。通缉已解除。`
       );
     } catch {
-      // Уже в тюрьме / вышел.
+      // 已在监狱中 / 已离开。
     }
   } finally {
     busy.delete(officerId);
@@ -447,7 +447,7 @@ function clearPending(officerId: number, disableCp: boolean): void {
   try {
     Checkpoint.disable(officer);
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 }
 
@@ -460,7 +460,7 @@ function clearPendingByTarget(targetSlot: number): void {
     clearPending(officerId, true);
     const officer = omp.players.at(officerId);
     if (officer && isPlayerActive(officer)) {
-      tell(officer, Color.error, "Задержанный выбыл. Арест отменён.");
+      tell(officer, Color.error, "被捕者已离开，逮捕已取消。");
     }
   }
 }
@@ -482,7 +482,7 @@ function payOfficer(player: Player, amount: number): void {
 function lawFallbackRank(player: Player): string {
   const account = getAccount(player);
   const orgId = account ? getMembership(account)?.org.id : undefined;
-  return orgId === ORG_FBI_ID ? "Агент" : "Офицер";
+  return orgId === ORG_FBI_ID ? "特工" : "警官";
 }
 
 function tell(player: Player, color: number, text: string): void {
@@ -491,6 +491,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }

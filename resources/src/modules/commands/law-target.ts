@@ -7,7 +7,7 @@ import { isCuffed } from "../cuff";
 import { canLawSearchTarget, isLawOfficer } from "../org/law";
 import { isJailed } from "../prison/sentence";
 
-const DENY = "Команда доступна сотрудникам полиции и FBI.";
+const DENY = "仅警察和 FBI 成员可使用此命令。";
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
@@ -15,7 +15,7 @@ export type LawTargetResult =
   | { ok: true; officer: Player; target: Player; officerId: number; targetId: number }
   | { ok: false };
 
-/** Общий разбор `/cmd [id]` для law-обыска / изъятия / наручников. */
+/** 为执法搜查、没收和手铐命令统一解析 `/cmd [id]`。 */
 export function resolveLawNearbyTarget(
   officer: Player,
   args: string,

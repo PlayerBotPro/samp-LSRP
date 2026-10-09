@@ -22,52 +22,52 @@ export const GANG_DEAL_KEY_NO = 131072;
 const PLAYER_STATE_ONFOOT = 1;
 const PLAYER_STATE_WASTED = 7;
 
-/** Проверки продавца-бандита на своей ганг-зоне. null — ок. */
+/** 检查帮派卖家是否位于己方帮派地盘。null 表示通过。 */
 export function gangSellerGate(player: Player): string | null {
   if (!isAuthenticated(player)) {
-    return "Сначала войдите в аккаунт.";
+    return "请先登录账号。";
   }
 
   const account = getAccount(player);
   if (!account) {
-    return "Сначала войдите в аккаунт.";
+    return "请先登录账号。";
   }
 
   if (account.hospitalized) {
-    return "Сначала пройдите лечение в больнице.";
+    return "请先在医院接受治疗。";
   }
 
   if (isJailed(player)) {
-    return "В тюрьме команда недоступна.";
+    return "在监狱中无法使用此命令。";
   }
 
   const membership = getMembership(account);
   if (!membership || !isGangOrgId(membership.org.id)) {
-    return "Команда доступна только бандам.";
+    return "仅帮派成员可使用此命令。";
   }
 
   try {
     if (player.getState() === PLAYER_STATE_WASTED) {
-      return "Вы не в игре.";
+      return "你不在游戏中。";
     }
 
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      return "Нужно стоять пешком.";
+      return "必须徒步站立。";
     }
 
     if (
       player.getVirtualWorld() !== STREET_WORLD ||
       player.getInterior() !== 0
     ) {
-      return "Сделка возможна только на улице.";
+      return "只能在室外进行交易。";
     }
   } catch {
-    return "Не удалось проверить позицию.";
+    return "无法检查位置。";
   }
 
   const turf = findTurfAtPlayer(player);
   if (!turf || turf.orgId !== membership.org.id) {
-    return "Продавать можно только на территории своей банды.";
+    return "只能在自己帮派的地盘出售。";
   }
 
   return null;
@@ -102,31 +102,31 @@ export function dealPairReady(seller: Player, buyer: Player): string | null {
 
   const buyerAccount = getAccount(buyer);
   if (!buyerAccount || !isAuthenticated(buyer)) {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   if (buyerAccount.hospitalized) {
-    return "Покупателю нужно лечение.";
+    return "买家需要治疗。";
   }
 
   if (isJailed(buyer)) {
-    return "Покупатель в тюрьме.";
+    return "买家正在监狱中。";
   }
 
   try {
     if (buyer.getState() === PLAYER_STATE_WASTED) {
-      return "Игрок не в игре.";
+      return "玩家不在线。";
     }
 
     if (buyer.getState() !== PLAYER_STATE_ONFOOT) {
-      return "Покупатель должен стоять пешком.";
+      return "买家必须徒步站立。";
     }
   } catch {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   if (!arePlayersNearby(seller, buyer, WHISPER_RADIUS)) {
-    return "Игрок слишком далеко.";
+    return "玩家距离太远。";
   }
 
   return null;
@@ -138,7 +138,7 @@ export function tellDeal(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -172,7 +172,7 @@ export function parseDealOfferArgs(
   return { slot, amount, price };
 }
 
-/** Дельта наличных после успешного transferUserCash (как в /pay). */
+/** transferUserCash 成功后更新现金差额（与 /pay 相同）。 */
 export function applyDealCashDelta(player: Player, delta: number): void {
   if (!isPlayerActive(player)) {
     return;
@@ -194,7 +194,7 @@ export function applyDealCashDelta(player: Player, delta: number): void {
   }
 }
 
-/** Общий busy для /sellgun и /selldrug (одни и те же слоты). */
+/** /sellgun 与 /selldrug 共用忙碌状态（使用相同槽位）。 */
 const dealBusy = new Set<number>();
 
 export function isDealBusy(...slots: number[]): boolean {

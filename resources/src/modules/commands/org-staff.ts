@@ -27,7 +27,7 @@ import { syncOrgVehicleAccess } from "../vehicles/access";
 import { refreshCaptureView } from "../zones/capture";
 import { registerCommand } from "./registry";
 
-/** @deprecated Диалог больше не используется — приглашение через Y/N. */
+/** @deprecated 此对话框已停用，现在通过 Y/N 邀请。 */
 export const ORG_INVITE_DIALOG_ID = 21;
 
 const KEY_YES = 65536;
@@ -55,7 +55,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -85,12 +85,12 @@ function expireInvite(slot: number, accountId: number): void {
 
   const target = findTarget(slot);
   if (target && getAccount(target)?.id === accountId) {
-    tell(target, Color.error, "Приглашение истекло.");
+    tell(target, Color.error, "邀请已过期。");
   }
 
   const inviter = findTarget(pending.inviterSlot);
   if (inviter && getAccount(inviter)?.id === pending.inviterAccountId) {
-    tell(inviter, Color.error, "Приглашение истекло.");
+    tell(inviter, Color.error, "邀请已过期。");
   }
 }
 
@@ -142,7 +142,7 @@ function samePlayer(a: Player, b: Player): boolean {
 function requireStaff(player: Player) {
   const staff = staffOf(player);
   if (!staff) {
-    tell(player, Color.error, "Команда доступна с 9 ранга организации.");
+    tell(player, Color.error, "组织等级达到 9 级后方可使用此命令。");
     return null;
   }
   return staff;
@@ -157,12 +157,12 @@ function requireOtherTarget(actor: Player, args: string, usage: string): Player 
 
   const target = findTarget(slot);
   if (!target) {
-    tell(actor, Color.error, "Игрок не найден.");
+    tell(actor, Color.error, "未找到玩家。");
     return null;
   }
 
   if (samePlayer(actor, target)) {
-    tell(actor, Color.error, "Нельзя применить к себе.");
+    tell(actor, Color.error, "不能对自己使用。");
     return null;
   }
 
@@ -216,35 +216,35 @@ function parseRankDelta(args: string): { slot: number; delta: 1 | -1 } | null {
   return null;
 }
 
-registerCommand("invite", "Пригласить в организацию", (player, args) => {
+registerCommand("invite", "邀请加入组织", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
   }
 
-  const target = requireOtherTarget(player, args, "Использование: /invite [id]");
+  const target = requireOtherTarget(player, args, "用法： /invite [id]");
   if (!target) {
     return;
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount) {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到玩家。");
     return;
   }
 
   if (!targetAccount.passport) {
-    tell(player, Color.error, "У игрока нет паспорта.");
+    tell(player, Color.error, "该玩家没有护照。");
     return;
   }
 
   if (targetAccount.orgId !== ORG_NONE || getMembership(targetAccount)) {
-    tell(player, Color.error, "Игрок уже состоит в организации.");
+    tell(player, Color.error, "该玩家已加入组织。");
     return;
   }
 
   if (!arePlayersNearby(player, target, INVITE_RADIUS)) {
-    tell(player, Color.error, "Игрок слишком далеко.");
+    tell(player, Color.error, "玩家距离太远。");
     return;
   }
 
@@ -255,14 +255,14 @@ registerCommand("invite", "Пригласить в организацию", (pla
   }
 
   if (!claimYnOffer(targetId, "invite")) {
-    tell(player, Color.error, "У игрока уже есть активное предложение.");
+    tell(player, Color.error, "该玩家已有待处理的提议。");
     return;
   }
 
   const rank = getOrgRank(staff.membership.org, MIN_ORG_RANK);
   if (!rank) {
     releaseYnOffer(targetId, "invite");
-    tell(player, Color.error, "Не удалось отправить приглашение.");
+    tell(player, Color.error, "无法发送邀请。");
     return;
   }
 
@@ -278,20 +278,20 @@ registerCommand("invite", "Пригласить в организацию", (pla
     }, INVITE_TTL_MS),
   });
 
-  tell(player, Color.info, `Вы отправили приглашение: ${playerChatName(target)}.`);
+  tell(player, Color.info, `你已向 ${playerChatName(target)} 发送邀请。`);
   tell(
     target,
     Color.white,
-    `${playerChatName(player)} приглашает вас в организацию ${staff.membership.org.name} (${rank.title}).`
+    `${playerChatName(player)} 邀请你加入组织 ${staff.membership.org.name}（${rank.title}）。`
   );
   tell(
     target,
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы принять или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}接受，或按 {FF6600}N {FFFFFF}拒绝"
   );
 });
 
-registerCommand("uninvite", "Уволить из организации", (player, args) => {
+registerCommand("uninvite", "从组织开除", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
@@ -306,11 +306,11 @@ registerCommand("uninvite", "Уволить из организации", (playe
   );
 
   if (!idPart || !reason) {
-    tell(player, Color.error, "Использование: /uninvite [id] [причина]");
+    tell(player, Color.error, "用法：/uninvite [id] [原因]");
     return;
   }
 
-  const target = requireOtherTarget(player, idPart, "Использование: /uninvite [id] [причина]");
+  const target = requireOtherTarget(player, idPart, "用法：/uninvite [id] [原因]");
   if (!target) {
     return;
   }
@@ -318,37 +318,37 @@ registerCommand("uninvite", "Уволить из организации", (playe
   const targetAccount = getAccount(target);
   const targetOrg = targetAccount ? getMembership(targetAccount) : null;
   if (!targetAccount || !targetOrg || targetOrg.org.id !== staff.membership.org.id) {
-    tell(player, Color.error, "Игрок не в вашей организации.");
+    tell(player, Color.error, "该玩家不属于你的组织。");
     return;
   }
 
   if (!canManage(targetOrg.rank.id)) {
-    tell(player, Color.error, "Нельзя уволить этого игрока.");
+    tell(player, Color.error, "不能开除该玩家。");
     return;
   }
 
   void (async () => {
     const actor = staffOf(player);
     if (!actor || actor.membership.org.id !== staff.membership.org.id) {
-      tell(player, Color.error, "Команда доступна с 9 ранга организации.");
+      tell(player, Color.error, "组织等级达到 9 级后方可使用此命令。");
       return;
     }
 
     const liveAccount = getAccount(target);
     const liveOrg = liveAccount ? getMembership(liveAccount) : null;
     if (!liveAccount || !liveOrg || liveOrg.org.id !== actor.membership.org.id) {
-      tell(player, Color.error, "Игрок не в вашей организации.");
+      tell(player, Color.error, "该玩家不属于你的组织。");
       return;
     }
 
     if (!canManage(liveOrg.rank.id)) {
-      tell(player, Color.error, "Нельзя уволить этого игрока.");
+      tell(player, Color.error, "不能开除该玩家。");
       return;
     }
 
     const ok = await setOrg(target, ORG_NONE, 0);
     if (!ok) {
-      tell(player, Color.error, "Не удалось сохранить в базу.");
+      tell(player, Color.error, "无法保存到数据库。");
       return;
     }
 
@@ -357,17 +357,17 @@ registerCommand("uninvite", "Уволить из организации", (playe
     tell(
       player,
       Color.info,
-      clipClientMessage(`Вы уволили ${tag} из организации ${orgName}. Причина: ${reason}`)
+      clipClientMessage(`你已将 ${tag} 从组织 ${orgName} 开除。原因：${reason}`)
     );
     tell(
       target,
       Color.info,
-      clipClientMessage(`Вас уволили из организации ${orgName}. Причина: ${reason}`)
+      clipClientMessage(`你已被组织 ${orgName} 开除。原因：${reason}`)
     );
   })();
 });
 
-registerCommand("rang", "Изменить ранг в организации", (player, args) => {
+registerCommand("rang", "更改组织等级", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
@@ -375,79 +375,79 @@ registerCommand("rang", "Изменить ранг в организации", (
 
   const parsed = parseRankDelta(args);
   if (!parsed) {
-    tell(player, Color.error, "Использование: /rang [id] [+/-]");
+    tell(player, Color.error, "用法： /rang [id] [+/-]");
     return;
   }
 
   const target = findTarget(parsed.slot);
   if (!target) {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到玩家。");
     return;
   }
 
   if (samePlayer(player, target)) {
-    tell(player, Color.error, "Нельзя применить к себе.");
+    tell(player, Color.error, "不能对自己使用。");
     return;
   }
 
   const targetAccount = getAccount(target);
   const targetOrg = targetAccount ? getMembership(targetAccount) : null;
   if (!targetAccount || !targetOrg || targetOrg.org.id !== staff.membership.org.id) {
-    tell(player, Color.error, "Игрок не в вашей организации.");
+    tell(player, Color.error, "该玩家不属于你的组织。");
     return;
   }
 
   if (!canManage(targetOrg.rank.id)) {
-    tell(player, Color.error, "Нельзя изменить ранг этого игрока.");
+    tell(player, Color.error, "不能更改该玩家的等级。");
     return;
   }
 
   const next = targetOrg.rank.id + parsed.delta;
   if (next < MIN_ORG_RANK || next > MANAGE_MAX_RANK) {
-    tell(player, Color.error, "Ранг игрока 1-9.");
+    tell(player, Color.error, "玩家等级必须在 1 到 9 之间。");
     return;
   }
 
   const nextRank = getOrgRank(targetOrg.org, next);
   if (!nextRank) {
-    tell(player, Color.error, "Не удалось изменить ранг.");
+    tell(player, Color.error, "无法更改等级。");
     return;
   }
 
   void (async () => {
     const actor = staffOf(player);
     if (!actor || actor.membership.org.id !== staff.membership.org.id) {
-      tell(player, Color.error, "Команда доступна с 9 ранга организации.");
+      tell(player, Color.error, "组织等级达到 9 级后方可使用此命令。");
       return;
     }
 
     const liveAccount = getAccount(target);
     const liveOrg = liveAccount ? getMembership(liveAccount) : null;
     if (!liveAccount || !liveOrg || liveOrg.org.id !== actor.membership.org.id) {
-      tell(player, Color.error, "Игрок не в вашей организации.");
+      tell(player, Color.error, "该玩家不属于你的组织。");
       return;
     }
 
     if (!canManage(liveOrg.rank.id)) {
-      tell(player, Color.error, "Нельзя изменить ранг этого игрока.");
+      tell(player, Color.error, "不能更改该玩家的等级。");
       return;
     }
 
     const liveNext = liveOrg.rank.id + parsed.delta;
     if (liveNext < MIN_ORG_RANK || liveNext > MANAGE_MAX_RANK) {
-      tell(player, Color.error, "Ранг игрока 1-9.");
+      tell(player, Color.error, "玩家等级必须在 1 到 9 之间。");
       return;
     }
 
     const liveNextRank = getOrgRank(liveOrg.org, liveNext);
     if (!liveNextRank) {
-      tell(player, Color.error, "Не удалось изменить ранг.");
+      tell(player, Color.error, "无法更改等级。");
       return;
     }
 
     const ok = await setOrg(target, liveOrg.org.id, liveNextRank.id);
     if (!ok) {
-      tell(player, Color.error, "Не удалось сохранить в базу.");
+      tell(player, Color.error, "无法保存到数据库。");
       return;
     }
 
@@ -457,15 +457,15 @@ registerCommand("rang", "Изменить ранг в организации", (
       player,
       Color.info,
       verbUp
-        ? `Вы повысили ${tag}: ${liveNextRank.title} (${liveNextRank.id}).`
-        : `Вы понизили ${tag}: ${liveNextRank.title} (${liveNextRank.id}).`
+        ? `你已提升 ${tag} 的等级：${liveNextRank.title}（${liveNextRank.id}）。`
+        : `你已降低 ${tag} 的等级：${liveNextRank.title}（${liveNextRank.id}）。`
     );
     tell(
       target,
       Color.info,
       verbUp
-        ? `Вас повысили: ${liveNextRank.title} (${liveNextRank.id}).`
-        : `Вас понизили: ${liveNextRank.title} (${liveNextRank.id}).`
+        ? `你的等级已提升：${liveNextRank.title}（${liveNextRank.id}）。`
+        : `你的等级已降低：${liveNextRank.title}（${liveNextRank.id}）。`
     );
   })();
 });
@@ -493,7 +493,7 @@ export function bindOrgStaff(): void {
       return;
     }
 
-    // Снимаем pending сразу (анти-даблклик), yn-слот держим до конца обработки.
+    // 立即清除 pending（防止重复点击），并保留 Y/N 槽位直到处理完成。
     clearTimeout(pending.timer);
     pendingInvite.delete(targetId);
 
@@ -511,15 +511,15 @@ export function bindOrgStaff(): void {
     const accepted = (pressed & KEY_YES) !== 0;
     const verb = byGender(
       getAccount(player)?.gender ?? null,
-      accepted ? "принял" : "отклонил",
-      accepted ? "приняла" : "отклонила"
+      accepted ? "接受了" : "拒绝了",
+      accepted ? "接受了" : "拒绝了"
     );
 
     if (!accepted) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.info, "Вы отклонили приглашение.");
+      tell(player, Color.info, "你拒绝了邀请。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.info, `${targetTag} ${verb} приглашение.`);
+        tell(inviter, Color.info, `${targetTag} ${verb} 邀请。`);
       }
       return;
     }
@@ -527,53 +527,53 @@ export function bindOrgStaff(): void {
     const live = getAccount(player);
     if (!live || !org || !rank) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "邀请已失效。");
       return;
     }
 
     if (!live.passport) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "У вас нет паспорта.");
+      tell(player, Color.error, "你没有护照。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.error, `${targetTag} не может вступить: нет паспорта.`);
+        tell(inviter, Color.error, `${targetTag} 无法加入：没有护照。`);
       }
       return;
     }
 
     if (live.orgId !== ORG_NONE || getMembership(live)) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "Вы уже состоите в организации.");
+      tell(player, Color.error, "你已加入组织。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.error, `${targetTag} уже состоит в организации.`);
+        tell(inviter, Color.error, `${targetTag} 已加入组织。`);
       }
       return;
     }
 
     if (!inviterOk || !inviter) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "邀请已失效。");
       return;
     }
 
     const liveStaff = staffOf(inviter);
     if (!liveStaff || liveStaff.membership.org.id !== pending.orgId) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "邀请已失效。");
       return;
     }
 
     if (!arePlayersNearby(player, inviter, INVITE_RADIUS)) {
       releaseYnOffer(targetId, "invite");
-      tell(player, Color.error, "Вы слишком далеко от того, кто пригласил.");
-      tell(inviter, Color.error, `${targetTag} не смог принять: слишком далеко.`);
+      tell(player, Color.error, "你离邀请者太远了。");
+      tell(inviter, Color.error, `${targetTag} 无法接受邀请：距离太远。`);
       return;
     }
 
     void (async () => {
       try {
         if (!arePlayersNearby(player, inviter, INVITE_RADIUS)) {
-          tell(player, Color.error, "Вы слишком далеко от того, кто пригласил.");
-          tell(inviter, Color.error, `${targetTag} не смог принять: слишком далеко.`);
+          tell(player, Color.error, "你离邀请者太远了。");
+          tell(inviter, Color.error, `${targetTag} 无法接受邀请：距离太远。`);
           return;
         }
 
@@ -584,21 +584,21 @@ export function bindOrgStaff(): void {
           again.orgId !== ORG_NONE ||
           getMembership(again)
         ) {
-          tell(player, Color.error, "Вы уже состоите в организации.");
+          tell(player, Color.error, "你已加入组织。");
           return;
         }
 
         const stillStaff = staffOf(inviter);
         if (!stillStaff || stillStaff.membership.org.id !== pending.orgId) {
-          tell(player, Color.error, "Приглашение уже неактуально.");
+          tell(player, Color.error, "邀请已失效。");
           return;
         }
 
         const ok = await setOrg(player, pending.orgId, pending.orgRank);
         if (!ok) {
-          tell(player, Color.error, "Не удалось сохранить в базу.");
+          tell(player, Color.error, "无法保存到数据库。");
           if (inviterOk && inviter) {
-            tell(inviter, Color.error, "Не удалось принять игрока.");
+            tell(inviter, Color.error, "无法接纳该玩家。");
           }
           return;
         }
@@ -606,10 +606,10 @@ export function bindOrgStaff(): void {
         tell(
           player,
           Color.info,
-          `Вы вступили в организацию ${org.name}. Должность: ${rank.title}.`
+          `你已加入组织 ${org.name}。职位：${rank.title}。`
         );
         if (inviterOk && inviter) {
-          tell(inviter, Color.info, `${targetTag} ${verb} приглашение в ${org.name}.`);
+          tell(inviter, Color.info, `${targetTag} ${verb} 加入 ${org.name} 的邀请。`);
         }
       } finally {
         releaseYnOffer(targetId, "invite");
@@ -635,7 +635,7 @@ export function bindOrgStaff(): void {
         pendingInvite.delete(targetSlot);
         releaseYnOffer(targetSlot, "invite");
         if (target) {
-          tell(target, Color.error, "Приглашение отменено.");
+          tell(target, Color.error, "邀请已取消。");
         }
       }
     }

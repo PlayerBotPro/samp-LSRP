@@ -48,12 +48,12 @@ type MedhelpOffer = {
   expiresAt: number;
 };
 
-/** Предложения лечения: slot пациента → оффер. */
+/** 治疗提议：患者槽位 → 提议。 */
 const pendingOffers = new Map<number, MedhelpOffer>();
 
 registerCommand(
   "medhelp",
-  "Больница: предложить лечение рядом (нужны медикаменты со склада)",
+  "医院：向附近玩家提供治疗（需要仓库中的药品）",
   (player, args) => {
     tryMedhelp(player, args.trim());
   }
@@ -415,7 +415,7 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
 
   patchAccount(patient, { health: MAX_HEALTH });
   applyHealth(patient, MAX_HEALTH);
-  // Иначе hospitalized остаётся true — пациент с 100 HP не выйдет на улицу.
+  // 否则 hospitalized 会一直为 true，满血患者也无法离开医院。
   dischargeHospitalPatient(patient);
 
   const patientWallet = getAccount(patient);
@@ -430,7 +430,7 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   queueSave(doctor);
 
   const left = getCarriedHospitalMeds(doctor);
-  const verb = byGender(doctorAccount.gender, "вылечил", "вылечила");
+  const verb = byGender(doctorAccount.gender, "治疗了", "治疗了");
   doctor.sendClientMessage(
     Color.info,
     `患者 ${playerName(patient)} 已治愈。+${formatMoney(price)}. 剩余药品: ${left}.`
@@ -481,9 +481,9 @@ function broadcastHospitalMed(
   doctorAccount: { gender: "male" | "female" },
   price: number
 ): void {
-  const verb = byGender(doctorAccount.gender, "вылечил", "вылечила");
+  const verb = byGender(doctorAccount.gender, "治疗了", "治疗了");
   const line = clipClientMessage(
-    `(MED) ${rankTitle} ${playerChatName(doctor)} ${verb} игрока ${playerChatName(patient)}. Стоимость: ${formatMoney(price)}.`
+    `（MED）${rankTitle} ${playerChatName(doctor)} ${verb} 玩家 ${playerChatName(patient)}。费用：${formatMoney(price)}。`
   );
 
   omp.players.forEach((other) => {
@@ -508,7 +508,7 @@ function broadcastHospitalMed(
     try {
       other.sendClientMessage(Color.radio, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

@@ -22,16 +22,16 @@ import { syncOrgVehicleAccess } from "../vehicles/access";
 import { refreshCaptureView } from "../zones/capture";
 import { registerCommand } from "./registry";
 
-/** Инспектор FBI и выше. */
+/** FBI 督察及以上等级。 */
 const DEMOTE_MIN_RANK = 8;
-/** Увольнять можно ранги 1–8 (9+ нельзя). */
+/** 可开除等级 1 至 8 的成员（不能开除 9 级及以上）。 */
 const DEMOTE_MAX_TARGET_RANK = 8;
 
 const busy = new Set<number>();
 
 registerCommand(
   "demote",
-  "Уволить сотрудника гос. организации (FBI 8+)",
+  "开除政府组织成员（FBI 等级 8+）",
   (player, args) => {
     const actorAccount = getAccount(player);
     const actorMembership = actorAccount ? getMembership(actorAccount) : null;
@@ -162,7 +162,7 @@ registerCommand(
           liveActorMembership.org.id !== ORG_FBI_ID ||
           liveActorMembership.rank.id < DEMOTE_MIN_RANK
         ) {
-          tell(player, Color.error, "Команда доступна сотрудникам FBI с 8 ранга.");
+          tell(player, Color.error, "仅 FBI 8 级及以上成员可使用此命令。");
           return;
         }
 
@@ -171,7 +171,7 @@ registerCommand(
           !isAuthenticated(target) ||
           !arePlayersNearby(player, target, WHISPER_RADIUS)
         ) {
-          tell(player, Color.error, "Игрок слишком далеко.");
+          tell(player, Color.error, "玩家距离太远。");
           return;
         }
 
@@ -187,25 +187,25 @@ registerCommand(
           liveTargetMembership.rank.id < MIN_ORG_RANK ||
           liveTargetMembership.rank.id > DEMOTE_MAX_TARGET_RANK
         ) {
-          tell(player, Color.error, "Увольнение больше недоступно.");
+          tell(player, Color.error, "无法继续开除操作。");
           return;
         }
 
         const orgName = liveTargetMembership.org.name;
         const actorTag = playerChatName(player);
         const targetTag = playerChatName(target);
-        const verb = byGender(liveActor.gender, "уволил", "уволила");
+        const verb = byGender(liveActor.gender, "开除了", "开除了");
         const rankTitle = liveActorMembership.rank.title;
 
         const ok = await clearOrg(target);
         if (!ok) {
-          tell(player, Color.error, "Не удалось сохранить в базу.");
+          tell(player, Color.error, "无法保存到数据库。");
           return;
         }
 
         notifyGovStaff(
           clipClientMessage(
-            `${rankTitle} ${actorTag} ${verb} из ${orgName} ${targetTag}. Причина: ${reason}`
+            `${rankTitle} ${actorTag} 将 ${targetTag} 从 ${orgName} 开除。原因：${reason}`
           )
         );
 
@@ -213,14 +213,14 @@ registerCommand(
           player,
           Color.info,
           clipClientMessage(
-            `Вы уволили ${targetTag} из ${orgName}. Причина: ${reason}`
+            `你已将 ${targetTag} 从 ${orgName} 开除。原因：${reason}`
           )
         );
         tell(
           target,
           Color.error,
           clipClientMessage(
-            `Вас уволили из организации ${orgName}. Причина: ${reason}`
+            `你已被组织 ${orgName} 开除。原因：${reason}`
           )
         );
       } finally {
@@ -232,8 +232,8 @@ registerCommand(
 );
 
 /**
- * Пишет ORG_NONE в БД. Сессию/визуал обновляет только если игрок ещё онлайн.
- * Успех БД = true (даже при дисконнекте цели после save).
+ * 将 ORG_NONE 写入数据库。仅当玩家仍在线时更新会话和画面状态。
+ * 数据库操作成功即返回 true（即使保存后目标断线也是如此）。
  */
 async function clearOrg(player: Player): Promise<boolean> {
   const account = getAccount(player);
@@ -308,6 +308,6 @@ function tell(player: Player, color: number, text: string): void {
     }
     player.sendClientMessage(color, text);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

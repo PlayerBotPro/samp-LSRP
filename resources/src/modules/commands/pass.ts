@@ -25,12 +25,12 @@ registerDocShowHandler("pass", (viewer, owner) => {
   }
 
   showPassport(viewer, account);
-  const verb = byGender(account.gender, "показал", "показала");
+  const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(Color.gray, `你${verb}了护照: ${playerName(viewer)}.`);
   viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的护照。`);
 });
 
-registerCommand("pass", "Паспорт: посмотреть или показать по id", (player, args) => {
+registerCommand("pass", "查看护照或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
     player.sendClientMessage(Color.error, "请先登录账号。");
@@ -88,15 +88,15 @@ function passRow(label: string, value: string): string {
 function showPassport(viewer: Player, owner: Account): void {
   const membership = getMembership(owner);
   const body = [
-    passRow("Имя", owner.name),
-    passRow("Проживание", residenceLabel(owner.id)),
-    passRow("Проживание в стране (лет)", String(ageFromBirthDate(owner.birthDate))),
-    passRow("Пол", genderLabel(owner.gender)),
-    passRow("Дата рождения", formatBirthDate(owner.birthDate)),
-    passRow("Организация", membership?.org.name ?? "Нет"),
-    passRow("Должность", membership?.rank.title ?? "Нет"),
-    passRow("Работа", jobLabel(owner.jobId, owner.gender)),
-    passRow("Законопослушность", String(owner.lawfulness)),
+    passRow("姓名", owner.name),
+    passRow("住所", residenceLabel(owner.id)),
+    passRow("居住年限", String(ageFromBirthDate(owner.birthDate))),
+    passRow("性别", genderLabel(owner.gender)),
+    passRow("出生日期", formatBirthDate(owner.birthDate)),
+    passRow("组织", membership?.org.name ?? "无"),
+    passRow("职位", membership?.rank.title ?? "无"),
+    passRow("职业", jobLabel(owner.jobId, owner.gender)),
+    passRow("守法值", String(owner.lawfulness)),
   ].join("\n");
 
   try {
@@ -104,9 +104,9 @@ function showPassport(viewer: Player, owner: Account): void {
       viewer,
       PASSPORT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Паспорт ${owner.name}`,
+      `${TITLE}护照 ${owner.name}`,
       body,
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {

@@ -14,14 +14,14 @@ const C_DESC = "{FFFFFF}";
 type HelpCategory = {
   key: string;
   label: string;
-  /** Имена команд из registry (без /). */
+  /** registry 中的命令名称（不含 /）。 */
   commands: readonly string[];
 };
 
 const CATEGORIES: readonly HelpCategory[] = [
   {
     key: "general",
-    label: "Общие команды",
+    label: "常用命令",
     commands: [
       "mn",
       "time",
@@ -45,32 +45,32 @@ const CATEGORIES: readonly HelpCategory[] = [
   },
   {
     key: "chat",
-    label: "Общение",
+    label: "聊天",
     commands: ["me", "do", "try", "todo", "b", "s", "w"],
   },
   {
     key: "vehicles",
-    label: "Управление транспортом",
+    label: "车辆管理",
     commands: ["lock", "car", "trunk", "limit", "eject", "unrent"],
   },
   {
     key: "houses",
-    label: "Дома",
+    label: "房屋",
     commands: ["home", "heal", "sellhouse", "findidhouse", "makestore", "use"],
   },
   {
     key: "business",
-    label: "Бизнес",
+    label: "企业",
     commands: ["buybiz", "biz", "findidbiz"],
   },
   {
     key: "gangs",
-    label: "Банды и мафии",
+    label: "帮派与黑手党",
     commands: ["f", "capture", "makegun", "sellgun", "selldrug"],
   },
   {
     key: "org",
-    label: "Организации",
+    label: "组织",
     commands: [
       "r",
       "d",
@@ -101,12 +101,12 @@ const CATEGORIES: readonly HelpCategory[] = [
   },
   {
     key: "leaders",
-    label: "Лидерам",
+    label: "领导者",
     commands: ["invite", "uninvite", "rang"],
   },
   {
     key: "family",
-    label: "Семья",
+    label: "家族",
     commands: [
       "family",
       "fam",
@@ -141,7 +141,7 @@ export function bindHelpDialogs(): void {
       return;
     }
 
-    // Список команд: «Назад» (1) / «Закрыть» (0)
+    // 命令列表: «返回» (1) / «关闭» (0)
     if (Number(response) === 0) {
       menuState.delete(slotId);
       return;
@@ -158,7 +158,7 @@ export function bindHelpDialogs(): void {
   });
 }
 
-/** Меню категорий команд (из `/mn` → «Список команд»). */
+/** 命令分类菜单（从 `/mn` →“命令列表”进入）。 */
 export function showHelpMenu(player: Player): void {
   if (!isPlayerActive(player)) {
     return;
@@ -178,10 +178,10 @@ export function showHelpMenu(player: Player): void {
       player,
       HELP_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Список команд",
+      "命令列表",
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     menuState.delete(slotId);
@@ -229,8 +229,8 @@ function showHelpCategory(player: Player, category: HelpCategory): void {
       DIALOG_STYLE_MSGBOX,
       category.label,
       lines.join("\n"),
-      "Назад",
-      "Закрыть"
+      "返回",
+      "关闭"
     );
   } catch {
     menuState.delete(slotId);

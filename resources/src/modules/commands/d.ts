@@ -14,7 +14,7 @@ import { registerCommand } from "./registry";
 const BUBBLE_MS = 3000;
 const BUBBLE_TEXT = "部门频道消息。";
 
-registerCommand("d", "Рация департамента", (player, args) => {
+registerCommand("d", "部门无线电", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership || !membership.org.gov) {
@@ -57,13 +57,13 @@ registerCommand("d", "Рация департамента", (player, args) => {
     try {
       other.sendClientMessage(Color.dept, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 
   try {
     player.setChatBubble(BUBBLE_TEXT, Color.dept, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // Пузырь не обязателен.
+    // 聊天气泡不是必需的。
   }
 });
