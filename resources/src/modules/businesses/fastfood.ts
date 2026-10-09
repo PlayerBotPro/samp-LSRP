@@ -33,7 +33,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const EAT_SOUND_ID = 32200;
 const ANIM_SYNC_ALL = 1;
 const EAT_ANIM_MS = 3000;
-/** Доля выручки на счёт бизнеса. */
+/** 营业收入中计入商家账户的比例。 */
 const BIZ_SHARE = 0.8;
 
 type FoodItem = {
@@ -42,15 +42,15 @@ type FoodItem = {
   hunger: number;
 };
 
-/** Дороже и сытнее, чем уличный ларёк. */
+/** 比街头小摊更贵，也更能填饱肚子。 */
 const MENU: readonly FoodItem[] = [
-  { name: "Кола", price: 80, hunger: 15 },
-  { name: "Картофель фри", price: 150, hunger: 30 },
-  { name: "Хот-дог", price: 180, hunger: 40 },
-  { name: "Бургер", price: 280, hunger: 55 },
-  { name: "Чизбургер", price: 350, hunger: 65 },
-  { name: "Пицца", price: 450, hunger: 80 },
-  { name: "Комбо-обед", price: 600, hunger: 100 },
+  { name: "可乐", price: 80, hunger: 15 },
+  { name: "薯条", price: 150, hunger: 30 },
+  { name: "热狗", price: 180, hunger: 40 },
+  { name: "汉堡", price: 280, hunger: 55 },
+  { name: "芝士汉堡", price: 350, hunger: 65 },
+  { name: "披萨", price: 450, hunger: 80 },
+  { name: "套餐", price: 600, hunger: 100 },
 ];
 
 const standingOn = new Map<number, number>();
@@ -92,7 +92,7 @@ export function startFastfoodShops(): void {
   const count = listBusinesses().filter(
     (b) => isFastfoodType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] закусочные: точек продажи ${count}`);
+  omp.log(`[${SERVER_TAG}] 小吃店：销售点 ${count} 个`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -202,7 +202,7 @@ function openMenu(player: Player, shop: BusinessRecord): void {
   pendingMenu.set(slotId, shop.id);
 
   const lines = [
-    "Блюдо\tЦена",
+    "餐品\t价格",
     ...MENU.map((item) => `${item.name}\t${formatMoney(item.price)}`),
   ];
 
@@ -213,8 +213,8 @@ function openMenu(player: Player, shop: BusinessRecord): void {
       DIALOG_STYLE_TABLIST_HEADERS,
       shop.name,
       lines.join("\n"),
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -237,7 +237,7 @@ async function onMenuResponse(
   pendingMenu.delete(slotId);
 
   if (!ok || businessId === undefined) {
-    // standingOn остаётся — меню не всплывёт снова, можно отойти от стойки.
+    // 保留 standingOn，避免菜单再次弹出；玩家可以离开柜台。
     return;
   }
 
@@ -247,7 +247,7 @@ async function onMenuResponse(
   }
 
   await buyFood(player, businessId, item);
-  // После покупки sticky тоже держим: отойти свободно; ещё заказ — отойти и снова встать.
+  // 购买后仍保留站位记录；再次点餐需先离开柜台，再返回。
 }
 
 async function buyFood(
@@ -299,7 +299,7 @@ async function buyFood(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] закусочная biz=${businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 小吃店 biz=${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   } finally {
@@ -324,7 +324,7 @@ async function buyFood(
     return;
   }
 
-  // После await могли отойти — деньги уже списаны, еду всё равно выдаём.
+  // 等待期间玩家可能已离开；款项已扣除，仍须交付食物。
   const liveAccount = getAccount(player);
   if (!liveAccount) {
     return;
@@ -344,14 +344,14 @@ async function buyFood(
   notifyHungerRestored(player, nextHunger);
 
   void saveUserHunger(account.id, nextHunger).catch(() => {
-    // Периодический save подхватит.
+    // 定期保存会处理此次更新。
   });
 
   try {
     const pos = player.getPos();
     player.playGameSound(EAT_SOUND_ID, pos.x, pos.y, pos.z);
   } catch {
-    // Слот пустой.
+    // 玩家槽位已空。
   }
 
   playEatAnimation(player);
@@ -403,7 +403,7 @@ function preloadEatAnim(player: Player): void {
     );
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Подтянется при покупке.
+    // 购买时会加载动画。
   }
 }
 
@@ -444,7 +444,7 @@ function playEatAnimation(player: Player): void {
       try {
         player.clearAnimations(ANIM_SYNC_ALL);
       } catch {
-        // Уже вышел.
+        // 玩家已离开。
       }
     }, EAT_ANIM_MS)
   );

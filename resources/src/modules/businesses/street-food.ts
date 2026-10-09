@@ -25,7 +25,7 @@ import { isStreetFoodType } from "./types";
 
 export const STREET_FOOD_MENU_DIALOG_ID = 93;
 
-/** Левый ALT (KEY_WALK). */
+/** 左 Alt 键（KEY_WALK）。 */
 const KEY_WALK = 1024;
 const PLAYER_STATE_ONFOOT = 1;
 const PICKUP_RADIUS = 1.6;
@@ -34,7 +34,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const EAT_SOUND_ID = 32200;
 const ANIM_SYNC_ALL = 1;
 const EAT_ANIM_MS = 3000;
-/** Доля выручки на счёт бизнеса. */
+/** 营业收入中计入商家账户的比例。 */
 const BIZ_SHARE = 0.8;
 
 type FoodItem = {
@@ -44,8 +44,8 @@ type FoodItem = {
 };
 
 const MENU: readonly FoodItem[] = [
-  { name: "Хот-дог", price: 50, hunger: 20 },
-  { name: "Бургер", price: 100, hunger: 40 },
+  { name: "热狗", price: 50, hunger: 20 },
+  { name: "汉堡", price: 100, hunger: 40 },
 ];
 
 const nearStall = new Map<number, number>();
@@ -93,7 +93,7 @@ export function startStreetFoodStalls(): void {
   });
 
   const count = listBusinesses().filter((b) => isStreetFoodType(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] уличная еда: ларьков ${count}`);
+  omp.log(`[${SERVER_TAG}] 街头小吃：摊位 ${count} 个`);
 }
 
 function tickStreetFood(): void {
@@ -193,7 +193,7 @@ function tryOpenMenu(player: Player): void {
   pendingMenu.set(slotId, business.id);
 
   const lines = [
-    "Товар\tЦена",
+    "商品\t价格",
     ...MENU.map((item) => `${item.name}\t${formatMoney(item.price)}`),
   ];
 
@@ -204,8 +204,8 @@ function tryOpenMenu(player: Player): void {
       DIALOG_STYLE_TABLIST_HEADERS,
       business.name,
       lines.join("\n"),
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -293,7 +293,7 @@ async function buyFood(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] уличная еда biz=${businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 街头小吃 biz=${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   } finally {
@@ -337,14 +337,14 @@ async function buyFood(
   notifyHungerRestored(player, nextHunger);
 
   void saveUserHunger(account.id, nextHunger).catch(() => {
-    // Периодический save подхватит.
+    // 定期保存会处理此次更新。
   });
 
   try {
     const pos = player.getPos();
     player.playGameSound(EAT_SOUND_ID, pos.x, pos.y, pos.z);
   } catch {
-    // Слот пустой.
+    // 玩家槽位已空。
   }
 
   playEatAnimation(player);
@@ -370,7 +370,7 @@ function preloadEatAnim(player: Player): void {
     );
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Подтянется при покупке.
+    // 购买时会加载动画。
   }
 }
 
@@ -411,7 +411,7 @@ function playEatAnimation(player: Player): void {
       try {
         player.clearAnimations(ANIM_SYNC_ALL);
       } catch {
-        // Уже вышел.
+        // 玩家已离开。
       }
     }, EAT_ANIM_MS)
   );
