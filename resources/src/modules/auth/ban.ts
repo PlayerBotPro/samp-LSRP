@@ -93,21 +93,6 @@ export function remainingBanDays(untilUnix: number, nowMs = Date.now()): number 
   return Math.max(1, Math.ceil((untilUnix * 1000 - nowMs) / DAY_MS));
 }
 
-export function banDaysWord(days: number): string {
-  const n = Math.abs(Math.floor(days)) % 100;
-  const n1 = n % 10;
-  if (n > 10 && n < 20) {
-    return "дней";
-  }
-  if (n1 === 1) {
-    return "день";
-  }
-  if (n1 >= 2 && n1 <= 4) {
-    return "дня";
-  }
-  return "дней";
-}
-
 export function kickBannedPlayer(player: Player, untilUnix: number, reason: string): void {
   const days = remainingBanDays(untilUnix);
   const reasonText = reason.trim() || "未注明";

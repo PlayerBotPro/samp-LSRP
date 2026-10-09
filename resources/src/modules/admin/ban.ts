@@ -4,7 +4,6 @@ import { CHAT_MAX_LENGTH, sanitizeChatText } from "../../shared/nearby";
 import { isPlayerActive, playerChatName } from "../../shared/player";
 import {
   MAX_BAN_DAYS,
-  banDaysWord,
   isBanActive,
   kickBannedPlayer,
   parseBannedUntil,
@@ -109,7 +108,6 @@ async function applyBan(
     return;
   }
 
-  const word = banDaysWord(days);
   const adminTag = playerChatName(admin);
   const targetTag = playerChatName(target);
   broadcastAll(
