@@ -68,29 +68,29 @@ export function showRulesDialog(player: Player): void {
     DialogStyle.msgbox,
     RULES_TITLE,
     SERVER_RULES,
-    "Accept",
-    "Decline"
+    "接受",
+    "拒绝"
   );
 }
 
 export function showLoginDialog(player: Player, name: string, error?: string): void {
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
-    prefix + `Welcome to ${SERVER_NAME}`,
-    "An account with this name already exists.",
+    prefix + `欢迎来到 ${SERVER_NAME}`,
+    "此角色名已注册。",
     "",
-    `Account: {33FF33}${name}{FFFFFF}`,
+    `账号：{33FF33}${name}{FFFFFF}`,
     "",
-    "Enter your password:",
+    "请输入密码：",
   ].join("\n");
 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Login",
+    "登录",
     body,
-    "Log in",
-    "Exit"
+    "登录",
+    "退出"
   );
 }
 
@@ -99,36 +99,36 @@ export function showEmailDialog(player: Player, name: string, error?: string): v
   showAuthDialog(
     player,
     DialogStyle.input,
-    "Registration",
-    `${prefix}The name {33FF33}${name}{FFFFFF} is available.\nEnter your email address:`,
-    "Next",
-    "Back"
+    "注册",
+    `${prefix}角色名 {33FF33}${name}{FFFFFF} 可以使用。\n请输入电子邮箱：`,
+    "下一步",
+    "返回"
   );
 }
 
 export function showPasswordDialog(player: Player, error?: string): void {
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
-    prefix + `Welcome to ${SERVER_NAME}`,
-    "Create an account to start playing.",
+    prefix + `欢迎来到 ${SERVER_NAME}`,
+    "创建账号后即可开始游戏。",
     "",
-    "Choose a password for your account.",
-    "You will need it each time you join the server.",
+    "请为账号设置密码。",
+    "每次登录服务器都需要输入此密码。",
     "",
-    "{33FF33}Notes:",
-    "- Your password may contain Cyrillic and Latin characters",
-    "- Your password is case-sensitive",
-    "- Your password must not contain spaces",
-    "- Your password must be 6 to 32 characters long",
+    "{33FF33}密码要求：",
+    "- 可使用西里尔字母和拉丁字母",
+    "- 区分大小写",
+    "- 不得包含空格",
+    "- 长度为 6 至 32 个字符",
   ].join("\n");
 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Registration",
+    "注册",
     body,
-    "Next",
-    "Back"
+    "下一步",
+    "返回"
   );
 }
 
@@ -137,10 +137,10 @@ export function showPasswordConfirmDialog(player: Player, error?: string): void 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Registration",
-    `${prefix}Enter your password again:`,
-    "Next",
-    "Back"
+    "注册",
+    `${prefix}请再次输入密码：`,
+    "下一步",
+    "返回"
   );
 }
 
@@ -149,10 +149,10 @@ export function showBirthDateDialog(player: Player, error?: string): void {
   showAuthDialog(
     player,
     DialogStyle.input,
-    "Registration",
-    `${prefix}Date of birth (DD.MM.YYYY):\nExample: 15.04.1998`,
-    "Next",
-    "Back"
+    "注册",
+    `${prefix}出生日期（日.月.年）：\n例如：15.04.1998`,
+    "下一步",
+    "返回"
   );
 }
 
@@ -160,10 +160,10 @@ export function showGenderDialog(player: Player): void {
   showAuthDialog(
     player,
     DialogStyle.list,
-    "Character gender",
+    "角色性别",
     `${GENDER_LIST_MALE}\n${GENDER_LIST_FEMALE}`,
-    "Select",
-    "Back"
+    "选择",
+    "返回"
   );
 }
 
@@ -171,10 +171,10 @@ export function showSkinDialog(player: Player, gender: Gender): void {
   showAuthDialog(
     player,
     DialogStyle.list,
-    "Choose a skin",
+    "选择角色外观",
     skinListBody(gender),
-    "Select",
-    "Back"
+    "选择",
+    "返回"
   );
 }
 
@@ -182,9 +182,9 @@ export function showRegisterConfirmDialog(player: Player, body: string): void {
   showAuthDialog(
     player,
     DialogStyle.msgbox,
-    "Confirmation",
+    "确认信息",
     body,
-    "Finish",
-    "Back"
+    "完成",
+    "返回"
   );
 }

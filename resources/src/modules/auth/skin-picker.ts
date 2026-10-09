@@ -200,7 +200,7 @@ function createDraws(): PickerDraws | null {
   });
 
   const select = tryDraw(() => {
-    const draw = new TextDraw(320.0, 408.4375, "SELECT");
+    const draw = new TextDraw(320.0, 408.4375, "选择");
     draw.setLetterSize(0.2205, 1.0575);
     draw.setTextSize(82.0, 20.0);
     draw.setAlignment(2);
