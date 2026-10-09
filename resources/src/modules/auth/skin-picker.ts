@@ -14,7 +14,7 @@ const PICKER_WORLD_BASE = 10_000;
 const HOVER_COLOR = 0xccccccff;
 const ANIM_SYNC_ALL = 1;
 const ARROW_SOUND_ID = 1083;
-/** Точка выбора скина при регистрации (интерьер 3, VW = 10000 + slot). */
+/** 注册时的外观选择位置（室内场景 3，虚拟世界 = 10000 + 槽位）。 */
 const AUTH_STAND: SpawnPoint = {
   x: 214.6442,
   y: -137.5518,
@@ -31,9 +31,9 @@ export type SkinPickerOpenOptions = {
   gender: Gender;
   skinId?: number;
   mode?: SkinPickerMode;
-  /** Каталог скинов; по умолчанию регистрационный. */
+  /** 外观目录；默认使用注册目录。 */
   catalog?: SkinOption[];
-  /** Точка превью (world подставится автоматически). */
+  /** 预览位置（虚拟世界会自动设置）。 */
   stand?: SpawnPoint;
   camera?: { x: number; y: number; z: number };
   businessId?: number;
@@ -49,7 +49,7 @@ type PickerSession = {
   businessId?: number;
 };
 
-/** Камера перед игроком по angle (GTA SA: 0 = север +Y, 90 = запад −X). */
+/** 按角度将镜头放在玩家前方（GTA SA：0 为北方 +Y，90 为西方 −X）。 */
 export function cameraInFront(
   stand: { x: number; y: number; z: number; angle: number },
   dist: number
@@ -87,7 +87,7 @@ function startFacingLock(player: Player, id: number): void {
       try {
         player.setFacingAngle(pickerPoint(player).angle);
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离线。
       }
     }, 100)
   );
@@ -111,7 +111,7 @@ function playPickerSound(player: Player, soundId: number): void {
     try {
       player.playGameSound(soundId, 0, 0, 0);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   }
 }
@@ -326,7 +326,7 @@ function createDraws(): PickerDraws | null {
       try {
         draw?.destroy();
       } catch {
-        // Не создан.
+        // 尚未创建。
       }
     }
     return null;
@@ -347,14 +347,14 @@ function showDraws(player: Player): void {
     try {
       draw.showForPlayer(player);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离线。
     }
   }
 
   try {
     player.selectTextDraw(HOVER_COLOR);
   } catch {
-    // Курсор не обязателен с первой попытки.
+    // 首次尝试时光标不一定可用。
   }
 }
 
@@ -369,7 +369,7 @@ function hideDraws(player: Player): void {
       try {
         draw.hideForPlayer(player);
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离线。
       }
     }
   }
@@ -377,7 +377,7 @@ function hideDraws(player: Player): void {
   try {
     player.cancelSelectTextDraw();
   } catch {
-    // Курсор уже скрыт.
+    // 光标已隐藏。
   }
 
   if (id !== null) {
@@ -394,7 +394,7 @@ function applyCamera(player: Player): void {
     player.setCameraPos(camera.x, camera.y, camera.z);
     player.setCameraLookAt(point.x, point.y, point.z + 0.62, 2);
   } catch {
-    // Слот ещё не готов.
+    // 槽位尚未就绪。
   }
 }
 
@@ -404,7 +404,7 @@ function preloadPickerAnims(player: Player): void {
     player.applyAnimation("DEALER", "DEALER_IDLE", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Библиотека подтянется на следующей попытке.
+    // 下次尝试时会加载库。
   }
 }
 
@@ -419,7 +419,7 @@ function lockFacing(player: Player): void {
     try {
       player.setFacingAngle(angle);
     } catch {
-      // Слот ещё не готов.
+      // 槽位尚未就绪。
     }
   }
 }
@@ -437,7 +437,7 @@ function applyPreview(player: Player, skinId: number): void {
     applyCamera(player);
     lockFacing(player);
   } catch {
-    // Слот ещё не готов.
+    // 槽位尚未就绪。
   }
 }
 
@@ -451,7 +451,7 @@ function holdPreview(player: Player): void {
     applyCamera(player);
     lockFacing(player);
   } catch {
-    // Слот ещё не готов.
+    // 槽位尚未就绪。
   }
 }
 
@@ -471,7 +471,7 @@ function leaveSpectate(player: Player, skinId: number): void {
     try {
       player.toggleSpectating(false);
     } catch {
-      // Спавн ещё не доступен.
+      // 出生点尚不可用。
     }
   }
 }
@@ -592,7 +592,7 @@ export function closeSkinPicker(player: Player): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Анимации уже сброшены.
+    // 动画已重置。
   }
 }
 
@@ -644,7 +644,7 @@ function isCancelClick(clicked: unknown): boolean {
       return true;
     }
   } catch {
-    // Невалидный объект клика.
+    // 点击的对象无效。
   }
 
   const numeric = Number(clicked);
@@ -665,7 +665,7 @@ export function bindSkinPicker(onAction: SkinPickerActionHandler): void {
   ensurePickerEvents();
 }
 
-/** Обработчик магазина одежды (mode = clothes). */
+/** 服装店处理器（mode = clothes）。 */
 export function bindClothesSkinPicker(onAction: SkinPickerActionHandler): void {
   clothesActionHandler = onAction;
   ensurePickerEvents();

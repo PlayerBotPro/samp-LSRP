@@ -114,7 +114,7 @@ async function applyBan(
   const targetTag = playerChatName(target);
   broadcastAll(
     Color.error,
-    `Администратор ${adminTag} забанил игрока ${targetTag} на ${days} ${word}. Причина: ${reason}.`
+    `管理员 ${adminTag} 封禁了玩家 ${targetTag}，时长 ${days} 天。原因：${reason}。`
   );
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {

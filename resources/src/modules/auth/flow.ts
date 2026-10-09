@@ -126,25 +126,25 @@ export function spawnIntoWorld(player: Player, skin: number): void {
   try {
     writeSpawnInfo(player, useSkin, spawnPoint);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 
   try {
     player.setCameraBehind();
   } catch {
-    // Камера выставится на спавне.
+    // 生成角色时会设置镜头。
   }
 
   try {
     player.toggleSpectating(false);
   } catch {
-    // Спек уже выключен.
+    // 旁观模式已关闭。
   }
 
   try {
     player.toggleControllable(true);
   } catch {
-    // Управление включится на спавне.
+    // 角色生成时会启用控制。
   }
 
   closeSkinPicker(player);
@@ -163,7 +163,7 @@ export function spawnIntoWorld(player: Player, skin: number): void {
       refreshStreamForPlayer(player);
       player.setCameraBehind();
     } catch {
-      // Спавн уже произошёл при выходе из спека.
+      // 退出旁观模式时角色已经生成。
     }
   }, 80);
 }
@@ -197,7 +197,7 @@ export function holdAtAuth(player: Player): void {
     try {
       player.toggleSpectating(true);
     } catch {
-      // Слот не готов.
+      // 槽位尚未就绪。
     }
   }
 
@@ -263,7 +263,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     try {
       player.toggleSpectating(true);
     } catch {
-      // Слот не готов.
+      // 槽位尚未就绪。
     }
   }
 
@@ -280,7 +280,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   }
 
   const name = playerName(player);
-  if (name === "Неизвестный" || !isRoleplayName(name)) {
+  if (!isRoleplayName(name)) {
     kickLater(
       player,
       "角色名须使用 Name_Surname 格式，例如 John_Doe。"
@@ -304,7 +304,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     showRulesDialog(player);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] ошибка входа ${name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 登录错误 ${name}: ${message}`);
     if (isPlayerActive(player)) {
       kickLater(player, "无法查询账号，请稍后再试。");
     }
@@ -446,7 +446,7 @@ function goBack(player: Player, state: Extract<Pending, { kind: "register" }>): 
     try {
       prepareAuthView(player);
     } catch {
-      // Камера авторизации не обязательна.
+      // 登录镜头不是必需的。
     }
   }
   showRegisterStep(player, state);
@@ -475,7 +475,7 @@ async function finishLogin(player: Player, name: string, password: string): Prom
         await saveUserBan(row.id, resolved.untilUnix, banReason);
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] не удалось сохранить бан ${name}: ${message}`);
+        omp.log(`[${SERVER_TAG}] 无法保存封禁记录 ${name}: ${message}`);
       }
     }
 
@@ -487,7 +487,7 @@ async function finishLogin(player: Player, name: string, password: string): Prom
   if (resolved.untilUnix != null) {
     void clearUserBan(row.id).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] не удалось очистить истёкший бан ${name}: ${message}`);
+      omp.log(`[${SERVER_TAG}] 无法清除过期封禁 ${name}: ${message}`);
     });
   }
 
@@ -504,10 +504,10 @@ async function finishLogin(player: Player, name: string, password: string): Prom
   if (ip) {
     void saveUserLastIp(account.id, ip).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] не удалось сохранить last_ip ${account.name}: ${message}`);
+      omp.log(`[${SERVER_TAG}] 无法保存 last_ip ${account.name}: ${message}`);
     });
   }
-  omp.log(`[${SERVER_TAG}] ${account.name} авторизовался`);
+  omp.log(`[${SERVER_TAG}] ${account.name} 已登录`);
 }
 
 async function finishRegister(
@@ -528,7 +528,7 @@ async function finishRegister(
     try {
       prepareAuthView(player);
     } catch {
-      // Камера авторизации не обязательна.
+      // 登录镜头不是必需的。
     }
     state.step = "email";
     setPending(player, state);
@@ -545,7 +545,7 @@ async function finishRegister(
     try {
       prepareAuthView(player);
     } catch {
-      // Камера авторизации не обязательна.
+      // 登录镜头不是必需的。
     }
     state.step = "gender";
     setPending(player, state);
@@ -591,7 +591,7 @@ async function finishRegister(
     Color.gray,
     "角色创建成功。输入 /mn 可打开菜单，查看状态和命令。"
   );
-  omp.log(`[${SERVER_TAG}] ${account.name} зарегистрировался`);
+  omp.log(`[${SERVER_TAG}] ${account.name} 已注册`);
 }
 
 async function handleLogin(
@@ -636,7 +636,7 @@ async function handleLogin(
     }
 
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] ошибка авторизации ${state.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 登录验证错误 ${state.name}: ${message}`);
     kickLater(player, "登录失败，请稍后再试。");
     clearPending(player);
   }
@@ -685,7 +685,7 @@ async function handleRegister(
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] ошибка проверки почты: ${message}`);
+        omp.log(`[${SERVER_TAG}] 邮箱验证错误：${message}`);
         kickLater(player, "无法验证电子邮箱，请稍后再试。");
         clearPending(player);
         return;
@@ -797,7 +797,7 @@ async function handleRegister(
           try {
             prepareAuthView(player);
           } catch {
-            // Камера авторизации не обязательна.
+            // 登录镜头不是必需的。
           }
           state.step = "email";
           setPending(player, state);
@@ -806,7 +806,7 @@ async function handleRegister(
         }
 
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] ошибка регистрации ${state.name}: ${message}`);
+        omp.log(`[${SERVER_TAG}] 注册错误 ${state.name}: ${message}`);
         kickLater(player, "无法创建角色，请稍后再试。");
         clearPending(player);
       }

@@ -22,10 +22,10 @@ export const authModule: GameModule = {
   async start() {
     try {
       await ensureUsersTable();
-      omp.log(`[${SERVER_TAG}] таблица users готова`);
+      omp.log(`[${SERVER_TAG}] users 表已就绪`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] не удалось подготовить users: ${message}`);
+      omp.log(`[${SERVER_TAG}] 无法准备 users 表：${message}`);
     }
 
     bindWantedDecay();
@@ -35,7 +35,7 @@ export const authModule: GameModule = {
       try {
         player.toggleSpectating(true);
       } catch {
-        // Слот ещё не готов.
+        // 槽位尚未就绪。
       }
 
       setTimeout(() => {
@@ -77,7 +77,7 @@ export const authModule: GameModule = {
         player.setSkin(skin);
         player.spawn();
       } catch {
-        // Спавн уже идёт.
+        // 正在生成角色。
       }
 
       return false;

@@ -555,8 +555,8 @@ export async function saveUserBankTransfer(
 }
 
 /**
- * Атомарная передача наличных (только `money`).
- * @returns `false`, если у отправителя в БД не хватило средств.
+ * 原子化转移现金（仅 `money`）。
+ * @returns 如果发送者在数据库中的余额不足，则返回 `false`。
  */
 export async function transferUserCash(
   fromUserId: number,
@@ -722,7 +722,7 @@ export async function saveAdminAccess(
   );
 }
 
-/** Меняет уровень админки, пароль не трогает. */
+/** 修改管理员等级，不更改密码。 */
 export async function saveAdminLevel(
   userId: number,
   adminLevel: number

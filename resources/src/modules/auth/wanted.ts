@@ -13,19 +13,19 @@ import {
 const DECAY_MS = 20 * 60 * 1000;
 const TICK_MS = 5000;
 
-/** Слот → когда следующий −1 к розыску (только online). */
+/** 玩家槽位 → 下次降低一级通缉的时间（仅在线时）。 */
 const nextDecayAt = new Map<number, number>();
 
 type WantedClearedHook = (accountId: number, slot: number | null) => void;
 
 let onWantedCleared: WantedClearedHook | null = null;
 
-/** Подписка слежки `/wanted`: срыв checkpoint при розыске → 0. */
+/** 订阅 `/wanted` 追踪：通缉清零时取消检查点。 */
 export function setWantedClearedHook(hook: WantedClearedHook | null): void {
   onWantedCleared = hook;
 }
 
-/** Выставить розыск 0–6: кэш, звёзды SA, БД. */
+/** 设置 0–6 级通缉：同步缓存、游戏星级和数据库。 */
 export function setPlayerWantedLevel(player: Player, level: number): void {
   const wanted = normalizeWantedLevel(level);
   const account = getAccount(player);
@@ -37,7 +37,7 @@ export function setPlayerWantedLevel(player: Player, level: number): void {
   patchAccount(player, { wantedLevel: wanted });
   applyWantedLevel(player, wanted);
   void saveUserWantedLevel(account.id, wanted).catch(() => {
-    // Кэш и клиент уже обновлены.
+    // 缓存和客户端已更新。
   });
   syncWantedDecay(player);
 
@@ -45,14 +45,14 @@ export function setPlayerWantedLevel(player: Player, level: number): void {
     try {
       onWantedCleared?.(account.id, playerId(player));
     } catch {
-      // Хук слежки не должен ломать снятие розыска.
+      // 追踪钩子的错误不应影响解除通缉。
     }
   }
 }
 
 /**
- * Запустить/остановить таймер снижения розыска.
- * Не сбрасывает уже идущий отсчёт (чтобы /su не обнулял 20 минут).
+ * 启动或停止通缉等级下降计时器。
+ * 不重置正在进行的倒计时（避免 /su 重置 20 分钟计时）。
  */
 export function syncWantedDecay(player: Player): void {
   const slot = playerId(player);
@@ -123,7 +123,7 @@ function tickWantedDecay(): void {
       return;
     }
 
-    // syncWantedDecay поставит now+20м; ниже поправим остаток периода при catch-up.
+    // syncWantedDecay 会设为当前时间加 20 分钟；下方会校正补算时的剩余时间。
     nextDecayAt.delete(slot);
     setPlayerWantedLevel(player, next);
     if (next > 0) {
@@ -142,7 +142,7 @@ function tickWantedDecay(): void {
         player.sendClientMessage(Color.info, "通缉已解除: 时效已过。");
       }
     } catch {
-      // Уже вышел.
+      // 玩家已离线。
     }
   });
 }

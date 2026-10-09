@@ -28,7 +28,7 @@ export function showAuthDialog(
   try {
     Dialog.show(player, AUTH_DIALOG_ID, style, title, body, button1, button2);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 }
 
@@ -51,7 +51,7 @@ export function refreshAuthViewSoon(player: Player): void {
       try {
         prepareAuthView(player);
       } catch {
-        // Слот ещё не готов.
+        // 槽位尚未就绪。
       }
     }, delay);
   }

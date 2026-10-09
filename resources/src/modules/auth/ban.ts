@@ -116,7 +116,7 @@ export function kickBannedPlayer(player: Player, untilUnix: number, reason: stri
   try {
     player.sendClientMessage(Color.error, chat);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 
   try {
@@ -130,7 +130,7 @@ export function kickBannedPlayer(player: Player, untilUnix: number, reason: stri
       ""
     );
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 
   kickSamePlayer(player, BAN_KICK_DELAY_MS);

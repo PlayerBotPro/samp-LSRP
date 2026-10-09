@@ -586,7 +586,7 @@ function onPriceEntered(seller: Player, response: number, inputText: string): vo
   tell(
     target,
     Color.white,
-    `${sellerAccount.name} предлагает купить лицензию ${license.offer} за $${price}.`
+    `${sellerAccount.name} 向你出售${license.offer}执照，价格 $${price}。`
   );
   tell(
     target,
@@ -681,6 +681,6 @@ async function completeSale(
     if (liveBuyer) {
       applyWallet(buyer, liveBuyer);
     }
-    tell(buyer, Color.info, `Вы купили лицензию ${license.offer} за $${price}.`);
+    tell(buyer, Color.info, `你以 $${price} 购买了${license.offer}执照。`);
   }
 }
