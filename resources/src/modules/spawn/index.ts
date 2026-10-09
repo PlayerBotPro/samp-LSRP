@@ -87,7 +87,7 @@ export const spawnModule: GameModule = {
         try {
           writeSpawnInfo(player, skin, pickJailCell());
         } catch {
-          // Игрок уже вышел.
+          // 玩家已离开。
         }
         patchAccount(player, { health: MAX_HEALTH });
         return;
@@ -99,7 +99,7 @@ export const spawnModule: GameModule = {
       try {
         writeSpawnInfo(player, skin, hospital);
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离开。
       }
 
       patchAccount(player, { health: HOSPITAL_HEALTH, hospitalized: true });
@@ -126,7 +126,7 @@ export const spawnModule: GameModule = {
         }
         player.setCameraBehind();
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离开。
       }
 
       if (account && isJailedAccount(account)) {
@@ -140,7 +140,7 @@ export const spawnModule: GameModule = {
           placeInJail(player);
           applyHealth(player, account.health);
         } catch {
-          // Игрок уже вышел.
+          // 玩家已离开。
         }
 
         if (firstSpawn) {
@@ -157,7 +157,7 @@ export const spawnModule: GameModule = {
           applyHealth(player, HOSPITAL_HEALTH);
           refreshStreamForPlayer(player);
         } catch {
-          // Игрок уже вышел.
+          // 玩家已离开。
         }
 
         patchAccount(player, { health: HOSPITAL_HEALTH });
@@ -184,7 +184,7 @@ export const spawnModule: GameModule = {
           applyHealth(player, account.health);
           refreshStreamForPlayer(player);
         } catch {
-          // Игрок уже вышел.
+          // 玩家已离开。
         }
 
         const id = playerId(player);
@@ -223,7 +223,7 @@ export const spawnModule: GameModule = {
               placeAt(player, orgSpawn);
               refreshStreamForPlayer(player);
             } catch {
-              // Игрок уже вышел.
+              // 玩家已离开。
             }
           }
         }
@@ -256,7 +256,7 @@ function takePendingHospital(player: Player): SpawnPoint | null {
   return hospital;
 }
 
-/** Сброс отложенного спавна в больницу после смерти (админ `/spawn` и т.п.). */
+/** 重置死亡后延迟前往医院的出生流程（管理员使用 `/spawn` 等命令时）。 */
 export function clearPendingHospitalSpawn(player: Player): void {
   const id = playerId(player);
   if (id !== null) {

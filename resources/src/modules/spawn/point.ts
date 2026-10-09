@@ -14,38 +14,38 @@ export type SpawnPoint = {
 
 export type PlaceAtOptions = {
   /**
-   * мс заморозки после телепорта (прогрузка коллизий/текстур).
-   * `false` — не замораживать. По умолчанию: interior>0 или не улица → 2500 мс.
+   * 传送后的冻结毫秒数（等待碰撞和纹理加载）。
+   * `false` — 不冻结。默认：interior>0 或不在街道时冻结 2500 毫秒。
    */
   settleMs?: number | false;
 };
 
 export const NO_TEAM = 255;
 
-/** Скин для class-селектора, если у игрока ещё нет аккаунта. */
+/** 玩家尚无账户时用于职业选择器的皮肤。 */
 export const DEFAULT_SPAWN_SKIN = 26;
 
 export const STREET_WORLD = 0;
 
-/** Пауза после входа в интерьер / кастомный VW, пока подтянутся объекты. */
+/** 进入室内或自定义 VW 后的等待时间，用于加载物体。 */
 export const INTERIOR_SETTLE_MS = 2500;
 
-/** Отдельный VW больницы: игроки и пикапы внутри не пересекаются с улицей. */
+/** 医院专用 VW：其中的玩家和拾取物不会与街道上的对象重叠。 */
 export const HOSPITAL_WORLD = 1;
 
-/** Отдельный VW тюрьмы: интерьер в небе не пересекается с улицей. Банк = 2. */
+/** 监狱专用 VW：天空中的室内空间不会与街道重叠。银行 = 2。 */
 export const PRISON_WORLD = 3;
 
-/** Двор тюрьмы на координатах участка: игроки не пересекаются с улицей. */
+/** 监狱院子使用监狱区域坐标：玩家不会与街道重叠。 */
 export const PRISON_YARD_WORLD = 4;
 
-/** Мафии (кастомный HQ, interior 0): LCN VW 14, Yakuza 15, Русская 16 — `org/mafias.ts`. */
-/** Банды (дома): Grove VW 9, Ballas 10, Vagos 11, Rifa 12, Aztecas 13 — `org/gangs.ts`. */
-/** Радиоцентр (кастомный интерьер): VW 8 — `org/radio.ts`. */
-/** Мэрия (кастомный интерьер): VW 3 (= org id) — `org/meriya.ts`. Совпадает с PRISON_WORLD; координаты далеко. */
-/** FBI HQ (кастомный интерьер): VW 6 (= org id) — `org/fbi.ts`. Совпадает с VW аммунации FBI (другой interior). */
+/** 黑手党（自定义总部，interior 0）：LCN VW 14，Yakuza 15，俄罗斯帮派 16 — `org/mafias.ts`。 */
+/** 帮派（帮派据点）：Grove VW 9，Ballas 10，Vagos 11，Rifa 12，Aztecas 13 — `org/gangs.ts`。 */
+/** 广播中心（自定义室内）：VW 8 — `org/radio.ts`。 */
+/** 市政府（自定义室内）：VW 3（= org id）— `org/meriya.ts`。与 PRISON_WORLD 相同，但坐标相距很远。 */
+/** FBI 总部（自定义室内）：VW 6（= org id）— `org/fbi.ts`。与 FBI 军火库 VW 相同，但 interior 不同。 */
 
-/** Обычный спавн, пока игрок не в организации. */
+/** 玩家尚未加入组织时使用的默认出生点。 */
 export const DEFAULT_SPAWN: SpawnPoint = {
   x: 1760.2538,
   y: -1898.8334,
@@ -99,7 +99,7 @@ export const HOSPITAL_SPAWNS: readonly SpawnPoint[] = [
 ];
 
 const settleTimers = new Map<number, ReturnType<typeof setTimeout>>();
-/** Токен активной settle-сессии (просроченный таймер не трогает управление). */
+/** 当前 settle 会话的令牌（过期计时器不会影响控制状态）。 */
 const settleTokens = new Map<number, object>();
 
 export function pickHospitalSpawn(): SpawnPoint {
@@ -130,7 +130,7 @@ export function writeSpawnInfo(player: Player, skin: number, point: SpawnPoint):
 }
 
 export function placeAt(player: Player, point: SpawnPoint, options?: PlaceAtOptions): void {
-  // Снимает прошлую settle-заморозку (иначе выход на улицу / новый ТП = вечный лок).
+  // 解除之前 settle 流程设置的冻结（否则走到街上或再次传送会导致永久锁定）。
   clearPlaceAtSettle(player);
 
   player.setInterior(point.interior);
@@ -144,7 +144,7 @@ export function placeAt(player: Player, point: SpawnPoint, options?: PlaceAtOpti
 }
 
 /**
- * Заморозка после телепорта (в т.ч. в ТС — toggleControllable блокирует и машину).
+ * 传送后冻结（包括在车辆中；toggleControllable 也会锁定车辆）。
  * `settleMs <= 0` — no-op.
  */
 export function scheduleSettleFreeze(player: Player, settleMs: number): void {
@@ -182,13 +182,13 @@ export function scheduleSettleFreeze(player: Player, settleMs: number): void {
           player.toggleControllable(true);
         }
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离开。
       }
     }, settleMs)
   );
 }
 
-/** Снять отложенную разморозку (дисконнект / новый телепорт). */
+/** 取消延迟解冻（断开连接或再次传送时）。 */
 export function clearPlaceAtSettle(player: Player): void {
   const id = playerId(player);
   if (id === null) {
@@ -204,7 +204,7 @@ export function clearPlaceAtSettle(player: Player): void {
   }
   settleTokens.delete(id);
 
-  // Размораживаем только если замораживали мы (не шахта / станок / скин-пикер).
+  // 只有冻结由此处设置时才解冻（不包括矿井、机器或皮肤选择器设置的冻结）。
   if (!hadSettle) {
     return;
   }
@@ -214,7 +214,7 @@ export function clearPlaceAtSettle(player: Player): void {
       player.toggleControllable(true);
     }
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -227,7 +227,7 @@ function resolveSettleMs(point: SpawnPoint, options?: PlaceAtOptions): number {
     return Math.max(0, options.settleMs);
   }
 
-  // Интерьер или кастомный VW (больница, тюрьма, завод, HQ…) — ждём коллизии.
+  // 室内或自定义 VW（医院、监狱、工厂、总部等）需要等待碰撞加载。
   if (point.interior > 0 || point.world !== STREET_WORLD) {
     return INTERIOR_SETTLE_MS;
   }

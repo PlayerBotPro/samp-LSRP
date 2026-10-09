@@ -22,7 +22,7 @@ const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const DENY =
-  "Открыть могут сотрудники LSPD, областной полиции, FBI и адвокаты мэрии.";
+  "只有 LSPD、州警、FBI 警员和市政府律师可以开启。";
 
 const POINT = {
   x: 1810.8636,
@@ -54,7 +54,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Тюрьма",
+    label: "监狱",
     staffOnly: true,
   },
   {
@@ -67,7 +67,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на улицу",
+    label: "通往街道的出口",
     staffOnly: true,
   },
   {
@@ -80,7 +80,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Тюремные камеры",
+    label: "监狱牢房",
     staffOnly: false,
   },
   {
@@ -93,7 +93,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Выход\nКухня\nКомната дежурного\nКомната охраны",
+    label: "出口\n厨房\n值班室\n警卫室",
     staffOnly: false,
   },
   {
@@ -106,7 +106,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_YARD_WORLD,
     },
-    label: "Тюремный двор",
+    label: "监狱院子",
     staffOnly: false,
     liveLabel: true,
   },
@@ -120,7 +120,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Тюремные камеры",
+    label: "监狱牢房",
     staffOnly: false,
   },
   {
@@ -133,7 +133,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Спортзал",
+    label: "健身房",
     staffOnly: false,
   },
   {
@@ -146,7 +146,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Тюремные камеры",
+    label: "监狱牢房",
     staffOnly: false,
   },
   {
@@ -159,7 +159,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Кухня",
+    label: "厨房",
     staffOnly: false,
   },
   {
@@ -172,7 +172,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Комната дежурного",
+    label: "值班室",
     staffOnly: false,
   },
   {
@@ -185,7 +185,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Комната охраны",
+    label: "警卫室",
     staffOnly: true,
   },
   {
@@ -198,7 +198,7 @@ const DOORS: readonly PrisonDoor[] = [
       interior: 0,
       world: PRISON_WORLD,
     },
-    label: "Комната дежурного",
+    label: "值班室",
     staffOnly: true,
   },
 ];
@@ -299,12 +299,12 @@ function tickPrison(): void {
 
       onPickup.delete(id);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
 
-/** Вход/выход и комната охраны: law + адвокаты мэрии (ранг как в /advokats). */
+/** 入口/出口和警卫室：执法人员 + 市政府律师（等级规则同 /advokats）。 */
 function canEnterPrisonStaffDoor(
   membership: NonNullable<ReturnType<typeof getMembership>>
 ): boolean {
@@ -325,7 +325,7 @@ function tryUse(player: Player, door: PrisonDoor): void {
   if (door.staffOnly) {
     const account = getAccount(player);
     if (account?.hospitalized) {
-      deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+      deny(player, "你需要接受治疗。请使用病床：/hospital。");
       return;
     }
 
@@ -336,9 +336,9 @@ function tryUse(player: Player, door: PrisonDoor): void {
     }
   }
 
-  // Двор закрыт — никому, в т.ч. мэрии (пульт только у полиции/FBI).
+  // 院子关闭时任何人都不能进入，包括市政府人员（控制台仅供警察/FBI 使用）。
   if (door.dest.world === PRISON_YARD_WORLD && !isPrisonYardOpen()) {
-    deny(player, "Двор закрыт.");
+    deny(player, "院子已关闭。");
     return;
   }
 
@@ -361,7 +361,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -383,7 +383,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -432,7 +432,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
     return;
   }
@@ -444,7 +444,7 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
   iconShown.delete(id);
 }

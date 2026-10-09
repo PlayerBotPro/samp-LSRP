@@ -43,8 +43,8 @@ function runPayday(now: Date): void {
   const clock = formatClock(now);
   omp.log(`[${SERVER_TAG}] payday ${clock}`);
 
-  // Снимок на весь payday: у всех членов банды одинаковая надбавка,
-  // даже если капт сменит владельца зоны во время обхода игроков.
+  // 为整个 payday 固定快照：同一帮派的所有成员获得相同奖金，
+  // 即使在遍历玩家时帮派战改变了区域归属也一样。
   const gangTurfCounts = snapshotGangTurfCounts();
 
   omp.players.forEach((player) => {
@@ -55,7 +55,7 @@ function runPayday(now: Date): void {
     try {
       payPlayer(player, clock, gangTurfCounts);
     } catch {
-      // Один слот не должен рвать payday остальным.
+      // 单个玩家槽位的问题不应中断其他人的 payday。
     }
   });
 }
@@ -77,7 +77,7 @@ function payPlayer(
   applyScore(player, next.level);
   void saveUserProgress(account.id, next.level, next.exp, lawfulness).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить payday ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的 payday：${message}`);
   });
 
   playPaydaySound(player);
@@ -96,17 +96,17 @@ function payPlayer(
 
   const bank = Math.max(0, Math.floor((getAccount(player) ?? account).bank));
 
-  tell(player, Color.white, `Текущее время: ${TAG_TIME}${clock}`);
-  tell(player, Color.white, "     БАНКОВСКИЙ ЧЕК");
+  tell(player, Color.white, `当前时间：${TAG_TIME}${clock}`);
+  tell(player, Color.white, "     银行支票");
   tell(player, Color.white, "______________________");
   if (salary) {
-    tell(player, Color.white, `Зарплата: ${TAG_SALARY}${formatMoney(credited)}`);
+    tell(player, Color.white, `工资：${TAG_SALARY}${formatMoney(credited)}`);
   }
-  tell(player, Color.white, `Текущий баланс счёта: ${TAG_BALANCE}${formatMoney(bank)}`);
+  tell(player, Color.white, `当前账户余额：${TAG_BALANCE}${formatMoney(bank)}`);
   tell(player, Color.white, "______________________");
 
   if (next.leveled) {
-    tell(player, Color.scene, "Поздравляем! Ваш уровень был повышен.");
+    tell(player, Color.scene, "恭喜！你的等级提升了。");
   }
 }
 
@@ -154,7 +154,7 @@ function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -166,7 +166,7 @@ function playPaydaySound(player: Player): void {
     try {
       player.playGameSound(PAYDAY_SOUND_ID, 0, 0, 0);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   }
 }

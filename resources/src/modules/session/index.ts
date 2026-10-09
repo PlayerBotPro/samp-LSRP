@@ -7,11 +7,11 @@ export const sessionModule: GameModule = {
   name: "session",
   start() {
     omp.on("playerConnect", (player) => {
-      omp.log(`[${SERVER_TAG}] ${playerName(player)} подключился`);
+      omp.log(`[${SERVER_TAG}] ${playerName(player)} 已连接`);
     });
 
     omp.on("playerDisconnect", (player) => {
-      omp.log(`[${SERVER_TAG}] ${playerName(player)} отключился`);
+      omp.log(`[${SERVER_TAG}] ${playerName(player)} 已断开连接`);
     });
   },
 };
