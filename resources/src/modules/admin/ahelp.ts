@@ -7,7 +7,7 @@ import { hasAdminAccess } from "./session";
 export function bindAdminHelp(): void {
   registerCommand(
     "ahelp",
-    "Список админ-команд",
+    "管理员命令列表",
     (player) => {
       if (!hasAdminAccess(player, 1)) {
         return;

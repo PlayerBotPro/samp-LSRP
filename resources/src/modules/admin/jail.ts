@@ -60,7 +60,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -68,7 +68,7 @@ function broadcastAll(color: number, text: string): void {
 export function bindAdminJail(): void {
   registerCommand(
     "jail",
-    "Посадить игрока в тюрьму",
+    "将玩家关入监狱",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -112,7 +112,7 @@ export function bindAdminJail(): void {
 
   registerCommand(
     "unjail",
-    "Выпустить игрока из тюрьмы",
+    "释放玩家出狱",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -163,8 +163,8 @@ async function applyAndAnnounce(
   const adminTag = playerChatName(admin);
   const targetTag = playerChatName(target);
   const line = reason
-    ? `Администратор ${adminTag} посадил игрока ${targetTag} в тюрьму на ${minutes} мин. Причина: ${reason}.`
-    : `Администратор ${adminTag} посадил игрока ${targetTag} в тюрьму на ${minutes} мин.`;
+    ? `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟。原因：${reason}。`
+    : `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟。`;
   broadcastAll(Color.error, line);
 }
 
@@ -179,6 +179,6 @@ async function applyUnjailAndAnnounce(admin: Player, target: Player): Promise<vo
   const targetTag = playerChatName(target);
   broadcastAll(
     Color.error,
-    `Администратор ${adminTag} выпустил игрока ${targetTag} из тюрьмы.`
+    `管理员 ${adminTag} 释放了玩家 ${targetTag}。`
   );
 }

@@ -37,7 +37,7 @@ function teleportToMapMark(player: Player, x: number, y: number, z: number): voi
       "你已成功传送到标记点！"
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 }
 

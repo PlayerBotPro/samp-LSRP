@@ -88,7 +88,7 @@ function spawnInFront(player: Player): { x: number; y: number; z: number; angle:
 export function bindAdminVeh(): void {
   registerCommand(
     "veh",
-    "Создать транспорт перед собой",
+    "在面前创建载具",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -134,7 +134,7 @@ export function bindAdminVeh(): void {
       try {
         vehicle.linkToInterior(spot.interior);
       } catch {
-        // Мир уже выставлен при спавне.
+        // 虚拟世界已在生成载具时设置。
       }
 
       player.sendClientMessage(
@@ -147,7 +147,7 @@ export function bindAdminVeh(): void {
 
   registerCommand(
     "delveh",
-    "Удалить машину, в которой сидишь",
+    "删除当前乘坐的车辆",
     (player) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

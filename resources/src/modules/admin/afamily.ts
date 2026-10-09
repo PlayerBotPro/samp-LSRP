@@ -38,8 +38,8 @@ const DIALOG_STYLE_MSGBOX = 0;
 const DIALOG_STYLE_INPUT = 1;
 const DIALOG_STYLE_LIST = 2;
 const PAGE_SIZE = 16;
-const BACK_LABEL = "<<< Назад";
-const NEXT_LABEL = ">>> Далее";
+const BACK_LABEL = "<<< 上一页";
+const NEXT_LABEL = ">>> 下一页";
 
 type PageSnap = {
   ids: readonly number[];
@@ -48,7 +48,7 @@ type PageSnap = {
 };
 
 const pageByPlayer = new Map<number, number>();
-/** Снимок страницы списка — listItem берём только из него. */
+/** 列表页快照——listItem 仅从该快照中读取。 */
 const pageSnapByPlayer = new Map<number, PageSnap>();
 const selectedFamily = new Map<number, number>();
 
@@ -65,7 +65,7 @@ const ALL_DIALOG_IDS = new Set([
 export function bindAdminAfamily(): void {
   registerCommand(
     "afamily",
-    "Управление семьями",
+    "家族管理",
     (player) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -221,10 +221,10 @@ function showList(player: Player, page: number): void {
       player,
       AFAMILY_LIST_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Семьи (${safePage + 1}/${pageCount(all.length)})`,
+      `家族 (${safePage + 1}/${pageCount(all.length)})`,
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     clearState(player);
@@ -341,9 +341,9 @@ function showHub(player: Player): void {
       AFAMILY_HUB_DIALOG_ID,
       DIALOG_STYLE_LIST,
       family.name,
-      "1. Информация\n2. Управление",
-      "Выбрать",
-      "Назад"
+      "1. 信息\n2. 管理",
+      "选择",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开家族菜单。");
@@ -385,32 +385,32 @@ async function showInfo(player: Player): Promise<void> {
   }
 
   const desc = sanitizeChatText(live.description.trim()) || "—";
-  const stockStatus = live.isLocked ? "закрыт" : "открыт";
+  const stockStatus = live.isLocked ? "已关闭" : "已开启";
   const body =
     `ID: ${live.id}\n` +
-    `Название: ${live.name}\n` +
-    `Описание: ${desc}\n` +
-    `Уровень: ${live.level}\n` +
-    `Опыт: ${live.exp}\n` +
-    `Владелец: ${ownerName} (acc #${live.ownerId})\n` +
-    `Участников: ${members}\n` +
-    `Создана: ${live.createdAt}\n\n` +
-    `Склад семьи:\n` +
-    `Патроны: ${live.ammo}\n` +
-    `Металл: ${live.metal}\n` +
-    `Наркотики: ${live.drugs}\n` +
-    `Деньги: ${formatMoney(live.money)}\n` +
-    `Статус: ${stockStatus}`;
+    `名称：${live.name}\n` +
+    `描述：${desc}\n` +
+    `等级：${live.level}\n` +
+    `经验：${live.exp}\n` +
+    `所有者：${ownerName}（账号 #${live.ownerId}）\n` +
+    `成员数：${members}\n` +
+    `创建时间：${live.createdAt}\n\n` +
+    `家族仓库：\n` +
+    `弹药：${live.ammo}\n` +
+    `金属：${live.metal}\n` +
+    `毒品：${live.drugs}\n` +
+    `资金：${formatMoney(live.money)}\n` +
+    `状态：${stockStatus}`;
 
   try {
     Dialog.show(
       player,
       AFAMILY_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `Семья: ${live.name}`,
+      `家族：${live.name}`,
       body,
-      "Назад",
-      "Закрыть"
+      "返回",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开信息。");
@@ -428,10 +428,10 @@ function showManage(player: Player): void {
       player,
       AFAMILY_MANAGE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Управление: ${family.name}`,
-      "1. Изменить название\n2. Изменить описание\n3. Удалить семью",
-      "Выбрать",
-      "Назад"
+      `管理：${family.name}`,
+      "1. 修改名称\n2. 修改描述\n3. 删除家族",
+      "选择",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开管理菜单。");
@@ -469,12 +469,12 @@ function showRename(player: Player): void {
       player,
       AFAMILY_RENAME_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Название семьи",
-      `Текущее: ${family.name}\n` +
-        `Только английские буквы и пробелы.\n` +
-        `Длина: ${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}.`,
-      "Сохранить",
-      "Назад"
+      "家族名称",
+      `当前名称：${family.name}\n` +
+        `仅允许英文字母和空格。\n` +
+        `长度：${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}。`,
+      "保存",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -493,10 +493,10 @@ function showRedesc(player: Player): void {
       player,
       AFAMILY_REDESC_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Описание семьи",
-      `Текущее: ${current}\nМаксимум ${FAMILY_DESC_MAX} символов.`,
-      "Сохранить",
-      "Назад"
+      "家族描述",
+      `当前描述：${current}\n最多 ${FAMILY_DESC_MAX} 个字符。`,
+      "保存",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -673,7 +673,7 @@ function clearOnlineFamilyMembers(familyId: number): void {
         "你的家族已被管理员解散。"
       );
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

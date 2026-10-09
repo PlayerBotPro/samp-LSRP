@@ -79,7 +79,7 @@ function showPasswordDialog(
       "取消"
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 }
 
@@ -193,7 +193,7 @@ async function tryLogin(player: Player, password: string): Promise<void> {
   showPasswordDialog(
     player,
     "login",
-    `Неверный пароль. Осталось попыток: ${left}`
+    `密码错误。剩余尝试次数：${left}`
   );
 }
 
@@ -235,12 +235,12 @@ async function handleAloginDialog(
   if (mode === "confirm") {
     const pending = takePendingAdminPassword(player);
     if (!pending) {
-      showPasswordDialog(player, "set", "Сначала введи пароль.");
+      showPasswordDialog(player, "set", "请先输入密码。");
       return;
     }
 
     if (input !== pending) {
-      showPasswordDialog(player, "set", "Пароли не совпадают.");
+      showPasswordDialog(player, "set", "两次输入的密码不一致。");
       return;
     }
 
@@ -249,7 +249,7 @@ async function handleAloginDialog(
   }
 
   if (!input) {
-    showPasswordDialog(player, "login", "Введи пароль от админки.");
+    showPasswordDialog(player, "login", "请输入管理员密码。");
     return;
   }
 
@@ -259,7 +259,7 @@ async function handleAloginDialog(
 export function bindAlogin(): void {
   registerCommand(
     "alogin",
-    "Вход в админку",
+    "管理员登录",
     (player) => {
       void startAlogin(player);
     },

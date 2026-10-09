@@ -17,7 +17,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -44,7 +44,7 @@ function parseSethpArgs(args: string): { slot: number; hp: number } | null {
 export function bindAdminSethp(): void {
   registerCommand(
     "sethp",
-    "Установить HP игроку",
+    "设置玩家生命值",
     (player, args) => {
       if (!hasAdminAccess(player, 4)) {
         return;
@@ -95,7 +95,7 @@ export function bindAdminSethp(): void {
         `玩家 ${playerChatName(target)} 的 HP 已设置为: ${parsed.hp}`
       );
       broadcastAdmins(
-        `[A] Администратор ${playerChatName(player)} установил HP игроку ${playerChatName(target)}: ${parsed.hp}.`
+        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 的生命值设为：${parsed.hp}。`
       );
     },
     true

@@ -18,7 +18,7 @@ import { hasAdminAccess } from "./session";
 export const MAKELEADER_DIALOG_ID = 12;
 
 const DIALOG_STYLE_LIST = 2;
-const REMOVE_LABEL = "Снять с лидерки";
+const REMOVE_LABEL = "撤销领袖职务";
 
 type PendingMakeleader = {
   slot: number;
@@ -37,11 +37,11 @@ function clearPending(player: Player): void {
 function targetBlocked(target: Player): string | null {
   const account = getAccount(target);
   if (!account) {
-    return "Игрок не найден.";
+    return "未找到玩家。";
   }
 
   if (!account.passport) {
-    return "У игрока нет паспорта.";
+    return "该玩家没有身份证。";
   }
 
   return null;
@@ -78,10 +78,10 @@ function showOrgList(player: Player): boolean {
       player,
       MAKELEADER_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Лидерка",
+      "领袖职务",
       orgListLines().join("\n"),
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
     return true;
   } catch {
@@ -131,7 +131,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -171,12 +171,12 @@ async function applyLeader(
       target.sendClientMessage(Color.info, "你的领导职务已被撤销。");
     }
     broadcastAdmins(
-      `[A] Администратор ${playerChatName(admin)} снял ${tag} с лидерки.`
+      `[A] 管理员 ${playerChatName(admin)} 撤销了 ${tag} 的领袖职务。`
     );
     return;
   }
 
-  const orgName = getOrganization(orgId)?.name ?? "организации";
+  const orgName = getOrganization(orgId)?.name ?? "组织";
   admin.sendClientMessage(Color.info, `你已任命 ${tag} 为组织 ${orgName} 的领导。`);
   if (isPlayerActive(target)) {
     target.sendClientMessage(
@@ -185,14 +185,14 @@ async function applyLeader(
     );
   }
   broadcastAdmins(
-    `[A] Администратор ${playerChatName(admin)} назначил ${tag} лидером организации ${orgName}.`
+    `[A] 管理员 ${playerChatName(admin)} 任命 ${tag} 为组织 ${orgName} 的领袖。`
   );
 }
 
 export function bindAdminMakeleader(): void {
   registerCommand(
     "makeleader",
-    "Назначить лидера организации",
+    "任命组织领袖",
     (player, args) => {
       if (!hasAdminAccess(player, 5)) {
         return;

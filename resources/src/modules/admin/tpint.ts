@@ -12,8 +12,8 @@ export const TPINT_DIALOG_ID = 41;
 const MIN_LEVEL = 4;
 const DIALOG_STYLE_LIST = 2;
 const PAGE_SIZE = 16;
-const BACK_LABEL = "<<< Назад";
-const NEXT_LABEL = ">>> Далее";
+const BACK_LABEL = "<<< 上一页";
+const NEXT_LABEL = ">>> 下一页";
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
@@ -79,10 +79,10 @@ function showList(player: Player, page: number): void {
       player,
       TPINT_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Интерьеры (${safePage + 1}/${pageCount()})`,
+      `室内场景 (${safePage + 1}/${pageCount()})`,
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     pageByPlayer.delete(id);
@@ -127,7 +127,7 @@ function teleportToInterior(player: Player, spot: AdminInterior): boolean {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 
   try {
@@ -173,7 +173,7 @@ function clearPage(player: Player): void {
 export function bindAdminTpint(): void {
   registerCommand(
     "tpint",
-    "Телепорт в интерьер",
+    "传送到室内场景",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

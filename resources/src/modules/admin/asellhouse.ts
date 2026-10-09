@@ -27,7 +27,7 @@ function parseHouseId(args: string): number | null {
 export function bindAdminAsellhouse(): void {
   registerCommand(
     "asellhouse",
-    "Освободить дом (продажа государству без выплаты)",
+    "收回房屋（出售给政府，不予补偿）",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;
@@ -61,7 +61,7 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
     result = await adminVacateHouse(houseId);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] asellhouse ${account.name} дом ${houseId}: ${message}`);
+    omp.log(`[${SERVER_TAG}] asellhouse ${account.name} 房屋 ${houseId}：${message}`);
     admin.sendClientMessage(Color.error, "无法腾空房屋。");
     return;
   }
@@ -78,7 +78,7 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
   applyAdminVacatedHouse(houseId);
 
   const label = playerChatName(admin);
-  omp.log(`[${SERVER_TAG}] asellhouse ${label} освободил дом №${houseId}`);
+  omp.log(`[${SERVER_TAG}] asellhouse ${label} 收回了 ${houseId} 号房屋`);
 
   if (result.wasOccupied) {
     admin.sendClientMessage(

@@ -19,7 +19,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -48,7 +48,7 @@ function occupiedVehicleIds(): Set<number> {
         ids.add(id);
       }
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
   return ids;
@@ -73,7 +73,7 @@ function respawnEmptyVehicles(): void {
 
       vehicle.setToRespawn();
     } catch {
-      // Транспорт уже уничтожен.
+      // 载具已被摧毁。
     }
   }
 }
@@ -81,7 +81,7 @@ function respawnEmptyVehicles(): void {
 export function bindAdminRespcar(): void {
   registerCommand(
     "respcar",
-    "Респаун всех машин через 30 секунд",
+    "30 秒后重置所有车辆",
     (player) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -98,7 +98,7 @@ export function bindAdminRespcar(): void {
       const tag = playerChatName(player);
       broadcastAll(
         Color.info,
-        `Администратор ${tag} запустил респаун транспорта. Машины без игроков вернутся на точки через 30 секунд.`
+        `管理员 ${tag} 已启动载具重置。无人乘坐的车辆将在 30 秒后返回原位。`
       );
 
       pending = setTimeout(() => {
@@ -106,7 +106,7 @@ export function bindAdminRespcar(): void {
         respawnEmptyVehicles();
         broadcastAll(
           Color.info,
-          `Администратор ${tag} респавнил весь свободный транспорт на сервере.`
+          `管理员 ${tag} 已重置服务器上所有无人乘坐的载具。`
         );
       }, DELAY_MS);
     },

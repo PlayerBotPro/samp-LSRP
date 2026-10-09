@@ -25,7 +25,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -39,7 +39,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -155,13 +155,13 @@ async function applyUnban(admin: Player, rawName: string): Promise<void> {
     return;
   }
 
-  broadcastAdmins(`Администратор ${playerChatName(admin)} разбанил игрока ${row.name}.`);
+  broadcastAdmins(`管理员 ${playerChatName(admin)} 解封了玩家 ${row.name}。`);
 }
 
 export function bindAdminBan(): void {
   registerCommand(
     "ban",
-    "Забанить игрока",
+    "封禁玩家",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -194,7 +194,7 @@ export function bindAdminBan(): void {
 
   registerCommand(
     "unban",
-    "Разбанить игрока",
+    "解封玩家",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

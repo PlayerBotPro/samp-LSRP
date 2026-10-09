@@ -55,7 +55,7 @@ function findTarget(slot: number): Player | null {
 export function bindAdminSetlevel(): void {
   registerCommand(
     "setlevel",
-    "Установить игровой уровень",
+    "设置游戏等级",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;

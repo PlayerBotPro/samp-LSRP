@@ -35,7 +35,7 @@ const AMMO_ONLY_IDS = new Set<number>([
 export function bindAdminWarehouse(): void {
   registerCommand(
     "warehouse",
-    "Состояние складов организаций",
+    "组织仓库状态",
     (player) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;
@@ -63,10 +63,10 @@ function showWarehouseList(player: Player): void {
       player,
       WAREHOUSE_LIST_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Склады",
+      "仓库",
       lines.join("\n"),
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开仓库列表。");
@@ -101,7 +101,7 @@ function showWarehouseInfo(player: Player, orgId: number): void {
       DIALOG_STYLE_MSGBOX,
       warehouseName(orgId),
       formatWarehouseInfo(record),
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {
@@ -113,22 +113,22 @@ function formatWarehouseInfo(record: WarehouseRecord): string {
   const lines: string[] = [];
 
   if (record.orgId === WAREHOUSE_MINE_ID) {
-    lines.push(`Металл: ${record.metal}`);
+    lines.push(`金属：${record.metal}`);
   } else if (record.orgId === ORG_HOSPITAL_ID) {
-    lines.push(`Медпрепараты: ${record.meds}`);
+    lines.push(`医疗用品：${record.meds}`);
   } else if (AMMO_ONLY_IDS.has(record.orgId)) {
-    lines.push(`Патроны: ${record.ammo}`);
+    lines.push(`弹药：${record.ammo}`);
   } else if (warehouseUsesLock(record.orgId)) {
-    lines.push(`Патроны: ${record.ammo}`);
-    lines.push(`Металл: ${record.metal}`);
-    lines.push(`Наркотики: ${record.drugs}`);
+    lines.push(`弹药：${record.ammo}`);
+    lines.push(`金属：${record.metal}`);
+    lines.push(`毒品：${record.drugs}`);
     lines.push("");
-    lines.push(record.isLocked ? "Склад закрыт" : "Склад открыт");
+    lines.push(record.isLocked ? "仓库已关闭" : "仓库已开启");
   } else {
-    lines.push(`Патроны: ${record.ammo}`);
-    lines.push(`Медпрепараты: ${record.meds}`);
-    lines.push(`Металл: ${record.metal}`);
-    lines.push(`Наркотики: ${record.drugs}`);
+    lines.push(`弹药：${record.ammo}`);
+    lines.push(`医疗用品：${record.meds}`);
+    lines.push(`金属：${record.metal}`);
+    lines.push(`毒品：${record.drugs}`);
   }
 
   return lines.join("\n");
@@ -136,10 +136,10 @@ function formatWarehouseInfo(record: WarehouseRecord): string {
 
 function warehouseName(orgId: number): string {
   if (orgId === WAREHOUSE_MINE_ID) {
-    return "Шахта";
+    return "矿场";
   }
 
-  return getOrganization(orgId)?.name ?? `Склад #${orgId}`;
+  return getOrganization(orgId)?.name ?? `仓库 #${orgId}`;
 }
 
 function pickWarehouseId(listItem: number, inputText: string): number | null {

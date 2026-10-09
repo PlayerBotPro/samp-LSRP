@@ -29,7 +29,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -57,7 +57,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 }
 
@@ -78,13 +78,13 @@ function exitSpectate(player: Player): void {
   try {
     player.toggleSpectating(false);
   } catch {
-    // Уже не в спеке.
+    // 已退出观察模式。
   }
 
   try {
     player.toggleControllable(true);
   } catch {
-    // Управление выставится после placeAt.
+    // 控制状态会在 placeAt 后设置。
   }
 }
 
@@ -126,14 +126,14 @@ function spawnToAccountPoint(target: Player): boolean {
   leaveVehicle(target);
   exitSpectate(target);
 
-  // Иначе OnPlayerSpawn покажет «Вы потеряли сознание…» поверх админ-спавна.
+  // 否则 OnPlayerSpawn 会在管理员重生后显示“你失去了意识……”。
   clearPendingHospitalSpawn(target);
 
   try {
     if (force) {
       writeSpawnInfo(target, skin, point);
       target.spawn();
-      // Ждём OnPlayerSpawn — иначе placeAt может перетереться хендлером смерти/больницы.
+      // 等待 OnPlayerSpawn，否则 placeAt 可能被死亡/医院处理器覆盖。
       setTimeout(() => {
         if (!isPlayerActive(target) || playerId(target) !== targetSlot) {
           return;
@@ -157,7 +157,7 @@ function spawnToAccountPoint(target: Player): boolean {
 export function bindAdminSpawn(): void {
   registerCommand(
     "spawn",
-    "Заспавнить себя или игрока",
+    "重生自己或其他玩家",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -201,7 +201,7 @@ export function bindAdminSpawn(): void {
 
       if (self) {
         player.sendClientMessage(Color.info, "你已重生。");
-        broadcastAdmins(`Администратор ${playerChatName(player)} заспавнил себя.`);
+        broadcastAdmins(`管理员 ${playerChatName(player)} 让自己重生。`);
         return;
       }
 
@@ -215,11 +215,11 @@ export function bindAdminSpawn(): void {
           `管理员 ${playerChatName(player)} 已使你重生。`
         );
       } catch {
-        // Уже вышел.
+        // 已离线。
       }
 
       broadcastAdmins(
-        `Администратор ${playerChatName(player)} заспавнил ${playerChatName(target)}.`
+        `管理员 ${playerChatName(player)} 让 ${playerChatName(target)} 重生。`
       );
     },
     true

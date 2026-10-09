@@ -39,7 +39,7 @@ function sendAnswer(line: string, target: Player): void {
     try {
       player.sendClientMessage(Color.adminChat, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   };
 
@@ -62,7 +62,7 @@ function playAnswerSound(player: Player): void {
     try {
       player.playGameSound(ANSWER_SOUND_ID, 0, 0, 0);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   }
 }
@@ -70,7 +70,7 @@ function playAnswerSound(player: Player): void {
 export function bindAdminAns(): void {
   registerCommand(
     "ans",
-    "Ответить игроку",
+    "回复玩家",
     (player, args) => {
       if (!hasAdminAccess(player, 1)) {
         return;
@@ -101,9 +101,9 @@ export function bindAdminAns(): void {
         return;
       }
 
-      const verb = byGender(getGender(player), "ответил", "ответила");
+      const verb = byGender(getGender(player), "回复了", "回复了");
       const line = clipClientMessage(
-        `[A] Администратор ${playerChatName(player)} ${verb} игроку ${playerChatName(target)}: ${text}`
+        `[A] 管理员 ${playerChatName(player)} 回复玩家 ${playerChatName(target)}：${text}`
       );
       sendAnswer(line, target);
     },

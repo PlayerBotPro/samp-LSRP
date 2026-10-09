@@ -89,7 +89,7 @@ function teleportToCoords(player: Player, x: number, y: number, z: number): bool
 export function bindAdminTpcor(): void {
   registerCommand(
     "tpcor",
-    "Телепорт по координатам XYZ",
+    "传送到 XYZ 坐标",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

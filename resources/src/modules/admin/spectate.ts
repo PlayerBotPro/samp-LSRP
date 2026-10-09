@@ -9,7 +9,7 @@ import { registerCommand } from "../commands/registry";
 import { hasAdminAccess } from "./session";
 
 const MIN_LEVEL = 1;
-/** SPECTATE_MODE_NORMAL — третье лицо. */
+/** SPECTATE_MODE_NORMAL — 第三人称视角。 */
 const SPECTATE_MODE_NORMAL = 1;
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
@@ -24,12 +24,12 @@ type SpecSession = {
   lastVehicleId: number;
 };
 
-/** adminSlot → сессия слежки. */
+/** adminSlot → 观察会话。 */
 const sessions = new Map<number, SpecSession>();
-/** После toggleSpectating(false) → вернуть на точку в playerSpawn. */
+/** toggleSpectating(false) 后，在 playerSpawn 中返回原位置。 */
 const pendingReturn = new Map<number, SpawnPoint>();
 
-/** Слот цели слежки или null. */
+/** 被观察目标的槽位，或 null。 */
 export function getAdminSpectateTarget(player: Player): number | null {
   const id = playerId(player);
   if (id === null) {
@@ -42,7 +42,7 @@ export function getAdminSpectateTarget(player: Player): number | null {
 export function bindAdminSpectate(): void {
   registerCommand(
     "sp",
-    "Слежка за игроком",
+    "观察玩家",
     (player, args) => {
       tryStartSpectate(player, args.trim());
     },
@@ -51,7 +51,7 @@ export function bindAdminSpectate(): void {
 
   registerCommand(
     "spoff",
-    "Выйти из слежки",
+    "退出观察",
     (player) => {
       tryStopSpectate(player);
     },
@@ -65,7 +65,7 @@ export function bindAdminSpectate(): void {
   });
 
   omp.on("playerDeath", (player) => {
-    // Смерть в спеке — без возврата на старую точку (спавн/больница сами).
+    // 观察期间死亡时不返回旧位置（由重生/医院流程处理）。
     clearSpectateState(player, false);
   });
 
@@ -84,7 +84,7 @@ export function bindAdminSpectate(): void {
 
       const admin = omp.players.at(adminSlot);
       if (admin && isPlayerActive(admin)) {
-        stopSpectate(admin, "Игрок вышел из игры. Слежка прекращена.");
+        stopSpectate(admin, "玩家已离开游戏，观察已结束。");
       } else {
         sessions.delete(adminSlot);
         pendingReturn.delete(adminSlot);
@@ -141,7 +141,7 @@ function tryStartSpectate(player: Player, raw: string): void {
     return;
   }
 
-  // Без нашей сессии, но уже в спеке (глюк/F4) — иначе returnPoint будет мусором.
+  // 没有本地会话但已处于观察状态（故障/F4），否则 returnPoint 会是无效值。
   if (!existing && isPlayerSpectating(player)) {
     player.sendClientMessage(
       Color.error,
@@ -166,16 +166,16 @@ function tryStartSpectate(player: Player, raw: string): void {
   if (!attachSpectate(player, target)) {
     player.sendClientMessage(Color.error, "无法开始观察。");
     if (existing) {
-      // Переключение на другую цель сорвалось — вернуть камеру на прежнюю.
+      // 切换观察目标失败，将镜头恢复到原目标。
       const prev = findTarget(existing.targetSlot);
       if (!prev || !attachSpectate(player, prev)) {
-        stopSpectate(player, "Слежка прекращена.");
+        stopSpectate(player, "观察已结束。");
       }
     } else {
       try {
         player.toggleSpectating(false);
       } catch {
-        // Уже не в спеке.
+        // 已退出观察模式。
       }
       markSpectating(player, false);
     }
@@ -192,7 +192,7 @@ function tryStartSpectate(player: Player, raw: string): void {
       vehicleId = target.getVehicleID();
     }
   } catch {
-    // Значения по умолчанию.
+    // 默认值。
   }
 
   sessions.set(adminSlot, {
@@ -210,25 +210,25 @@ function tryStartSpectate(player: Player, raw: string): void {
     `你开始观察 ${playerChatName(target)}.`
   );
   broadcastAdmins(
-    `[A] Администратор ${playerChatName(player)} начал слежку за ${playerChatName(target)}.`
+    `[A] 管理员 ${playerChatName(player)} 开始观察 ${playerChatName(target)}。`
   );
 }
 
 function tryStopSpectate(player: Player): void {
   const id = playerId(player);
-  // Выход из слежки разрешён даже без alogin — иначе можно застрять в спеке.
+  // 即使未 alogin 也允许退出观察，否则可能卡在观察模式。
   if (id !== null && sessions.has(id)) {
-    stopSpectate(player, "Вы вышли из режима слежки.");
+    stopSpectate(player, "你已退出观察模式。");
     return;
   }
 
-  // Сессии нет, но клиент всё ещё в SPECTATING (глюк) — принудительно снять.
+  // 会话已结束，但客户端仍处于 SPECTATING 状态（故障），强制退出。
   if (isPlayerSpectating(player)) {
     markSpectating(player, false);
     try {
       player.toggleSpectating(false);
     } catch {
-      // Уже не в спеке.
+      // 已退出观察模式。
     }
     player.sendClientMessage(Color.info, "你已退出观察模式。");
     return;
@@ -261,8 +261,8 @@ function stopSpectate(player: Player, message: string): void {
     return;
   }
 
-  // toggleSpectating(false) вызывает playerSpawn — там applyPendingReturn.
-  // Fallback, если спавн уже прошёл или событие не пришло.
+  // toggleSpectating(false) 会触发 playerSpawn，并在那里调用 applyPendingReturn。
+  // 如果重生流程已完成或事件未触发，则使用备用处理。
   setTimeout(() => {
     if (pendingReturn.has(id) && isPlayerActive(player)) {
       applyPendingReturn(player);
@@ -272,7 +272,7 @@ function stopSpectate(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.info, message);
   } catch {
-    // Уже вышел.
+    // 已离线。
   }
 }
 
@@ -294,7 +294,7 @@ function applyPendingReturn(player: Player): void {
     refreshStreamForPlayer(player);
     player.setCameraBehind();
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 
   markSpectating(player, false);
@@ -307,7 +307,7 @@ function clearSpectateState(player: Player, restore: boolean): void {
   }
 
   if (restore && sessions.has(id)) {
-    stopSpectate(player, "Слежка прекращена.");
+    stopSpectate(player, "观察已结束。");
     return;
   }
 
@@ -320,7 +320,7 @@ function clearSpectateState(player: Player, restore: boolean): void {
       player.toggleSpectating(false);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -333,7 +333,7 @@ function syncSpectateSessions(): void {
     const admin = omp.players.at(adminSlot);
     if (!admin || !isPlayerActive(admin) || !hasAdminAccess(admin, MIN_LEVEL)) {
       if (admin && isPlayerActive(admin)) {
-        stopSpectate(admin, "Слежка прекращена.");
+        stopSpectate(admin, "观察已结束。");
       } else {
         sessions.delete(adminSlot);
         pendingReturn.delete(adminSlot);
@@ -348,7 +348,7 @@ function syncSpectateSessions(): void {
       isAdminTarget(target) ||
       !canBeSpectated(target)
     ) {
-      stopSpectate(admin, "Игрок недоступен. Слежка прекращена.");
+      stopSpectate(admin, "玩家不可用，观察已结束。");
       continue;
     }
 
@@ -360,7 +360,7 @@ function syncSpectateSessions(): void {
       world = target.getVirtualWorld();
       vehicleId = target.isInAnyVehicle() ? target.getVehicleID() : -1;
     } catch {
-      stopSpectate(admin, "Игрок недоступен. Слежка прекращена.");
+      stopSpectate(admin, "玩家不可用，观察已结束。");
       continue;
     }
 
@@ -373,7 +373,7 @@ function syncSpectateSessions(): void {
     }
 
     if (!attachSpectate(admin, target)) {
-      stopSpectate(admin, "Не удалось обновить слежку.");
+      stopSpectate(admin, "无法更新观察状态。");
       continue;
     }
 
@@ -390,7 +390,7 @@ function attachSpectate(admin: Player, target: Player): boolean {
     admin.setInterior(interior);
     admin.setVirtualWorld(world);
 
-    // Порядок важен: сначала spectating, потом цель.
+    // 顺序很重要：先设置 spectating，再设置目标。
     admin.toggleSpectating(true);
 
     if (target.isInAnyVehicle()) {
@@ -408,7 +408,7 @@ function attachSpectate(admin: Player, target: Player): boolean {
   }
 }
 
-/** omp-node typings для SpectateVehicle ошибочно ждут Player; у Vehicle есть getPtr. */
+/** omp-node 对 SpectateVehicle 的类型声明错误地要求 Player；Vehicle 也有 getPtr。 */
 function spectateVehicle(admin: Player, vehicle: Vehicle): void {
   (
     admin as Player & {
@@ -495,7 +495,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 }
 
@@ -508,7 +508,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

@@ -18,7 +18,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -29,7 +29,7 @@ function slapPlayer(target: Player): boolean {
       target.removeFromVehicle();
     }
   } catch {
-    // Уже не в транспорте.
+    // 已经不在载具中。
   }
 
   try {
@@ -43,7 +43,7 @@ function slapPlayer(target: Player): boolean {
   try {
     target.setVelocity(0, 0, SLAP_VELOCITY);
   } catch {
-    // Позиция уже сдвинута вверх.
+    // 位置已向上移动。
   }
 
   return true;
@@ -52,7 +52,7 @@ function slapPlayer(target: Player): boolean {
 export function bindAdminSlap(): void {
   registerCommand(
     "slap",
-    "Подкинуть игрока вверх",
+    "将玩家向上抛起",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -92,7 +92,7 @@ export function bindAdminSlap(): void {
       }
 
       broadcastAdmins(
-        `Администратор ${playerChatName(player)} подбросил ${playerChatName(target)}.`
+        `管理员 ${playerChatName(player)} 将 ${playerChatName(target)} 抛向空中。`
       );
     },
     true

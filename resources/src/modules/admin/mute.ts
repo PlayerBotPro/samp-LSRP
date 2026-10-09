@@ -61,7 +61,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -69,7 +69,7 @@ function broadcastAll(color: number, text: string): void {
 export function bindAdminMute(): void {
   registerCommand(
     "mute",
-    "Заглушить игрока",
+    "禁言玩家",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -138,7 +138,7 @@ async function applyMute(
   const adminTag = playerChatName(admin);
   const targetTag = playerChatName(target);
   const line = reason
-    ? `Администратор ${adminTag} заглушил игрока ${targetTag}. Причина: ${reason}.`
-    : `Администратор ${adminTag} заглушил игрока ${targetTag}.`;
+    ? `管理员 ${adminTag} 禁言了玩家 ${targetTag}。原因：${reason}。`
+    : `管理员 ${adminTag} 禁言了玩家 ${targetTag}。`;
   broadcastAll(Color.error, line);
 }

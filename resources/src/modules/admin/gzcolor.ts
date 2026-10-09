@@ -10,7 +10,7 @@ const MIN_ADMIN_LEVEL = 5;
 
 function usageLines(): string[] {
   return [
-    "Использование: /gzcolor [id]",
+    "用法：/gzcolor [id]",
     ...GANGS.map((gang) => `${gang.id} — ${gang.name}`),
   ];
 }
@@ -32,7 +32,7 @@ function parseGangId(args: string): number | null {
 export function bindAdminGzcolor(): void {
   registerCommand(
     "gzcolor",
-    "Сменить владельца гангзоны",
+    "更换帮派地盘的所有者",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;
@@ -83,7 +83,7 @@ async function applyOwner(
     return;
   }
 
-  const nextName = getOrganization(orgId)?.name ?? "банде";
-  const prevName = getOrganization(previousOrgId)?.name ?? "никому";
+  const nextName = getOrganization(orgId)?.name ?? "帮派";
+  const prevName = getOrganization(previousOrgId)?.name ?? "无人";
   admin.sendClientMessage(Color.info, `地盘 #${zoneId}: ${prevName} → ${nextName}.`);
 }

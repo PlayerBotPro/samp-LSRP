@@ -14,7 +14,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -22,7 +22,7 @@ function broadcastAll(color: number, text: string): void {
 export function bindAdminAo(): void {
   registerCommand(
     "ao",
-    "Объявление всем игрокам",
+    "向所有玩家公告",
     (player, args) => {
       if (!hasAdminAccess(player, 3)) {
         return;
@@ -36,7 +36,7 @@ export function bindAdminAo(): void {
 
       broadcastAll(
         Color.info,
-        `Администратор ${playerChatName(player)}: ${text}`
+        `管理员 ${playerChatName(player)}：${text}`
       );
     },
     true

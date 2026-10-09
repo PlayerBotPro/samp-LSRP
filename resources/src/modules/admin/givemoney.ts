@@ -63,7 +63,7 @@ function notifyGive(
 ): void {
   const targetTag = playerChatName(target);
   const adminTag = playerChatName(admin);
-  const where = toBank ? "на банковский счёт" : "наличными";
+  const where = toBank ? "存入银行账户" : "现金";
 
   admin.sendClientMessage(
     Color.info,
@@ -81,7 +81,7 @@ function notifyGive(
 export function bindAdminGivemoney(): void {
   registerCommand(
     "givemoney",
-    "Выдать наличные или деньги на банк",
+    "发放现金或银行存款",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

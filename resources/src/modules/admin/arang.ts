@@ -58,7 +58,7 @@ function isSamePlayer(a: Player, b: Player): boolean {
 export function bindAdminArang(): void {
   registerCommand(
     "arang",
-    "Повысить или понизить уровень админки",
+    "提升或降低管理员等级",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;

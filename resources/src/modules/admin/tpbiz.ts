@@ -12,8 +12,8 @@ export const TPBIZ_DIALOG_ID = 69;
 const MIN_LEVEL = 4;
 const DIALOG_STYLE_LIST = 2;
 const PAGE_SIZE = 16;
-const BACK_LABEL = "<<< Назад";
-const NEXT_LABEL = ">>> Далее";
+const BACK_LABEL = "<<< 上一页";
+const NEXT_LABEL = ">>> 下一页";
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
@@ -85,10 +85,10 @@ function showList(player: Player, page: number): void {
       player,
       TPBIZ_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Бизнесы (${safePage + 1}/${pageCount()})`,
+      `产业 (${safePage + 1}/${pageCount()})`,
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     pageByPlayer.delete(id);
@@ -138,7 +138,7 @@ function teleportToBusiness(player: Player, business: BusinessRecord): boolean {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 
   try {
@@ -181,7 +181,7 @@ function clearPage(player: Player): void {
 export function bindAdminTpbiz(): void {
   registerCommand(
     "tpbiz",
-    "Телепорт к бизнесу",
+    "传送到产业",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

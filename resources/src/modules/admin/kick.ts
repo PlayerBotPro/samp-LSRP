@@ -18,7 +18,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -30,7 +30,7 @@ function kickSoon(player: Player): void {
 export function bindAdminKick(): void {
   registerCommand(
     "kick",
-    "Кикнуть игрока",
+    "踢出玩家",
     (player, args) => {
       if (!canUseKick(player)) {
         return;
@@ -80,8 +80,8 @@ export function bindAdminKick(): void {
       const adminTag = playerChatName(player);
       const targetTag = playerChatName(target);
       const line = reason
-        ? `Администратор ${adminTag} кикнул игрока ${targetTag}. Причина: ${reason}.`
-        : `Администратор ${adminTag} кикнул игрока ${targetTag}.`;
+        ? `管理员 ${adminTag} 踢出了玩家 ${targetTag}。原因：${reason}。`
+        : `管理员 ${adminTag} 踢出了玩家 ${targetTag}。`;
       broadcastAll(Color.error, line);
       kickSoon(target);
     },

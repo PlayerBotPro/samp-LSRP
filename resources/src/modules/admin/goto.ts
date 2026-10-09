@@ -60,7 +60,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 }
 
@@ -107,7 +107,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -115,7 +115,7 @@ function broadcastAdmins(text: string): void {
 export function bindAdminGoto(): void {
   registerCommand(
     "goto",
-    "Телепорт к игроку",
+    "传送到玩家身边",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -154,7 +154,7 @@ export function bindAdminGoto(): void {
         `你已传送到 ${playerChatName(target)}.`
       );
       broadcastAdmins(
-        `[A] Администратор ${playerChatName(player)} телепортировался к ${playerChatName(target)}.`
+        `[A] 管理员 ${playerChatName(player)} 传送到了 ${playerChatName(target)} 身边。`
       );
     },
     true
@@ -162,7 +162,7 @@ export function bindAdminGoto(): void {
 
   registerCommand(
     "gethere",
-    "Телепорт игрока к себе",
+    "将玩家传送到自己身边",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;
@@ -206,11 +206,11 @@ export function bindAdminGoto(): void {
           `管理员 ${playerChatName(player)} 已将你传送走。`
         );
       } catch {
-        // Игрок уже вышел.
+        // 玩家已离线。
       }
 
       broadcastAdmins(
-        `[A] Администратор ${playerChatName(player)} телепортировал к себе игрока ${playerChatName(target)}.`
+        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 传送到了自己身边。`
       );
     },
     true

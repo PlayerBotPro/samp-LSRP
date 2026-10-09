@@ -80,7 +80,7 @@ function applyVisibleSkin(target: Player): void {
 export function bindAdminSetskin(): void {
   registerCommand(
     "setskin",
-    "Установить скин игроку",
+    "设置玩家外观",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

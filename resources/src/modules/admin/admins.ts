@@ -16,7 +16,7 @@ type OnlineAdmin = {
 export function bindAdminsList(): void {
   registerCommand(
     "admins",
-    "Список администраторов в игре",
+    "在线管理员列表",
     (player) => {
       if (!hasAdminAccess(player, 1)) {
         return;
@@ -43,7 +43,7 @@ export function bindAdminsList(): void {
         }
 
         const slot = playerId(other) ?? 0;
-        const logged = isAdminLoggedIn(other) ? "да" : "нет";
+        const logged = isAdminLoggedIn(other) ? "是" : "否";
         const afk = afkStatusSuffix(other, true);
         const specTarget = getAdminSpectateTarget(other);
         const spec =

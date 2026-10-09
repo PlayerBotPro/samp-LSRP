@@ -14,7 +14,7 @@ function sendAdminChat(text: string): void {
     try {
       other.sendClientMessage(Color.adminChat, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -22,7 +22,7 @@ function sendAdminChat(text: string): void {
 export function bindAdminChat(): void {
   registerCommand(
     "a",
-    "Чат администрации",
+    "管理员聊天",
     (player, args) => {
       if (!hasAdminAccess(player, 1)) {
         return;

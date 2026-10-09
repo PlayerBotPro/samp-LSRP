@@ -11,7 +11,7 @@ const MIN_LEVEL = 1;
 export function bindAdminStats(): void {
   registerCommand(
     "stats",
-    "Статистика игрока",
+    "玩家统计",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_LEVEL)) {
         return;

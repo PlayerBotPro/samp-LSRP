@@ -47,7 +47,7 @@ function findTarget(slot: number) {
 export function bindAdminMakeadmin(): void {
   registerCommand(
     "makeadmin",
-    "Выдать или снять админку",
+    "授予或撤销管理员权限",
     (player, args) => {
       if (!hasAdminAccess(player, 7)) {
         return;
