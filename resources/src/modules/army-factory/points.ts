@@ -1,22 +1,22 @@
 import { ORG_ARMY_ID } from "../org/army";
 
-/** Ванильный интерьер завода (ID 2). */
+/** 工厂的原版室内场景（ID 2）。 */
 export const ARMY_FACTORY_INTERIOR = 2;
 
 /**
- * VW завода = id Армии. Армия и FBI входят в один инстанс.
- * Улица остаётся STREET_WORLD (0).
+ * 工厂的虚拟世界 ID 等于军队 ID。军队和 FBI 位于同一个实例中。
+ * 街道仍使用 STREET_WORLD（0）。
  */
 export const ARMY_FACTORY_WORLD = ORG_ARMY_ID;
 
-/** Пикап раздевалки (устройство / завершение). */
+/** 更衣室拾取点（开始 / 结束工作班次）。 */
 export const HIRE_POINT = {
   x: 2567.759,
   y: -1281.4629,
   z: 1044.125,
 } as const;
 
-/** Жёлтые пикапы — заготовки гильз. */
+/** 黄色拾取点用于领取弹壳毛坯。 */
 export const BLANK_POINTS: readonly { x: number; y: number; z: number }[] = [
   { x: 2559.323, y: -1287.3453, z: 1044.125 },
   { x: 2551.165, y: -1287.2174, z: 1044.125 },
@@ -26,7 +26,7 @@ export const BLANK_POINTS: readonly { x: number; y: number; z: number }[] = [
   { x: 2558.8235, y: -1299.9015, z: 1044.125 },
 ];
 
-/** Станы сборки: пикап + объект на столе + угол игрока. */
+/** 装配工作台：拾取点 + 桌面物体 + 玩家朝向。 */
 export const BENCH_POINTS: readonly {
   pickup: { x: number; y: number; z: number };
   object: { x: number; y: number; z: number; rz: number };
@@ -84,7 +84,7 @@ export const BENCH_POINTS: readonly {
   },
 ];
 
-/** Сдача готовых патронов. */
+/** 交付已完成的子弹。 */
 export const STOCK_POINTS: readonly { x: number; y: number; z: number }[] = [
   { x: 2564.3374, y: -1292.8196, z: 1044.125 },
 ];

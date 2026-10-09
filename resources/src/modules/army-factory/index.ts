@@ -76,7 +76,7 @@ export function isArmyFactoryOnShift(player: Player): boolean {
   return id !== null && jobs.has(id);
 }
 
-/** Завершить смену с выплатой (выход с завода / раздевалка). */
+/** 结束工作班次并发放工资（离开工厂 / 更衣室）。 */
 export function endArmyFactoryShift(player: Player): void {
   finishShift(player, { requireHirePoint: false, notifyExit: true });
 }
@@ -221,7 +221,7 @@ function tickFactory(): void {
       const inFactory =
         world === ARMY_FACTORY_WORLD && interior === ARMY_FACTORY_INTERIOR;
 
-      // /goto, /tpint и т.п.: смена не должна «висеть» вне цеха.
+      // /goto、/tpint 等命令：离开车间后不应继续保留工作班次。
       if (job && !inFactory) {
         endArmyFactoryShift(player);
         standing.delete(id);
@@ -270,7 +270,7 @@ function tickFactory(): void {
           break;
       }
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -477,7 +477,7 @@ function startCraft(
       0
     );
   } catch {
-    // Иначе phase=craft + freeze без таймера — вечный лок.
+    // 否则 phase=craft 会被冻结且没有计时器，导致永久卡住。
     cancelCraft(player, job, true);
     job.phase = "blank";
     giveCarry(player, BLANK_ATTACH_MODEL);
@@ -513,7 +513,7 @@ function finishCraft(player: Player, expectedId: number): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.toggleControllable(true);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 
   if (!isPlayerActive(player)) {
@@ -714,7 +714,7 @@ function cancelCraft(player: Player, job: Job, unlock: boolean): void {
       player.toggleControllable(true);
       player.clearAnimations(ANIM_SYNC_ALL);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已经离开。
     }
   }
 }
@@ -727,7 +727,7 @@ function destroyCraftObject(job: Job): void {
   try {
     job.craftObject.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已经销毁。
   }
 
   job.craftObject = null;
@@ -754,7 +754,7 @@ function giveCarry(player: Player, model: number): void {
     );
     player.setSpecialAction(SPECIAL_ACTION_CARRY);
   } catch {
-    // Слот ещё не готов.
+    // 槽位尚未准备好。
   }
 }
 
@@ -764,7 +764,7 @@ function clearCarry(player: Player): void {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -772,7 +772,7 @@ function clearHandObject(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_HAND);
   } catch {
-    // Слота не было.
+    // 槽位不存在。
   }
 }
 
@@ -790,7 +790,7 @@ function playPutdown(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // Библиотека подтянется позже.
+    // 稍后会加载动作库。
   }
 }
 
@@ -800,7 +800,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("CARRY", "PUTDWN", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Подтянется на первой сборке.
+    // 第一次组装时会加载。
   }
 }
 
@@ -812,7 +812,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 

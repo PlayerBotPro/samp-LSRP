@@ -68,7 +68,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -119,7 +119,7 @@ function showDialog(
     Dialog.show(player, id, style, title, body, button1, button2);
     return true;
   } catch {
-    tell(player, Color.error, "Не удалось открыть окно экзамена.");
+    tell(player, Color.error, "无法打开考试窗口。");
     return false;
   }
 }
@@ -128,7 +128,7 @@ function clearRace(player: Player): void {
   try {
     RaceCheckpoint.disable(player);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -198,7 +198,7 @@ function showRaceCp(player: Player, exam: ExamSession): void {
       RACE_CP_RADIUS
     );
   } catch {
-    tell(player, Color.error, "Не удалось поставить чекпоинт.");
+    tell(player, Color.error, "无法设置检查点。");
   }
 }
 
@@ -224,7 +224,7 @@ function beginRoute(player: Player, exam: ExamSession, vehicle: Vehicle): void {
     tell(
       player,
       Color.info,
-      "Проедьте все красные чекпоинты со стрелкой до конца маршрута."
+      "沿着箭头依次通过所有红色检查点，直到路线终点。"
     );
   }
 }
@@ -246,13 +246,13 @@ function availableKinds(player: Player): ExamKind[] {
 }
 
 function kindLabel(kind: ExamKind): string {
-  return kind === "car" ? "Автомобили" : "Мотоциклы";
+  return kind === "car" ? "汽车" : "摩托车";
 }
 
 function openKindMenu(player: Player): void {
   const kinds = availableKinds(player);
   if (kinds.length === 0) {
-    tell(player, Color.error, "У вас уже есть права на автомобили и мотоциклы.");
+    tell(player, Color.error, "你已经持有汽车和摩托车驾照。");
     return;
   }
 
@@ -277,10 +277,10 @@ function openKindMenu(player: Player): void {
     player,
     AUTOSCHOOL_EXAM_KIND_DIALOG_ID,
     DIALOG_STYLE_LIST,
-    `Экзамен ПДД — $${THEORY_FEE}`,
+    `交通规则考试 — $${THEORY_FEE}`,
     kinds.map(kindLabel).join("\n"),
-    "Далее",
-    "Отмена"
+    "下一步",
+    "取消"
   );
 }
 
@@ -291,10 +291,10 @@ function openRules(player: Player, exam: ExamSession): void {
     player,
     AUTOSCHOOL_EXAM_RULES_DIALOG_ID,
     DIALOG_STYLE_MSGBOX,
-    "Правила ПДД",
+    "交通规则",
     EXAM_RULES,
-    "Далее",
-    "Отмена"
+    "下一步",
+    "取消"
   );
 }
 
@@ -311,10 +311,10 @@ function openQuestion(player: Player, exam: ExamSession): void {
     player,
     AUTOSCHOOL_EXAM_QUESTION_DIALOG_ID,
     DIALOG_STYLE_LIST,
-    `Вопрос ${exam.question + 1}/${QUESTION_COUNT}`,
+    `问题 ${exam.question + 1}/${QUESTION_COUNT}`,
     item.answers.join("\n"),
-    "Ответить",
-    "Отмена"
+    "提交答案",
+    "取消"
   );
 }
 
@@ -329,9 +329,9 @@ function finishTheory(player: Player, exam: ExamSession): void {
       player,
       AUTOSCHOOL_EXAM_RESULT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Экзамен",
-      `Вы не сдали тест.\nПравильных ответов: ${exam.correct}/${total}.`,
-      "Закрыть",
+      "考试",
+      `你未能通过测试。\n答对题数：${exam.correct}/${total}。`,
+      "关闭",
       ""
     );
     return;
@@ -344,8 +344,8 @@ function finishTheory(player: Player, exam: ExamSession): void {
     player,
     Color.info,
     exam.kind === "car"
-      ? "Вы сдали теорию. Выйдите на парковку и садитесь в автомобиль автошколы."
-      : "Вы сдали теорию. Выйдите на парковку и садитесь в мотоцикл автошколы."
+      ? "你已通过理论考试。请前往停车场，坐上驾校汽车。"
+      : "你已通过理论考试。请前往停车场，坐上驾校摩托车。"
   );
 }
 
@@ -367,29 +367,29 @@ function tryStartMarker(player: Player): void {
   standingOnMarker.add(id);
 
   if (isJailed(player)) {
-    tell(player, Color.error, "Вы в тюрьме.");
+    tell(player, Color.error, "你目前在监狱中。");
     return;
   }
 
   const account = getAccount(player);
   if (account?.hospitalized) {
-    tell(player, Color.error, "Вам нужно лечение. Займите койку: /hospital.");
+    tell(player, Color.error, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
   if (isMinerOnShift(player)) {
-    tell(player, Color.error, "Сначала закончите смену на шахте.");
+    tell(player, Color.error, "请先结束矿场的工作班次。");
     return;
   }
 
   if (isLoaderOnShift(player)) {
-    tell(player, Color.error, "Сначала закончите смену грузчика.");
+    tell(player, Color.error, "请先结束搬运工的工作班次。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account?.money ?? 0));
   if (cash < THEORY_FEE) {
-    tell(player, Color.error, `Тест ПДД стоит $${THEORY_FEE}. Недостаточно наличных.`);
+    tell(player, Color.error, `交通规则考试费用为 $${THEORY_FEE}，现金不足。`);
     return;
   }
 
@@ -399,8 +399,8 @@ function tryStartMarker(player: Player): void {
       player,
       Color.info,
       exam.kind === "car"
-        ? "Выйдите на парковку и садитесь в автомобиль автошколы."
-        : "Выйдите на парковку и садитесь в мотоцикл автошколы."
+        ? "请前往停车场，坐上驾校汽车。"
+        : "请前往停车场，坐上驾校摩托车。"
     );
     return;
   }
@@ -423,7 +423,7 @@ function syncStartMarker(player: Player): void {
       Checkpoint.set(player, MARKER.x, MARKER.y, MARKER.z, CHECKPOINT_RADIUS);
       startMarkerOn.add(id);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
     return;
   }
@@ -486,14 +486,14 @@ function onKindPicked(player: Player, response: number, listItem: number, inputT
 
   if (!kind) {
     exams.delete(id);
-    tell(player, Color.error, "Выберите автомобили или мотоциклы.");
+    tell(player, Color.error, "请选择汽车或摩托车。");
     return;
   }
 
   const account = getAccount(player);
   if (!account || account.licenses[kind]) {
     exams.delete(id);
-    tell(player, Color.error, "У вас уже есть эта лицензия.");
+    tell(player, Color.error, "你已经持有此驾照。");
     return;
   }
 
@@ -520,28 +520,28 @@ function onRules(player: Player, response: number): void {
 async function startPaidTest(player: Player, exam: ExamSession): Promise<void> {
   const account = getAccount(player);
   if (!account || account.id !== exam.accountId) {
-    abortExam(player, "Экзамен прерван.");
+    abortExam(player, "考试已中止。");
     return;
   }
 
   if (account.licenses[exam.kind]) {
-    abortExam(player, "У вас уже есть эта лицензия.");
+    abortExam(player, "你已经持有此驾照。");
     return;
   }
 
   if (busy.has(account.id)) {
-    tell(player, Color.error, "Подождите, идёт другая операция.");
+    tell(player, Color.error, "请稍候，另一项操作正在进行中。");
     return;
   }
 
   if (!inSchoolInterior(player)) {
-    abortExam(player, "Оплатить тест можно только в автошколе.");
+    abortExam(player, "只能在驾校支付考试费用。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account.money));
   if (cash < THEORY_FEE) {
-    abortExam(player, `Тест ПДД стоит $${THEORY_FEE}. Недостаточно наличных.`);
+    abortExam(player, `交通规则考试费用为 $${THEORY_FEE}，现金不足。`);
     return;
   }
 
@@ -553,7 +553,7 @@ async function startPaidTest(player: Player, exam: ExamSession): Promise<void> {
     busy.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] autoschool fee ${account.name}: ${message}`);
-    abortExam(player, "Оплата теста не прошла. Попробуйте ещё раз.");
+    abortExam(player, "考试费用支付失败，请重试。");
     return;
   }
   busy.delete(account.id);
@@ -574,7 +574,7 @@ async function startPaidTest(player: Player, exam: ExamSession): Promise<void> {
     applyWallet(player, live);
   }
 
-  tell(player, Color.info, `Вы оплатили тест ПДД: $${THEORY_FEE}.`);
+  tell(player, Color.info, `你已支付交通规则考试费用：$${THEORY_FEE}。`);
   exam.question = 0;
   exam.correct = 0;
   openQuestion(player, exam);
@@ -645,8 +645,8 @@ function onDriver(player: Player): void {
         player,
         Color.error,
         exam.kind === "car"
-          ? "Для экзамена нужен автомобиль."
-          : "Для экзамена нужен мотоцикл."
+          ? "考试需要一辆汽车。"
+          : "考试需要一辆摩托车。"
       );
       return;
     }
@@ -665,7 +665,7 @@ function onLeftVehicle(player: Player): void {
 
   exam.vehicleId = null;
   clearRace(player);
-  tell(player, Color.error, "Вы покинули транспорт. Садитесь обратно, чтобы продолжить экзамен.");
+  tell(player, Color.error, "你已离开车辆。请重新上车以继续考试。");
 }
 
 function onRaceEnter(player: Player): void {
@@ -704,19 +704,19 @@ async function finishPractice(player: Player, exam: ExamSession): Promise<void> 
   const id = playerId(player);
   const account = getAccount(player);
   if (id === null || !account || account.id !== exam.accountId) {
-    abortExam(player, "Экзамен прерван.");
+    abortExam(player, "考试已中止。");
     return;
   }
 
   if (account.licenses[exam.kind]) {
-    abortExam(player, "У вас уже есть эта лицензия.");
+    abortExam(player, "你已经持有此驾照。");
     return;
   }
 
   if (busy.has(account.id)) {
     exam.cpIndex = Math.max(0, EXAM_ROUTE.length - 1);
     showRaceCp(player, exam);
-    tell(player, Color.error, "Подождите, идёт другая операция.");
+    tell(player, Color.error, "请稍候，另一项操作正在进行中。");
     return;
   }
 
@@ -732,7 +732,7 @@ async function finishPractice(player: Player, exam: ExamSession): Promise<void> 
     showRaceCp(player, exam);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] autoschool exam ${account.name}: ${message}`);
-    tell(player, Color.error, "Не удалось сохранить лицензию. Попробуйте ещё раз.");
+    tell(player, Color.error, "无法保存驾照，请重试。");
     return;
   }
   busy.delete(account.id);
@@ -743,14 +743,14 @@ async function finishPractice(player: Player, exam: ExamSession): Promise<void> 
   try {
     player.removeFromVehicle();
   } catch {
-    // Uzhe na nogah.
+    // 玩家已经下车。
   }
 
   if (vehicle) {
     try {
       vehicle.setToRespawn();
     } catch {
-      // Transport uzhe unichtozhen.
+      // 车辆已经销毁。
     }
   }
 
@@ -759,13 +759,13 @@ async function finishPractice(player: Player, exam: ExamSession): Promise<void> 
   }
 
   patchAccount(player, { licenses: nextLicenses });
-  tell(player, Color.info, "Вы успешно сдали практический экзамен.");
+  tell(player, Color.info, "你已成功通过实操考试。");
   tell(
     player,
     Color.info,
     exam.kind === "car"
-      ? "Вы получили лицензию на автомобили."
-      : "Вы получили лицензию на мотоциклы."
+      ? "你已获得汽车驾照。"
+      : "你已获得摩托车驾照。"
   );
 }
 
@@ -828,7 +828,7 @@ export const autoschoolModule: GameModule = {
     });
 
     omp.on("playerDeath", (player) => {
-      abortExam(player, "Экзамен прерван.");
+      abortExam(player, "考试已中止。");
     });
 
     omp.on("playerConnect", (player) => {
@@ -859,18 +859,18 @@ function tickExam(): void {
 
     const exam = getExam(player);
     if (exam?.phase === "drive" && exam.driveUntil !== null && Date.now() > exam.driveUntil) {
-      abortExam(player, "Время практического экзамена истекло.");
+      abortExam(player, "实操考试时间已到。");
       return;
     }
 
     const account = getAccount(player);
     if (exam && account?.hospitalized) {
-      abortExam(player, "Экзамен прерван: нужно лечение.");
+      abortExam(player, "考试已中止：你需要治疗。");
       return;
     }
 
     if (exam && isJailed(player)) {
-      abortExam(player, "Экзамен прерван.");
+      abortExam(player, "考试已中止。");
       return;
     }
 

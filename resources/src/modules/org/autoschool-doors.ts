@@ -39,7 +39,7 @@ const DOORS: readonly SchoolDoor[] = [
       interior: AUTOSCHOOL_INTERIOR,
       world: STREET_WORLD,
     },
-    label: "Автошкола\nВход",
+    label: "驾校\n入口",
   },
   {
     pickup: {
@@ -57,7 +57,7 @@ const DOORS: readonly SchoolDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на улицу",
+    label: "前往街道",
   },
   {
     pickup: {
@@ -75,7 +75,7 @@ const DOORS: readonly SchoolDoor[] = [
       interior: AUTOSCHOOL_INTERIOR,
       world: STREET_WORLD,
     },
-    label: "Автошкола\nПарковка",
+    label: "驾校\n停车场",
   },
   {
     pickup: {
@@ -93,7 +93,7 @@ const DOORS: readonly SchoolDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Парковка",
+    label: "停车场",
   },
 ];
 
@@ -157,7 +157,7 @@ function tickSchoolDoors(): void {
         }
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空，或玩家已经离开。
     }
   });
 }
@@ -165,7 +165,7 @@ function tickSchoolDoors(): void {
 function tryUse(player: Player, door: SchoolDoor): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -188,7 +188,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -210,7 +210,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
