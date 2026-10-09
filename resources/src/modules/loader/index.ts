@@ -123,13 +123,13 @@ export const loaderModule: GameModule = {
     omp.on("playerKeyStateChange", (player, newKeys, oldKeys) => {
       const pressed = newKeys & ~oldKeys;
       if ((pressed & KEY_JUMP) !== 0 || (pressed & KEY_FIRE) !== 0) {
-        dropBag(player, "Вы уронили мешок!");
+        dropBag(player, "你把袋子掉了！");
       }
     });
 
     omp.on("playerStateChange", (player, newState) => {
       if (newState === PLAYER_STATE_DRIVER || newState === PLAYER_STATE_PASSENGER) {
-        dropBag(player, "Вы уронили мешок!");
+        dropBag(player, "你把袋子掉了！");
       }
     });
 
@@ -194,7 +194,7 @@ function tickLoader(): void {
         showHireDialog(player);
       }
     } catch {
-      // Слот уже пуст.
+      // 玩家槽位已清空。
     }
   });
 }
@@ -233,7 +233,7 @@ function updateLoaderIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已经离开。
     }
     return;
   }
@@ -250,7 +250,7 @@ function hideLoaderIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -413,7 +413,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -508,7 +508,7 @@ function dropBag(player: Player, message: string): void {
     playTiredAnim(player);
     setPickupCheckpoint(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 
   player.sendClientMessage(Color.error, message);
@@ -518,7 +518,7 @@ function setPickupCheckpoint(player: Player): void {
   try {
     Checkpoint.set(player, PICKUP_POINT.x, PICKUP_POINT.y, PICKUP_POINT.z, CHECKPOINT_RADIUS);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -547,14 +547,14 @@ function clearBag(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_BAG);
   } catch {
-    // Слота не было.
+    // 玩家槽位不存在。
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -572,7 +572,7 @@ function playTiredAnim(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // Библиотека подтянется позже.
+    // 稍后会加载动画库。
   }
 }
 
@@ -581,7 +581,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("PED", "IDLE_tired", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Библиотека подтянется при первой разгрузке.
+    // 首次卸货时会加载动画库。
   }
 }
 

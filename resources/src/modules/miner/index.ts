@@ -75,7 +75,7 @@ let metalStockLabel: TextLabel | null = null;
 
 function metalStockLabelText(): string {
   const metal = getWarehouse(WAREHOUSE_MINE_ID)?.metal ?? 0;
-  return `Метал\nна Складе\n${metal} кг`;
+  return `金属\n仓库库存\n${metal} 千克`;
 }
 
 function refreshMetalStockLabel(): void {
@@ -86,7 +86,7 @@ function refreshMetalStockLabel(): void {
   try {
     metalStockLabel.updateText(Color.info, metalStockLabelText());
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已销毁。
   }
 }
 
@@ -272,7 +272,7 @@ function updateMineIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已经离开。
     }
     return;
   }
@@ -289,7 +289,7 @@ function hideMineIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -363,7 +363,7 @@ function tickMiner(): void {
         showMetalBuyDialog(player);
       }
     } catch {
-      // Слот уже пуст.
+      // 玩家槽位已清空。
     }
   });
 }
@@ -374,17 +374,17 @@ function showInfoDialog(player: Player): void {
       player,
       MINER_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Шахта",
+      "矿场",
       [
-        "Работа шахтёра",
+        "矿工工作",
         "",
-        "Обычная руда: 6-16 kg, $15 за kg",
-        "Особая руда: редкий шанс, 3-8 kg, $90 за kg",
+        "普通矿石：6–16 千克，每千克 $15",
+        "稀有矿石：低概率获得，3–8 千克，每千克 $90",
         "",
-        "Зарплата копится за смену и выдаётся",
-        "только когда вы завершаете работу.",
+        "工资会在班次期间累积，只有在",
+        "结束工作时才会发放。",
       ].join("\n"),
-      "Закрыть",
+      "关闭",
       ""
     );
   } catch {
@@ -474,7 +474,7 @@ function buyMetal(player: Player, rawInput: string): void {
     saveUserMoney(account.id, nextMoney, account.bank),
     saveUserInventory(account.id, account.drugs, account.ammo, nextMetal),
   ]).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   player.sendClientMessage(
@@ -647,7 +647,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -733,7 +733,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("CARRY", "crry_prtial", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Библиотека подтянется на первой добыче.
+    // 首次采矿时会加载动画库。
   }
 }
 
@@ -756,7 +756,7 @@ function resetStance(player: Player): void {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -836,7 +836,7 @@ function deliver(player: Player, job: Job): void {
   givePickaxe(player);
   setMineCheckpoint(player, job);
 
-  const kind = special ? "особая" : "обычная";
+  const kind = special ? "稀有" : "普通";
   player.sendClientMessage(
     Color.info,
     `已交付: ${kind} 矿石，${kg} kg. +$${pay}`
@@ -870,7 +870,7 @@ function setMineCheckpoint(player: Player, job: Job): void {
   try {
     Checkpoint.set(player, point.x, point.y, point.z, CHECKPOINT_RADIUS);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已经离开。
   }
 }
 
@@ -895,7 +895,7 @@ function givePickaxe(player: Player): void {
       0
     );
   } catch {
-    // Слот ещё не готов.
+    // 玩家槽位尚未就绪。
   }
 }
 
@@ -972,7 +972,7 @@ function giveCart(player: Player): void {
     );
     player.setSpecialAction(SPECIAL_ACTION_NONE);
   } catch {
-    // Слот ещё не готов.
+    // 玩家槽位尚未就绪。
   }
 }
 
@@ -981,7 +981,7 @@ function clearJobObjects(player: Player): void {
     try {
       player.removeAttachedObject(slot);
     } catch {
-      // Слота не было.
+      // 玩家槽位不存在。
     }
   }
 }
