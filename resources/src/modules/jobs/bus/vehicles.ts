@@ -7,7 +7,7 @@ import { JOB_BUS_DRIVER } from "../catalog";
 const BUS_MODEL = 431;
 const RESPAWN_SEC = 1800;
 const COLOR = -1;
-const DENY = "Этот автобус только для водителей автобуса.";
+const DENY = "此公交车仅供公交车司机使用。";
 
 export type BusSpawnSpot = {
   x: number;
@@ -24,7 +24,7 @@ const BUS_SPOTS: readonly BusSpawnSpot[] = [
   { x: 1275.3092, y: -1818.8633, z: 13.3833, angle: 90 },
 ];
 
-/** vehicleId → парковочное место. */
+/** vehicleId → 停车位置。 */
 const spawnByVehicleId = new Map<number, BusSpawnSpot>();
 
 export function spawnBusJobVehicles(): void {
@@ -57,7 +57,7 @@ function rememberSpawn(vehicle: Vehicle, spot: BusSpawnSpot, retried = false): v
       return;
     }
   } catch {
-    // id ещё не готов.
+    // ID 尚未就绪。
   }
 
   if (!retried) {

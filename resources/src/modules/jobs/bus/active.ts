@@ -1,7 +1,7 @@
 import type { Player } from "@omp-node/core";
 import { playerId } from "../../../shared/player";
 
-/** Слоты игроков на активной смене водителя автобуса. */
+/** 正在公交车司机班次中的玩家槽位。 */
 const activeSlots = new Set<number>();
 
 export function isBusDriverOnShift(player: Player): boolean {

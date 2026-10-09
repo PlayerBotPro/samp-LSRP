@@ -5,14 +5,14 @@ export const JOB_BUS_DRIVER = 1;
 
 export type JobDef = {
   id: number;
-  /** Название в паспорте / статистике / бирже. */
+  /** 在证件、统计和招聘中心中显示的名称。 */
   title: string;
-  /** Минимальный уровень персонажа для устройства. */
+  /** 入职所需的最低角色等级。 */
   minLevel: number;
 };
 
 const JOBS: readonly JobDef[] = [
-  { id: JOB_BUS_DRIVER, title: "Водитель автобуса", minLevel: 2 },
+  { id: JOB_BUS_DRIVER, title: "公交车司机", minLevel: 2 },
 ];
 
 const byId = new Map(JOBS.map((job) => [job.id, job]));
@@ -25,28 +25,28 @@ export function isKnownJobId(jobId: number): boolean {
   return jobId === JOB_NONE || byId.has(jobId);
 }
 
-/** Подпись для паспорта/статистики с учётом пола. */
+/** 根据性别生成证件和统计页面中的职业名称。 */
 export function jobLabel(jobId: number, gender: Gender | null): string {
   if (jobId === JOB_NONE || !byId.has(jobId)) {
-    return byGender(gender, "Безработный", "Безработная");
+    return byGender(gender, "无业", "无业");
   }
 
   return byId.get(jobId)!.title;
 }
 
 /**
- * Тело диалога TABLIST_HEADERS.
- * listItem 0 — уволиться; 1+ — работа из каталога.
+ * TABLIST_HEADERS 对话框正文。
+ * listItem 0 表示辞职；1 及以上表示目录中的工作。
  */
 export function jobHireDialogBody(): string {
   return [
-    "Работа\tУровень",
-    "Уволиться с работы\t—",
-    ...JOBS.map((job) => `${job.title}\t${job.minLevel} LVL`),
+    "工作\t等级",
+    "辞去工作\t—",
+    ...JOBS.map((job) => `${job.title}\t${job.minLevel}级`),
   ].join("\n");
 }
 
-/** listItem 0 — уволиться; 1+ — работа из каталога. */
+/** listItem 0 表示辞职；1 及以上表示目录中的工作。 */
 export function jobIdFromHireListItem(listItem: number): number | null {
   if (!Number.isInteger(listItem) || listItem < 0) {
     return null;
