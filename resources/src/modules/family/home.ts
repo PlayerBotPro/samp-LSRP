@@ -23,14 +23,14 @@ const LABEL_DRAW_DISTANCE = 12;
 const TELEPORT_COOLDOWN_MS = 1500;
 const TICK_MS = 200;
 
-/** Пикап входа на улице. */
+/** 街道上的入口拾取点。 */
 const STREET_PICKUP = {
   x: 1327.7509,
   y: -1556.4092,
   z: 13.5469,
 } as const;
 
-/** Точка выхода на улицу после телепорта. */
+/** 传送后返回街道的位置。 */
 const STREET_EXIT: SpawnPoint = {
   x: 1325.9447,
   y: -1557.7162,
@@ -40,7 +40,7 @@ const STREET_EXIT: SpawnPoint = {
   world: STREET_WORLD,
 };
 
-/** Пикап выхода в интерьере фамильного дома. */
+/** 家族住宅内部的出口拾取点。 */
 const INTERIOR_PICKUP = {
   x: 200.1208,
   y: 4.9145,
@@ -48,7 +48,7 @@ const INTERIOR_PICKUP = {
   interior: 0,
 } as const;
 
-/** Точка появления внутри дома. */
+/** 住宅内部的出生点。 */
 const INTERIOR_SPAWN = {
   x: 198.0291,
   y: 4.9097,
@@ -105,7 +105,7 @@ export function startFamilyHome(): void {
   });
 }
 
-/** Создать пикап выхода для VW семьи (после create / при старте). */
+/** 为家族 VW 创建出口拾取点（创建后或启动时）。 */
 export function ensureFamilyHomeExit(familyId: number): void {
   if (exitByFamily.has(familyId)) {
     return;
@@ -136,7 +136,7 @@ export function ensureFamilyHomeExit(familyId: number): void {
   ensureFamilyHealPickup(familyId);
 }
 
-/** Убрать пикап выхода при роспуске семьи. */
+/** 家族解散时移除出口拾取点。 */
 export function removeFamilyHomeExit(familyId: number): void {
   const props = exitByFamily.get(familyId);
   if (!props) {
@@ -146,13 +146,13 @@ export function removeFamilyHomeExit(familyId: number): void {
   try {
     props.pickup.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已销毁。
   }
 
   try {
     props.label.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已销毁。
   }
 
   exitByFamily.delete(familyId);
@@ -232,7 +232,7 @@ function tryEnterFamilyHome(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Войти может только член семьи.");
+    tell(player, Color.error, "只有家族成员才能进入。");
     return;
   }
 
@@ -255,7 +255,7 @@ function tryEnterFamilyHome(player: Player): void {
     placeAt(player, spawn);
     refreshStreamForPlayer(player);
   } catch {
-    tell(player, Color.error, "Не удалось войти в дом семьи.");
+    tell(player, Color.error, "无法进入家族住宅。");
   }
 }
 
@@ -269,7 +269,7 @@ function tryExitFamilyHome(player: Player): void {
 
     const account = getAccount(player);
     if (!account || account.familyId !== familyId) {
-      // Чужой VW — всё равно выпускаем на улицу.
+      // 即使 VW 不属于该家族，也仍将玩家送回街道。
     }
   } catch {
     return;
@@ -283,7 +283,7 @@ function tryExitFamilyHome(player: Player): void {
     placeAt(player, STREET_EXIT);
     refreshStreamForPlayer(player);
   } catch {
-    tell(player, Color.error, "Не удалось выйти из дома семьи.");
+    tell(player, Color.error, "无法离开家族住宅。");
   }
 }
 
@@ -320,6 +320,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

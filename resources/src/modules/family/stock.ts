@@ -90,7 +90,7 @@ export function bindFamilyWarehouseInteract(): void {
           );
         } finally {
           const slot = playerId(player);
-          // Если снова открыли ввод суммы — busy остаётся.
+          // 如果再次打开金额输入界面，则继续保持 busy 状态。
           if (slot === null || !pendingByPlayer.has(slot)) {
             setDialogBusy(player, false);
           }
@@ -111,7 +111,7 @@ export function bindFamilyWarehouseInteract(): void {
   });
 }
 
-/** Открыть меню один раз при наступлении на пикап. */
+/** 玩家踏上拾取点时仅打开一次菜单。 */
 function tickFamilyStockStanding(): void {
   omp.players.forEach((player) => {
     const id = playerId(player);
@@ -445,12 +445,12 @@ async function applyPut(
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.info,
-        `你向家族仓库存入了: ${formatMoney(amount)}.`
+        `你向家族仓库存入了 ${formatMoney(amount)}.`
       );
     }
     broadcastFamilyStock(
       familyId,
-      `[Семья] ${membership.rank.title} ${playerChatName(player)} положил: ${formatMoney(amount)}.`
+      `[家族] ${membership.rank.title} ${playerChatName(player)} 存入：${formatMoney(amount)}。`
     );
     return;
   }
@@ -497,12 +497,12 @@ async function applyPut(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你向家族仓库存入了: ${ITEM_LABEL[item]} ${amount} 件。`
+      `你向家族仓库存入了 ${ITEM_LABEL[item]} ${amount} 件。`
     );
   }
   broadcastFamilyStock(
     familyId,
-    `[Семья] ${membership.rank.title} ${playerChatName(player)} положил: ${ITEM_LABEL[item]} ${amount} шт.`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} 存入： ${ITEM_LABEL[item]} ${amount} 件`
   );
 }
 
@@ -553,12 +553,12 @@ async function applyTake(
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.info,
-        `你从家族仓库取出了: ${formatMoney(amount)}.`
+        `你从家族仓库取出了 ${formatMoney(amount)}.`
       );
     }
     broadcastFamilyStock(
       familyId,
-      `[Семья] ${membership.rank.title} ${playerChatName(player)} взял: ${formatMoney(amount)}.`
+      `[家族] ${membership.rank.title} ${playerChatName(player)} 取出：${formatMoney(amount)}。`
     );
     return;
   }
@@ -622,12 +622,12 @@ async function applyTake(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你从家族仓库取出了: ${ITEM_LABEL[item]} ${amount} 件。`
+      `你从家族仓库取出了 ${ITEM_LABEL[item]} ${amount} 件。`
     );
   }
   broadcastFamilyStock(
     familyId,
-    `[Семья] ${membership.rank.title} ${playerChatName(player)} взял: ${ITEM_LABEL[item]} ${amount} шт.`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} 取出： ${ITEM_LABEL[item]} ${amount} 件`
   );
 }
 
@@ -650,11 +650,11 @@ function toggleLock(player: Player, familyId: number): void {
   }
 
   refreshFamilyWarehouseLabel(familyId);
-  const verb = next ? "закрыл" : "открыл";
+  const verb = next ? "关闭了" : "打开了";
   player.sendClientMessage(Color.info, next ? "家族仓库已关闭。" : "家族仓库已开启。");
   broadcastFamilyStock(
     familyId,
-    `[Семья] ${membership.rank.title} ${playerChatName(player)} ${verb} склад.`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} ${verb}仓库。`
   );
 }
 
@@ -673,7 +673,7 @@ function broadcastFamilyStock(familyId: number, text: string): void {
     try {
       other.sendClientMessage(Color.info, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

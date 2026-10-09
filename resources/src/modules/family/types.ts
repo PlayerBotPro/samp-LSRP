@@ -4,9 +4,9 @@ export const MAX_FAMILY_RANK = 10;
 export const FAMILY_STAFF_MIN_RANK = 9;
 export const FAMILY_MANAGE_MAX_RANK = 9;
 
-/** Стоимость регистрации семьи в мэрии ($). */
+/** 在市政厅登记家族的费用（$）。 */
 export const FAMILY_CREATE_COST = 250_000;
-/** Минимальный уровень персонажа для создания. */
+/** 创建家族所需的最低角色等级。 */
 export const FAMILY_CREATE_MIN_LEVEL = 5;
 
 export const FAMILY_NAME_MIN = 2;

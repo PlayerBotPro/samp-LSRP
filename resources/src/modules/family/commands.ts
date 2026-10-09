@@ -29,7 +29,7 @@ import {
   MIN_FAMILY_RANK,
 } from "./types";
 
-/** @deprecated Диалог больше не используется — приглашение через Y/N. */
+/** @deprecated 此对话框已停用，邀请通过 Y/N 处理。 */
 export const FAMILY_INVITE_DIALOG_ID = 112;
 export const FAMILY_MEMBERS_DIALOG_ID = 123;
 
@@ -58,7 +58,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -88,12 +88,12 @@ function expireInvite(slot: number, accountId: number): void {
 
   const target = findTarget(slot);
   if (target && getAccount(target)?.id === accountId) {
-    tell(target, Color.error, "Приглашение в семью истекло.");
+    tell(target, Color.error, "家族邀请已过期。");
   }
 
   const inviter = findTarget(pending.inviterSlot);
   if (inviter && getAccount(inviter)?.id === pending.inviterAccountId) {
-    tell(inviter, Color.error, "Приглашение в семью истекло.");
+    tell(inviter, Color.error, "家族邀请已过期。");
   }
 }
 
@@ -145,7 +145,7 @@ function staffOf(player: Player) {
 function requireStaff(player: Player) {
   const staff = staffOf(player);
   if (!staff) {
-    tell(player, Color.error, "Команда доступна с 9 ранга семьи.");
+    tell(player, Color.error, "家族等级达到 9 级后可使用此命令。");
     return null;
   }
   return staff;
@@ -160,12 +160,12 @@ function requireOtherTarget(actor: Player, args: string, usage: string): Player 
 
   const target = findTarget(slot);
   if (!target) {
-    tell(actor, Color.error, "Игрок не найден.");
+    tell(actor, Color.error, "未找到该玩家。");
     return null;
   }
 
   if (samePlayer(actor, target)) {
-    tell(actor, Color.error, "Нельзя применить к себе.");
+    tell(actor, Color.error, "不能对自己使用。");
     return null;
   }
 
@@ -221,7 +221,7 @@ function parseRankDelta(args: string): { slot: number; delta: 1 | -1 } | null {
   return null;
 }
 
-/** Уведомление всем онлайн-членам семьи в стиле /fam. */
+/** 按 /fam 的格式通知所有在线家族成员。 */
 function broadcastFamilyNotice(
   familyId: number,
   familyName: string,
@@ -233,7 +233,7 @@ function broadcastFamilyNotice(
   const rankTitle = membership?.rank.title ?? "—";
 
   const line = clipClientMessage(
-    `[Семья] [${familyName}] [${rankId}] ${rankTitle} ${playerChatName(actor)}${chatColorTag(Color.white)}: ${message}`
+    `[家族] [${familyName}] [${rankId}] ${rankTitle} ${playerChatName(actor)}${chatColorTag(Color.white)}: ${message}`
   );
 
   omp.players.forEach((other) => {
@@ -257,16 +257,16 @@ function broadcastFamilyNotice(
     try {
       other.sendClientMessage(Color.familyChat, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
 
-registerCommand("fmembers", "Состав семьи в сети", (player) => {
+registerCommand("fmembers", "在线家族成员", (player) => {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
@@ -315,18 +315,18 @@ registerCommand("fmembers", "Состав семьи в сети", (player) => {
   rows.sort((a, b) => b.rankId - a.rankId || a.name.localeCompare(b.name));
 
   if (rows.length === 0) {
-    tell(player, Color.error, "В сети нет членов семьи.");
+    tell(player, Color.error, "没有在线的家族成员。");
     return;
   }
 
   const lines = rows.map((row) => {
-    const phone = row.phone ? ` | тел. ${row.phone}` : "";
+    const phone = row.phone ? ` | 电话： ${row.phone}` : "";
     return `[${row.rankId}] ${row.rankTitle} ${row.name}${phone}${row.status}`;
   });
 
   const body =
-    `Семья: ${membership.family.name}\n` +
-    `В сети: ${rows.length}\n\n` +
+    `家族：${membership.family.name}\n` +
+    `在线人数：${rows.length}\n\n` +
     lines.join("\n");
 
   try {
@@ -334,7 +334,7 @@ registerCommand("fmembers", "Состав семьи в сети", (player) => {
       player,
       FAMILY_MEMBERS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Семья в сети",
+      "在线家族成员",
       body,
       "OK",
       ""
@@ -346,22 +346,22 @@ registerCommand("fmembers", "Состав семьи в сети", (player) => {
   }
 });
 
-registerCommand("fam", "Рация семьи", (player, args) => {
+registerCommand("fam", "家族频道", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    tell(player, Color.error, "Использование: /fam [текст]");
+    tell(player, Color.error, "用法：/fam [内容]");
     return;
   }
 
   const line = clipClientMessage(
-    `[Семья] [${membership.family.name}] [${membership.rank.id}] ${membership.rank.title} ${playerChatName(player)}${chatColorTag(Color.white)}: ${text}`
+    `[家族] [${membership.family.name}] [${membership.rank.id}] ${membership.rank.title} ${playerChatName(player)}${chatColorTag(Color.white)}: ${text}`
   );
   const familyId = membership.family.id;
 
@@ -386,46 +386,46 @@ registerCommand("fam", "Рация семьи", (player, args) => {
     try {
       other.sendClientMessage(Color.familyChat, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 
   try {
     player.setChatBubble("家族频道消息。", Color.familyChat, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // Пузырь не обязателен.
+    // 气泡提示不是必需的。
   }
 });
 
-registerCommand("finvite", "Пригласить в семью", (player, args) => {
+registerCommand("finvite", "邀请加入家族", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
   }
 
-  const target = requireOtherTarget(player, args, "Использование: /finvite [id]");
+  const target = requireOtherTarget(player, args, "用法：/finvite [玩家 ID]");
   if (!target) {
     return;
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount) {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到该玩家。");
     return;
   }
 
   if (!targetAccount.passport) {
-    tell(player, Color.error, "У игрока нет паспорта.");
+    tell(player, Color.error, "该玩家没有身份证。");
     return;
   }
 
   if (getFamilyMembership(targetAccount)) {
-    tell(player, Color.error, "Игрок уже состоит в семье.");
+    tell(player, Color.error, "该玩家已经加入家族。");
     return;
   }
 
   if (!arePlayersNearby(player, target, INVITE_RADIUS)) {
-    tell(player, Color.error, "Игрок слишком далеко.");
+    tell(player, Color.error, "该玩家距离太远。");
     return;
   }
 
@@ -436,14 +436,14 @@ registerCommand("finvite", "Пригласить в семью", (player, args) 
   }
 
   if (!claimYnOffer(targetId, "finvite")) {
-    tell(player, Color.error, "У игрока уже есть активное предложение.");
+    tell(player, Color.error, "该玩家已有待处理的邀请。");
     return;
   }
 
   const rank = getFamilyRank(MIN_FAMILY_RANK);
   if (!rank) {
     releaseYnOffer(targetId, "finvite");
-    tell(player, Color.error, "Не удалось отправить приглашение.");
+    tell(player, Color.error, "无法发送邀请。");
     return;
   }
 
@@ -459,20 +459,20 @@ registerCommand("finvite", "Пригласить в семью", (player, args) 
     }, INVITE_TTL_MS),
   });
 
-  tell(player, Color.info, `Вы отправили приглашение: ${playerChatName(target)}.`);
+  tell(player, Color.info, `已向 ${playerChatName(target)} 发出邀请。`);
   tell(
     target,
     Color.white,
-    `${playerChatName(player)} приглашает вас в семью ${staff.membership.family.name} (${rank.title}).`
+    `${playerChatName(player)} 邀请你加入家族“${staff.membership.family.name}”（${rank.title}）。`
   );
   tell(
     target,
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы принять или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}接受，或按 {FF6600}N {FFFFFF}拒绝"
   );
 });
 
-registerCommand("funinvite", "Исключить из семьи", (player, args) => {
+registerCommand("funinvite", "将玩家移出家族", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
@@ -484,11 +484,11 @@ registerCommand("funinvite", "Исключить из семьи", (player, args
   const reason = sanitizeChatText(parts.slice(1).join(" ")).slice(0, CHAT_MAX_LENGTH);
 
   if (!idPart) {
-    tell(player, Color.error, "Использование: /funinvite [id] [причина]");
+    tell(player, Color.error, "用法：/funinvite [玩家 ID] [原因]");
     return;
   }
 
-  const target = requireOtherTarget(player, idPart, "Использование: /funinvite [id] [причина]");
+  const target = requireOtherTarget(player, idPart, "用法：/funinvite [玩家 ID] [原因]");
   if (!target) {
     return;
   }
@@ -500,24 +500,24 @@ registerCommand("funinvite", "Исключить из семьи", (player, args
     !targetFamily ||
     targetFamily.family.id !== staff.membership.family.id
   ) {
-    tell(player, Color.error, "Игрок не в вашей семье.");
+    tell(player, Color.error, "该玩家不属于你的家族。");
     return;
   }
 
   if (targetFamily.family.ownerId === targetAccount.id) {
-    tell(player, Color.error, "Нельзя исключить владельца семьи.");
+    tell(player, Color.error, "不能将家族所有者移出家族。");
     return;
   }
 
   if (!canManage(targetFamily.rank.id)) {
-    tell(player, Color.error, "Нельзя исключить этого игрока.");
+    tell(player, Color.error, "不能将该玩家移出家族。");
     return;
   }
 
   void (async () => {
     const actor = staffOf(player);
     if (!actor || actor.membership.family.id !== staff.membership.family.id) {
-      tell(player, Color.error, "Команда доступна с 9 ранга семьи.");
+      tell(player, Color.error, "家族等级达到 9 级后可使用此命令。");
       return;
     }
 
@@ -528,12 +528,12 @@ registerCommand("funinvite", "Исключить из семьи", (player, args
       !liveFamily ||
       liveFamily.family.id !== actor.membership.family.id
     ) {
-      tell(player, Color.error, "Игрок не в вашей семье.");
+      tell(player, Color.error, "该玩家不属于你的家族。");
       return;
     }
 
     if (liveFamily.family.ownerId === liveAccount.id || !canManage(liveFamily.rank.id)) {
-      tell(player, Color.error, "Нельзя исключить этого игрока.");
+      tell(player, Color.error, "不能将该玩家移出家族。");
       return;
     }
 
@@ -543,23 +543,23 @@ registerCommand("funinvite", "Исключить из семьи", (player, args
 
     const ok = await setFamily(target, FAMILY_NONE, 0);
     if (!ok) {
-      tell(player, Color.error, "Не удалось сохранить в базу.");
+      tell(player, Color.error, "无法保存到数据库。");
       return;
     }
 
-    const reasonText = reason ? ` Причина: ${reason}` : "";
-    tell(target, Color.info, clipClientMessage(`Вас исключили из семьи ${familyName}.${reasonText}`));
+    const reasonText = reason ? `原因：${reason}` : "";
+    tell(target, Color.info, clipClientMessage(`你已被移出家族“${familyName}”。${reasonText}`));
 
     broadcastFamilyNotice(
       familyId,
       familyName,
       player,
-      `уволил ${tag}.${reasonText}`
+      `${tag} 已被移出家族。${reasonText}`
     );
   })();
 });
 
-registerCommand("frang", "Изменить ранг в семье", (player, args) => {
+registerCommand("frang", "更改家族等级", (player, args) => {
   const staff = requireStaff(player);
   if (!staff) {
     return;
@@ -567,18 +567,18 @@ registerCommand("frang", "Изменить ранг в семье", (player, arg
 
   const parsed = parseRankDelta(args);
   if (!parsed) {
-    tell(player, Color.error, "Использование: /frang [id] [+/-]");
+    tell(player, Color.error, "用法：/frang [玩家 ID] [+/-]");
     return;
   }
 
   const target = findTarget(parsed.slot);
   if (!target) {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到该玩家。");
     return;
   }
 
   if (samePlayer(player, target)) {
-    tell(player, Color.error, "Нельзя применить к себе.");
+    tell(player, Color.error, "不能对自己使用。");
     return;
   }
 
@@ -589,35 +589,35 @@ registerCommand("frang", "Изменить ранг в семье", (player, arg
     !targetFamily ||
     targetFamily.family.id !== staff.membership.family.id
   ) {
-    tell(player, Color.error, "Игрок не в вашей семье.");
+    tell(player, Color.error, "该玩家不属于你的家族。");
     return;
   }
 
   if (targetFamily.family.ownerId === targetAccount.id) {
-    tell(player, Color.error, "Нельзя менять ранг владельца.");
+    tell(player, Color.error, "不能更改家族所有者的等级。");
     return;
   }
 
   if (!canManage(targetFamily.rank.id)) {
-    tell(player, Color.error, "Нельзя изменить ранг этого игрока.");
+    tell(player, Color.error, "不能更改该玩家的等级。");
     return;
   }
 
   const next = targetFamily.rank.id + parsed.delta;
   if (next < MIN_FAMILY_RANK || next > FAMILY_MANAGE_MAX_RANK) {
-    tell(player, Color.error, "Ранг игрока 1-9.");
+    tell(player, Color.error, "玩家等级范围为 1–9。");
     return;
   }
 
   if (!getFamilyRank(next)) {
-    tell(player, Color.error, "Не удалось изменить ранг.");
+    tell(player, Color.error, "无法更改等级。");
     return;
   }
 
   void (async () => {
     const actor = staffOf(player);
     if (!actor || actor.membership.family.id !== staff.membership.family.id) {
-      tell(player, Color.error, "Команда доступна с 9 ранга семьи.");
+      tell(player, Color.error, "家族等级达到 9 级后可使用此命令。");
       return;
     }
 
@@ -628,7 +628,7 @@ registerCommand("frang", "Изменить ранг в семье", (player, arg
       !liveFamily ||
       liveFamily.family.id !== actor.membership.family.id
     ) {
-      tell(player, Color.error, "Игрок не в вашей семье.");
+      tell(player, Color.error, "该玩家不属于你的家族。");
       return;
     }
 
@@ -636,40 +636,40 @@ registerCommand("frang", "Изменить ранг в семье", (player, arg
       liveFamily.family.ownerId === liveAccount.id ||
       !canManage(liveFamily.rank.id)
     ) {
-      tell(player, Color.error, "Нельзя изменить ранг этого игрока.");
+      tell(player, Color.error, "不能更改该玩家的等级。");
       return;
     }
 
     const liveNext = liveFamily.rank.id + parsed.delta;
     if (liveNext < MIN_FAMILY_RANK || liveNext > FAMILY_MANAGE_MAX_RANK) {
-      tell(player, Color.error, "Ранг игрока 1-9.");
+      tell(player, Color.error, "玩家等级范围为 1–9。");
       return;
     }
 
     const liveNextRank = getFamilyRank(liveNext);
     if (!liveNextRank) {
-      tell(player, Color.error, "Не удалось изменить ранг.");
+      tell(player, Color.error, "无法更改等级。");
       return;
     }
 
     const ok = await setFamily(target, liveFamily.family.id, liveNextRank.id);
     if (!ok) {
-      tell(player, Color.error, "Не удалось сохранить в базу.");
+      tell(player, Color.error, "无法保存到数据库。");
       return;
     }
 
     const tag = playerChatName(target);
     const verbUp = parsed.delta > 0;
     const action = verbUp
-      ? `повысил ${tag} до ${liveNextRank.title} (${liveNextRank.id})`
-      : `понизил ${tag} до ${liveNextRank.title} (${liveNextRank.id})`;
+      ? `将 ${tag} 提升至 ${liveNextRank.title}（${liveNextRank.id}）`
+      : `将 ${tag} 降至 ${liveNextRank.title}（${liveNextRank.id}）`;
 
     tell(
       target,
       Color.info,
       verbUp
-        ? `Вас повысили в семье: ${liveNextRank.title} (${liveNextRank.id}).`
-        : `Вас понизили в семье: ${liveNextRank.title} (${liveNextRank.id}).`
+        ? `你的家族等级已提升至：${liveNextRank.title}（${liveNextRank.id}）。`
+        : `你的家族等级已降至：${liveNextRank.title}（${liveNextRank.id}）。`
     );
 
     broadcastFamilyNotice(
@@ -704,7 +704,7 @@ export function bindFamilyCommands(): void {
       return;
     }
 
-    // Снимаем pending сразу (анти-даблклик), yn-слот держим до конца обработки.
+    // 立即清除待处理状态（防止重复点击），并保留 Y/N 槽位直到处理完成。
     clearTimeout(pending.timer);
     pendingInvite.delete(targetId);
 
@@ -722,15 +722,15 @@ export function bindFamilyCommands(): void {
     const accepted = (pressed & KEY_YES) !== 0;
     const verb = byGender(
       getAccount(player)?.gender ?? null,
-      accepted ? "принял" : "отклонил",
-      accepted ? "приняла" : "отклонила"
+      accepted ? "接受了" : "拒绝了",
+      accepted ? "接受了" : "拒绝了"
     );
 
     if (!accepted) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.info, "Вы отклонили приглашение в семью.");
+      tell(player, Color.info, "你拒绝了家族邀请。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.info, `${targetTag} ${verb} приглашение в семью.`);
+        tell(inviter, Color.info, `${targetTag} ${verb} 家族邀请。`);
       }
       return;
     }
@@ -738,31 +738,31 @@ export function bindFamilyCommands(): void {
     const live = getAccount(player);
     if (!live || !family || !rank) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "家族邀请已失效。");
       return;
     }
 
     if (!live.passport) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "У вас нет паспорта.");
+      tell(player, Color.error, "你没有身份证。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.error, `${targetTag} не может вступить: нет паспорта.`);
+        tell(inviter, Color.error, `${targetTag} 无法加入：没有身份证。`);
       }
       return;
     }
 
     if (getFamilyMembership(live)) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "Вы уже состояте в семье.");
+      tell(player, Color.error, "你已经加入家族。");
       if (inviterOk && inviter) {
-        tell(inviter, Color.error, `${targetTag} уже состоит в семье.`);
+        tell(inviter, Color.error, `${targetTag} 已经加入家族。`);
       }
       return;
     }
 
     if (!inviterOk || !inviter) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "家族邀请已失效。");
       return;
     }
 
@@ -772,27 +772,27 @@ export function bindFamilyCommands(): void {
       inviterStaff.membership.family.id !== pending.familyId
     ) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "Приглашение уже неактуально.");
+      tell(player, Color.error, "家族邀请已失效。");
       return;
     }
 
     if (!arePlayersNearby(player, inviter, INVITE_RADIUS)) {
       releaseYnOffer(targetId, "finvite");
-      tell(player, Color.error, "Вы слишком далеко от того, кто пригласил.");
-      tell(inviter, Color.error, `${targetTag} не смог принять: слишком далеко.`);
+      tell(player, Color.error, "你距离邀请者太远。");
+      tell(inviter, Color.error, `${targetTag} 无法接受邀请：距离太远。`);
       return;
     }
 
     void (async () => {
       try {
         if (!arePlayersNearby(player, inviter, INVITE_RADIUS)) {
-          tell(player, Color.error, "Вы слишком далеко от того, кто пригласил.");
-          tell(inviter, Color.error, `${targetTag} не смог принять: слишком далеко.`);
+          tell(player, Color.error, "你距离邀请者太远。");
+          tell(inviter, Color.error, `${targetTag} 无法接受邀请：距离太远。`);
           return;
         }
 
         if (!getFamily(pending.familyId)) {
-          tell(player, Color.error, "Семья больше не существует.");
+          tell(player, Color.error, "该家族已不存在。");
           return;
         }
 
@@ -801,7 +801,7 @@ export function bindFamilyCommands(): void {
           !liveInviterStaff ||
           liveInviterStaff.membership.family.id !== pending.familyId
         ) {
-          tell(player, Color.error, "Приглашение уже неактуально.");
+          tell(player, Color.error, "家族邀请已失效。");
           return;
         }
 
@@ -810,15 +810,15 @@ export function bindFamilyCommands(): void {
           return;
         }
         if (getFamilyMembership(liveAgain)) {
-          tell(player, Color.error, "Вы уже состояте в семье.");
+          tell(player, Color.error, "你已经加入家族。");
           return;
         }
 
         const ok = await setFamily(player, pending.familyId, pending.familyRank);
         if (!ok) {
-          tell(player, Color.error, "Не удалось сохранить в базу.");
+          tell(player, Color.error, "无法保存到数据库。");
           if (inviterOk && inviter) {
-            tell(inviter, Color.error, "Не удалось принять игрока.");
+            tell(inviter, Color.error, "无法接纳该玩家。");
           }
           return;
         }
@@ -826,7 +826,7 @@ export function bindFamilyCommands(): void {
         tell(
           player,
           Color.info,
-          `Вы вступили в семью ${family.name}. Должность: ${rank.title}.`
+          `你已加入家族 ${family.name}. 职位： ${rank.title}.`
         );
 
         if (isPlayerActive(inviter) && getAccount(inviter)?.id === pending.inviterAccountId) {
@@ -834,7 +834,7 @@ export function bindFamilyCommands(): void {
             pending.familyId,
             family.name,
             inviter,
-            `пригласил ${targetTag} в семью`
+            `邀请了 ${targetTag}加入家族`
           );
         }
       } finally {
@@ -861,7 +861,7 @@ export function bindFamilyCommands(): void {
         pendingInvite.delete(targetSlot);
         releaseYnOffer(targetSlot, "finvite");
         if (target) {
-          tell(target, Color.error, "Приглашение в семью отменено.");
+          tell(target, Color.error, "家族邀请已取消。");
         }
       }
     }

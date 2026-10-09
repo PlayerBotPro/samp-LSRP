@@ -42,11 +42,11 @@ const DIALOG_STYLE_MSGBOX = 0;
 const DIALOG_STYLE_INPUT = 1;
 const DIALOG_STYLE_LIST = 2;
 
-registerCommand("family", "Меню семьи", (player) => {
+registerCommand("family", "家族菜单", (player) => {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
@@ -145,24 +145,24 @@ function showMainMenu(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
-  const lines = ["Информация", "Управление семьей", "Покинуть семью"];
+  const lines = ["信息", "家族管理", "离开家族"];
 
   try {
     Dialog.show(
       player,
       FAMILY_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Семья: ${membership.family.name}`,
+      `家族：${membership.family.name}`,
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть меню.");
+    tell(player, Color.error, "无法打开菜单。");
   }
 }
 
@@ -170,7 +170,7 @@ function onMainPick(player: Player, listItem: number): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
@@ -181,7 +181,7 @@ function onMainPick(player: Player, listItem: number): void {
 
   if (listItem === 1) {
     if (membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-      tell(player, Color.error, "Управление доступно с 9 ранга.");
+      tell(player, Color.error, "达到 9 级后可使用管理功能。");
       showMainMenu(player);
       return;
     }
@@ -198,7 +198,7 @@ async function showInfo(player: Player): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
@@ -208,26 +208,26 @@ async function showInfo(player: Player): Promise<void> {
   const desc = family.description.trim() || "—";
 
   const body =
-    `Название: ${family.name}\n` +
-    `Описание: ${desc}\n` +
-    `Уровень: ${family.level}\n` +
-    `Опыт: ${family.exp}\n` +
-    `Владелец: ${ownerName}\n` +
-    `Участников: ${members}\n` +
-    `Ваш ранг: ${membership.rank.title} (${membership.rank.id})`;
+    `名称： ${family.name}\n` +
+    `描述： ${desc}\n` +
+    `等级： ${family.level}\n` +
+    `经验： ${family.exp}\n` +
+    `所有者： ${ownerName}\n` +
+    `成员数： ${members}\n` +
+    `你的等级： ${membership.rank.title} (${membership.rank.id})`;
 
   try {
     Dialog.show(
       player,
       FAMILY_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Информация о семье",
+      "家族信息",
       body,
-      "Назад",
-      "Закрыть"
+      "返回",
+      "关闭"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть информацию.");
+    tell(player, Color.error, "无法打开家族信息。");
   }
 }
 
@@ -235,15 +235,15 @@ function showManageMenu(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "Управление доступно с 9 ранга.");
+    tell(player, Color.error, "达到 9 级后可使用管理功能。");
     return;
   }
 
   const lines = [
-    "Изменить название",
-    "Изменить описание",
-    "Передать права семьи",
-    "Удалить семью",
+    "更改名称",
+    "更改描述",
+    "转让家族所有权",
+    "删除家族",
   ];
 
   try {
@@ -251,13 +251,13 @@ function showManageMenu(player: Player): void {
       player,
       FAMILY_MANAGE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Управление семьей",
+      "家族管理",
       lines.join("\n"),
-      "Выбрать",
-      "Назад"
+      "选择",
+      "返回"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть управление.");
+    tell(player, Color.error, "无法打开管理菜单。");
   }
 }
 
@@ -265,7 +265,7 @@ function onManagePick(player: Player, listItem: number): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "Управление доступно с 9 ранга.");
+    tell(player, Color.error, "达到 9 级后可使用管理功能。");
     return;
   }
 
@@ -281,7 +281,7 @@ function onManagePick(player: Player, listItem: number): void {
 
   if (listItem === 2) {
     if (!isFamilyOwner(account)) {
-      tell(player, Color.error, "Передать права может только владелец.");
+      tell(player, Color.error, "只有所有者才能转让所有权。");
       showManageMenu(player);
       return;
     }
@@ -291,7 +291,7 @@ function onManagePick(player: Player, listItem: number): void {
 
   if (listItem === 3) {
     if (!isFamilyOwner(account)) {
-      tell(player, Color.error, "Удалить семью может только владелец.");
+      tell(player, Color.error, "只有所有者才能删除家族。");
       showManageMenu(player);
       return;
     }
@@ -308,25 +308,25 @@ function showLeaveConfirm(player: Player): void {
 
   const isOwner = membership.family.ownerId === account.id;
   const body = isOwner
-    ? `Вы владелец семьи «${membership.family.name}».\n` +
-      `Если вы единственный участник — семья будет расформирована.\n` +
-      `Если есть другие — сначала передайте права:\n` +
-      `/family → Управление → Передать права семьи.\n\n` +
-      `Покинуть семью?`
-    : `Покинуть семью «${membership.family.name}»?`;
+    ? `你是家族“${membership.family.name}”的所有者。\n` +
+      `如果你是唯一成员，家族将被解散。\n` +
+      `如果还有其他成员，请先转让所有权：\n` +
+      `/family → 家族管理 → 转让家族所有权。\n\n` +
+      `离开家族？`
+    : `离开家族“${membership.family.name}”？`;
 
   try {
     Dialog.show(
       player,
       FAMILY_LEAVE_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Покинуть семью",
+      "离开家族",
       body,
-      "Да",
-      "Нет"
+      "是",
+      "否"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть подтверждение.");
+    tell(player, Color.error, "无法打开确认窗口。");
   }
 }
 
@@ -343,16 +343,16 @@ function showRenameDialog(player: Player): void {
       player,
       FAMILY_RENAME_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Название семьи",
-      `Текущее: ${membership.family.name}\n` +
-        `Только английские буквы и пробелы.\n` +
-        `Длина: ${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}.\n` +
-        `Пример: Woozie Family`,
-      "Сохранить",
-      "Назад"
+      "家族名称",
+      `当前： ${membership.family.name}\n` +
+        `只能使用英文字母和空格。\n` +
+        `长度：${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}。\n` +
+        `示例：Woozie Family`,
+      "保存",
+      "返回"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть диалог.");
+    tell(player, Color.error, "无法打开对话框。");
   }
 }
 
@@ -370,13 +370,13 @@ function showRedescDialog(player: Player): void {
       player,
       FAMILY_REDESC_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Описание семьи",
-      `Текущее: ${current}\nМаксимум ${FAMILY_DESC_MAX} символов.`,
-      "Сохранить",
-      "Назад"
+      "家族描述",
+      `当前：${current}\n最多 ${FAMILY_DESC_MAX} 个字符。`,
+      "保存",
+      "返回"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть диалог.");
+    tell(player, Color.error, "无法打开对话框。");
   }
 }
 
@@ -391,14 +391,14 @@ function showTransferDialog(player: Player): void {
       player,
       FAMILY_TRANSFER_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Передать права семьи",
-      "Введите ID игрока (должен быть в сети и в вашей семье).\n" +
-        "Вы станете заместителем (9 ранг).",
-      "Передать",
-      "Назад"
+      "转让家族所有权",
+      "输入玩家 ID（该玩家必须在线且属于你的家族）。\n" +
+        "你将成为副手（9 级）。",
+      "转让",
+      "返回"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть диалог.");
+    tell(player, Color.error, "无法打开对话框。");
   }
 }
 
@@ -422,7 +422,7 @@ function showDeleteConfirm(player: Player): void {
       "取消"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть подтверждение.");
+    tell(player, Color.error, "无法打开确认窗口。");
   }
 }
 
@@ -430,32 +430,32 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || !isFamilyOwner(account)) {
-    tell(player, Color.error, "Передать права может только владелец.");
+    tell(player, Color.error, "只有所有者才能转让所有权。");
     return;
   }
 
   const slot = Math.floor(Number(String(rawId).trim()));
   if (!Number.isInteger(slot) || slot < 0) {
-    tell(player, Color.error, "Введите корректный ID игрока.");
+    tell(player, Color.error, "请输入有效的玩家 ID。");
     showTransferDialog(player);
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    tell(player, Color.error, "Игрок не в сети.");
+    tell(player, Color.error, "该玩家不在线。");
     showTransferDialog(player);
     return;
   }
 
   try {
     if (target.isNPC()) {
-      tell(player, Color.error, "Игрок не найден.");
+      tell(player, Color.error, "未找到该玩家。");
       showTransferDialog(player);
       return;
     }
   } catch {
-    tell(player, Color.error, "Игрок не найден.");
+    tell(player, Color.error, "未找到该玩家。");
     showTransferDialog(player);
     return;
   }
@@ -463,7 +463,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const selfId = playerId(player);
   const targetId = playerId(target);
   if (selfId !== null && selfId === targetId) {
-    tell(player, Color.error, "Нельзя передать права себе.");
+    tell(player, Color.error, "不能将所有权转让给自己。");
     showTransferDialog(player);
     return;
   }
@@ -475,7 +475,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
     !targetFamily ||
     targetFamily.family.id !== membership.family.id
   ) {
-    tell(player, Color.error, "Игрок должен быть в вашей семье и в сети.");
+    tell(player, Color.error, "该玩家必须在线且属于你的家族。");
     showTransferDialog(player);
     return;
   }
@@ -490,7 +490,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
     MAX_FAMILY_RANK
   );
   if (!transferred) {
-    tell(player, Color.error, "Не удалось передать права.");
+    tell(player, Color.error, "无法转让所有权。");
     showManageMenu(player);
     return;
   }
@@ -508,15 +508,15 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const familyName = getFamily(familyId)?.name ?? membership.family.name;
   const targetTag = playerChatName(target);
 
-  tell(player, Color.info, `Вы передали права семьи «${familyName}» игроку ${targetTag}.`);
-  tell(player, Color.info, "Ваш новый ранг: Заместитель (9).");
-  tell(target, Color.info, `Вы стали владельцем семьи «${familyName}».`);
+  tell(player, Color.info, `你已将家族“${familyName}”的所有权转让给玩家 ${targetTag}。`);
+  tell(player, Color.info, "你的新等级：副手（9）。");
+  tell(target, Color.info, `你已成为家族“${familyName}”的所有者。`);
 
   broadcastFamilyNotice(
     familyId,
     familyName,
     player,
-    `передал права семьи ${targetTag}`
+    `转让了家族所有权 ${targetTag}`
   );
   showManageMenu(player);
 }
@@ -532,7 +532,7 @@ function broadcastFamilyNotice(
   const rankTitle = membership?.rank.title ?? "—";
 
   const line = clipClientMessage(
-    `[Семья] [${familyName}] [${rankId}] ${rankTitle} ${playerChatName(actor)}${chatColorTag(Color.white)}: ${message}`
+    `[家族] [${familyName}] [${rankId}] ${rankTitle} ${playerChatName(actor)}${chatColorTag(Color.white)}: ${message}`
   );
 
   omp.players.forEach((other) => {
@@ -548,7 +548,7 @@ function broadcastFamilyNotice(
     try {
       other.sendClientMessage(Color.familyChat, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -557,7 +557,7 @@ async function renameFamily(player: Player, raw: string): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "Управление доступно с 9 ранга.");
+    tell(player, Color.error, "达到 9 级后可使用管理功能。");
     return;
   }
 
@@ -566,34 +566,34 @@ async function renameFamily(player: Player, raw: string): Promise<void> {
     tell(
       player,
       Color.error,
-      `Некорректное название. Только A-Z, a-z и пробелы (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
+      `名称无效。只能使用英文字母和空格（${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}）。`
     );
     showRenameDialog(player);
     return;
   }
 
   if (name.toLowerCase() === membership.family.name.toLowerCase()) {
-    tell(player, Color.info, "Название не изменилось.");
+    tell(player, Color.info, "名称未更改。");
     showManageMenu(player);
     return;
   }
 
   const exists = await findFamilyByName(name);
   if (exists && exists.id !== membership.family.id) {
-    tell(player, Color.error, "Семья с таким названием уже существует.");
+    tell(player, Color.error, "该家族名称已被使用。");
     showRenameDialog(player);
     return;
   }
 
   const ok = await updateFamilyName(membership.family.id, name);
   if (!ok) {
-    tell(player, Color.error, "Не удалось сохранить название.");
+    tell(player, Color.error, "无法保存名称。");
     showManageMenu(player);
     return;
   }
 
   refreshFamilyTags(membership.family.id);
-  tell(player, Color.info, `Название семьи изменено на «${name}».`);
+  tell(player, Color.info, `家族名称已更改为“${name}”。`);
   showManageMenu(player);
 }
 
@@ -601,25 +601,25 @@ async function redesFamily(player: Player, raw: string): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "Управление доступно с 9 ранга.");
+    tell(player, Color.error, "达到 9 级后可使用管理功能。");
     return;
   }
 
   const description = sanitizeChatText(raw.trim()).slice(0, FAMILY_DESC_MAX);
   if (!description) {
-    tell(player, Color.error, `Введите описание (до ${FAMILY_DESC_MAX} символов).`);
+    tell(player, Color.error, `请输入描述（最多 ${FAMILY_DESC_MAX} 个字符）。`);
     showRedescDialog(player);
     return;
   }
 
   const ok = await updateFamilyDescription(membership.family.id, description);
   if (!ok) {
-    tell(player, Color.error, "Не удалось сохранить описание.");
+    tell(player, Color.error, "无法保存描述。");
     showManageMenu(player);
     return;
   }
 
-  tell(player, Color.info, "Описание семьи обновлено.");
+  tell(player, Color.info, "家族描述已更新。");
   showManageMenu(player);
 }
 
@@ -627,7 +627,7 @@ async function leaveFamily(player: Player): Promise<void> {
   const live = getAccount(player);
   const liveMembership = live ? getFamilyMembership(live) : null;
   if (!live || !liveMembership) {
-    tell(player, Color.error, "Вы не состоите в семье.");
+    tell(player, Color.error, "你不属于任何家族。");
     return;
   }
 
@@ -640,7 +640,7 @@ async function leaveFamily(player: Player): Promise<void> {
       tell(
         player,
         Color.error,
-        "Сначала передайте права: /family → Управление → Передать права семьи."
+        "请先转让所有权：/family → 家族管理 → 转让家族所有权。"
       );
       return;
     }
@@ -649,7 +649,7 @@ async function leaveFamily(player: Player): Promise<void> {
     if (isPlayerActive(player) && getAccount(player)?.id === live.id) {
       patchAccount(player, { familyId: FAMILY_NONE, familyRank: 0 });
       clearFamilyTag(player);
-      tell(player, Color.info, "Семья расформирована.");
+      tell(player, Color.info, "家族已解散。");
     }
     return;
   }
@@ -657,7 +657,7 @@ async function leaveFamily(player: Player): Promise<void> {
   try {
     await saveUserFamily(live.id, FAMILY_NONE, 0);
   } catch {
-    tell(player, Color.error, "Не удалось сохранить в базу.");
+    tell(player, Color.error, "无法保存到数据库。");
     return;
   }
 
@@ -667,14 +667,14 @@ async function leaveFamily(player: Player): Promise<void> {
 
   patchAccount(player, { familyId: FAMILY_NONE, familyRank: 0 });
   clearFamilyTag(player);
-  tell(player, Color.info, `Вы покинули семью ${liveMembership.family.name}.`);
+  tell(player, Color.info, `你已离开家族 ${liveMembership.family.name}。`);
 }
 
 async function dissolveFamily(player: Player): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || !isFamilyOwner(account)) {
-    tell(player, Color.error, "Удалить семью может только владелец.");
+    tell(player, Color.error, "只有所有者才能删除家族。");
     return;
   }
 
@@ -684,7 +684,7 @@ async function dissolveFamily(player: Player): Promise<void> {
   try {
     await deleteFamily(familyId);
   } catch {
-    tell(player, Color.error, "Не удалось удалить семью.");
+    tell(player, Color.error, "无法删除家族。");
     return;
   }
 
@@ -694,7 +694,7 @@ async function dissolveFamily(player: Player): Promise<void> {
     clearFamilyTag(player);
   }
 
-  tell(player, Color.info, `Семья «${familyName}» удалена.`);
+  tell(player, Color.info, `家族“${familyName}”已删除。`);
 }
 
 function clearOnlineFamilyMembers(familyId: number): void {
@@ -710,7 +710,7 @@ function clearOnlineFamilyMembers(familyId: number): void {
 
     patchAccount(other, { familyId: FAMILY_NONE, familyRank: 0 });
     clearFamilyTag(other);
-    tell(other, Color.info, "Ваша семья была расформирована.");
+    tell(other, Color.info, "你的家族已解散。");
   });
 }
 
@@ -720,6 +720,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

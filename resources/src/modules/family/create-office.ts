@@ -34,7 +34,7 @@ const LABEL_DRAW_DISTANCE = 12;
 const DIALOG_STYLE_MSGBOX = 0;
 const DIALOG_STYLE_INPUT = 1;
 
-/** Пикап регистрации семьи в интерьере мэрии. */
+/** 市政厅内部的家族登记拾取点。 */
 const CREATE_PICKUP = {
   x: -812.8052,
   y: -672.9063,
@@ -148,7 +148,7 @@ function tryOpenConfirm(player: Player): void {
   }
 
   if (!account.passport) {
-    tell(player, Color.error, "Для создания семьи нужен паспорт.");
+    tell(player, Color.error, "创建家族需要身份证。");
     return;
   }
 
@@ -156,13 +156,13 @@ function tryOpenConfirm(player: Player): void {
     tell(
       player,
       Color.error,
-      `Создать семью можно с ${FAMILY_CREATE_MIN_LEVEL} уровня.`
+      `角色等级达到 ${FAMILY_CREATE_MIN_LEVEL} 级后可以创建家族。`
     );
     return;
   }
 
   if (getFamilyMembership(account)) {
-    tell(player, Color.error, "Вы уже состоите в семье.");
+    tell(player, Color.error, "你已经加入家族。");
     return;
   }
 
@@ -170,7 +170,7 @@ function tryOpenConfirm(player: Player): void {
     tell(
       player,
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(FAMILY_CREATE_COST)}.`
+      `现金不足。需要 ${formatMoney(FAMILY_CREATE_COST)}.`
     );
     return;
   }
@@ -185,7 +185,7 @@ function showConfirmDialog(player: Player): void {
   }
 
   const body =
-    `在市政厅注册家族.\n\n` +
+    `在市政厅登记家族。\n\n` +
     `费用: ${formatMoney(FAMILY_CREATE_COST)}\n` +
     `要求: 护照, 等级 ${FAMILY_CREATE_MIN_LEVEL}+\n` +
     `费用将从现金中扣除.\n\n` +
@@ -214,12 +214,12 @@ function onConfirmResponse(player: Player, accepted: boolean): void {
   }
 
   if (!accepted) {
-    tell(player, Color.info, "Регистрация семьи отменена.");
+    tell(player, Color.info, "家族登记已取消。");
     return;
   }
 
   if (!isOnCreatePickup(player)) {
-    tell(player, Color.error, "Встаньте на пикап регистрации семьи.");
+    tell(player, Color.error, "请站到家族登记拾取点上。");
     return;
   }
 
@@ -229,7 +229,7 @@ function onConfirmResponse(player: Player, accepted: boolean): void {
   }
 
   if (!account.passport) {
-    tell(player, Color.error, "Для создания семьи нужен паспорт.");
+    tell(player, Color.error, "创建家族需要身份证。");
     return;
   }
 
@@ -237,13 +237,13 @@ function onConfirmResponse(player: Player, accepted: boolean): void {
     tell(
       player,
       Color.error,
-      `Создать семью можно с ${FAMILY_CREATE_MIN_LEVEL} уровня.`
+      `角色等级达到 ${FAMILY_CREATE_MIN_LEVEL} 级后可以创建家族。`
     );
     return;
   }
 
   if (getFamilyMembership(account)) {
-    tell(player, Color.error, "Вы уже состоите в семье.");
+    tell(player, Color.error, "你已经加入家族。");
     return;
   }
 
@@ -251,7 +251,7 @@ function onConfirmResponse(player: Player, accepted: boolean): void {
     tell(
       player,
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(FAMILY_CREATE_COST)}.`
+      `现金不足。需要 ${formatMoney(FAMILY_CREATE_COST)}.`
     );
     return;
   }
@@ -266,7 +266,7 @@ function showNameDialog(player: Player): void {
   }
 
   const body =
-    `输入家族名称.\n` +
+    `输入家族名称。\n` +
     `仅限英文字母和空格.\n` +
     `示例: Woozie Family\n` +
     `长度: ${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX} 个字符.\n` +
@@ -295,12 +295,12 @@ function onNameResponse(player: Player, accepted: boolean, rawName: string): voi
   }
 
   if (!accepted) {
-    tell(player, Color.info, "Регистрация семьи отменена.");
+    tell(player, Color.info, "家族登记已取消。");
     return;
   }
 
   if (!isOnCreatePickup(player)) {
-    tell(player, Color.error, "Встаньте на пикап регистрации семьи.");
+    tell(player, Color.error, "请站到家族登记拾取点上。");
     return;
   }
 
@@ -309,7 +309,7 @@ function onNameResponse(player: Player, accepted: boolean, rawName: string): voi
     tell(
       player,
       Color.error,
-      `Некорректное название. Только A-Z, a-z и пробелы (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
+      `名称无效。只能使用英文字母和空格（${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}）。`
     );
     showNameDialog(player);
     return;
@@ -325,7 +325,7 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
   }
 
   if (!account.passport) {
-    tell(player, Color.error, "Для создания семьи нужен паспорт.");
+    tell(player, Color.error, "创建家族需要身份证。");
     return;
   }
 
@@ -333,13 +333,13 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
     tell(
       player,
       Color.error,
-      `Создать семью можно с ${FAMILY_CREATE_MIN_LEVEL} уровня.`
+      `角色等级达到 ${FAMILY_CREATE_MIN_LEVEL} 级后可以创建家族。`
     );
     return;
   }
 
   if (getFamilyMembership(account)) {
-    tell(player, Color.error, "Вы уже состоите в семье.");
+    tell(player, Color.error, "你已经加入家族。");
     return;
   }
 
@@ -347,14 +347,14 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
     tell(
       player,
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(FAMILY_CREATE_COST)}.`
+      `现金不足。需要 ${formatMoney(FAMILY_CREATE_COST)}.`
     );
     return;
   }
 
   const exists = await findFamilyByName(name);
   if (exists) {
-    tell(player, Color.error, "Семья с таким названием уже существует.");
+    tell(player, Color.error, "该家族名称已被使用。");
     showNameDialog(player);
     return;
   }
@@ -365,7 +365,7 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
   }
 
   if (!live.passport) {
-    tell(player, Color.error, "Для создания семьи нужен паспорт.");
+    tell(player, Color.error, "创建家族需要身份证。");
     return;
   }
 
@@ -373,13 +373,13 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
     tell(
       player,
       Color.error,
-      `Создать семью можно с ${FAMILY_CREATE_MIN_LEVEL} уровня.`
+      `角色等级达到 ${FAMILY_CREATE_MIN_LEVEL} 级后可以创建家族。`
     );
     return;
   }
 
   if (getFamilyMembership(live)) {
-    tell(player, Color.error, "Вы уже состоите в семье.");
+    tell(player, Color.error, "你已经加入家族。");
     return;
   }
 
@@ -387,7 +387,7 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
     tell(
       player,
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(FAMILY_CREATE_COST)}.`
+      `现金不足。需要 ${formatMoney(FAMILY_CREATE_COST)}.`
     );
     return;
   }
@@ -396,12 +396,12 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
   try {
     await saveUserMoney(live.id, nextMoney, live.bank);
   } catch {
-    tell(player, Color.error, "Не удалось сохранить в базу.");
+    tell(player, Color.error, "无法保存到数据库。");
     return;
   }
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== live.id) {
-    // Деньги уже списаны в БД — вернуть, семья не создана.
+    // 款项已从数据库扣除；创建失败，将退还款项。
     await saveUserMoney(live.id, live.money, live.bank).catch(() => undefined);
     return;
   }
@@ -418,7 +418,7 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
     });
   } catch {
     await refundCreateCost(player, live.id, live.money, live.bank);
-    tell(player, Color.error, "Не удалось создать семью. Возможно, имя занято.");
+    tell(player, Color.error, "无法创建家族，名称可能已被占用。");
     return;
   }
 
@@ -426,18 +426,18 @@ async function createFamilyForPlayer(player: Player, name: string): Promise<void
   if (!ok) {
     await deleteFamily(family.id).catch(() => undefined);
     await refundCreateCost(player, live.id, live.money, live.bank);
-    tell(player, Color.error, "Не удалось сохранить членство в семье.");
+    tell(player, Color.error, "无法保存家族成员关系。");
     return;
   }
 
   tell(
     player,
     Color.info,
-    `Семья «${family.name}» зарегистрирована. Списано ${formatMoney(FAMILY_CREATE_COST)}.`
+    `家族“${family.name}”已登记。已扣除 ${formatMoney(FAMILY_CREATE_COST)}。`
   );
 }
 
-/** Только латиница и одиночные пробелы, напр. Woozie Family. */
+/** 仅允许拉丁字母和单个空格，例如 Woozie Family。 */
 export function normalizeFamilyName(raw: string): string | null {
   const name = String(raw ?? "")
     .trim()
@@ -500,6 +500,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

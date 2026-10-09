@@ -51,7 +51,7 @@ export const familyModule: GameModule = {
   name: "family",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] семьи: нет БД`);
+      omp.log(`[${SERVER_TAG}] 家族：数据库不可用`);
       return;
     }
 
@@ -65,10 +65,10 @@ export const familyModule: GameModule = {
       bindFamilyCommands();
       bindFamilyMenu();
       startFamilyTags();
-      omp.log(`[${SERVER_TAG}] семьи: загружено ${listFamilies().length}`);
+      omp.log(`[${SERVER_TAG}] 家族：已加载 ${listFamilies().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] семьи: ошибка загрузки — ${message}`);
+      omp.log(`[${SERVER_TAG}] 家族：加载失败 — ${message}`);
     }
   },
 };

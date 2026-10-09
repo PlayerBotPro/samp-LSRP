@@ -9,7 +9,7 @@ import {
   isFamilyVirtualWorld,
 } from "./world";
 
-/** Пикап склада в общем интерьере фамильного дома (свой VW у каждой семьи). */
+/** 家族住宅公共室内的仓库拾取点（每个家族有自己的 VW）。 */
 export const FAMILY_STOCK_POINT = {
   x: 199.2969,
   y: -3.6267,
@@ -55,7 +55,7 @@ export function startFamilyWarehouseDisplay(): void {
   }
 }
 
-/** Пикап + лейбл склада в VW семьи. */
+/** 家族 VW 中的仓库拾取点和标签。 */
 export function ensureFamilyStockDisplay(familyId: number): void {
   if (stocks.has(familyId)) {
     return;
@@ -93,13 +93,13 @@ export function removeFamilyStockDisplay(familyId: number): void {
   try {
     stock.pickup.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已销毁。
   }
 
   try {
     stock.label.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已销毁。
   }
 
   stocks.delete(familyId);
@@ -114,11 +114,11 @@ export function refreshFamilyWarehouseLabel(familyId: number): void {
   try {
     stock.label.updateText(Color.info, stockLabelText(familyId));
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已销毁。
   }
 }
 
-/** Игрок у пикапа склада своей семьи. */
+/** 玩家位于所属家族仓库拾取点附近。 */
 export function findFamilyStockAtPlayer(player: Player): boolean {
   try {
     const world = player.getVirtualWorld();
@@ -151,7 +151,7 @@ export function findFamilyStockAtPlayer(player: Player): boolean {
   }
 }
 
-/** Игрок вплотную на пикапе склада (для однократного открытия меню). */
+/** 玩家正站在仓库拾取点上（用于仅打开一次菜单）。 */
 export function isPlayerOnFamilyStockPickup(player: Player): boolean {
   try {
     const world = player.getVirtualWorld();
