@@ -12,7 +12,7 @@ import { getMembership } from "../org";
 import { registerCommand } from "./registry";
 
 const BUBBLE_MS = 3000;
-const BUBBLE_TEXT = "Сообщение по департаменту.";
+const BUBBLE_TEXT = "部门频道消息。";
 
 registerCommand("d", "Рация департамента", (player, args) => {
   const account = getAccount(player);

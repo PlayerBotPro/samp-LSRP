@@ -30,7 +30,7 @@ registerCommand("f", "Чат банды или мафии", (player, args) => {
     `[F] ${membership.rank.title} ${playerChatName(player)}: ${text}`
   );
   const orgId = membership.org.id;
-  const bubble = membership.org.mafia ? "Сообщение мафии." : "Сообщение банде.";
+  const bubble = membership.org.mafia ? "黑手党频道消息。" : "帮派频道消息。";
 
   omp.players.forEach((other) => {
     if (!isPlayerActive(other)) {

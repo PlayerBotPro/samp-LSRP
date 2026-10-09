@@ -26,25 +26,25 @@ type Emotion = {
 const EMOTIONS: Emotion[] = [
   {
     trigger: "))",
-    status: () => "смеётся",
+    status: () => "大笑",
   },
   {
     trigger: "((",
     status: (gender) =>
-      byGender(gender, "сильно расстроился", "сильно расстроилась"),
+      byGender(gender, "非常沮丧", "非常沮丧"),
     anim: { lib: "GRAVEYARD", name: "mrnF_loop" },
   },
   {
     trigger: ")",
-    status: () => "улыбается",
+    status: () => "微笑",
   },
   {
     trigger: "(",
-    status: (gender) => byGender(gender, "расстроился", "расстроилась"),
+    status: (gender) => byGender(gender, "沮丧", "沮丧"),
   },
   {
     trigger: "=0",
-    status: (gender) => byGender(gender, "удивился", "удивилась"),
+    status: (gender) => byGender(gender, "惊讶", "惊讶"),
   },
 ];
 

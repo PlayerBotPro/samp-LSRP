@@ -391,7 +391,7 @@ registerCommand("fam", "Рация семьи", (player, args) => {
   });
 
   try {
-    player.setChatBubble("Сообщение семье.", Color.familyChat, CHAT_RADIUS, BUBBLE_MS);
+    player.setChatBubble("家族频道消息。", Color.familyChat, CHAT_RADIUS, BUBBLE_MS);
   } catch {
     // Пузырь не обязателен.
   }

@@ -21,7 +21,7 @@ export const MUTED_CHAT_COMMANDS = new Set([
 ]);
 
 const BUBBLE_MS = 3500;
-const BUBBLE_TEXT = "Пытается что-то сказать...";
+const BUBBLE_TEXT = "试图说些什么……";
 const MUTE_RED = 0xff0000ff;
 
 type MuteTimer = {
