@@ -28,7 +28,7 @@ const TICK_MS = 200;
 const PLAYER_STATE_ONFOOT = 1;
 const DIALOG_STYLE_LIST = 2;
 const MAX_ARMOR = 100;
-/** Доля выручки на счёт бизнеса. */
+/** 营业收入计入企业账户的比例。 */
 const BIZ_SHARE = 0.8;
 
 type AmmuItem =
@@ -36,7 +36,7 @@ type AmmuItem =
   | { kind: "weapon"; name: string; price: number; weaponId: number; ammo: number };
 
 const MENU: readonly AmmuItem[] = [
-  { kind: "armor", name: "Бронежилет", price: 2_500 },
+  { kind: "armor", name: "防弹衣", price: 2_500 },
   { kind: "weapon", name: "Desert Eagle", price: 4_500, weaponId: 24, ammo: 49 },
   { kind: "weapon", name: "Shotgun", price: 4_000, weaponId: 25, ammo: 30 },
   { kind: "weapon", name: "UZI", price: 3_000, weaponId: 28, ammo: 100 },
@@ -73,7 +73,7 @@ export function startAmmuShops(): void {
   const count = listBusinesses().filter(
     (b) => isAmmuType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] аммунация: точек продажи ${count}`);
+  omp.log(`[${SERVER_TAG}] 军用品店：销售点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -186,7 +186,7 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
     if (item.kind === "armor") {
       return `${item.name}\t${formatMoney(item.price)}`;
     }
-    return `${item.name}\t${formatMoney(item.price)} (${item.ammo} патр.)`;
+    return `${item.name}\t${formatMoney(item.price)}（${item.ammo} 发子弹）`;
   });
 
   try {
@@ -196,8 +196,8 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
       DIALOG_STYLE_LIST,
       shop.name,
       lines.join("\n"),
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -228,7 +228,7 @@ async function onMenuResponse(
   }
 
   await buyAmmuItem(player, businessId, item);
-  // standingOn остаётся — можно отойти; ещё покупка — отойти от пикапа и встать снова.
+  // 保留 standingOn 状态以便离开；再次购买前需离开拾取点再回来。
 }
 
 async function buyAmmuItem(
@@ -301,7 +301,7 @@ async function buyAmmuItem(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] аммунация biz=${businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 军用品店 企业=${businessId}（${account.name}）：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   } finally {

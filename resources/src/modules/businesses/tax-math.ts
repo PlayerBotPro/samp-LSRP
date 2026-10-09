@@ -6,7 +6,7 @@ import {
   rentDaysLeftLabel,
 } from "../houses/rent-math";
 
-/** Доля от стоимости бизнеса в день (0.1%), как у домов. */
+/** 每日按企业价格计算的比例（0.1%），与住宅相同。 */
 export const BUSINESS_TAX_RATE = 0.001;
 
 export function dailyBusinessTax(price: number): number {

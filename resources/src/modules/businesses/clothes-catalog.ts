@@ -3,7 +3,7 @@ import type { SkinOption } from "../auth/skins";
 
 export type ClothesSkinOption = SkinOption & { price: number };
 
-/** Каталог магазина одежды по полу. */
+/** 按性别分类的服装店目录。 */
 export const CLOTHES_SKINS: Record<Gender, ClothesSkinOption[]> = {
   male: [
     { id: 1, label: "The Truth", price: 2_500 },

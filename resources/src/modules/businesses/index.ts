@@ -27,7 +27,7 @@ export const businessesModule: GameModule = {
   name: "businesses",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] бизнесы: нет БД`);
+      omp.log(`[${SERVER_TAG}] 企业：数据库不可用`);
       return;
     }
 
@@ -47,10 +47,10 @@ export const businessesModule: GameModule = {
       bindBusinessPurchase();
       bindBusinessMenu();
       startBusinessTaxScheduler();
-      omp.log(`[${SERVER_TAG}] бизнесы: загружено ${listBusinesses().length}`);
+      omp.log(`[${SERVER_TAG}] 企业：已加载 ${listBusinesses().length} 家`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] бизнесы: ошибка загрузки — ${message}`);
+      omp.log(`[${SERVER_TAG}] 企业：加载失败 — ${message}`);
     }
 
     omp.on("playerSpawn", (player) => {
@@ -58,7 +58,7 @@ export const businessesModule: GameModule = {
       remindBusinessTaxOnLogin(player);
     });
 
-    // Смерть/респавн уводят из интерьера — иначе сессия блокирует выход/выселение.
+    // 死亡或重生会离开室内，否则会话会阻止离开或收回企业。
     omp.on("playerDeath", (player) => {
       const id = playerId(player);
       if (id !== null) {

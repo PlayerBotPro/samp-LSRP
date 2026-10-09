@@ -36,7 +36,7 @@ import { getInsideBusiness } from "./session";
 import { isWorkshopType } from "./types";
 import { businessIdFromVirtualWorld, businessVirtualWorld } from "./world";
 
-/** Не пересекать с family 115–123. */
+/** 不要与 family 115–123 重叠。 */
 export const WORKSHOP_MENU_DIALOG_ID = 144;
 export const WORKSHOP_COLOR1_DIALOG_ID = 145;
 export const WORKSHOP_COLOR2_DIALOG_ID = 146;
@@ -51,25 +51,25 @@ const NITRO_COMPONENT = 1010;
 const PRICE_REPAIR = 800;
 const PRICE_COLOR = 1_500;
 const PRICE_NITRO = 5_000;
-/** $ за недостающий литр (как на АЗС). */
+/** 每缺少一升燃油的价格（与加油站相同）。 */
 const PRICE_FUEL_UNIT = 10;
 
 type PaintColor = { id: number; name: string };
 
-/** Популярные цвета GTA SA для покраски. */
+/** GTA SA 喷漆使用的常见颜色。 */
 const PAINT_COLORS: readonly PaintColor[] = [
-  { id: 0, name: "Чёрный" },
-  { id: 1, name: "Белый" },
-  { id: 3, name: "Серый" },
-  { id: 6, name: "Жёлтый" },
-  { id: 79, name: "Красный" },
-  { id: 86, name: "Синий" },
-  { id: 152, name: "Зелёный" },
-  { id: 158, name: "Оранжевый" },
-  { id: 166, name: "Фиолетовый" },
-  { id: 175, name: "Розовый" },
-  { id: 181, name: "Голубой" },
-  { id: 189, name: "Коричневый" },
+  { id: 0, name: "黑色" },
+  { id: 1, name: "白色" },
+  { id: 3, name: "灰色" },
+  { id: 6, name: "黄色" },
+  { id: 79, name: "红色" },
+  { id: 86, name: "蓝色" },
+  { id: 152, name: "绿色" },
+  { id: 158, name: "橙色" },
+  { id: 166, name: "紫色" },
+  { id: 175, name: "粉色" },
+  { id: 181, name: "浅蓝色" },
+  { id: 189, name: "棕色" },
 ];
 
 type PendingPaint = {
@@ -110,7 +110,7 @@ export function startWorkshopShops(): void {
   const count = listBusinesses().filter(
     (b) => isWorkshopType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] автомастерская: точек сервиса ${count}`);
+  omp.log(`[${SERVER_TAG}] 汽车维修店：服务点数量 ${count}`);
 }
 
 function clearPlayerWorkshop(player: Player): void {
@@ -259,19 +259,19 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
     : 0;
 
   const rows = [
-    "Услуга\tЦена\tСостояние",
-    `Покраска\t${formatMoney(PRICE_COLOR)}\tДоступно`,
+    "服务\t价格\t状态",
+    `喷漆\t${formatMoney(PRICE_COLOR)}\t可用`,
     repairNeed
-      ? `Ремонт\t${formatMoney(PRICE_REPAIR)}\tHP ${Math.round(health)}`
-      : `Ремонт\t—\tУже исправен`,
+      ? `维修\t${formatMoney(PRICE_REPAIR)}\tHP ${Math.round(health)}`
+      : `维修\t—\t车辆状况良好`,
     fuelOk
       ? fuelNeed
-        ? `Заправка\t${formatMoney(fuelPrice)}\t${Math.round(fuel)}%`
-        : `Заправка\t—\tБак полный`
-      : `Заправка\t—\tНе требуется`,
+        ? `加油\t${formatMoney(fuelPrice)}\t${Math.round(fuel)}%`
+        : `加油\t—\t油箱已满`
+      : `加油\t—\t无需加油`,
     hasNitro
-      ? `Нитро\t—\tУже установлено`
-      : `Нитро\t${formatMoney(PRICE_NITRO)}\tНет`,
+      ? `氮气\t—\t已安装`
+      : `氮气\t${formatMoney(PRICE_NITRO)}\t未安装`,
   ];
 
   pendingMenu.set(slotId, business.id);
@@ -282,10 +282,10 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
       player,
       WORKSHOP_MENU_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `${business.name} — сервис`,
+      `${business.name} — 维修服务`,
       rows.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -365,7 +365,7 @@ async function onMainMenuResponse(
   }
 
   await runWorkshopService(player, business, kind);
-  // standingOn остаётся — можно отойти; ещё услуга — отойти от пикапа и встать снова.
+  // 保留 standingOn 状态以便离开；再次使用服务前需离开拾取点再回来。
 }
 
 function showColorPicker(player: Player, businessId: number, step: 1 | 2): void {
@@ -375,7 +375,7 @@ function showColorPicker(player: Player, businessId: number, step: 1 | 2): void 
   }
 
   const rows = [
-    "Цвет\tID",
+    "颜色\tID",
     ...PAINT_COLORS.map((c) => `${c.name}\t${c.id}`),
   ];
 
@@ -461,7 +461,7 @@ async function onColor2Response(
     color2: paint.id,
     expectedRuntimeId: pending.vehicleRuntimeId,
   });
-  // sticky — можно отойти; ещё услуга — отойти от пикапа и встать снова.
+  // sticky 状态会保留；再次使用服务前需离开拾取点再回来。
 }
 
 async function runWorkshopService(
@@ -597,7 +597,7 @@ async function runWorkshopService(
       isPlayerActive(player) && getAccount(player)?.id === account.id;
 
     if (stillHere) {
-      // После await игрок мог отойти от пикапа — услугу всё равно выдаём (уже оплачено).
+      // await 期间玩家可能已离开拾取点；服务仍然生效（费用已支付）。
       patchAccount(player, { money: result.cashLeft });
       setBusinessBalance(business.id, result.balance);
       const live = getAccount(player);
@@ -651,10 +651,10 @@ async function runWorkshopService(
     }
 
     const labels: Record<MenuKind, string> = {
-      repair: "Ремонт выполнен",
-      fuel: "Бак заправлен",
-      nitro: "Нитро установлено",
-      color: "Цвет обновлён",
+      repair: "维修完成",
+      fuel: "加油完成",
+      nitro: "氮气已安装",
+      color: "颜色已更新",
     };
     player.sendClientMessage(
       Color.info,
@@ -681,6 +681,6 @@ async function persistWorkshopUpgrade(
       await updatePlayerVehicleColors(dbId, paint.color1, paint.color2);
     }
   } catch {
-    // Следующий /car подтянет старые данные — игрок уже оплатил.
+    // 下次使用 /car 时会加载数据；玩家已支付费用。
   }
 }

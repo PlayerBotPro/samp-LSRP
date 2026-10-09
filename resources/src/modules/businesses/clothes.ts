@@ -70,7 +70,7 @@ export function startClothesShops(): void {
   const count = listBusinesses().filter(
     (b) => isClothesType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] одежда: точек примерки ${count}`);
+  omp.log(`[${SERVER_TAG}] 服装店：试衣点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -82,7 +82,7 @@ function hasBuyPickup(business: BusinessRecord): boolean {
   );
 }
 
-/** Возврат к пикапу покупки в интерьере бизнеса. */
+/** 返回企业室内的购买拾取点。 */
 function clothesReturnPoint(business: BusinessRecord): SpawnPoint | null {
   if (!hasBuyPickup(business) || business.interiorId === null) {
     return null;
@@ -220,7 +220,7 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
     return;
   }
 
-  // Та же точка/камера, что при регистрации; свой VW подставит picker.
+  // 使用与注册时相同的位置和镜头；拾取器会自动设置对应的虚拟世界。
   const skin = openSkinPicker(player, {
     gender,
     mode: "clothes",
@@ -241,23 +241,23 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
 function clothesBuyDeny(player: Player): string | null {
   const account = getAccount(player);
   if (!account) {
-    return "Сначала войдите в аккаунт.";
+    return "请先登录账号。";
   }
 
   if (isJailed(player)) {
-    return "В тюрьме нельзя покупать одежду.";
+    return "在监狱中不能购买服装。";
   }
 
   if (account.hospitalized) {
-    return "Сначала пройдите лечение в больнице.";
+    return "请先在医院完成治疗。";
   }
 
   if (isMinerOnShift(player)) {
-    return "Сначала закончите смену шахтёра.";
+    return "请先结束矿工的工作班次。";
   }
 
   if (isLoaderOnShift(player)) {
-    return "Сначала закончите смену грузчика.";
+    return "请先结束搬运工的工作班次。";
   }
 
   return null;
@@ -273,7 +273,7 @@ async function handleClothesPickerAction(
 
   const account = getAccount(player);
   if (account && buying.has(account.id)) {
-    // Покупка в полёте: не даём отменить/перелистнуть (гонка с await).
+    // 购买请求正在处理中：禁止取消或翻页，避免与 await 产生竞态。
     return;
   }
 
@@ -314,7 +314,7 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
     return;
   }
 
-  // Цена/каталог только с сервера — не доверяем объекту сессии целиком.
+  // 价格和目录以服务器数据为准，不完全信任会话对象。
   const skin =
     clothesCatalog(account.gender).find((item) => item.id === picked.id) ?? null;
   if (!skin || skin.price !== asClothesSkin(picked)?.price) {
@@ -404,11 +404,11 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
     if (stillInClothesPicker()) {
       exitClothesTryOn(player, { restoreShop: true });
     } else {
-      // Уже вышли (ESC) или умерли — только визуал/кошелёк, без телепорта в магазин.
+      // 玩家已退出（ESC）或死亡：只更新显示和钱包，不传送到商店。
       try {
         applyOrgVisuals(player);
       } catch {
-        // Слот пустой.
+        // 槽位为空。
       }
     }
   } finally {
@@ -437,7 +437,7 @@ function exitClothesTryOn(
     player.toggleControllable(true);
     player.setCameraBehind();
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 
   const slotId = playerId(player);
@@ -448,7 +448,7 @@ function exitClothesTryOn(
     try {
       applyOrgVisuals(player);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
     return;
   }
@@ -462,7 +462,7 @@ function exitClothesTryOn(
     try {
       applyOrgVisuals(player);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
     return;
   }
@@ -472,11 +472,11 @@ function exitClothesTryOn(
     refreshStreamForPlayer(player);
     applyOrgVisuals(player);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 
   if (slotId !== null) {
-    // Чтобы сразу не открыть примерку снова — ждём отхода от пикапа.
+    // 等玩家离开拾取点后再允许重新打开试衣界面。
     standingOn.set(slotId, businessId);
   }
 }

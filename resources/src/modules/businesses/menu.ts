@@ -64,7 +64,7 @@ const sellingState = new Set<number>();
 const transferring = new Set<number>();
 
 export function bindBusinessMenu(): void {
-  registerCommand("biz", "Меню своего бизнеса у входа", (player) => {
+  registerCommand("biz", "在入口处打开自己的企业菜单", (player) => {
     showBusinessMenu(player);
   });
 
@@ -253,14 +253,14 @@ function handleBizDialog(
 function showBusinessStats(player: Player, business: BusinessRecord): void {
   const daily = dailyBusinessTax(business.price);
   const body = [
-    `${LABEL}Название:\t\t${VALUE}${business.name}`,
-    `${LABEL}Номер:\t\t${VALUE}${business.id}`,
-    `${LABEL}Тип:\t\t${VALUE}${businessTypeLabel(business.typeId)}`,
-    `${LABEL}Стоимость:\t\t${VALUE}${formatMoney(business.price)}`,
-    `${LABEL}Прибыль:\t\t${VALUE}${formatMoney(business.balance)}`,
-    `${LABEL}Налог/день:\t\t${VALUE}${formatMoney(daily)}`,
-    `${LABEL}Оплачено до:\t\t${VALUE}${formatRentDate(business.taxPaidUntil)}`,
-    `${LABEL}Владелец:\t\t${VALUE}${business.ownerName ?? "—"}`,
+    `${LABEL}名称：\t\t${VALUE}${business.name}`,
+    `${LABEL}编号：\t\t${VALUE}${business.id}`,
+    `${LABEL}类型：\t\t${VALUE}${businessTypeLabel(business.typeId)}`,
+    `${LABEL}价格：\t\t${VALUE}${formatMoney(business.price)}`,
+    `${LABEL}余额：\t\t${VALUE}${formatMoney(business.balance)}`,
+    `${LABEL}每日税款：\t\t${VALUE}${formatMoney(daily)}`,
+    `${LABEL}已缴费至：\t\t${VALUE}${formatRentDate(business.taxPaidUntil)}`,
+    `${LABEL}所有者：\t\t${VALUE}${business.ownerName ?? "—"}`,
   ].join("\n");
 
   try {
@@ -520,7 +520,7 @@ async function confirmSellToState(player: Player): Promise<void> {
   } catch (error: unknown) {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] продажа бизнеса ${business.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 出售企业 ${business.id}（${account.name}）：${message}`);
     player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
@@ -553,7 +553,7 @@ async function confirmSellToState(player: Player): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить деньги ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的资金：${message}`);
   });
 
   refreshBusinessLabel(business.id);
@@ -650,7 +650,7 @@ async function acceptBizOffer(
     transferring.delete(sellerAccount.id);
     transferring.delete(buyerAccount.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] передача бизнеса ${offer.businessId}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 转让企业 ${offer.businessId}：${message}`);
     buyer.sendClientMessage(Color.error, "交易失败。请重试。");
     return;
   }
@@ -688,7 +688,7 @@ async function acceptBizOffer(
       applyWallet(buyer, liveBuyer);
     }
     void saveUserMoney(buyerAccount.id, result.buyerCashLeft, buyerAccount.bank).catch(() => {
-      // Кэш уже обновлён.
+      // 缓存已更新。
     });
     buyer.sendClientMessage(
       Color.info,
@@ -703,7 +703,7 @@ async function acceptBizOffer(
       applyWallet(seller, liveSeller);
     }
     void saveUserMoney(sellerAccount.id, result.sellerCashLeft, sellerAccount.bank).catch(() => {
-      // Кэш уже обновлён.
+      // 缓存已更新。
     });
     seller.sendClientMessage(
       Color.info,

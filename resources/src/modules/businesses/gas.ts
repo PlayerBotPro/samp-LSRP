@@ -29,12 +29,12 @@ import {
 } from "./repository";
 import { isGasStationType } from "./types";
 
-/** Сигнал в ТС / C пешком (KEY_CROUCH). */
+/** 车辆喇叭 / 徒步时按 C（KEY_CROUCH）。 */
 const KEY_CROUCH = 2;
 const PLAYER_STATE_DRIVER = 2;
 const PICKUP_RADIUS = 5.5;
 const BIZ_SHARE = 0.8;
-/** $ за единицу топлива (полный бак с 0 = $1000). */
+/** 每单位燃油的价格（空油箱加满为 $1000）。 */
 const PRICE_PER_UNIT = 10;
 const REFUEL_MS = 6000;
 
@@ -44,7 +44,7 @@ export function startGasStations(): void {
   setExtraEngineBlocker((player) => {
     const slot = playerId(player);
     if (slot !== null && refueling.has(slot)) {
-      return "Идёт заправка. Подождите.";
+      return "正在加油，请稍候。";
     }
     return null;
   });
@@ -73,7 +73,7 @@ export function startGasStations(): void {
   });
 
   const count = listBusinesses().filter((b) => isGasStationType(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] АЗС: станций ${count}`);
+  omp.log(`[${SERVER_TAG}] 加油站：站点数量 ${count}`);
 }
 
 function abortRefuel(player: Player): void {
@@ -171,7 +171,7 @@ async function tryRefuel(player: Player): Promise<void> {
 
   await sleep(REFUEL_MS);
 
-  // Смерть / выход / смена ТС сняли флаг — не оплачиваем.
+  // 死亡、退出或更换车辆会清除标记，因此不扣款。
   if (!refueling.has(slot)) {
     return;
   }
@@ -223,7 +223,7 @@ async function tryRefuel(player: Player): Promise<void> {
     );
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] АЗС biz=${station.id}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 加油站企业=${station.id}：${message}`);
     abortRefuel(player);
     player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
@@ -258,7 +258,7 @@ async function tryRefuel(player: Player): Promise<void> {
   const personal = getPersonalRuntime(vehicleId);
   if (personal) {
     void updatePlayerVehicleFuel(personal.dbId, MAX_VEHICLE_FUEL).catch(() => {
-      // Кэш уже полный.
+      // 油箱已满。
     });
   }
 
@@ -321,7 +321,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 

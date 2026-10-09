@@ -6,7 +6,7 @@ import type { BusinessRecord } from "./repository";
 import { listBusinesses } from "./repository";
 import { businessMapIconType } from "./types";
 
-/** Слоты 11–49 заняты домами. */
+/** 11–49 号槽位已由住宅占用。 */
 const MAP_ICON_SLOT_MIN = 50;
 const MAP_ICON_SLOT_MAX = 99;
 const MAPICON_LOCAL = 0;
@@ -71,7 +71,7 @@ export function refreshBusinessMapIcons(player: Player): void {
     const interior = player.getInterior();
     updatePlayerIcons(player, id, pos.x, pos.y, world, interior);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -97,7 +97,7 @@ function tickBusinessIcons(): void {
       const interior = player.getInterior();
       updatePlayerIcons(player, id, pos.x, pos.y, world, interior, businesses);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   });
 }
@@ -193,7 +193,7 @@ function showBusinessIcon(player: Player, business: BusinessRecord, slot: number
       MAPICON_LOCAL
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -206,7 +206,7 @@ function hideBusinessIcon(
   try {
     player.removeMapIcon(slot);
   } catch {
-    // Иконки не было.
+    // 图标不存在。
   }
 
   state.active.delete(businessId);

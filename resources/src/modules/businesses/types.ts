@@ -1,4 +1,4 @@
-/** Типы бизнесов (TINYINT type_id в БД, не MySQL ENUM). */
+/** 企业类型（数据库中的 TINYINT type_id，不是 MySQL ENUM）。 */
 export const BusinessType = {
   SHOP_247: 1,
   AMMU: 2,
@@ -19,7 +19,7 @@ export const BusinessType = {
 
 export type BusinessTypeId = (typeof BusinessType)[keyof typeof BusinessType];
 
-/** MapIcon ID по типу бизнеса. */
+/** 根据企业类型映射 MapIcon ID。 */
 const MAP_ICON_BY_TYPE: Readonly<Record<number, number>> = {
   [BusinessType.SHOP_247]: 52,
   [BusinessType.AMMU]: 18,

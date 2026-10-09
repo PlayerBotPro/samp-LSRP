@@ -557,7 +557,7 @@ export async function forfeitExpiredBusinesses(): Promise<number[]> {
     return forfeited;
   } catch {
     await conn.rollback();
-    throw new Error("не удалось изъять просроченные бизнесы");
+    throw new Error("无法收回逾期未缴税款的企业");
   } finally {
     conn.release();
   }
@@ -570,7 +570,7 @@ export async function ensureBusinessesTable(): Promise<void> {
   cachedBusinesses = await loadBusinesses();
 }
 
-/** Точные interior/buy пикапы (обновляются при старте). */
+/** 精确的室内和购买拾取点（启动时更新）。 */
 async function migrateInteriorPickupCoords(): Promise<void> {
   const rows: Array<
     [number, number, number, number, number | null, number | null, number | null]
@@ -640,13 +640,13 @@ async function seedBusinesses(): Promise<void> {
 function loadBusinessesSeedSql(): string {
   const seedPath = join(process.cwd(), "sql", "businesses_seed.sql");
   if (!existsSync(seedPath)) {
-    throw new Error("sql/businesses_seed.sql не найден");
+    throw new Error("未找到 sql/businesses_seed.sql");
   }
 
   const sql = readFileSync(seedPath, "utf8");
   const insertAt = sql.toUpperCase().indexOf("INSERT INTO BUSINESSES");
   if (insertAt < 0) {
-    throw new Error("seed businesses повреждён");
+    throw new Error("企业种子数据已损坏");
   }
 
   return sql.slice(insertAt).trim();
@@ -731,7 +731,7 @@ export async function payBusinessEntranceFee(
   }
 }
 
-/** Списывает стоимость аренды с наличных; 80% идёт на balance бизнеса. */
+/** 从现金中扣除租金；其中 80% 存入企业余额。 */
 export async function payVehicleRental(
   businessId: number,
   payerId: number,
@@ -740,7 +740,7 @@ export async function payVehicleRental(
   return payBusinessCashShare(businessId, payerId, price, 0.8);
 }
 
-/** Наличные → бизнес: доля `share` (0..1) на balance, остальное «комиссия». */
+/** 现金 → 企业：`share`（0..1）的比例计入余额，其余作为“手续费”。 */
 export async function payBusinessCashShare(
   businessId: number,
   payerId: number,
@@ -818,7 +818,7 @@ export async function payBusinessCashShare(
   }
 }
 
-/** Покупка скина: наличные + skin в одной транзакции, доля `share` на бизнес. */
+/** 购买皮肤：现金和皮肤在同一事务中处理，`share` 的比例计入企业。 */
 export async function payBusinessClothesPurchase(
   businessId: number,
   payerId: number,
@@ -910,8 +910,8 @@ function randomPhoneDigits(): string {
 }
 
 /**
- * Покупка телефона: списание наличных, 80% на бизнес, уникальный 6-значный номер.
- * Всё в одной транзакции (при неудаче — полный откат).
+ * 购买手机：扣除现金，80% 计入企业，并分配唯一的六位数号码。
+ * 所有操作在同一事务中完成（失败时完整回滚）。
  */
 export async function payBusinessPhonePurchase(
   businessId: number,
@@ -973,7 +973,7 @@ export async function payBusinessPhonePurchase(
     );
     if (userUpdate.affectedRows !== 1) {
       await conn.rollback();
-      // Повторно смотрим причину: телефон могли выдать параллельно.
+      // 再次检查原因：手机可能已由并发请求发放。
       const [again] = await conn.query<RowDataPacket[]>(
         "SELECT phone FROM users WHERE id = ? LIMIT 1",
         [payerId]

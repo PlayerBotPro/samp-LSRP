@@ -29,7 +29,7 @@ const pendingBuy = new Map<number, number>();
 const buying = new Set<number>();
 
 export function bindBusinessPurchase(): void {
-  registerCommand("buybiz", "Купить бизнес у пикапа", (player) => {
+  registerCommand("buybiz", "在拾取点购买企业", (player) => {
     void openBuyBusinessDialog(player);
   });
 
@@ -107,11 +107,11 @@ async function openBuyBusinessDialog(player: Player): Promise<void> {
   pendingBuy.set(slotId, business.id);
 
   const body = [
-    `${LABEL}Вы действительно хотите купить бизнес?`,
+    `${LABEL}确定要购买这家企业吗？`,
     "",
-    `${LABEL}Название:\t\t${VALUE}${business.name}`,
-    `${LABEL}Номер:\t\t${VALUE}${business.id}`,
-    `${LABEL}Стоимость:\t\t${VALUE}${formatMoney(business.price)}`,
+    `${LABEL}名称：\t\t${VALUE}${business.name}`,
+    `${LABEL}编号：\t\t${VALUE}${business.id}`,
+    `${LABEL}价格：\t\t${VALUE}${formatMoney(business.price)}`,
   ].join("\n");
 
   try {
@@ -119,10 +119,10 @@ async function openBuyBusinessDialog(player: Player): Promise<void> {
       player,
       BUYBIZ_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `${TITLE}Покупка бизнеса`,
+      `${TITLE}购买企业`,
       body,
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingBuy.delete(slotId);
@@ -180,7 +180,7 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] покупка бизнеса ${businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 购买企业 ${businessId}（${account.name}）：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
@@ -226,7 +226,7 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить деньги ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的资金：${message}`);
   });
 
   refreshBusinessLabel(businessId);

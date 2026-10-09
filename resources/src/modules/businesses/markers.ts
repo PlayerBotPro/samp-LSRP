@@ -70,7 +70,7 @@ export function refreshBusinessLabel(businessId: number): void {
   try {
     marker.label.updateText(Color.info, businessLabelText(business));
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已销毁。
   }
 }
 

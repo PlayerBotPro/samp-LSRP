@@ -17,7 +17,7 @@ import { setInsideBusiness } from "./session";
 import { isAmmuType } from "./types";
 import { businessVirtualWorld } from "./world";
 
-/** Левый ALT — медленная ходьба (KEY_WALK). */
+/** 左 ALT：慢走（KEY_WALK）。 */
 const KEY_WALK = 1024;
 const PLAYER_STATE_ONFOOT = 1;
 const PICKUP_RADIUS = 1.5;
@@ -173,7 +173,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
       result = await payBusinessEntranceFee(business.id, account.id, fee);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] вход в бизнес ${business.id} (${account.name}): ${message}`);
+      omp.log(`[${SERVER_TAG}] 进入企业 ${business.id}（${account.name}）：${message}`);
       player.sendClientMessage(Color.error, "无法支付入场费。");
       return;
     } finally {

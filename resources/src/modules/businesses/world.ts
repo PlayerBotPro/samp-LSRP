@@ -1,6 +1,6 @@
-/** VW бизнесов: 2000–99999 (не пересекается с домами 1000–1999 и семьями 100000+). */
+/** 企业虚拟世界：2000–99999（不与住宅 1000–1999 和家族 100000+ 重叠）。 */
 export const BUSINESS_WORLD_OFFSET = 2000;
-/** Верхняя граница VW бизнесов (начало диапазона семей). */
+/** 企业虚拟世界上限（家族范围的起点）。 */
 const BUSINESS_WORLD_END = 100_000;
 
 export function businessVirtualWorld(businessId: number): number {

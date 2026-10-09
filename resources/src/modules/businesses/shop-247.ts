@@ -39,9 +39,9 @@ type ShopItem =
   | { kind: "mask"; name: string; price: number };
 
 const MENU: readonly ShopItem[] = [
-  { kind: "phone", name: "Мобильный телефон", price: 2_000 },
-  { kind: "weapon", name: "Фотоаппарат", price: 1_000, weaponId: WEAPON_CAMERA, ammo: CAMERA_AMMO },
-  { kind: "mask", name: "Маска", price: 500 },
+  { kind: "phone", name: "手机", price: 2_000 },
+  { kind: "weapon", name: "相机", price: 1_000, weaponId: WEAPON_CAMERA, ammo: CAMERA_AMMO },
+  { kind: "mask", name: "面具", price: 500 },
 ];
 
 const standingOn = new Map<number, number>();
@@ -73,7 +73,7 @@ export function startShop247(): void {
   const count = listBusinesses().filter(
     (b) => isShop247Type(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 24/7: точек продажи ${count}`);
+  omp.log(`[${SERVER_TAG}] 24/7：销售点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -183,7 +183,7 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
   pendingMenu.set(slotId, shop.id);
 
   const lines = [
-    "Товар\tЦена",
+    "商品\t价格",
     ...MENU.map((item) => `${item.name}\t${formatMoney(item.price)}`),
   ];
 
@@ -194,8 +194,8 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
       DIALOG_STYLE_TABLIST_HEADERS,
       shop.name,
       lines.join("\n"),
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -226,7 +226,7 @@ async function onMenuResponse(
   }
 
   await buyShopItem(player, businessId, item);
-  // standingOn остаётся — можно отойти; ещё покупка — отойти от пикапа и встать снова.
+  // 保留 standingOn 状态以便离开；再次购买前需离开拾取点再回来。
 }
 
 async function buyShopItem(
@@ -322,7 +322,7 @@ async function buyPhone(
     result = await payBusinessPhonePurchase(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 телефон biz=${businessId} (${userName}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 24/7 手机 企业=${businessId}（${userName}）：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
@@ -373,7 +373,7 @@ async function buyCamera(
     result = await payBusinessCashShare(businessId, userId, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 фото biz=${businessId} (${userName}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 24/7 相机 企业=${businessId}（${userName}）：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
@@ -421,7 +421,7 @@ async function buyMask(
     result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 маска biz=${businessId} (${userName}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 24/7 面具 企业=${businessId}（${userName}）：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }

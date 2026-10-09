@@ -62,7 +62,7 @@ export function notifyBusinessTaxReminder(player: Player): void {
     );
     player.sendClientMessage(Color.gray, "请在银行缴纳企业费用。");
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -99,7 +99,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     businessIds = await forfeitExpiredBusinesses();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] налог бизнесов (${source}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 企业税款（${source}）：${message}`);
     return;
   }
 
@@ -107,7 +107,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     return;
   }
 
-  omp.log(`[${SERVER_TAG}] налог бизнесов (${source}): изъято ${businessIds.length}`);
+  omp.log(`[${SERVER_TAG}] 企业税款（${source}）：已收回 ${businessIds.length} 家`);
 
   for (const businessId of businessIds) {
     applyForfeitedBusiness(businessId);
@@ -128,12 +128,12 @@ export function applyForfeitedBusiness(businessId: number): void {
     evictPlayersFromBusiness(
       businessId,
       business,
-      `Бизнес #${businessId} изъят государством за неуплату.`
+      `企业 #${businessId} 因未缴税款已被政府收回。`
     );
     notifyBusinessOwner(
       ownerId,
       businessId,
-      `Бизнес #${businessId} изъят государством за неуплату. Компенсация не выплачивается.`
+      `企业 #${businessId} 因未缴税款已被政府收回，不予补偿。`
     );
   }
 }
@@ -180,7 +180,7 @@ function evictPlayersFromBusiness(
       refreshStreamForPlayer(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   });
 }
@@ -204,7 +204,7 @@ function notifyBusinessOwner(ownerId: number, businessId: number, message: strin
     try {
       player.sendClientMessage(Color.error, message);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   });
 }

@@ -36,7 +36,7 @@ const DIALOG_STYLE_LIST = 2;
 const MAX_TAX_DAYS = 999;
 const MAX_MONEY = 2_147_483_647;
 
-const BIZ_MENU_ITEMS = ["Оплатить бизнес", "Снять деньги с бизнеса"] as const;
+const BIZ_MENU_ITEMS = ["缴纳企业税款", "提取企业资金"] as const;
 
 type PendingTax = {
   businessId: number;
@@ -63,7 +63,7 @@ export function clearBusinessTaxPending(player: Player): void {
   }
 }
 
-/** Вход из банка: пункт «Бизнес». */
+/** 银行入口：“企业”选项。 */
 export function showBusinessBankMenu(player: Player): void {
   const account = getAccount(player);
   if (!account) {
@@ -77,9 +77,9 @@ export function showBusinessBankMenu(player: Player): void {
         player,
         BANK_BIZ_EMPTY_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
-        "Бизнес",
-        "У вас нет бизнеса.",
-        "Назад",
+        "企业",
+        "你没有企业。",
+        "返回",
         ""
       );
     } catch {
@@ -93,10 +93,10 @@ export function showBusinessBankMenu(player: Player): void {
       player,
       BANK_BIZ_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Бизнес",
+      "企业",
       BIZ_MENU_ITEMS.join("\n"),
-      "Выбрать",
-      "Назад"
+      "选择",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开企业菜单。");
@@ -118,14 +118,14 @@ export function showBusinessTaxMenu(player: Player): void {
   const daily = dailyBusinessTax(business.price);
   const lines = [
     `${business.name} (#${business.id})`,
-    `Оплачено до: ${formatRentDate(business.taxPaidUntil)}`,
-    `Ежедневный налог: ${formatMoney(daily)}`,
+    `已缴费至：${formatRentDate(business.taxPaidUntil)}`,
+    `每日税款：${formatMoney(daily)}`,
   ];
 
   if (isTaxLastDay(business)) {
     lines.push("");
-    lines.push("Сегодня последний оплаченный день.");
-    lines.push("Завтра в 00:00 бизнес будет изъят, если не оплатите.");
+    lines.push("今天是最后一个已缴费日。");
+    lines.push("若未缴费，企业将于明日 00:00 被收回。");
   }
 
   try {
@@ -133,10 +133,10 @@ export function showBusinessTaxMenu(player: Player): void {
       player,
       BANK_BIZ_TAX_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Оплата бизнеса",
+      "缴纳企业税款",
       lines.join("\n"),
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开企业付款页面。");
@@ -159,10 +159,10 @@ function showDaysInputDialog(player: Player): void {
   const bank = Math.max(0, Math.floor(account.bank));
   const body = [
     `${business.name} (#${business.id})`,
-    `Ежедневный налог: ${formatMoney(daily)}`,
-    `Банковский счёт: ${formatMoney(bank)}`,
+    `每日税款：${formatMoney(daily)}`,
+    `银行账户：${formatMoney(bank)}`,
     "",
-    "Введите количество дней:",
+    "请输入缴费天数：",
   ].join("\n");
 
   try {
@@ -170,10 +170,10 @@ function showDaysInputDialog(player: Player): void {
       player,
       BANK_BIZ_TAX_DAYS_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Оплата бизнеса",
+      "缴纳企业税款",
       body,
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开天数输入页面。");
@@ -194,9 +194,9 @@ function showWithdrawInputDialog(player: Player): void {
 
   const body = [
     `${business.name} (#${business.id})`,
-    `Прибыль на счёте: ${formatMoney(business.balance)}`,
+    `账户余额：${formatMoney(business.balance)}`,
     "",
-    "Введите сумму снятия:",
+    "请输入提取金额：",
   ].join("\n");
 
   try {
@@ -204,10 +204,10 @@ function showWithdrawInputDialog(player: Player): void {
       player,
       BANK_BIZ_WITHDRAW_INPUT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Снятие с бизнеса",
+      "提取企业资金",
       body,
-      "Далее",
-      "Назад"
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开提款页面。");
@@ -315,16 +315,16 @@ export function handleBusinessTaxDialog(
         player,
         BANK_BIZ_TAX_CONFIRM_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
-        "Подтверждение",
+        "确认",
         [
           `${business.name} (#${business.id})`,
-          `Оплата: ${days} ${dayLabel(days)} — ${formatMoney(amount)}`,
-          `Новая дата оплаты: ${formatRentDate(paidUntil)}`,
+          `缴费：${days}天 — ${formatMoney(amount)}`,
+          `新的缴费日期：${formatRentDate(paidUntil)}`,
           "",
-          "Списание с банковского счёта.",
+          "费用将从银行账户扣除。",
         ].join("\n"),
-        "Оплатить",
-        "Назад"
+        "缴费",
+        "返回"
       );
     } catch {
       clearBusinessTaxPending(player);
@@ -384,16 +384,16 @@ export function handleBusinessTaxDialog(
         player,
         BANK_BIZ_WITHDRAW_CONFIRM_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
-        "Подтверждение",
+        "确认",
         [
           `${business.name} (#${business.id})`,
-          `Снять: ${formatMoney(amount)}`,
-          `Останется на счёте: ${formatMoney(business.balance - amount)}`,
+          `提取：${formatMoney(amount)}`,
+          `提取后余额：${formatMoney(business.balance - amount)}`,
           "",
-          "Деньги будут выданы наличными.",
+          "资金将以现金形式发放。",
         ].join("\n"),
-        "Снять",
-        "Назад"
+        "提取",
+        "返回"
       );
     } catch {
       pendingWithdraw.delete(slotId);
@@ -447,7 +447,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
   } catch (error: unknown) {
     payingTax.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] оплата бизнеса ${business.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 缴纳企业税款 ${business.id}（${account.name}）：${message}`);
     player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
   }
@@ -468,7 +468,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
     return;
   }
 
-  // БД уже обновлена в транзакции — кэш всегда синхронизируем.
+  // 数据库已在事务中更新，因此同步缓存。
   setBusinessTaxPaidUntil(business.id, result.paidUntil);
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {
@@ -522,7 +522,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
   } catch (error: unknown) {
     withdrawing.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] снятие с бизнеса ${business.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 提取企业资金 ${business.id}（${account.name}）：${message}`);
     player.sendClientMessage(Color.error, "提款失败。请重试。");
     return;
   }
@@ -543,7 +543,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
     return;
   }
 
-  // БД уже обновлена в транзакции — кэш всегда синхронизируем.
+  // 数据库已在事务中更新，因此同步缓存。
   setBusinessBalance(business.id, result.balanceLeft);
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {
@@ -594,14 +594,6 @@ function parseAmount(input: string): number | null {
   return amount;
 }
 
-function dayLabel(days: number): string {
-  const mod10 = days % 10;
-  const mod100 = days % 100;
-  if (mod10 === 1 && mod100 !== 11) {
-    return "день";
-  }
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
-    return "дня";
-  }
-  return "дней";
+function dayLabel(_days: number): string {
+  return "天";
 }
