@@ -123,35 +123,35 @@ export function bindAdminGoto(): void {
 
       const slot = parseSlot(args);
       if (slot === null) {
-        player.sendClientMessage(Color.error, "Использование: /goto [id]");
+        player.sendClientMessage(Color.error, "用法: /goto [id]");
         return;
       }
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (isSamePlayer(player, target)) {
-        player.sendClientMessage(Color.error, "Нельзя телепортироваться к себе.");
+        player.sendClientMessage(Color.error, "不能传送到自己那里。");
         return;
       }
 
       if (!canTeleport(player)) {
-        player.sendClientMessage(Color.error, "Сейчас нельзя телепортироваться.");
+        player.sendClientMessage(Color.error, "现在不能传送。");
         return;
       }
 
       const point = readPoint(target);
       if (!point || !teleportPlayer(player, point)) {
-        player.sendClientMessage(Color.error, "Не удалось телепортироваться.");
+        player.sendClientMessage(Color.error, "无法传送。");
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `Вы телепортировались к ${playerChatName(target)}.`
+        `你已传送到 ${playerChatName(target)}.`
       );
       broadcastAdmins(
         `[A] Администратор ${playerChatName(player)} телепортировался к ${playerChatName(target)}.`
@@ -170,40 +170,40 @@ export function bindAdminGoto(): void {
 
       const slot = parseSlot(args);
       if (slot === null) {
-        player.sendClientMessage(Color.error, "Использование: /gethere [id]");
+        player.sendClientMessage(Color.error, "用法: /gethere [id]");
         return;
       }
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (isSamePlayer(player, target)) {
-        player.sendClientMessage(Color.error, "Нельзя телепортировать себя.");
+        player.sendClientMessage(Color.error, "不能传送自己。");
         return;
       }
 
       if (!canTeleport(target)) {
-        player.sendClientMessage(Color.error, "Сейчас нельзя телепортировать игрока.");
+        player.sendClientMessage(Color.error, "现在不能传送玩家。");
         return;
       }
 
       const point = readPoint(player);
       if (!point || !teleportPlayer(target, point)) {
-        player.sendClientMessage(Color.error, "Не удалось телепортировать игрока.");
+        player.sendClientMessage(Color.error, "无法传送玩家。");
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `Вы телепортировали к себе ${playerChatName(target)}.`
+        `你已将 ${playerChatName(target)} 传送到自己这里。`
       );
       try {
         target.sendClientMessage(
           Color.info,
-          `Администратор ${playerChatName(player)} телепортировал вас.`
+          `管理员 ${playerChatName(player)} 已将你传送走。`
         );
       } catch {
         // Игрок уже вышел.

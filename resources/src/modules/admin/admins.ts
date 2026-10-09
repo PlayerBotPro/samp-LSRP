@@ -57,9 +57,9 @@ export function bindAdminsList(): void {
 
       list.sort((a, b) => b.level - a.level || a.slot - b.slot);
 
-      player.sendClientMessage(Color.info, "Администраторы в игре:");
+      player.sendClientMessage(Color.info, "游戏中的管理员:");
       if (list.length === 0) {
-        player.sendClientMessage(Color.white, "Никого нет.");
+        player.sendClientMessage(Color.white, "没有人。");
         return;
       }
 

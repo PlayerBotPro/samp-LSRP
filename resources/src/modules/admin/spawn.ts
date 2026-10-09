@@ -168,30 +168,30 @@ export function bindAdminSpawn(): void {
 
       if (raw) {
         if (!/^\d+$/.test(raw)) {
-          player.sendClientMessage(Color.error, "Использование: /spawn [id]");
+          player.sendClientMessage(Color.error, "用法: /spawn [id]");
           return;
         }
 
         const slot = Number(raw);
         if (!Number.isInteger(slot) || slot < 0) {
-          player.sendClientMessage(Color.error, "Использование: /spawn [id]");
+          player.sendClientMessage(Color.error, "用法: /spawn [id]");
           return;
         }
 
         const found = findTarget(slot);
         if (!found || !isAuthenticated(found)) {
-          player.sendClientMessage(Color.error, "Игрок не найден.");
+          player.sendClientMessage(Color.error, "未找到玩家。");
           return;
         }
 
         target = found;
       } else if (!isAuthenticated(player)) {
-        player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+        player.sendClientMessage(Color.error, "请先登录账号。");
         return;
       }
 
       if (!spawnToAccountPoint(target)) {
-        player.sendClientMessage(Color.error, "Не удалось заспавнить игрока.");
+        player.sendClientMessage(Color.error, "无法使玩家重生。");
         return;
       }
 
@@ -200,19 +200,19 @@ export function bindAdminSpawn(): void {
       const self = adminId !== null && adminId === targetId;
 
       if (self) {
-        player.sendClientMessage(Color.info, "Вы заспавнены.");
+        player.sendClientMessage(Color.info, "你已重生。");
         broadcastAdmins(`Администратор ${playerChatName(player)} заспавнил себя.`);
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `Вы заспавнили игрока ${playerChatName(target)}.`
+        `你已使玩家 ${playerChatName(target)} 重生。`
       );
       try {
         target.sendClientMessage(
           Color.info,
-          `Администратор ${playerChatName(player)} заспавнил вас.`
+          `管理员 ${playerChatName(player)} 已使你重生。`
         );
       } catch {
         // Уже вышел.

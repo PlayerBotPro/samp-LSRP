@@ -206,7 +206,7 @@ function showList(player: Player, page: number): void {
 
   const all = familiesSorted();
   if (all.length === 0) {
-    player.sendClientMessage(Color.error, "Семей пока нет.");
+    player.sendClientMessage(Color.error, "暂时还没有家族。");
     clearState(player);
     return;
   }
@@ -228,7 +228,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     clearState(player);
-    player.sendClientMessage(Color.error, "Не удалось открыть список семей.");
+    player.sendClientMessage(Color.error, "无法打开家族列表。");
   }
 }
 
@@ -321,7 +321,7 @@ function requireSelected(player: Player): FamilyRecord | null {
   const family = getFamily(familyId);
   if (!family) {
     selectedFamily.delete(slot);
-    player.sendClientMessage(Color.error, "Семья больше не существует.");
+    player.sendClientMessage(Color.error, "家族已不存在。");
     showList(player, pageByPlayer.get(slot) ?? 0);
     return null;
   }
@@ -346,7 +346,7 @@ function showHub(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть меню семьи.");
+    player.sendClientMessage(Color.error, "无法打开家族菜单。");
   }
 }
 
@@ -413,7 +413,7 @@ async function showInfo(player: Player): Promise<void> {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть информацию.");
+    player.sendClientMessage(Color.error, "无法打开信息。");
   }
 }
 
@@ -434,7 +434,7 @@ function showManage(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть управление.");
+    player.sendClientMessage(Color.error, "无法打开管理菜单。");
   }
 }
 
@@ -477,7 +477,7 @@ function showRename(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -499,7 +499,7 @@ function showRedesc(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -521,7 +521,7 @@ function showDeleteConfirm(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть подтверждение.");
+    player.sendClientMessage(Color.error, "无法打开确认对话框。");
   }
 }
 
@@ -535,14 +535,14 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   if (!name) {
     player.sendClientMessage(
       Color.error,
-      `Некорректное название. Только A-Z, a-z и пробелы (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
+      `名称无效。仅允许 A-Z, a-z 和空格 (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
     );
     showRename(player);
     return;
   }
 
   if (name.toLowerCase() === family.name.toLowerCase()) {
-    player.sendClientMessage(Color.info, "Название не изменилось.");
+    player.sendClientMessage(Color.info, "名称未更改。");
     showManage(player);
     return;
   }
@@ -553,13 +553,13 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (exists && exists.id !== family.id) {
-    player.sendClientMessage(Color.error, "Семья с таким названием уже существует.");
+    player.sendClientMessage(Color.error, "已有同名家族。");
     showRename(player);
     return;
   }
 
   if (!getFamily(family.id)) {
-    player.sendClientMessage(Color.error, "Семья больше не существует.");
+    player.sendClientMessage(Color.error, "家族已不存在。");
     const slot = playerId(player);
     if (slot !== null) {
       selectedFamily.delete(slot);
@@ -574,13 +574,13 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (!ok) {
-    player.sendClientMessage(Color.error, "Не удалось сохранить название.");
+    player.sendClientMessage(Color.error, "无法保存名称。");
     showManage(player);
     return;
   }
 
   refreshFamilyTags(family.id);
-  player.sendClientMessage(Color.info, `Название семьи изменено на «${name}».`);
+  player.sendClientMessage(Color.info, `家族名称已更改为 «${name}».`);
   showManage(player);
 }
 
@@ -594,7 +594,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
   if (!description) {
     player.sendClientMessage(
       Color.error,
-      `Введите описание (до ${FAMILY_DESC_MAX} символов).`
+      `请输入描述（最多 ${FAMILY_DESC_MAX} 个字符）。`
     );
     showRedesc(player);
     return;
@@ -606,7 +606,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (!ok || !getFamily(family.id)) {
-    player.sendClientMessage(Color.error, "Не удалось сохранить описание.");
+    player.sendClientMessage(Color.error, "无法保存描述。");
     const slot = playerId(player);
     if (slot !== null && !getFamily(family.id)) {
       selectedFamily.delete(slot);
@@ -617,7 +617,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
     return;
   }
 
-  player.sendClientMessage(Color.info, "Описание семьи обновлено.");
+  player.sendClientMessage(Color.info, "家族描述已更新。");
   showManage(player);
 }
 
@@ -635,7 +635,7 @@ async function deleteSelected(player: Player): Promise<void> {
   try {
     await deleteFamily(familyId);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось удалить семью.");
+    player.sendClientMessage(Color.error, "无法删除家族。");
     showManage(player);
     return;
   }
@@ -650,7 +650,7 @@ async function deleteSelected(player: Player): Promise<void> {
     selectedFamily.delete(slot);
   }
 
-  player.sendClientMessage(Color.info, `Семья «${familyName}» удалена.`);
+  player.sendClientMessage(Color.info, `家族 «${familyName}» 已删除。`);
   showList(player, page);
 }
 
@@ -670,7 +670,7 @@ function clearOnlineFamilyMembers(familyId: number): void {
     try {
       other.sendClientMessage(
         Color.info,
-        "Ваша семья была расформирована администрацией."
+        "你的家族已被管理员解散。"
       );
     } catch {
       // Слот пустой.

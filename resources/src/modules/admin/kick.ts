@@ -47,7 +47,7 @@ export function bindAdminKick(): void {
       if (!idPart) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /kick [id] [причина (не обязательно)]"
+          "用法: /kick [id] [原因 (可选)]"
         );
         return;
       }
@@ -56,24 +56,24 @@ export function bindAdminKick(): void {
       if (!Number.isInteger(slot) || slot < 0) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /kick [id] [причина (не обязательно)]"
+          "用法: /kick [id] [原因 (可选)]"
         );
         return;
       }
 
       const target = omp.players.at(slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "Игрок не найден.");
+          player.sendClientMessage(Color.error, "未找到玩家。");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 

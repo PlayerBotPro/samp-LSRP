@@ -54,24 +54,24 @@ export function bindAdminSethp(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /sethp [id] [hp] (0-100)"
+          "用法: /sethp [id] [hp] (0-100)"
         );
         return;
       }
 
       const target = omp.players.at(parsed.slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "Игрок не найден.");
+          player.sendClientMessage(Color.error, "未找到玩家。");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -79,7 +79,7 @@ export function bindAdminSethp(): void {
       if (!samePlayer && isAdminLoggedIn(target)) {
         player.sendClientMessage(
           Color.error,
-          "Администраторам запрещено изменять уровень здоровья."
+          "禁止管理员更改生命值。"
         );
         return;
       }
@@ -92,7 +92,7 @@ export function bindAdminSethp(): void {
 
       player.sendClientMessage(
         Color.info,
-        `HP игрока ${playerChatName(target)} установлено: ${parsed.hp}`
+        `玩家 ${playerChatName(target)} 的 HP 已设置为: ${parsed.hp}`
       );
       broadcastAdmins(
         `[A] Администратор ${playerChatName(player)} установил HP игроку ${playerChatName(target)}: ${parsed.hp}.`

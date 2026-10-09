@@ -16,11 +16,11 @@ export function bindAdminHelp(): void {
       const account = getAccount(player);
       const level = Math.min(MAX_ADMIN_LEVEL, account?.adminLevel ?? 1);
 
-      player.sendClientMessage(Color.info, "Доступные команды:");
+      player.sendClientMessage(Color.info, "可用命令:");
       for (let n = 1; n <= level; n += 1) {
         const cmds = ADMIN_COMMANDS_BY_LEVEL[n] ?? [];
         const suffix = cmds.length > 0 ? ` ${cmds.join(" ")}` : "";
-        player.sendClientMessage(Color.white, `${n} уровень:${suffix}`);
+        player.sendClientMessage(Color.white, `${n} 级别:${suffix}`);
       }
     },
     true

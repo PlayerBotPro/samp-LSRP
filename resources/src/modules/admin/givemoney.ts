@@ -67,13 +67,13 @@ function notifyGive(
 
   admin.sendClientMessage(
     Color.info,
-    `Вы выдали игроку ${targetTag} $${credited} ${where}.`
+    `你向玩家 ${targetTag} 发放了 $${credited} ${where}.`
   );
 
   if (isPlayerActive(target)) {
     target.sendClientMessage(
       Color.info,
-      `Администратор ${adminTag} выдал вам $${credited} ${where}.`
+      `管理员 ${adminTag} 向你发放了 $${credited} ${where}.`
     );
   }
 }
@@ -91,19 +91,19 @@ export function bindAdminGivemoney(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /givemoney [id] [0-1] [сумма] (0 - наличные, 1 - банк)"
+          "用法: /givemoney [id] [0-1] [金额] (0 - 现金, 1 - 银行)"
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -125,7 +125,7 @@ async function applyGive(
   }
 
   if (pending.has(account.id)) {
-    admin.sendClientMessage(Color.error, "Деньги этому игроку уже выдают. Подождите.");
+    admin.sendClientMessage(Color.error, "正在向该玩家发放资金。请稍候。");
     return;
   }
 
@@ -136,7 +136,7 @@ async function applyGive(
   if (credited <= 0) {
     admin.sendClientMessage(
       Color.error,
-      toBank ? "Банковский счёт заполнен." : "Наличные заполнены."
+      toBank ? "银行账户已满。" : "现金已满。"
     );
     return;
   }
@@ -164,7 +164,7 @@ async function applyGive(
     if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
       admin.sendClientMessage(
         Color.info,
-        `Вы выдали $${credited}. Игрок вышел, сумма сохранена.`
+        `你已发放 $${credited}. 玩家已离线，金额已保存。`
       );
       return;
     }
@@ -198,7 +198,7 @@ async function applyGive(
         applyWallet(target, fresh);
       }
     }
-    admin.sendClientMessage(Color.error, "Не удалось сохранить деньги.");
+    admin.sendClientMessage(Color.error, "无法保存资金。");
   } finally {
     pending.delete(account.id);
   }

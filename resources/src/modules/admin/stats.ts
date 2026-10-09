@@ -19,32 +19,32 @@ export function bindAdminStats(): void {
 
       const raw = args.trim();
       if (!raw || !/^\d+$/.test(raw)) {
-        player.sendClientMessage(Color.error, "Использование: /stats [id]");
+        player.sendClientMessage(Color.error, "用法: /stats [id]");
         return;
       }
 
       const slot = Number(raw);
       if (!Number.isInteger(slot) || slot < 0) {
-        player.sendClientMessage(Color.error, "Использование: /stats [id]");
+        player.sendClientMessage(Color.error, "用法: /stats [id]");
         return;
       }
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       const targetAccount = getAccount(target);
       if (!targetAccount) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (targetAccount.adminLevel >= 1) {
         player.sendClientMessage(
           Color.error,
-          "Нельзя просматривать статистику администратора."
+          "不能查看管理员的统计数据。"
         );
         return;
       }

@@ -85,19 +85,19 @@ export function bindAdminAns(): void {
       );
 
       if (!idPart || !text) {
-        player.sendClientMessage(Color.error, "Использование: /ans [id] [текст]");
+        player.sendClientMessage(Color.error, "用法: /ans [id] [文本]");
         return;
       }
 
       const slot = Number(idPart);
       if (!Number.isInteger(slot) || slot < 0) {
-        player.sendClientMessage(Color.error, "Использование: /ans [id] [текст]");
+        player.sendClientMessage(Color.error, "用法: /ans [id] [文本]");
         return;
       }
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 

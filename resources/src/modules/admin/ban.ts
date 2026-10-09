@@ -96,7 +96,7 @@ async function applyBan(
 ): Promise<void> {
   const account = getAccount(target);
   if (!account) {
-    admin.sendClientMessage(Color.error, "Игрок не авторизован.");
+    admin.sendClientMessage(Color.error, "玩家尚未登录。");
     return;
   }
 
@@ -105,7 +105,7 @@ async function applyBan(
   try {
     await saveUserBan(account.id, untilUnix, reason);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось сохранить бан.");
+    admin.sendClientMessage(Color.error, "无法保存封禁记录。");
     return;
   }
 
@@ -127,7 +127,7 @@ async function applyBan(
 async function applyUnban(admin: Player, rawName: string): Promise<void> {
   const name = rawName.trim();
   if (!name || name.includes(" ") || name.length > 24) {
-    admin.sendClientMessage(Color.error, "Использование: /unban [Nick_Name]");
+    admin.sendClientMessage(Color.error, "用法: /unban [Nick_Name]");
     return;
   }
 
@@ -135,25 +135,25 @@ async function applyUnban(admin: Player, rawName: string): Promise<void> {
   try {
     row = await findUserByName(name);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось проверить бан.");
+    admin.sendClientMessage(Color.error, "无法检查封禁状态。");
     return;
   }
 
   if (!row) {
-    admin.sendClientMessage(Color.error, "Игрок не найден.");
+    admin.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   const until = parseBannedUntil(row.banned_until);
   if (!isBanActive(until)) {
-    admin.sendClientMessage(Color.error, "Игрок не забанен.");
+    admin.sendClientMessage(Color.error, "该玩家未被封禁。");
     return;
   }
 
   try {
     await clearUserBan(row.id);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось снять бан.");
+    admin.sendClientMessage(Color.error, "无法解除封禁。");
     return;
   }
 
@@ -173,19 +173,19 @@ export function bindAdminBan(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /ban [id] [дни] [причина]"
+          "用法: /ban [id] [天数] [原因]"
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "Игрок не авторизован.");
+        player.sendClientMessage(Color.error, "玩家尚未登录。");
         return;
       }
 

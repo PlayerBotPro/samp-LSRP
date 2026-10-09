@@ -90,20 +90,20 @@ export function bindAdminSetskin(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /setskin [id] [skin] (1-311)"
+          "用法: /setskin [id] [skin] (1-311)"
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -122,12 +122,12 @@ async function applySkin(admin: Player, target: Player, skin: number): Promise<v
   try {
     await saveUserSkin(account.id, skin);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось сохранить скин.");
+    admin.sendClientMessage(Color.error, "无法保存皮肤。");
     return;
   }
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
-    admin.sendClientMessage(Color.error, "Игрок не найден.");
+    admin.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -139,13 +139,13 @@ async function applySkin(admin: Player, target: Player, skin: number): Promise<v
 
   admin.sendClientMessage(
     Color.info,
-    `Вы изменили внешность игроку ${targetTag} на ${skin} скина.`
+    `你已将玩家 ${targetTag} 的外观更改为皮肤 ${skin}.`
   );
 
   if (isPlayerActive(target)) {
     target.sendClientMessage(
       Color.info,
-      `Администратор ${adminTag} изменил вашу внешность на ${skin} скина.`
+      `管理员 ${adminTag} 已将你的外观更改为皮肤 ${skin}.`
     );
   }
 }

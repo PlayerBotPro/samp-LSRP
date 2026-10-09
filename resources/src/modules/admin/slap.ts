@@ -60,34 +60,34 @@ export function bindAdminSlap(): void {
 
       const idPart = args.trim();
       if (!idPart) {
-        player.sendClientMessage(Color.error, "Использование: /slap [id]");
+        player.sendClientMessage(Color.error, "用法: /slap [id]");
         return;
       }
 
       const slot = Number(idPart);
       if (!Number.isInteger(slot) || slot < 0) {
-        player.sendClientMessage(Color.error, "Использование: /slap [id]");
+        player.sendClientMessage(Color.error, "用法: /slap [id]");
         return;
       }
 
       const target = omp.players.at(slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "Игрок не найден.");
+          player.sendClientMessage(Color.error, "未找到玩家。");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (!slapPlayer(target)) {
-        player.sendClientMessage(Color.error, "Не удалось подкинуть игрока.");
+        player.sendClientMessage(Color.error, "无法击飞玩家。");
         return;
       }
 

@@ -99,7 +99,7 @@ export function bindAdminTpcor(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /tpcor [x] [y] [z]"
+          "用法: /tpcor [x] [y] [z]"
         );
         return;
       }

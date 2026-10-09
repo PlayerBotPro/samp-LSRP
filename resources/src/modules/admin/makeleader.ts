@@ -85,7 +85,7 @@ function showOrgList(player: Player): boolean {
     );
     return true;
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть список.");
+    player.sendClientMessage(Color.error, "无法打开列表。");
     return false;
   }
 }
@@ -150,12 +150,12 @@ async function applyLeader(
   try {
     await saveUserOrg(account.id, orgId, orgRank);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось сохранить в базу.");
+    admin.sendClientMessage(Color.error, "无法保存到数据库。");
     return;
   }
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
-    admin.sendClientMessage(Color.error, "Игрок не найден.");
+    admin.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -166,9 +166,9 @@ async function applyLeader(
 
   const tag = playerChatName(target);
   if (orgId === ORG_NONE) {
-    admin.sendClientMessage(Color.info, `Вы сняли ${tag} с лидерки.`);
+    admin.sendClientMessage(Color.info, `你已撤销 ${tag} 的领导职务。`);
     if (isPlayerActive(target)) {
-      target.sendClientMessage(Color.info, "Вас сняли с лидерки.");
+      target.sendClientMessage(Color.info, "你的领导职务已被撤销。");
     }
     broadcastAdmins(
       `[A] Администратор ${playerChatName(admin)} снял ${tag} с лидерки.`
@@ -177,11 +177,11 @@ async function applyLeader(
   }
 
   const orgName = getOrganization(orgId)?.name ?? "организации";
-  admin.sendClientMessage(Color.info, `Вы назначили ${tag} лидером: ${orgName}.`);
+  admin.sendClientMessage(Color.info, `你已任命 ${tag} 为组织 ${orgName} 的领导。`);
   if (isPlayerActive(target)) {
     target.sendClientMessage(
       Color.info,
-      `Вас назначили лидером организации ${orgName}.`
+      `你已被任命为组织 ${orgName} 的领导。`
     );
   }
   broadcastAdmins(
@@ -201,13 +201,13 @@ export function bindAdminMakeleader(): void {
       const rawId = args.trim();
       const slot = Number(rawId);
       if (!rawId || !Number.isInteger(slot) || slot < 0) {
-        player.sendClientMessage(Color.error, "Использование: /makeleader [id]");
+        player.sendClientMessage(Color.error, "用法: /makeleader [id]");
         return;
       }
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -254,7 +254,7 @@ export function bindAdminMakeleader(): void {
     const target = findTarget(pending.slot);
     const targetAccount = target ? getAccount(target) : null;
     if (!target || !targetAccount || targetAccount.id !== pending.accountId) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 

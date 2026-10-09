@@ -65,19 +65,19 @@ export function bindAdminSetlevel(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          `Использование: /setlevel [id] [lvl] (${MIN_PLAYER_LEVEL}-${MAX_LEVEL})`
+          `用法: /setlevel [id] [lvl] (${MIN_PLAYER_LEVEL}-${MAX_LEVEL})`
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -94,7 +94,7 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
   }
 
   if (pending.has(account.id)) {
-    admin.sendClientMessage(Color.error, "Уровень этого игрока уже меняют. Подождите.");
+    admin.sendClientMessage(Color.error, "该玩家的等级正在被更改。请稍候。");
     return;
   }
 
@@ -110,7 +110,7 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
     if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
       admin.sendClientMessage(
         Color.info,
-        `Вы установили уровень ${level}. Игрок вышел, уровень сохранён.`
+        `你已设置等级 ${level}. 玩家已离线，等级已保存。`
       );
       return;
     }
@@ -129,17 +129,17 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
 
     admin.sendClientMessage(
       Color.info,
-      `Вы установили уровень игроку ${targetTag}: ${level}. Опыт: 0/${need}.`
+      `你已将玩家 ${targetTag} 的等级设为: ${level}. 经验值: 0/${need}.`
     );
 
     if (isPlayerActive(target)) {
       target.sendClientMessage(
         Color.info,
-        `Администратор ${adminTag} установил вам уровень ${level}. Опыт: 0/${need}.`
+        `管理员 ${adminTag} 已将你的等级设为 ${level}. 经验值: 0/${need}.`
       );
     }
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось сохранить уровень.");
+    admin.sendClientMessage(Color.error, "无法保存等级。");
   } finally {
     pending.delete(account.id);
   }

@@ -30,7 +30,7 @@ export function bindAdminAo(): void {
 
       const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
       if (!text) {
-        player.sendClientMessage(Color.error, "Использование: /ao [текст]");
+        player.sendClientMessage(Color.error, "用法: /ao [文本]");
         return;
       }
 

@@ -35,12 +35,12 @@ export function bindAdminAsellhouse(): void {
 
       const houseId = parseHouseId(args);
       if (houseId === null) {
-        player.sendClientMessage(Color.error, "Использование: /asellhouse [id дома]");
+        player.sendClientMessage(Color.error, "用法: /asellhouse [房屋 id]");
         return;
       }
 
       if (!getHouse(houseId)) {
-        player.sendClientMessage(Color.error, "Дом с таким номером не найден.");
+        player.sendClientMessage(Color.error, "未找到该编号的房屋。");
         return;
       }
 
@@ -62,16 +62,16 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] asellhouse ${account.name} дом ${houseId}: ${message}`);
-    admin.sendClientMessage(Color.error, "Не удалось освободить дом.");
+    admin.sendClientMessage(Color.error, "无法腾空房屋。");
     return;
   }
 
   if (!result.ok) {
     if (result.reason === "not_found") {
-      admin.sendClientMessage(Color.error, "Дом с таким номером не найден.");
+      admin.sendClientMessage(Color.error, "未找到该编号的房屋。");
       return;
     }
-    admin.sendClientMessage(Color.error, "Не удалось освободить дом.");
+    admin.sendClientMessage(Color.error, "无法腾空房屋。");
     return;
   }
 
@@ -83,10 +83,10 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
   if (result.wasOccupied) {
     admin.sendClientMessage(
       Color.info,
-      `Дом №${houseId} освобождён. Бывший владелец: id ${result.previousOwnerId}.`
+      `房屋 №${houseId} 已腾空。前任房主: id ${result.previousOwnerId}.`
     );
     return;
   }
 
-  admin.sendClientMessage(Color.info, `Дом №${houseId} уже был свободен. Состояние обновлено.`);
+  admin.sendClientMessage(Color.info, `房屋 №${houseId} 已经空置。状态已更新。`);
 }

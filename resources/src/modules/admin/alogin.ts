@@ -90,7 +90,7 @@ export function promptAdminPasswordSetup(player: Player): void {
 function kickAfterFails(player: Player): void {
   player.sendClientMessage(
     Color.error,
-    "Три неверные попытки входа в админку. Кик."
+    "管理员登录连续输错三次。踢出。"
   );
   kickSamePlayer(player);
 }
@@ -98,12 +98,12 @@ function kickAfterFails(player: Player): void {
 async function startAlogin(player: Player): Promise<void> {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
   if (isAdminLoggedIn(player)) {
-    player.sendClientMessage(Color.info, "Вы уже авторизованы в админке.");
+    player.sendClientMessage(Color.info, "你已经登录管理员面板。");
     return;
   }
 
@@ -111,7 +111,7 @@ async function startAlogin(player: Player): Promise<void> {
   try {
     creds = await findAdminCredentials(account.id);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось проверить админку.");
+    player.sendClientMessage(Color.error, "无法检查管理员面板。");
     return;
   }
 
@@ -143,14 +143,14 @@ async function finishSetPassword(
     const hash = await hashPassword(password);
     await saveAdminPassword(account.id, hash);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось сохранить пароль админки.");
+    player.sendClientMessage(Color.error, "无法保存管理员密码。");
     return;
   }
 
   markAdminLoggedIn(player);
   player.sendClientMessage(
     Color.info,
-    `Пароль админки сохранён. Вход выполнен (lvl ${account.adminLevel}).`
+    `管理员密码已保存。登录成功 (lvl ${account.adminLevel}).`
   );
 }
 
@@ -164,7 +164,7 @@ async function tryLogin(player: Player, password: string): Promise<void> {
   try {
     creds = await findAdminCredentials(account.id);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось проверить пароль.");
+    player.sendClientMessage(Color.error, "无法验证密码。");
     return;
   }
 
@@ -178,7 +178,7 @@ async function tryLogin(player: Player, password: string): Promise<void> {
     markAdminLoggedIn(player);
     player.sendClientMessage(
       Color.info,
-      `Вход в админку выполнен (lvl ${creds.adminLevel}).`
+      `已登录管理员面板 (lvl ${creds.adminLevel}).`
     );
     return;
   }

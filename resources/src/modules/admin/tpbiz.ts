@@ -72,7 +72,7 @@ function showList(player: Player, page: number): void {
   }
 
   if (businesses().length === 0) {
-    player.sendClientMessage(Color.error, "Бизнесы не загружены.");
+    player.sendClientMessage(Color.error, "企业尚未加载。");
     return;
   }
 
@@ -92,7 +92,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     pageByPlayer.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось открыть список бизнесов.");
+    player.sendClientMessage(Color.error, "无法打开企业列表。");
   }
 }
 
@@ -159,16 +159,16 @@ function teleportToBusiness(player: Player, business: BusinessRecord): boolean {
 
 function goToBusiness(player: Player, business: BusinessRecord): void {
   if (!canTeleport(player)) {
-    player.sendClientMessage(Color.error, "Сейчас нельзя телепортироваться.");
+    player.sendClientMessage(Color.error, "现在不能传送。");
     return;
   }
 
   if (!teleportToBusiness(player, business)) {
-    player.sendClientMessage(Color.error, "Не удалось телепортироваться.");
+    player.sendClientMessage(Color.error, "无法传送。");
     return;
   }
 
-  player.sendClientMessage(Color.info, `Телепорт к бизнесу #${business.id}: ${business.name}.`);
+  player.sendClientMessage(Color.info, `传送至企业 #${business.id}: ${business.name}.`);
 }
 
 function clearPage(player: Player): void {
@@ -199,7 +199,7 @@ export function bindAdminTpbiz(): void {
         const maxId = all.length > 0 ? all[all.length - 1]!.id : 0;
         player.sendClientMessage(
           Color.error,
-          maxId > 0 ? `Использование: /tpbiz [1-${maxId}]` : "Бизнесы не загружены."
+          maxId > 0 ? `用法: /tpbiz [1-${maxId}]` : "企业尚未加载。"
         );
         return;
       }

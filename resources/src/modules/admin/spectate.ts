@@ -99,19 +99,19 @@ function tryStartSpectate(player: Player, raw: string): void {
   }
 
   if (!raw) {
-    player.sendClientMessage(Color.error, "Использование: /sp [id]");
+    player.sendClientMessage(Color.error, "用法: /sp [id]");
     return;
   }
 
   const targetSlot = Number(raw);
   if (!Number.isInteger(targetSlot) || targetSlot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /sp [id]");
+    player.sendClientMessage(Color.error, "用法: /sp [id]");
     return;
   }
 
   const target = findTarget(targetSlot);
   if (!target || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -121,23 +121,23 @@ function tryStartSpectate(player: Player, raw: string): void {
   }
 
   if (adminSlot === targetSlot) {
-    player.sendClientMessage(Color.error, "Нельзя следить за самим собой.");
+    player.sendClientMessage(Color.error, "不能观察自己。");
     return;
   }
 
   if (isAdminTarget(target)) {
-    player.sendClientMessage(Color.error, "Нельзя следить за администратором.");
+    player.sendClientMessage(Color.error, "不能观察管理员。");
     return;
   }
 
   if (!canBeSpectated(target)) {
-    player.sendClientMessage(Color.error, "Сейчас за этим игроком нельзя следить.");
+    player.sendClientMessage(Color.error, "现在不能观察该玩家。");
     return;
   }
 
   const existing = sessions.get(adminSlot);
   if (existing?.targetSlot === targetSlot) {
-    player.sendClientMessage(Color.gray, "Вы уже следите за этим игроком.");
+    player.sendClientMessage(Color.gray, "你已经在观察该玩家。");
     return;
   }
 
@@ -145,26 +145,26 @@ function tryStartSpectate(player: Player, raw: string): void {
   if (!existing && isPlayerSpectating(player)) {
     player.sendClientMessage(
       Color.error,
-      "Сначала выйдите из режима камеры: /spoff"
+      "请先退出摄像机模式: /spoff"
     );
     return;
   }
 
   if (!existing && !canAdminStartSpectate(player)) {
-    player.sendClientMessage(Color.error, "Сейчас нельзя начать слежку.");
+    player.sendClientMessage(Color.error, "现在不能开始观察。");
     return;
   }
 
   const returnPoint = existing?.returnPoint ?? readPoint(player);
   if (!returnPoint) {
-    player.sendClientMessage(Color.error, "Не удалось сохранить позицию.");
+    player.sendClientMessage(Color.error, "无法保存位置。");
     return;
   }
 
   leaveVehicle(player);
 
   if (!attachSpectate(player, target)) {
-    player.sendClientMessage(Color.error, "Не удалось начать слежку.");
+    player.sendClientMessage(Color.error, "无法开始观察。");
     if (existing) {
       // Переключение на другую цель сорвалось — вернуть камеру на прежнюю.
       const prev = findTarget(existing.targetSlot);
@@ -207,7 +207,7 @@ function tryStartSpectate(player: Player, raw: string): void {
 
   player.sendClientMessage(
     Color.info,
-    `Вы начали слежку за ${playerChatName(target)}.`
+    `你开始观察 ${playerChatName(target)}.`
   );
   broadcastAdmins(
     `[A] Администратор ${playerChatName(player)} начал слежку за ${playerChatName(target)}.`
@@ -230,12 +230,12 @@ function tryStopSpectate(player: Player): void {
     } catch {
       // Уже не в спеке.
     }
-    player.sendClientMessage(Color.info, "Вы вышли из режима слежки.");
+    player.sendClientMessage(Color.info, "你已退出观察模式。");
     return;
   }
 
   if (hasAdminAccess(player, MIN_LEVEL)) {
-    player.sendClientMessage(Color.error, "Вы не в режиме слежки.");
+    player.sendClientMessage(Color.error, "你当前不在观察模式。");
   }
 }
 

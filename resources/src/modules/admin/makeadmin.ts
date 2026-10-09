@@ -57,28 +57,28 @@ export function bindAdminMakeadmin(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /makeadmin [id] [lvl] (0-7)"
+          "用法: /makeadmin [id] [lvl] (0-7)"
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (playerId(player) === playerId(target)) {
         player.sendClientMessage(
           Color.error,
-          "Нельзя выдать или снять админку себе."
+          "不能给自己授予或撤销管理员权限。"
         );
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
@@ -101,12 +101,12 @@ async function grantAdmin(
   try {
     await saveAdminAccess(account.id, level);
   } catch {
-    admin.sendClientMessage(Color.error, "Не удалось сохранить админку.");
+    admin.sendClientMessage(Color.error, "无法保存管理员权限。");
     return;
   }
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
-    admin.sendClientMessage(Color.error, "Игрок не найден.");
+    admin.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -116,15 +116,15 @@ async function grantAdmin(
   const tag = playerChatName(target);
 
   if (level < 1) {
-    admin.sendClientMessage(Color.info, `Вы сняли админку: ${tag}.`);
-    target.sendClientMessage(Color.info, "Вас сняли с администрирования.");
+    admin.sendClientMessage(Color.info, `你已撤销 ${tag} 的管理员权限。`);
+    target.sendClientMessage(Color.info, "你的管理员权限已被撤销。");
     return;
   }
 
-  admin.sendClientMessage(Color.info, `Вы выдали админку ${tag}: ${level} lvl.`);
+  admin.sendClientMessage(Color.info, `你已授予 ${tag} 管理员权限: ${level} lvl.`);
   target.sendClientMessage(
     Color.info,
-    `Вам выдали администрирование. Уровень: ${level}. Придумайте пароль от админки.`
+    `你已获得管理员权限。等级: ${level}. 请设置管理员面板密码。`
   );
   promptAdminPasswordSetup(target);
 }

@@ -90,7 +90,7 @@ export function bindAdminRespcar(): void {
       if (pending) {
         player.sendClientMessage(
           Color.error,
-          "Таймер респауна транспорта уже запущен."
+          "载具重生计时器已经启动。"
         );
         return;
       }

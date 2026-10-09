@@ -79,25 +79,25 @@ export function bindAdminMute(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /mute [id] [минуты] [причина (не обязательно)]"
+          "用法: /mute [id] [分钟] [原因 (可选)]"
         );
         return;
       }
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "Игрок не найден.");
+        player.sendClientMessage(Color.error, "未找到玩家。");
         return;
       }
 
       if (account.adminLevel >= 1) {
-        player.sendClientMessage(Color.error, "Нельзя поставить мут администратору.");
+        player.sendClientMessage(Color.error, "不能禁言管理员。");
         return;
       }
 
@@ -131,7 +131,7 @@ async function applyMute(
       patchAccount(target, { mutedUntil: previous });
       watchMute(target);
     }
-    admin.sendClientMessage(Color.error, "Не удалось сохранить мут.");
+    admin.sendClientMessage(Color.error, "无法保存禁言记录。");
     return;
   }
 
