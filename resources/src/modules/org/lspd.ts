@@ -8,7 +8,7 @@ import type { OrgGateDef } from "./types";
 export const ORG_LSPD_ID = 5;
 export const LSPD_INTERIOR = 10;
 
-/** = ORG_ARMY_ID; без импорта army.ts (цикл с ARMY_GATE_ORG_IDS). */
+/** = ORG_ARMY_ID; 不导入 army.ts（避免与 ARMY_GATE_ORG_IDS 形成循环依赖）。 */
 const ORG_ARMY_FOR_BARRIER = 1;
 
 export const LSPD = defineGovOrg(
@@ -26,9 +26,9 @@ export const LSPD = defineGovOrg(
   POLICE_RANKS
 );
 
-/** Ворота гаража: без Армии. */
+/** 车库大门：不包括军队。 */
 export const LAW_ORG_IDS = [ORG_LSPD_ID, ORG_POLICE_ID, ORG_FBI_ID] as const;
-/** Шлагбаум у входа: + Армия (доставка патронов). */
+/** 入口道闸：包括军队（弹药运送）。 */
 const BARRIER_ORG_IDS = [
   ORG_LSPD_ID,
   ORG_POLICE_ID,
@@ -36,8 +36,8 @@ const BARRIER_ORG_IDS = [
   ORG_ARMY_FOR_BARRIER,
 ] as const;
 const BARRIER_DENY =
-  "Открыть могут сотрудники LSPD, областной полиции, FBI и Армии.";
-const GARAGE_DENY = "Открыть могут сотрудники LSPD, областной полиции и FBI.";
+  "LSPD、州警察、FBI 和军队员工可以打开。";
+const GARAGE_DENY = "LSPD、州警察和 FBI 员工可以打开。";
 
 export const LSPD_GATES: OrgGateDef[] = [
   {

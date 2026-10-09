@@ -24,9 +24,9 @@ const TICK_MS = 200;
 const AMMO_LABEL_HEIGHT = 1.4;
 const AMMO_LABEL_DRAW_DISTANCE = 12;
 const MAX_ARMOR = 100;
-const DENY = "Вы не состоите в Армии.";
+const DENY = "你不属于军队。";
 
-/** Аммунация Армии (интерьер 6, VW = org_id). */
+/** 军队军械库 (室内 6，VW = org_id). */
 const POINT = {
   x: 312.4084,
   y: -165.5791,
@@ -41,7 +41,7 @@ type LockerItem = {
 };
 
 const ITEMS: readonly LockerItem[] = [
-  { label: "Бронежилет", kind: "armor", id: 0 },
+  { label: "防弹衣", kind: "armor", id: 0 },
   { label: "Desert Eagle", kind: "weapon", id: 24, ammo: 50 },
   { label: "M4", kind: "weapon", id: 31, ammo: 150 },
   { label: "Rifle", kind: "weapon", id: 33, ammo: 50 },
@@ -52,7 +52,7 @@ let ammoStockLabel: TextLabel | null = null;
 
 function ammoStockLabelText(): string {
   const ammo = getWarehouse(ORG_ARMY_ID)?.ammo ?? 0;
-  return `Патроны: ${ammo}`;
+  return `弹药: ${ammo}`;
 }
 
 export function refreshArmyAmmoStockLabel(): void {
@@ -63,7 +63,7 @@ export function refreshArmyAmmoStockLabel(): void {
   try {
     ammoStockLabel.updateText(Color.info, ammoStockLabelText());
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已销毁。
   }
 }
 
@@ -146,7 +146,7 @@ function tickLocker(): void {
       inside.add(id);
       tryOpen(player);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -167,7 +167,7 @@ function canUseLocker(player: Player, tellDeny = false): boolean {
 
   if (account.hospitalized) {
     if (tellDeny) {
-      tell(player, Color.error, "Сначала пройдите лечение в больнице.");
+      tell(player, Color.error, "请先在医院接受治疗。");
     }
     return false;
   }
@@ -190,15 +190,15 @@ function showLocker(player: Player): void {
       player,
       ARMY_LOCKER_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `Оружейная | Патроны: ${stock}`,
+      `军械库 | 弹药: ${stock}`,
       ITEMS.map(
         (item, index) => `${index + 1}. ${lockerItemLabel(item.label, item)}`
       ).join("\n"),
-      "Взять",
-      "Закрыть"
+      "领取",
+      "关闭"
     );
   } catch {
-    tell(player, Color.error, "Не удалось открыть склад.");
+    tell(player, Color.error, "无法打开仓库。");
   }
 }
 
@@ -219,7 +219,7 @@ function giveItem(player: Player, item: LockerItem): void {
   try {
     if (item.kind === "armor") {
       grantArmour(player, MAX_ARMOR);
-      tell(player, Color.info, "Вы надели бронежилет.");
+      tell(player, Color.info, "你穿上了防弹衣。");
       return;
     }
 
@@ -242,14 +242,14 @@ function giveItem(player: Player, item: LockerItem): void {
       tell(
         player,
         Color.info,
-        `Вы взяли: ${item.label} (-${cost} патр., склад: ${left}).`
+        `你领取了： ${item.label} (-${cost} 发子弹, 库存： ${left}).`
       );
       return;
     }
 
-    tell(player, Color.info, `Вы взяли: ${item.label}.`);
+    tell(player, Color.info, `你领取了： ${item.label}.`);
   } catch {
-    tell(player, Color.error, "Не удалось выдать снаряжение.");
+    tell(player, Color.error, "无法发放装备。");
   }
 }
 
@@ -257,7 +257,7 @@ function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

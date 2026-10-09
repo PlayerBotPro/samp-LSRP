@@ -22,8 +22,8 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "Открыть могут сотрудники LSPD, областной полиции и FBI.";
-const DENY_AMMUNATION = "В аммунацию могут войти сотрудники областной полиции и FBI.";
+const DENY = "LSPD、州警察和 FBI 员工可以打开。";
+const DENY_AMMUNATION = "州警察和 FBI 员工可以进入军械库。";
 const AMMUNATION_ALLOWED = [ORG_POLICE_ID, ORG_FBI_ID] as const;
 
 type DestKey = "office" | "parking" | "ammunation" | "roof";
@@ -250,7 +250,7 @@ export function bindPoliceDoors(): void {
       return;
     }
 
-    // Выход из аммунации — без проверки органа (уже внутри).
+    // 离开军械库时无需检查组织（玩家已经在内部).
     if (kind !== "ammoExit" && !canUseStaffDoor(player, true)) {
       return;
     }
@@ -308,7 +308,7 @@ function tickPoliceDoors(): void {
 
       onPickup.delete(id);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -347,7 +347,7 @@ function openMenu(player: Player, door: PoliceDoor): void {
     );
   } catch {
     pending.delete(id);
-    deny(player, "Не удалось открыть меню.");
+    deny(player, "无法打开菜单。");
   }
 }
 
@@ -355,7 +355,7 @@ function canUseStaffDoor(player: Player, tellDeny: boolean): boolean {
   const account = getAccount(player);
   if (account?.hospitalized) {
     if (tellDeny) {
-      deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+      deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     }
     return false;
   }
@@ -426,7 +426,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -448,7 +448,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

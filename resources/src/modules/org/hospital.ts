@@ -9,16 +9,16 @@ const FEMALE_SKIN = 170;
 
 function hospitalRanks(): OrgRankDef[] {
   const rows: Array<{ title: string; male: number; pay: number }> = [
-    { title: "Интерн", male: 274, pay: 1800 },
-    { title: "Младший мед. работник", male: 274, pay: 2300 },
-    { title: "Старший мед. работник", male: 70, pay: 2900 },
-    { title: "Врач-участковый", male: 71, pay: 3600 },
-    { title: "Терапевт", male: 71, pay: 4400 },
-    { title: "Хирург", male: 276, pay: 5400 },
-    { title: "Заведующий отделением", male: 275, pay: 6500 },
-    { title: "Старший ординатор", male: 275, pay: 7700 },
-    { title: "Заместитель главного врача", male: 70, pay: 9000 },
-    { title: "Главный врач", male: 70, pay: 10800 },
+    { title: "实习医生", male: 274, pay: 1800 },
+    { title: "初级医护人员", male: 274, pay: 2300 },
+    { title: "高级医护人员", male: 70, pay: 2900 },
+    { title: "社区医生", male: 71, pay: 3600 },
+    { title: "内科医生", male: 71, pay: 4400 },
+    { title: "外科医生", male: 276, pay: 5400 },
+    { title: "科室主任", male: 275, pay: 6500 },
+    { title: "高级住院医师", male: 275, pay: 7700 },
+    { title: "副院长", male: 70, pay: 9000 },
+    { title: "院长", male: 70, pay: 10800 },
   ];
 
   return rows.map((row, index) => ({
@@ -31,7 +31,7 @@ function hospitalRanks(): OrgRankDef[] {
 
 export const HOSPITAL: OrganizationDef = {
   id: ORG_HOSPITAL_ID,
-  name: "Больница",
+  name: "医院",
   color: HOSPITAL_COLOR,
   gov: true,
   illegal: false,
@@ -47,7 +47,7 @@ export const HOSPITAL: OrganizationDef = {
 };
 
 if (HOSPITAL.ranks.length !== MAX_ORG_RANK) {
-  throw new Error("Больница: нужно 10 рангов");
+  throw new Error("医院: 需要 10 个等级");
 }
 
 export const HOSPITAL_GATES: OrgGateDef[] = [
@@ -62,6 +62,6 @@ export const HOSPITAL_GATES: OrgGateDef[] = [
     ry: 0,
     rz: 0,
     radius: 14,
-    denyMessage: "Вы не состоите в больнице.",
+    denyMessage: "你不属于医院。",
   },
 ];

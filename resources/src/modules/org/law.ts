@@ -28,7 +28,7 @@ export function isFbiOfficer(player: Player): boolean {
 }
 
 /**
- * FBI — любого; полиция (LSPD / обл.) — только не-law («обычных» игроков).
+ * FBI 可针对任何人；警察（LSPD / 州警察）仅可针对非执法人员（“普通”玩家).
  */
 export function canLawSearchTarget(officer: Player, target: Player): boolean {
   if (!isLawOfficer(officer)) {
@@ -42,14 +42,14 @@ export function canLawSearchTarget(officer: Player, target: Player): boolean {
   return !isLawOfficer(target);
 }
 
-/** «ФБР» или «Полицейский» (LSPD / областная полиция). */
+/** “FBI”或“警察”（LSPD / 州警察). */
 export function lawOfficerLabel(player: Player): string {
   const account = getAccount(player);
   const orgId = account ? getMembership(account)?.org.id : undefined;
-  return orgId === ORG_FBI_ID ? "ФБР" : "Полицейский";
+  return orgId === ORG_FBI_ID ? "FBI" : "警察";
 }
 
-/** Сообщение всем онлайн LSPD / областной полиции / FBI. */
+/** 向所有在线的 LSPD / 州警察 / FBI 成员发送消息。 */
 export function notifyLawStaff(line: string, color: number = Color.dept): void {
   const text = clipClientMessage(line);
   omp.players.forEach((officer) => {
@@ -62,7 +62,7 @@ export function notifyLawStaff(line: string, color: number = Color.dept): void {
       }
       officer.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

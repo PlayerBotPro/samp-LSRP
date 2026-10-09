@@ -2,26 +2,26 @@ import type { OrganizationDef, OrgRankDef } from "./types";
 import { MAX_ORG_RANK } from "./types";
 
 export const ORG_MERIYA_ID = 3;
-/** Ранг «Адвокат» в мэрии (для `/advokats`). */
+/** 市政厅中的“律师”等级 (用于 `/advokats`). */
 export const MERIYA_ADVOKAT_RANK = 5;
 
 const MERIYA_COLOR = 0xffff00ff;
-/** Кастомный интерьер мэрии (`maps/cityhall.txt`): interior 0, VW = org id. */
+/** 市政厅自定义室内 (`maps/cityhall.txt`): interior 0, VW = org id. */
 export const MERIYA_WORLD = ORG_MERIYA_ID;
 export const MERIYA_CUSTOM_INTERIOR = 0;
 
 function meriyaRanks(): OrgRankDef[] {
   const rows: Array<{ title: string; male: number; female: number; pay: number }> = [
-    { title: "Охранник", male: 164, female: 141, pay: 2500 },
-    { title: "Секретарь", male: 185, female: 141, pay: 3300 },
-    { title: "Старший секретарь", male: 59, female: 141, pay: 4200 },
-    { title: "Начальник охраны", male: 165, female: 141, pay: 5300 },
-    { title: "Адвокат", male: 57, female: 141, pay: 6600 },
-    { title: "Помощник депутата", male: 98, female: 76, pay: 8100 },
-    { title: "Советник", male: 227, female: 76, pay: 9800 },
-    { title: "Депутат", male: 187, female: 76, pay: 11800 },
-    { title: "Зам. Мэра", male: 17, female: 76, pay: 14200 },
-    { title: "Мэр", male: 147, female: 150, pay: 17000 },
+    { title: "保安", male: 164, female: 141, pay: 2500 },
+    { title: "秘书", male: 185, female: 141, pay: 3300 },
+    { title: "高级秘书", male: 59, female: 141, pay: 4200 },
+    { title: "保安主管", male: 165, female: 141, pay: 5300 },
+    { title: "律师", male: 57, female: 141, pay: 6600 },
+    { title: "议员助理", male: 98, female: 76, pay: 8100 },
+    { title: "顾问", male: 227, female: 76, pay: 9800 },
+    { title: "议员", male: 187, female: 76, pay: 11800 },
+    { title: "副市长", male: 17, female: 76, pay: 14200 },
+    { title: "市长", male: 147, female: 150, pay: 17000 },
   ];
 
   return rows.map((row, index) => ({
@@ -34,7 +34,7 @@ function meriyaRanks(): OrgRankDef[] {
 
 export const MERIYA: OrganizationDef = {
   id: ORG_MERIYA_ID,
-  name: "Мэрия",
+  name: "市政厅",
   color: MERIYA_COLOR,
   gov: true,
   illegal: false,
@@ -50,9 +50,9 @@ export const MERIYA: OrganizationDef = {
 };
 
 if (MERIYA.ranks.length !== MAX_ORG_RANK) {
-  throw new Error("Мэрия: нужно 10 рангов");
+  throw new Error("市政厅: 需要 10 个等级");
 }
 
-if (MERIYA.ranks[MERIYA_ADVOKAT_RANK - 1]?.title !== "Адвокат") {
-  throw new Error("Мэрия: MERIYA_ADVOKAT_RANK должен указывать на ранг «Адвокат»");
+if (MERIYA.ranks[MERIYA_ADVOKAT_RANK - 1]?.title !== "律师") {
+  throw new Error("市政厅：MERIYA_ADVOKAT_RANK 必须指向“律师”等级");
 }

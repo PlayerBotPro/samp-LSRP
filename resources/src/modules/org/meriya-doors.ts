@@ -17,9 +17,9 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "Проход только для сотрудников Мэрии и FBI.";
+const DENY = "仅市政厅和 FBI 员工可以通行。";
 
-/** Служебный вход / парковка / крыша. */
+/** 员工入口 / 停车场 / 屋顶。 */
 const STAFF_ORGS: ReadonlySet<number> = new Set([ORG_MERIYA_ID, ORG_FBI_ID]);
 
 type StaffDoor = {
@@ -45,7 +45,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: MERIYA_CUSTOM_INTERIOR,
       world: MERIYA_WORLD,
     },
-    label: "Мэрия\nСлужебный вход",
+    label: "市政厅\n员工入口",
   },
   {
     pickup: {
@@ -63,7 +63,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Парковка\nСлужебный выход",
+    label: "停车场\n员工出口",
   },
   {
     pickup: {
@@ -81,7 +81,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Мэрия\nКрыша",
+    label: "市政厅\n屋顶",
   },
   {
     pickup: {
@@ -99,7 +99,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: MERIYA_CUSTOM_INTERIOR,
       world: MERIYA_WORLD,
     },
-    label: "Мэрия\nС крыши",
+    label: "市政厅\n从屋顶下来",
   },
 ];
 
@@ -163,7 +163,7 @@ function tickStaffDoors(): void {
         }
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -171,7 +171,7 @@ function tickStaffDoors(): void {
 function tryUse(player: Player, dest: SpawnPoint): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -200,7 +200,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -222,7 +222,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

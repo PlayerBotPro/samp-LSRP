@@ -6,7 +6,7 @@ export const ORG_LCN_ID = 14;
 export const ORG_YAKUZA_ID = 15;
 export const ORG_RUSSIAN_MAFIA_ID = 16;
 
-/** Кастомный HQ (`maps/mafia.txt`): один interior 0, разные VW по семье. */
+/** 自定义总部 (`maps/mafia.txt`)：共用 interior 0，各家族使用不同 VW。 */
 export const MAFIA_INTERIOR = 0;
 export const LCN_WORLD = 14;
 export const YAKUZA_WORLD = 15;
@@ -59,7 +59,7 @@ function defineMafia(
   };
 
   if (org.ranks.length !== MAX_ORG_RANK) {
-    throw new Error(`${name}: нужно 10 рангов`);
+    throw new Error(`${name}: 需要 10 个等级`);
   }
 
   return org;
@@ -107,21 +107,21 @@ export const YAKUZA = defineMafia(
 
 export const RUSSIAN_MAFIA = defineMafia(
   ORG_RUSSIAN_MAFIA_ID,
-  "Русская мафия",
+  "俄罗斯黑手党",
   0x1a5c6eff,
   mafiaHqSpawn(RUSSIAN_MAFIA_WORLD),
   169,
   [
-    { title: "Шнырь", male: 112 },
-    { title: "Босяк", male: 112 },
-    { title: "Браток", male: 272 },
-    { title: "Бык", male: 272 },
-    { title: "Авторитет", male: 126 },
-    { title: "Зам. бригадира", male: 125 },
-    { title: "Бригадир", male: 111 },
-    { title: "Смотрящий", male: 98 },
-    { title: "Блатной", male: 46 },
-    { title: "Вор в законе", male: 46 },
+    { title: "跑腿", male: 112 },
+    { title: "小混混", male: 112 },
+    { title: "帮派兄弟", male: 272 },
+    { title: "打手", male: 272 },
+    { title: "有威望者", male: 126 },
+    { title: "副队长", male: 125 },
+    { title: "队长", male: 111 },
+    { title: "监督者", male: 98 },
+    { title: "黑帮成员", male: 46 },
+    { title: "黑帮老大", male: 46 },
   ]
 );
 
@@ -139,7 +139,7 @@ export const LCN_GATES: OrgGateDef[] = [
     ry: 0,
     rz: 90,
     radius: 14,
-    denyMessage: "Вы не состоите в La Cosa Nostra.",
+    denyMessage: "你不属于 La Cosa Nostra。",
   },
 ];
 
@@ -149,7 +149,7 @@ const YAKUZA_GATE = {
   rx: 0,
   ry: 0,
   radius: 14,
-  denyMessage: "Вы не состоите в Yakuza.",
+  denyMessage: "你不属于 Yakuza。",
 } as const;
 
 export const YAKUZA_GATES: OrgGateDef[] = [
@@ -192,6 +192,6 @@ export const RUSSIAN_MAFIA_GATES: OrgGateDef[] = [
     ryOpen: 0,
     rz: 0.7162,
     radius: 14,
-    denyMessage: "Вы не состоите в русской мафии.",
+    denyMessage: "你不属于俄罗斯黑手党。",
   },
 ];

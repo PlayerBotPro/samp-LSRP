@@ -20,7 +20,7 @@ const DIALOG_STYLE_MSGBOX = 0;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const DENY_COOLDOWN_MS = 2500;
-/** Минут тюрьмы за 1 уровень розыска (1★ = 10 мин, 6★ = 60 мин). */
+/** 每级通缉对应的监禁分钟数（1★ = 10 分钟，6★ = 60 分钟). */
 const MINUTES_PER_WANTED = 10;
 
 const PICKUP = {
@@ -68,7 +68,7 @@ export function bindLspdSurrender(): void {
       return;
     }
 
-    // Только ответ на наш открытый диалог.
+    // 仅处理当前打开的对话框响应。
     if (!pending.delete(slotId)) {
       return;
     }
@@ -147,12 +147,12 @@ function openSurrenderDialog(player: Player, slotId: number): void {
   }
 
   if (isJailed(player)) {
-    deny(player, slotId, "Вы уже в тюрьме.");
+    deny(player, slotId, "你已经在监狱里了。");
     return;
   }
 
   if (account.wantedLevel <= 0) {
-    deny(player, slotId, "У вас нет розыска. Сдаваться не за что.");
+    deny(player, slotId, "你没有通缉等级，无需自首。");
     return;
   }
 
@@ -184,7 +184,7 @@ function openSurrenderDialog(player: Player, slotId: number): void {
 }
 
 function deny(player: Player, slotId: number, message: string): void {
-  // Держим standingOn — иначе тик будет спамить каждые 200 мс.
+  // 保留 standingOn，否则每 200 毫秒就会重复触发。
   const now = Date.now();
   const last = lastDenyAt.get(slotId) ?? 0;
   if (now - last < DENY_COOLDOWN_MS) {
@@ -195,7 +195,7 @@ function deny(player: Player, slotId: number, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
@@ -249,7 +249,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
       return;
     }
 
-    // Срок по розыску на момент подтверждения.
+    // 以确认时的通缉等级计算刑期。
     const wanted = account.wantedLevel;
     const minutes = surrenderMinutes(wanted);
 
@@ -262,17 +262,17 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
       return;
     }
 
-    // Только после успешной посадки — иначе розыск не теряется зря.
+    // 成功入狱后才执行，否则会无故清除通缉。
     setPlayerWantedLevel(player, 0);
 
-    const verb = byGender(account.gender, "сдался", "сдалась");
+    const verb = byGender(account.gender, "自首了", "自首了");
     player.sendClientMessage(
       Color.info,
       `你${verb}自首了。通缉已解除，刑期: ${minutes} 分钟。`
     );
 
     notifyLawStaff(
-      `${playerChatName(player)} ${verb} с повинной в LSPD (розыск ${wanted}, срок ${minutes} мин.).`
+      `${playerChatName(player)} ${verb} 向 LSPD 自首 (通缉等级 ${wanted}, 刑期 ${minutes} 分钟).`
     );
   } finally {
     busy.delete(slotId);

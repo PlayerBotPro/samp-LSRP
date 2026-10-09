@@ -23,7 +23,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY_ROOF = "На крышу могут только сотрудники радиоцентра.";
+const DENY_ROOF = "只有广播中心员工可以上屋顶。";
 
 type DoorKind = "street" | "interior" | "roof";
 
@@ -86,10 +86,10 @@ const DOORS: readonly RadioDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Радиоцентр\nВход",
+    label: "广播中心\n入口",
     options: [
-      { key: "office", label: "Офис" },
-      { key: "roof", label: "Крыша" },
+      { key: "office", label: "办公室" },
+      { key: "roof", label: "屋顶" },
     ],
   },
   {
@@ -101,10 +101,10 @@ const DOORS: readonly RadioDoor[] = [
       interior: RADIO_INTERIOR,
       world: RADIO_WORLD,
     },
-    label: "Радиоцентр\nВыход",
+    label: "广播中心\n出口",
     options: [
-      { key: "street", label: "Улица" },
-      { key: "roof", label: "Крыша" },
+      { key: "street", label: "街道" },
+      { key: "roof", label: "屋顶" },
     ],
   },
   {
@@ -116,10 +116,10 @@ const DOORS: readonly RadioDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Радиоцентр\nКрыша",
+    label: "广播中心\n屋顶",
     options: [
-      { key: "street", label: "Улица" },
-      { key: "office", label: "Офис" },
+      { key: "street", label: "街道" },
+      { key: "office", label: "办公室" },
     ],
   },
 ];
@@ -130,7 +130,7 @@ const onPickup = new Map<number, DoorKind>();
 const pending = new Map<number, DoorKind>();
 
 export function bindRadioDoors(): void {
-  // В radio.txt объекты с interior 18, игроки заходят в interior 0 — сбрасываем в -1.
+  // radio.txt 中的对象使用 interior 18，玩家进入 interior 0，因此将其重置为 -1。
   assignStreamWorld(RADIO_WORLD, isRadioInteriorObject, -1);
 
   for (const door of DOORS) {
@@ -231,7 +231,7 @@ function tickRadioDoors(): void {
 
       onPickup.delete(id);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -239,7 +239,7 @@ function tickRadioDoors(): void {
 function openMenu(player: Player, door: RadioDoor): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -254,21 +254,21 @@ function openMenu(player: Player, door: RadioDoor): void {
       player,
       RADIO_DOOR_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Радиоцентр",
+      "广播中心",
       door.options.map((option) => option.label).join("\n"),
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     pending.delete(id);
-    deny(player, "Не удалось открыть меню.");
+    deny(player, "无法打开菜单。");
   }
 }
 
 function tryUse(player: Player, destKey: "office" | "street" | "roof"): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -316,7 +316,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -338,7 +338,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

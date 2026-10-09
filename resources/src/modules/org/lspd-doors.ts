@@ -16,7 +16,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "Открыть могут сотрудники LSPD, областной полиции и FBI.";
+const DENY = "LSPD、州警察和 FBI 员工可以打开。";
 
 type LspdDoor = {
   pickup: { x: number; y: number; z: number; interior: number };
@@ -36,7 +36,7 @@ const DOORS: readonly LspdDoor[] = [
       interior: LSPD_INTERIOR,
       world: STREET_WORLD,
     },
-    label: "LSPD\nВход",
+    label: "LSPD\n入口",
     staffOnly: false,
   },
   {
@@ -49,7 +49,7 @@ const DOORS: readonly LspdDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на улицу",
+    label: "街道出口",
     staffOnly: false,
   },
   {
@@ -62,7 +62,7 @@ const DOORS: readonly LspdDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Гараж\nСлужебный выход",
+    label: "车库\n员工出口",
     staffOnly: true,
   },
   {
@@ -75,7 +75,7 @@ const DOORS: readonly LspdDoor[] = [
       interior: LSPD_INTERIOR,
       world: STREET_WORLD,
     },
-    label: "Гараж\nСлужебный вход",
+    label: "车库\n员工入口",
     staffOnly: true,
   },
 ];
@@ -143,7 +143,7 @@ function tickLspdDoors(): void {
         }
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -152,7 +152,7 @@ function tryUse(player: Player, door: LspdDoor): void {
   if (door.staffOnly) {
     const account = getAccount(player);
     if (account?.hospitalized) {
-      deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+      deny(player, "你需要治疗。请使用 /hospital 占用病床。");
       return;
     }
 
@@ -183,7 +183,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -205,7 +205,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

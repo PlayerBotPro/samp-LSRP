@@ -58,14 +58,14 @@ function hqDoors(input: {
         world: input.world,
       },
       dest: input.streetExit,
-      label: "Выход на улицу",
+      label: "街道出口",
     },
   ];
 }
 
 const DOORS: readonly GangDoor[] = [
   ...hqDoors({
-    enterLabel: "Grove Street\nВход",
+    enterLabel: "Grove Street\n入口",
     world: GROVE_WORLD,
     interior: 2,
     streetPickup: { x: 2514.0725, y: -1691.3683, z: 14.046 },
@@ -81,7 +81,7 @@ const DOORS: readonly GangDoor[] = [
     insideEnter: { x: 2466.3977, y: -1698.2695, z: 1013.5078, angle: 89.5907, interior: 2, world: GROVE_WORLD },
   }),
   ...hqDoors({
-    enterLabel: "Ballas\nВход",
+    enterLabel: "Ballas\n入口",
     world: BALLAS_WORLD,
     interior: 4,
     streetPickup: { x: 2022.8706, y: -1120.2635, z: 26.421 },
@@ -97,7 +97,7 @@ const DOORS: readonly GangDoor[] = [
     insideEnter: { x: 221.8294, y: 1141.7898, z: 1082.6094, angle: 359.7336, interior: 4, world: BALLAS_WORLD },
   }),
   ...hqDoors({
-    enterLabel: "Vagos\nВход",
+    enterLabel: "Vagos\n入口",
     world: VAGOS_WORLD,
     interior: 5,
     streetPickup: { x: 2756.2834, y: -1182.8099, z: 69.4035 },
@@ -113,7 +113,7 @@ const DOORS: readonly GangDoor[] = [
     insideEnter: { x: 318.6287, y: 1116.5457, z: 1083.8828, angle: 359.06, interior: 5, world: VAGOS_WORLD },
   }),
   ...hqDoors({
-    enterLabel: "Rifa\nВход",
+    enterLabel: "Rifa\n入口",
     world: RIFA_WORLD,
     interior: 6,
     streetPickup: { x: 2787.074, y: -1926.1321, z: 13.5469 },
@@ -129,7 +129,7 @@ const DOORS: readonly GangDoor[] = [
     insideEnter: { x: -68.8442, y: 1353.2507, z: 1080.2109, angle: 1.2767, interior: 6, world: RIFA_WORLD },
   }),
   ...hqDoors({
-    enterLabel: "Aztecas\nВход",
+    enterLabel: "Aztecas\n入口",
     world: AZTECAS_WORLD,
     interior: 2,
     streetPickup: { x: 2185.8184, y: -1815.228, z: 13.5469 },
@@ -219,7 +219,7 @@ function tickGangDoors(): void {
 
       standingOn.delete(id);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -227,7 +227,7 @@ function tickGangDoors(): void {
 function tryUse(player: Player, dest: SpawnPoint): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -250,7 +250,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -273,7 +273,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     refreshStreamForPlayer(player);
     markStandingPickup(id, point);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

@@ -6,7 +6,7 @@ import { HOSPITAL_WORLD } from "../spawn/point";
 import { ORG_HOSPITAL_ID } from "./hospital";
 import { getMembership } from "./membership";
 
-/** Левый Alt (KEY_WALK). */
+/** 左 Alt（KEY_WALK). */
 const KEY_WALK = 1024;
 const HOLD_OPEN_MS = 5000;
 const TRAVEL_MS = 1200;
@@ -14,7 +14,7 @@ const Z_BUMP = 0.02;
 const DRAW_DISTANCE = 120;
 const DENY_COOLDOWN_MS = 2500;
 const PLAYER_STATE_ONFOOT = 1;
-const DENY = "Вы не состоите в больнице.";
+const DENY = "你不属于医院。";
 
 type DoorDef = {
   x: number;
@@ -33,7 +33,7 @@ type LiveDoor = {
   closeTimer: ReturnType<typeof setTimeout> | null;
 };
 
-/** Двери служебного блока (закрыто → открыто = поворот rz). */
+/** 服务区的门（关闭 → 打开 = 旋转 rz). */
 const DOORS: readonly DoorDef[] = [
   {
     x: 1147.775024,
@@ -102,7 +102,7 @@ function moveDoor(door: LiveDoor, open: boolean): void {
     }
     object.move(def.x, def.y, z, MOVE_SPEED, def.rx, def.ry, rz);
   } catch {
-    // Объект ещё не готов.
+    // 对象尚未就绪。
   }
 }
 
@@ -156,7 +156,7 @@ function denyOpen(player: Player): void {
   try {
     player.sendClientMessage(Color.error, DENY);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -207,7 +207,7 @@ export function bindHospitalDoors(): void {
       );
       doors.push({ def, object, closeTimer: null });
     } catch {
-      // Лимит объектов.
+      // 对象数量已达上限。
     }
   }
 

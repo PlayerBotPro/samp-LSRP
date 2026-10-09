@@ -9,7 +9,7 @@ const PICKUP_TYPE = 1;
 const LABEL_HEIGHT = 1.85;
 const LABEL_DRAW_DISTANCE = 14;
 
-/** Склад медикаментов в служебном блоке больницы. */
+/** 医院服务区的药品仓库。 */
 export const HOSPITAL_MEDS_STOCK_POINT = {
   x: 1156.484,
   y: -1342.847,
@@ -21,7 +21,7 @@ let medsStockLabel: TextLabel | null = null;
 
 function medsStockLabelText(): string {
   const meds = getWarehouse(ORG_HOSPITAL_ID)?.meds ?? 0;
-  return `Склад медикаментов\nМедикаменты: ${meds}`;
+  return `药品仓库\n药品: ${meds}`;
 }
 
 export function refreshHospitalMedsStockLabel(): void {
@@ -32,11 +32,11 @@ export function refreshHospitalMedsStockLabel(): void {
   try {
     medsStockLabel.updateText(Color.info, medsStockLabelText());
   } catch {
-    // Лейбл уже уничтожен.
+    // 标签已销毁。
   }
 }
 
-/** Склад медикаментов в служебном блоке. */
+/** 服务区的药品仓库。 */
 export function bindHospitalStock(): void {
   new Pickup(
     PICKUP_MODEL,

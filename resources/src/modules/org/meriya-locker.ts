@@ -17,7 +17,7 @@ const MAX_ARMOR = 100;
 const WEAPON_NIGHTSTICK = 3;
 const WEAPON_DEAGLE = 24;
 const DEAGLE_AMMO = 50;
-const DENY = "Вы не состоите в мэрии.";
+const DENY = "你不属于市政厅。";
 
 const POINT = {
   x: -806.9103,
@@ -88,7 +88,7 @@ function tickLocker(): void {
       inside.add(id);
       tryTake(player);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -100,7 +100,7 @@ function tryTake(player: Player): void {
   }
 
   if (account.hospitalized) {
-    tell(player, Color.error, "Сначала пройдите лечение в больнице.");
+    tell(player, Color.error, "请先在医院接受治疗。");
     return;
   }
 
@@ -115,18 +115,18 @@ function tryTake(player: Player): void {
     grantWeapon(player, WEAPON_NIGHTSTICK, 1);
     grantWeapon(player, WEAPON_DEAGLE, DEAGLE_AMMO);
   } catch {
-    tell(player, Color.error, "Не удалось выдать снаряжение.");
+    tell(player, Color.error, "无法发放装备。");
     return;
   }
 
-  tell(player, Color.info, "Вы взяли бронежилет, дубинку и Desert Eagle.");
+  tell(player, Color.info, "你领取了防弹衣、警棍和 Desert Eagle。");
 }
 
 function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

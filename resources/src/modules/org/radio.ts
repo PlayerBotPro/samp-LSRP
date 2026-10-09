@@ -2,13 +2,13 @@ import { defineGovOrg, defineRanks } from "./define";
 import type { OrgGateDef } from "./types";
 
 export const ORG_RADIO_ID = 8;
-/** Кастомный интерьер Радиоцентра. Улица и крыша остаются VW 0. */
+/** 广播中心自定义室内。街道和屋顶仍使用 VW 0。 */
 export const RADIO_WORLD = 8;
 export const RADIO_INTERIOR = 0;
 
 export const RADIOCENTR = defineGovOrg(
   ORG_RADIO_ID,
-  "Радиоцентр",
+  "广播中心",
   0xff8c00ff,
   {
     x: 1429.5406,
@@ -19,16 +19,16 @@ export const RADIOCENTR = defineGovOrg(
     world: RADIO_WORLD,
   },
   defineRanks([
-    { title: "Помощник редакции", male: 250, female: 93, pay: 1700 },
-    { title: "Верстальщик новостей", male: 250, female: 93, pay: 2200 },
-    { title: "Радиотехник", male: 60, female: 93, pay: 2800 },
-    { title: "Журналист", male: 60, female: 93, pay: 3500 },
-    { title: "Старший журналист", male: 170, female: 211, pay: 4300 },
-    { title: "Корректор", male: 188, female: 211, pay: 5200 },
-    { title: "Помощник редактора", male: 188, female: 211, pay: 6300 },
-    { title: "Редактор", male: 187, female: 211, pay: 7600 },
-    { title: "Главный редактор", male: 227, female: 211, pay: 9100 },
-    { title: "Директор радиоцентра", male: 228, female: 150, pay: 11000 },
+    { title: "编辑助理", male: 250, female: 93, pay: 1700 },
+    { title: "新闻排版员", male: 250, female: 93, pay: 2200 },
+    { title: "无线电技术员", male: 60, female: 93, pay: 2800 },
+    { title: "记者", male: 60, female: 93, pay: 3500 },
+    { title: "高级记者", male: 170, female: 211, pay: 4300 },
+    { title: "校对员", male: 188, female: 211, pay: 5200 },
+    { title: "副编辑", male: 188, female: 211, pay: 6300 },
+    { title: "编辑", male: 187, female: 211, pay: 7600 },
+    { title: "主编", male: 227, female: 211, pay: 9100 },
+    { title: "广播中心主任", male: 228, female: 150, pay: 11000 },
   ])
 );
 
@@ -45,6 +45,6 @@ export const RADIO_GATES: OrgGateDef[] = [
     ryOpen: 0,
     rz: 11.4037,
     radius: 14,
-    denyMessage: "Вы не состоите в радиоцентре.",
+    denyMessage: "你不属于广播中心。",
   },
 ];

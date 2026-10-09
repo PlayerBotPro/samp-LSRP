@@ -10,20 +10,20 @@ export const ORG_ARMY_ID = 1;
 const ARMY_COLOR = 0x9c7a4bff;
 const ARMY_GATE_ORG_IDS = [ORG_ARMY_ID, ORG_POLICE_ID, ORG_LSPD_ID, ORG_FBI_ID] as const;
 const ARMY_GATE_DENY =
-  "Открыть могут сотрудники Армии, областной полиции, LSPD и FBI.";
+  "军队、州警察、LSPD 和 FBI 员工可以打开。";
 
 function armyRanks(): OrgRankDef[] {
   const rows: Array<{ title: string; male: number; female: number; pay: number }> = [
-    { title: "Рядовой", male: 287, female: 191, pay: 1500 },
-    { title: "Ефрейтор", male: 287, female: 191, pay: 1900 },
-    { title: "Сержант", male: 179, female: 191, pay: 2400 },
-    { title: "Старшина", male: 179, female: 191, pay: 3000 },
-    { title: "Лейтенант", male: 255, female: 191, pay: 3700 },
-    { title: "Капитан", male: 255, female: 191, pay: 4500 },
-    { title: "Майор", male: 255, female: 191, pay: 5400 },
-    { title: "Подполковник", male: 61, female: 191, pay: 6400 },
-    { title: "Полковник", male: 61, female: 191, pay: 7500 },
-    { title: "Генерал", male: 61, female: 191, pay: 9000 },
+    { title: "列兵", male: 287, female: 191, pay: 1500 },
+    { title: "下士", male: 287, female: 191, pay: 1900 },
+    { title: "中士", male: 179, female: 191, pay: 2400 },
+    { title: "军士长", male: 179, female: 191, pay: 3000 },
+    { title: "中尉", male: 255, female: 191, pay: 3700 },
+    { title: "上尉", male: 255, female: 191, pay: 4500 },
+    { title: "少校", male: 255, female: 191, pay: 5400 },
+    { title: "中校", male: 61, female: 191, pay: 6400 },
+    { title: "上校", male: 61, female: 191, pay: 7500 },
+    { title: "将军", male: 61, female: 191, pay: 9000 },
   ];
 
   return rows.map((row, index) => ({
@@ -36,7 +36,7 @@ function armyRanks(): OrgRankDef[] {
 
 export const ARMY: OrganizationDef = {
   id: ORG_ARMY_ID,
-  name: "Армия",
+  name: "军队",
   color: ARMY_COLOR,
   gov: true,
   illegal: false,
@@ -52,7 +52,7 @@ export const ARMY: OrganizationDef = {
 };
 
 if (ARMY.ranks.length !== MAX_ORG_RANK) {
-  throw new Error("Армия: нужно 10 рангов");
+  throw new Error("军队: 需要 10 个等级");
 }
 
 const ARMY_GATE = {

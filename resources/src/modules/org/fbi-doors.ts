@@ -20,7 +20,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "Вы не состоите в FBI.";
+const DENY = "你不属于 FBI。";
 
 type DestKey = "interior" | "roof" | "ammunation" | "street";
 
@@ -34,7 +34,7 @@ type FbiDoor = {
   options?: readonly { key: DestKey; label: string }[];
 };
 
-/** Возврат в HQ с крыши / аммунации. */
+/** 从屋顶 / 军械库返回总部。 */
 const INTERIOR_FROM_ROOF: SpawnPoint = {
   x: 681.4877,
   y: 2544.3806,
@@ -68,7 +68,7 @@ const DEST: Partial<Record<DestKey, SpawnPoint>> = {
   ammunation: AMMUNATION_ENTER,
 };
 
-/** Объекты кастомного HQ из `maps/fbi.txt` (улица там же — не трогаем). */
+/** 自定义总部对象来自 `maps/fbi.txt` (街道也在其中，不作修改). */
 const INTERIOR_MAP = {
   minX: 640,
   maxX: 700,
@@ -90,7 +90,7 @@ const DOORS: readonly FbiDoor[] = [
       interior: FBI_INTERIOR,
       world: FBI_WORLD,
     },
-    label: "FBI\nСлужебный вход",
+    label: "FBI\n员工入口",
     staffOnly: true,
   },
   {
@@ -110,7 +110,7 @@ const DOORS: readonly FbiDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на улицу",
+    label: "街道出口",
     staffOnly: true,
   },
   {
@@ -226,7 +226,7 @@ export function bindFbiDoors(): void {
       return;
     }
 
-    // Выход из аммунации — без проверки органа (уже внутри).
+    // 离开军械库时无需检查组织（玩家已经在内部).
     if (kind !== "ammoExit" && !canUseFbiDoor(player, true)) {
       return;
     }
@@ -280,7 +280,7 @@ function tickFbiDoors(): void {
 
       onPickup.delete(id);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -319,7 +319,7 @@ function openMenu(player: Player, door: FbiDoor): void {
     );
   } catch {
     pending.delete(id);
-    deny(player, "Не удалось открыть меню.");
+    deny(player, "无法打开菜单。");
   }
 }
 
@@ -327,7 +327,7 @@ function canUseFbiDoor(player: Player, tellDeny: boolean): boolean {
   const account = getAccount(player);
   if (account?.hospitalized) {
     if (tellDeny) {
-      deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+      deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     }
     return false;
   }
@@ -383,7 +383,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -405,7 +405,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

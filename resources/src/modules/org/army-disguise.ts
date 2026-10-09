@@ -24,7 +24,7 @@ const GHETTO_GANG_IDS: ReadonlySet<number> = new Set([
   ORG_AZTECAS_ID,
 ]);
 
-/** Слоты игроков в армейской маскировке (банды у Смоки). */
+/** 处于军队伪装状态的玩家槽位（斯莫基附近的帮派). */
 const disguised = new Set<number>();
 
 export function isArmyDisguised(player: Player): boolean {
@@ -32,7 +32,7 @@ export function isArmyDisguised(player: Player): boolean {
   return id !== null && disguised.has(id);
 }
 
-/** Форма действует только у члена банды гетто вне тюрьмы. */
+/** 该制服仅对未入狱的贫民区帮派成员有效。 */
 export function canKeepArmyDisguise(player: Player): boolean {
   const account = getAccount(player);
   if (!account || account.jailSeconds > 0) {
@@ -52,11 +52,11 @@ export function applyArmyDisguiseVisuals(player: Player, account: Account): void
     player.setSkin(armyDisguiseSkin(account));
     player.setColor(ARMY.color);
   } catch {
-    // Слот ещё не в игре.
+    // 该槽位中的玩家尚未进入游戏。
   }
 }
 
-/** Включить маскировку (скин + цвет армии). Банда не меняется. */
+/** 启用伪装（皮肤 + 军队颜色).帮派身份不变。 */
 export function startArmyDisguise(player: Player): boolean {
   const id = playerId(player);
   const account = getAccount(player);
@@ -69,7 +69,7 @@ export function startArmyDisguise(player: Player): boolean {
   return true;
 }
 
-/** Снять маскировку. Визуал восстанавливает вызывающая сторона через applyOrgVisuals. */
+/** 解除伪装。调用方通过 applyOrgVisuals 恢复外观。 */
 export function clearArmyDisguise(player: Player): boolean {
   const id = playerId(player);
   if (id === null || !disguised.has(id)) {
@@ -81,8 +81,8 @@ export function clearArmyDisguise(player: Player): boolean {
 }
 
 /**
- * Если маскировка больше невалидна (тюрьма / кик из банды) — снять флаг.
- * Возвращает true, если игрок сейчас должен выглядеть как армия.
+ * 如果伪装不再有效（入狱 / 被踢出帮派），则清除标记。
+ * 如果玩家当前应显示为军队外观，则返回 true。
  */
 export function syncArmyDisguise(player: Player): boolean {
   if (!isArmyDisguised(player)) {

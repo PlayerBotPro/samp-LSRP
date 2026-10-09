@@ -21,7 +21,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "Вы не состоите в больнице.";
+const DENY = "你不属于医院。";
 
 type StaffDoor = {
   pickup: { x: number; y: number; z: number; world: number };
@@ -40,7 +40,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Парковка\nНа крышу",
+    label: "停车场\n前往屋顶",
   },
   {
     pickup: { x: 1161.5471, y: -1330.0697, z: 31.4935, world: STREET_WORLD },
@@ -52,7 +52,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Крыша\nНа парковку",
+    label: "屋顶\n前往停车场",
   },
   {
     pickup: { x: 1147.801, y: -1317.7454, z: 13.6535, world: STREET_WORLD },
@@ -64,7 +64,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: HOSPITAL_WORLD,
     },
-    label: "Больница\nВход",
+    label: "医院\n入口",
   },
   {
     pickup: { x: 1148.1534, y: -1345.9833, z: 3001.0845, world: HOSPITAL_WORLD },
@@ -76,7 +76,7 @@ const DOORS: readonly StaffDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "Выход на парковку",
+    label: "停车场出口",
   },
 ];
 
@@ -144,7 +144,7 @@ function tickStaffDoors(): void {
         }
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已离开。
     }
   });
 }
@@ -152,7 +152,7 @@ function tickStaffDoors(): void {
 function tryUse(player: Player, dest: SpawnPoint): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "Вам нужно лечение. Займите койку: /hospital.");
+    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
     return;
   }
 
@@ -181,7 +181,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -203,7 +203,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 

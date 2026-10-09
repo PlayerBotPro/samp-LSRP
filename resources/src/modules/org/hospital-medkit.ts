@@ -20,24 +20,24 @@ const TICK_MS = 200;
 const STOCK_RADIUS = 1.8;
 const PLAYER_STATE_ONFOOT = 1;
 const DENY_COOLDOWN_MS = 2500;
-/** Сколько ед. выдаём со склада за один забор. */
+/** 每次从仓库领取的药品数量。 */
 export const MEDKIT_TAKE_AMOUNT = 20;
 /**
- * Attach-index чемодана. Слот 1 занят коробкой доставки (`vehicles/hospital` SLOT_BOX).
+ * 医疗箱的 Attach 索引。槽位 1 被配送箱占用 (`vehicles/hospital` SLOT_BOX).
  */
 const SLOT_MEDKIT = 2;
 const MEDKIT_MODEL = 11738;
-/** Правая рука. */
+/** 右手。 */
 const BONE_RIGHT_HAND = 6;
 
-/** Слот → сколько медикаментов у врача (сессия). */
+/** 槽位 → 医生持有的药品数量（当前会话). */
 const carriedMeds = new Map<number, number>();
-/** Слот → надет визуальный чемодан. */
+/** 槽位 → 是否显示手提医疗箱。 */
 const hasCase = new Set<number>();
 const standingOnStock = new Set<number>();
 const denyAt = new Map<number, number>();
 
-/** Блокировка забора (доставка коробок) — регистрирует `vehicles/hospital`. */
+/** 领取锁定（箱子配送）由 `vehicles/hospital`. */
 let stockBlocked: ((player: Player) => boolean) | null = null;
 
 export function setHospitalMedkitStockBlocked(
@@ -59,7 +59,7 @@ export function hasHospitalMedkitCase(player: Player): boolean {
   return id !== null && hasCase.has(id);
 }
 
-/** Списать 1 ед. после успешного /medhelp. */
+/** 成功执行 /medhelp 后扣除 1 件药品。 */
 export function consumeHospitalMed(player: Player): boolean {
   const id = playerId(player);
   if (id === null) {
@@ -90,11 +90,11 @@ export function clearMedkitCase(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_MEDKIT);
   } catch {
-    // Слота не было.
+    // 槽位不存在。
   }
 }
 
-/** Вернуть медикаменты на склад (disconnect / увольнение). */
+/** 将药品退回仓库（断开连接 / 解雇). */
 export function returnHospitalMedsToStock(player: Player): number {
   const id = playerId(player);
   if (id === null) {
@@ -119,7 +119,7 @@ export function bindHospitalMedkit(): void {
   setInterval(tickHospitalMedkit, TICK_MS);
 
   omp.on("playerDeath", (player) => {
-    // Чемодан снимаем, медикаменты оставляем.
+    // 移除医疗箱，保留药品。
     clearMedkitCase(player);
     const id = playerId(player);
     if (id !== null) {
@@ -144,7 +144,7 @@ function tickHospitalMedkit(): void {
       return;
     }
 
-    // Уволили из больницы — медикаменты обратно на склад.
+    // 从医院解雇时，将药品退回仓库。
     if ((carriedMeds.get(id) ?? 0) > 0 && !isHospitalMember(player)) {
       const back = returnHospitalMedsToStock(player);
       if (back > 0) {
@@ -156,7 +156,7 @@ function tickHospitalMedkit(): void {
       return;
     }
 
-    // Тюрьма / выход из интерьера больницы — только чемодан.
+    // 入狱 / 离开医院室内时，仅移除医疗箱。
     if (hasCase.has(id)) {
       try {
         if (isJailed(player) || player.getVirtualWorld() !== HOSPITAL_WORLD) {
@@ -241,7 +241,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
 
   const stock = getWarehouse(ORG_HOSPITAL_ID)?.meds ?? 0;
   if (stock < 1) {
-    // Не sticky — когда склад пополнят, можно взять не отходя.
+    // 不保持锁定；仓库补货后可在原地领取。
     if (canDeny(id)) {
       player.sendClientMessage(Color.error, "仓库里没有药品。");
     }

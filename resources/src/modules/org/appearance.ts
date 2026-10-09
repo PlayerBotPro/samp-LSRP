@@ -42,7 +42,7 @@ export function applyOrgVisuals(player: Player): void {
     return;
   }
 
-  // Маскировка армии (банды): скин/цвет как у армии, членство банды не меняется.
+  // 军队伪装（帮派）：使用军队皮肤和颜色，但不改变帮派成员身份。
   if (syncArmyDisguise(player)) {
     applyArmyDisguiseVisuals(player, account);
   } else {
@@ -50,11 +50,11 @@ export function applyOrgVisuals(player: Player): void {
       player.setSkin(resolvePlayerSkin(account));
       player.setColor(resolveNametagColor(account));
     } catch {
-      // Слот ещё не в игре.
+      // 该槽位中的玩家尚未进入游戏。
     }
   }
 
-  // Маска перекрывает цвет (и alpha 0 — скрытие с мини-карты).
+  // 伪装会覆盖颜色（并将 alpha 设为 0，从小地图隐藏).
   if (isMasked(player)) {
     applyMaskVisuals(player);
   }
