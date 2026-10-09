@@ -335,7 +335,7 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
 
   // Уже арендована другим — нельзя садиться.
   if (slot.renterUserId !== null && slot.renterUserId !== account.id) {
-    player.sendClientMessage(Color.error, "Этот автомобиль уже арендован.");
+    player.sendClientMessage(Color.error, "这辆车已经被租用了。");
     eject(player);
     return;
   }
@@ -351,7 +351,7 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
   if (ownedVehicleId !== undefined) {
     player.sendClientMessage(
       Color.error,
-      "Вы уже арендуете автомобиль. Чтобы завершить аренду, введите /unrent."
+      "你已经租了一辆车。输入 /unrent 结束租车。"
     );
     eject(player);
     return;
@@ -359,14 +359,14 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
 
   // Пассажир не может начать аренду.
   if (asPassenger) {
-    player.sendClientMessage(Color.error, "Чтобы арендовать, сядьте за руль.");
+    player.sendClientMessage(Color.error, "租车前请坐上驾驶位。");
     eject(player);
     return;
   }
 
   // Нужны права на авто (дубль на случай обхода access).
   if (!account.licenses.car) {
-    player.sendClientMessage(Color.error, "У вас нет лицензии на автомобили.");
+    player.sendClientMessage(Color.error, "你没有汽车执照。");
     eject(player);
     return;
   }
@@ -409,7 +409,7 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
     pendingOffer.delete(slotId);
     setControllable(player, true);
     eject(player);
-    player.sendClientMessage(Color.error, "Не удалось открыть окно аренды.");
+    player.sendClientMessage(Color.error, "无法打开租车窗口。");
   }
 }
 
@@ -446,7 +446,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
 
   if (!account.licenses.car) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "У вас нет лицензии на автомобили.");
+    player.sendClientMessage(Color.error, "你没有汽车执照。");
     eject(player);
     return;
   }
@@ -455,7 +455,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     setControllable(player, true);
     player.sendClientMessage(
       Color.error,
-      "Вы уже арендуете автомобиль. Чтобы завершить аренду, введите /unrent."
+      "你已经租了一辆车。输入 /unrent 结束租车。"
     );
     eject(player);
     return;
@@ -464,7 +464,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   const slot = slotsByVehicle.get(pending.vehicleId);
   if (!slot || slot.renterUserId !== null) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "Этот автомобиль уже арендован.");
+    player.sendClientMessage(Color.error, "这辆车已经被租用了。");
     eject(player);
     return;
   }
@@ -472,7 +472,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   // Игрок должен всё ещё сидеть в этой машине.
   if (!isDriverOf(player, pending.vehicleId)) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "Сядьте в автомобиль, чтобы арендовать его.");
+    player.sendClientMessage(Color.error, "请上车后租用车辆。");
     return;
   }
 
@@ -480,7 +480,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     setControllable(player, true);
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(RENT_PRICE)}.`
+      `现金不足。需要 ${formatMoney(RENT_PRICE)}.`
     );
     eject(player);
     return;
@@ -507,7 +507,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     setControllable(player, true);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] аренда авто бизнес #${pending.businessId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Аренда не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "租车失败。请重试。");
     eject(player);
     return;
   }
@@ -519,10 +519,10 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(RENT_PRICE)}.`
+        `现金不足。需要 ${formatMoney(RENT_PRICE)}.`
       );
     } else {
-      player.sendClientMessage(Color.error, "Аренда не прошла. Попробуйте ещё раз.");
+      player.sendClientMessage(Color.error, "租车失败。请重试。");
     }
     eject(player);
     return;
@@ -557,11 +557,11 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы арендовали автомобиль за ${formatMoney(result.amount)}. Завершить: /unrent.`
+    `你已租下车辆，费用 ${formatMoney(result.amount)}. 输入 /unrent 结束租赁。`
   );
   player.sendClientMessage(
     Color.gray,
-    "Если выйти из машины, у вас есть 5 минут, чтобы вернуться."
+    "下车后，你有 5 分钟返回车辆。"
   );
 }
 
@@ -655,7 +655,7 @@ function handleLeaveRental(player: Player): void {
   try {
     player.sendClientMessage(
       Color.gray,
-      "У вас есть 5 минут, чтобы вернуться в арендованный автомобиль."
+      "你有 5 分钟返回租用的车辆。"
     );
   } catch {
     // Игрок уже вышел.
@@ -666,14 +666,14 @@ function endPlayerRental(player: Player, reason: "command" | "timeout" | "discon
   const account = getAccount(player);
   if (!account) {
     if (reason === "command") {
-      player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+      player.sendClientMessage(Color.error, "请先登录账号。");
     }
     return;
   }
 
   if (!vehicleByRenter.has(account.id)) {
     if (reason === "command") {
-      player.sendClientMessage(Color.error, "У вас нет арендованного автомобиля.");
+      player.sendClientMessage(Color.error, "你没有租用车辆。");
     }
     return;
   }
@@ -695,7 +695,7 @@ function endPlayerRental(player: Player, reason: "command" | "timeout" | "discon
   forceEndRentalByUser(account.id, reason);
 
   if (reason === "command" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, "Аренда автомобиля завершена.");
+    player.sendClientMessage(Color.info, "车辆租赁已结束。");
   }
 }
 

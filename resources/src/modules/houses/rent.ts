@@ -48,17 +48,17 @@ export function notifyHouseRentReminder(player: Player): void {
     if (daysLeft === 0) {
       player.sendClientMessage(
         Color.error,
-        "Сегодня последний день оплаты дома. Иначе государство заберёт его завтра."
+        "今天是缴纳房屋费用的最后一天。否则政府明天会收回房屋。"
       );
-      player.sendClientMessage(Color.gray, "Оплатите жильё в банке.");
+      player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用。");
       return;
     }
 
     player.sendClientMessage(
       Color.tryOk,
-      `До оплаты дома №${house.id} осталось ${daysLeft} ${rentDaysLeftLabel(daysLeft)}.`
+      `房屋 №${house.id} 还有 ${daysLeft} ${rentDaysLeftLabel(daysLeft)} 到期。`
     );
-    player.sendClientMessage(Color.gray, "Оплатите жильё в банке.");
+    player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用。");
   } catch {
     // Игрок уже вышел.
   }

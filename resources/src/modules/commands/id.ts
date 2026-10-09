@@ -11,7 +11,7 @@ registerCommand(
   "Поиск игроков онлайн по ID или части ника",
   (player, args) => {
     if (!isAuthenticated(player)) {
-      player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+      player.sendClientMessage(Color.error, "请先登录账号。");
       return;
     }
 
@@ -19,7 +19,7 @@ registerCommand(
     if (!query) {
       player.sendClientMessage(
         Color.error,
-        "Использование: /id [ID или часть ника]"
+        "用法: /id [ID 或昵称片段]"
       );
       return;
     }
@@ -29,7 +29,7 @@ registerCommand(
 
     player.sendClientMessage(
       Color.white,
-      "Игроки, найденные по вашему запросу:"
+      "根据你的搜索找到的玩家:"
     );
 
     let count = 0;
@@ -72,7 +72,7 @@ registerCommand(
 
       player.sendClientMessage(
         Color.white,
-        `Ник: ${name} | ID: ${slot} | Уровень: ${level} | Пинг: ${ping}`
+        `昵称: ${name} | ID: ${slot} | 等级: ${level} | 延迟: ${ping}`
       );
       count += 1;
     });
@@ -80,7 +80,7 @@ registerCommand(
     if (count === 0) {
       player.sendClientMessage(
         Color.error,
-        "Игроки с такими данными не найдены."
+        "没有找到符合这些信息的玩家。"
       );
     }
   }

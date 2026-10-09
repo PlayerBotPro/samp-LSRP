@@ -27,12 +27,12 @@ export function resolveLawNearbyTarget(
   }
 
   if (isJailed(officer)) {
-    officer.sendClientMessage(Color.error, "В тюрьме команда недоступна.");
+    officer.sendClientMessage(Color.error, "在监狱里无法使用此命令。");
     return { ok: false };
   }
 
   if (isCuffed(officer)) {
-    officer.sendClientMessage(Color.error, "В наручниках команда недоступна.");
+    officer.sendClientMessage(Color.error, "戴着手铐时无法使用此命令。");
     return { ok: false };
   }
 
@@ -54,13 +54,13 @@ export function resolveLawNearbyTarget(
   }
 
   if (slot === officerId) {
-    officer.sendClientMessage(Color.error, "Нельзя применить к себе.");
+    officer.sendClientMessage(Color.error, "不能对自己使用。");
     return { ok: false };
   }
 
   const target = findPlayer(slot);
   if (!target) {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return { ok: false };
   }
 
@@ -70,7 +70,7 @@ export function resolveLawNearbyTarget(
       officerState === PLAYER_STATE_WASTED ||
       officerState === PLAYER_STATE_SPECTATING
     ) {
-      officer.sendClientMessage(Color.error, "Сейчас команда недоступна.");
+      officer.sendClientMessage(Color.error, "当前无法使用此命令。");
       return { ok: false };
     }
 
@@ -79,23 +79,23 @@ export function resolveLawNearbyTarget(
       targetState === PLAYER_STATE_WASTED ||
       targetState === PLAYER_STATE_SPECTATING
     ) {
-      officer.sendClientMessage(Color.error, "Игрок не в игре.");
+      officer.sendClientMessage(Color.error, "玩家不在线。");
       return { ok: false };
     }
   } catch {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return { ok: false };
   }
 
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    officer.sendClientMessage(Color.error, "玩家距离太远。");
     return { ok: false };
   }
 
   if (!canLawSearchTarget(officer, target)) {
     officer.sendClientMessage(
       Color.error,
-      "Полиция может применять команду только к гражданским. FBI — к любым (в т.ч. полиции)."
+      "警察只能对平民使用此命令。FBI 可以对任何人使用（包括警察）。"
     );
     return { ok: false };
   }

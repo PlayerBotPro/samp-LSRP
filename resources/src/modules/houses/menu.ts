@@ -46,7 +46,7 @@ export function bindHouseMenuDialogs(): void {
 
       const house = findOwnedHouseAtInterior(player);
       if (!house || house.ownerId !== account.id) {
-        player.sendClientMessage(Color.error, "Меню дома доступно только внутри вашего дома.");
+        player.sendClientMessage(Color.error, "房屋菜单只能在自己的房屋内使用。");
         return;
       }
 
@@ -95,7 +95,7 @@ export function bindHouseMenuDialogs(): void {
 export function showHouseMenu(player: Player): void {
   const house = findOwnedHouseAtInterior(player);
   if (!house) {
-    player.sendClientMessage(Color.error, "Меню дома доступно только внутри вашего дома.");
+    player.sendClientMessage(Color.error, "房屋菜单只能在自己的房屋内使用。");
     return;
   }
 
@@ -116,7 +116,7 @@ export function showHouseMenu(player: Player): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть меню дома.");
+    player.sendClientMessage(Color.error, "无法打开房屋菜单。");
   }
 }
 
@@ -128,7 +128,7 @@ async function toggleHouseLock(player: Player, houseId: number): Promise<void> {
 
   const house = findOwnedHouseAtInterior(player);
   if (!house || house.id !== houseId || house.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Меню дома доступно только внутри вашего дома.");
+    player.sendClientMessage(Color.error, "房屋菜单只能在自己的房屋内使用。");
     return;
   }
 
@@ -150,14 +150,14 @@ async function toggleHouseLock(player: Player, houseId: number): Promise<void> {
   }
 
   if (!saved) {
-    player.sendClientMessage(Color.error, "Не удалось изменить статус дома.");
+    player.sendClientMessage(Color.error, "无法更改房屋状态。");
     return;
   }
 
   setHouseLock(houseId, nextLocked);
   player.sendClientMessage(
     Color.info,
-    nextLocked ? "Дом закрыт." : "Дом открыт."
+    nextLocked ? "房屋已锁。" : "房屋已解锁。"
   );
   showHouseMenu(player);
 }
@@ -174,12 +174,12 @@ async function openMedkitFlow(player: Player, houseId: number): Promise<void> {
   }
 
   if (!findOwnedHouseAtInterior(player)) {
-    player.sendClientMessage(Color.error, "Меню дома доступно только внутри вашего дома.");
+    player.sendClientMessage(Color.error, "房屋菜单只能在自己的房屋内使用。");
     return;
   }
 
   if (house.hasMedkit) {
-    player.sendClientMessage(Color.info, "В доме уже есть аптечка.");
+    player.sendClientMessage(Color.info, "房屋里已经有急救包。");
     showHouseMenu(player);
     return;
   }
@@ -197,7 +197,7 @@ async function openMedkitFlow(player: Player, houseId: number): Promise<void> {
     );
   } catch {
     pendingMedkitHouse.delete(account.id);
-    player.sendClientMessage(Color.error, "Не удалось открыть покупку аптечки.");
+    player.sendClientMessage(Color.error, "无法打开急救包购买页面。");
   }
 }
 
@@ -213,18 +213,18 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
   }
 
   if (!findOwnedHouseAtInterior(player)) {
-    player.sendClientMessage(Color.error, "Покупка доступна только внутри вашего дома.");
+    player.sendClientMessage(Color.error, "只能在自己的房屋内购买。");
     return;
   }
 
   if (house.hasMedkit) {
-    player.sendClientMessage(Color.info, "В доме уже есть аптечка.");
+    player.sendClientMessage(Color.info, "房屋里已经有急救包。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account.money));
   if (cash < MEDKIT_PRICE) {
-    player.sendClientMessage(Color.error, "Недостаточно наличных.");
+    player.sendClientMessage(Color.error, "现金不足。");
     return;
   }
 
@@ -240,22 +240,22 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
     buyingMedkit.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] аптечка дома ${houseId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
   buyingMedkit.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "exists") {
-      player.sendClientMessage(Color.info, "В доме уже есть аптечка.");
+      player.sendClientMessage(Color.info, "房屋里已经有急救包。");
       setHouseMedkit(houseId, true);
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "Недостаточно наличных.");
+      player.sendClientMessage(Color.error, "现金不足。");
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -275,7 +275,7 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
     omp.log(`[${SERVER_TAG}] не удалось сохранить деньги ${account.name}: ${message}`);
   });
 
-  player.sendClientMessage(Color.info, `Аптечка куплена за ${formatMoney(MEDKIT_PRICE)}.`);
+  player.sendClientMessage(Color.info, `已购买急救包，花费 ${formatMoney(MEDKIT_PRICE)}.`);
   showHouseMenu(player);
 }
 
@@ -304,7 +304,7 @@ function showHouseInfoDialog(player: Player, house: ReturnType<typeof findOwnedH
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть информацию о доме.");
+    player.sendClientMessage(Color.error, "无法打开房屋信息。");
   }
 }
 

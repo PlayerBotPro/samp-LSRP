@@ -86,7 +86,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     pageByPlayer.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось открыть список интерьеров.");
+    player.sendClientMessage(Color.error, "无法打开室内列表。");
   }
 }
 
@@ -148,18 +148,18 @@ function teleportToInterior(player: Player, spot: AdminInterior): boolean {
 
 function goToSpot(player: Player, spot: AdminInterior): void {
   if (!canTeleport(player)) {
-    player.sendClientMessage(Color.error, "Сейчас нельзя телепортироваться.");
+    player.sendClientMessage(Color.error, "现在不能传送。");
     return;
   }
 
   if (!teleportToInterior(player, spot)) {
-    player.sendClientMessage(Color.error, "Не удалось телепортироваться.");
+    player.sendClientMessage(Color.error, "无法传送。");
     return;
   }
 
   player.sendClientMessage(
     Color.info,
-    `Телепорт: ${spot.name} (interior ${spot.interior}).`
+    `传送至: ${spot.name} (室内 ${spot.interior}).`
   );
 }
 
@@ -189,7 +189,7 @@ export function bindAdminTpint(): void {
       if (!Number.isInteger(index) || index < 1 || index > ADMIN_INTERIORS.length) {
         player.sendClientMessage(
           Color.error,
-          `Использование: /tpint [1-${ADMIN_INTERIORS.length}]`
+          `用法: /tpint [1-${ADMIN_INTERIORS.length}]`
         );
         return;
       }
@@ -198,7 +198,7 @@ export function bindAdminTpint(): void {
       if (!spot) {
         player.sendClientMessage(
           Color.error,
-          `Использование: /tpint [1-${ADMIN_INTERIORS.length}]`
+          `用法: /tpint [1-${ADMIN_INTERIORS.length}]`
         );
         return;
       }

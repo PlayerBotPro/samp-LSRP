@@ -362,20 +362,20 @@ function onOfferResponse(player: Player, accepted: boolean): void {
   }
 
   if (!isInMedVanAsDriver(player)) {
-    player.sendClientMessage(Color.error, "Вы должны быть за рулём фургона доставки.");
+    player.sendClientMessage(Color.error, "你必须驾驶送货面包车。");
     return;
   }
 
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.error,
-      `Фургон уже загружен (${vanMeds} ед.). Сначала разгрузите его.`
+      `面包车已经装载 (${vanMeds} 件)。请先卸货。`
     );
     return;
   }
 
   if (jobs.size > 0) {
-    player.sendClientMessage(Color.error, "Фургон уже занят другим рейсом.");
+    player.sendClientMessage(Color.error, "面包车正在执行另一趟配送。");
     return;
   }
 
@@ -384,11 +384,11 @@ function onOfferResponse(player: Player, accepted: boolean): void {
     Checkpoint.set(player, LOAD_POINT.x, LOAD_POINT.y, LOAD_POINT.z, CHECKPOINT_RADIUS);
     player.sendClientMessage(
       Color.info,
-      `Доставка начата. Заберите ${LOAD_AMOUNT} ед. медикаментов у поставщика.`
+      `配送已开始。请从供应商处领取 ${LOAD_AMOUNT} 件药品。`
     );
   } catch {
     jobs.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось поставить чекпоинт.");
+    player.sendClientMessage(Color.error, "无法设置检查点。");
   }
 }
 
@@ -421,7 +421,7 @@ function onDeliveryCheckpoint(player: Player): void {
 
 function startLoading(player: Player, id: number, job: DeliveryJob): void {
   if (!isInMedVanAsDriver(player)) {
-    player.sendClientMessage(Color.error, "Загрузка только из фургона доставки.");
+    player.sendClientMessage(Color.error, "只能使用送货面包车装货。");
     return;
   }
 
@@ -438,7 +438,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
     }
     player.sendClientMessage(
       Color.error,
-      "Фургон уже загружен. Ваш рейс к поставщику отменён."
+      "面包车已装载。你前往供应商的行程已取消。"
     );
     return;
   }
@@ -463,7 +463,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
 
   player.sendClientMessage(
     Color.info,
-    `Идёт загрузка ${LOAD_AMOUNT} ед. медикаментов. Оставайтесь в фургоне (${LOAD_SEC} сек.).`
+    `正在装载 ${LOAD_AMOUNT} 件药品。请留在面包车内 (${LOAD_SEC} 秒)。`
   );
 
   if (job.loadTimer) {
@@ -533,10 +533,10 @@ function finishLoading(player: Player, id: number, job: DeliveryJob): void {
     );
     player.sendClientMessage(
       Color.info,
-      `Загружено ${vanMeds} ед. медикаментов. Вернитесь к парковке больницы.`
+      `已装载 ${vanMeds} 件药品。返回医院停车场。`
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось поставить чекпоинт возврата.");
+    player.sendClientMessage(Color.error, "无法设置返回检查点。");
   }
 }
 
@@ -557,11 +557,11 @@ function finishReturn(player: Player, id: number): void {
   const boxes = Math.ceil(vanMeds / BOX_AMOUNT);
   player.sendClientMessage(
     Color.info,
-    `Вы на парковке. В фургоне ${vanMeds} ед. — ${boxes} коробок по ${BOX_AMOUNT}.`
+    `你已到达停车场。面包车内有 ${vanMeds} 件药品 — ${boxes} 箱，每箱 ${BOX_AMOUNT} 件。`
   );
   player.sendClientMessage(
     Color.info,
-    "Выйдите из машины, возьмите коробку: /pickmed и отнесите на склад в служебном блоке."
+    "下车领取箱子: /pickmed，然后把它送到员工区仓库。"
   );
 }
 
@@ -581,26 +581,26 @@ function onPickMed(player: Player): void {
   }
 
   if (carrying.has(id)) {
-    player.sendClientMessage(Color.error, "У вас уже есть коробка. Отнесите её на склад.");
+    player.sendClientMessage(Color.error, "你已经有一个箱子。请把它送到仓库。");
     return;
   }
 
   if (hasHospitalMedkitCase(player)) {
     player.sendClientMessage(
       Color.error,
-      "Сначала уберите набор медикаментов (выйдите из больницы или израсходуйте)."
+      "请先放下药品套装 (离开医院或用完药品)。"
     );
     return;
   }
 
   if (vanMeds <= 0) {
-    player.sendClientMessage(Color.error, "В фургоне нет медикаментов.");
+    player.sendClientMessage(Color.error, "面包车里没有药品。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "Выйдите из транспорта, чтобы взять коробку.");
+      player.sendClientMessage(Color.error, "下车后才能领取箱子。");
       return;
     }
   } catch {
@@ -608,14 +608,14 @@ function onPickMed(player: Player): void {
   }
 
   if (!isNearMedVan(player)) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к фургону доставки.");
+    player.sendClientMessage(Color.error, "请靠近送货面包车。");
     return;
   }
 
   if (!isMedVanAtHospitalParking()) {
     player.sendClientMessage(
       Color.error,
-      "Разгрузка только на парковке больницы. Сначала верните фургон на базу."
+      "只能在医院停车场卸货。请先把面包车开回基地。"
     );
     return;
   }
@@ -629,19 +629,19 @@ function onPickMed(player: Player): void {
   } catch {
     vanMeds += take;
     updateMedVanLabel(medsLabelText(vanMeds));
-    player.sendClientMessage(Color.error, "Не удалось взять коробку.");
+    player.sendClientMessage(Color.error, "无法领取箱子。");
     return;
   }
 
   carrying.set(id, take);
   player.sendClientMessage(
     Color.info,
-    `Вы взяли коробку (${take} ед.). Отнесите её на склад медикаментов в служебном блоке.`
+    `你领取了一个箱子 (${take} 件)。把它送到员工区的药品仓库。`
   );
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.gray,
-      `В фургоне осталось ${vanMeds} ед. После сдачи возьмите следующую: /pickmed.`
+      `面包车里还剩 ${vanMeds} 件。交货后领取下一箱: /pickmed.`
     );
   }
 }
@@ -722,18 +722,18 @@ function depositBox(player: Player, id: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `Сдано ${amount} ед. медикаментов. +$${pay}. На складе больницы: ${total}.`
+    `已交付 ${amount} 件药品。+$${pay}. 医院仓库库存: ${total}.`
   );
 
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.info,
-      `В фургоне ещё ${vanMeds} ед. Вернитесь и возьмите коробку: /pickmed.`
+      `面包车里还剩 ${vanMeds} 件。返回领取箱子: /pickmed.`
     );
     return;
   }
 
-  player.sendClientMessage(Color.info, "Фургон пуст. Доставка медикаментов завершена.");
+  player.sendClientMessage(Color.info, "面包车已空。药品配送完成。");
 }
 
 function returnCarriedToVan(player: Player, id: number, message: string): void {
@@ -962,7 +962,7 @@ function isInMedVanAsDriver(player: Player): boolean {
 function ejectFromVehicle(player: Player): void {
   try {
     player.removeFromVehicle();
-    player.sendClientMessage(Color.gray, "Вы отказались от доставки.");
+    player.sendClientMessage(Color.gray, "你拒绝了配送。");
   } catch {
     // Уже не в машине.
   }

@@ -5,7 +5,7 @@ import { registerCommand } from "./registry";
 
 registerCommand("anim", "Список анимаций или /anim [1-74]", (player, args) => {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -16,7 +16,7 @@ registerCommand("anim", "Список анимаций или /anim [1-74]", (pl
   }
 
   if (!/^\d+$/.test(raw)) {
-    player.sendClientMessage(Color.error, "Использование: /anim [1-74]");
+    player.sendClientMessage(Color.error, "用法: /anim [1-74]");
     return;
   }
 
@@ -24,7 +24,7 @@ registerCommand("anim", "Список анимаций или /anim [1-74]", (pl
   if (!Number.isInteger(number) || number < 1 || number > ANIM_COUNT) {
     player.sendClientMessage(
       Color.error,
-      `Использование: /anim [1-${ANIM_COUNT}]`
+      `用法: /anim [1-${ANIM_COUNT}]`
     );
     return;
   }

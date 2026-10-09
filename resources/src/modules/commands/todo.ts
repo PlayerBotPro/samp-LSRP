@@ -13,9 +13,9 @@ registerCommand("todo", "Реплика и действие через *", (play
   if (!speech || !action) {
     player.sendClientMessage(
       Color.error,
-      "Использование: /todo [реплика]*[действие]"
+      "用法: /todo [台词]*[动作]"
     );
-    player.sendClientMessage(Color.gray, "Пример: /todo Привет*махая рукой");
+    player.sendClientMessage(Color.gray, "示例: /todo 你好*挥手");
     return;
   }
 

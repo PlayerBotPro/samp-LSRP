@@ -185,7 +185,7 @@ export function showHelpMenu(player: Player): void {
     );
   } catch {
     menuState.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть список команд.");
+    player.sendClientMessage(Color.error, "无法打开命令列表。");
   }
 }
 
@@ -217,7 +217,7 @@ function showHelpCategory(player: Player, category: HelpCategory): void {
   }
 
   if (lines.length === 0) {
-    player.sendClientMessage(Color.error, "В этом разделе пока нет команд.");
+    player.sendClientMessage(Color.error, "此分类中暂无命令。");
     showHelpMenu(player);
     return;
   }
@@ -234,6 +234,6 @@ function showHelpCategory(player: Player, category: HelpCategory): void {
     );
   } catch {
     menuState.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть раздел команд.");
+    player.sendClientMessage(Color.error, "无法打开命令分类。");
   }
 }

@@ -204,7 +204,7 @@ export function playAnimByIndex(player: Player, index: number): boolean {
   if (!isOnFoot(player)) {
     player.sendClientMessage(
       Color.error,
-      "Вы не можете использовать это в машине."
+      "你不能在车内使用此功能。"
     );
     return false;
   }
@@ -218,7 +218,7 @@ export function playAnimByIndex(player: Player, index: number): boolean {
   forceClearAnim(player);
 
   if (!applyEntry(player, entry)) {
-    player.sendClientMessage(Color.error, "Не удалось запустить анимацию.");
+    player.sendClientMessage(Color.error, "无法启动动画。");
     return false;
   }
 
@@ -236,7 +236,7 @@ export function openAnimDialog(player: Player): void {
   if (!isOnFoot(player)) {
     player.sendClientMessage(
       Color.error,
-      "Вы не можете использовать это в машине."
+      "你不能在车内使用此功能。"
     );
     return;
   }
@@ -252,7 +252,7 @@ export function openAnimDialog(player: Player): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть список анимаций.");
+    player.sendClientMessage(Color.error, "无法打开动画列表。");
   }
 }
 
@@ -270,7 +270,7 @@ function showAnimInfo(player: Player): void {
   } catch {
     player.sendClientMessage(
       Color.info,
-      "Быстрый запуск: /anim [номер] из списка."
+      "快速启动: 从列表中选择 /anim [编号]."
     );
   }
 }

@@ -12,7 +12,7 @@ registerCommand("gov", "Гос. новости", (player, args) => {
   if (!account || !membership || !membership.org.gov) {
     player.sendClientMessage(
       Color.error,
-      "Вы не состоите в государственной организации."
+      "你不属于政府组织。"
     );
     return;
   }
@@ -20,14 +20,14 @@ registerCommand("gov", "Гос. новости", (player, args) => {
   if (membership.rank.id !== MAX_ORG_RANK) {
     player.sendClientMessage(
       Color.error,
-      "Гос. новости доступны только лидеру организации."
+      "政府新闻仅组织领导可发布。"
     );
     return;
   }
 
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /gov [текст]");
+    player.sendClientMessage(Color.error, "用法: /gov [文本]");
     return;
   }
 

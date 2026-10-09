@@ -179,7 +179,7 @@ function openSurrenderDialog(player: Player, slotId: number): void {
   } catch {
     pending.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -216,12 +216,12 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
     }
 
     if (isJailed(player)) {
-      player.sendClientMessage(Color.error, "Вы уже в тюрьме.");
+      player.sendClientMessage(Color.error, "你已经在监狱里。");
       return;
     }
 
     if (account.wantedLevel <= 0) {
-      player.sendClientMessage(Color.error, "У вас нет розыска.");
+      player.sendClientMessage(Color.error, "你没有通缉等级。");
       return;
     }
 
@@ -231,7 +231,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
         player.getVirtualWorld() !== PICKUP.world ||
         player.getInterior() !== PICKUP.interior
       ) {
-        player.sendClientMessage(Color.error, "Подойдите к стойке сдачи.");
+        player.sendClientMessage(Color.error, "请靠近自首柜台。");
         return;
       }
 
@@ -242,7 +242,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
         pos.z - PICKUP.z
       );
       if (dist > PICKUP_RADIUS * 2) {
-        player.sendClientMessage(Color.error, "Подойдите к стойке сдачи.");
+        player.sendClientMessage(Color.error, "请靠近自首柜台。");
         return;
       }
     } catch {
@@ -257,7 +257,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
     if (!ok) {
       player.sendClientMessage(
         Color.error,
-        "Не удалось оформить сдачу. Попробуйте ещё раз."
+        "无法办理自首。请重试。"
       );
       return;
     }
@@ -268,7 +268,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
     const verb = byGender(account.gender, "сдался", "сдалась");
     player.sendClientMessage(
       Color.info,
-      `Вы ${verb} с повинной. Розыск снят, срок: ${minutes} мин.`
+      `你${verb}自首了。通缉已解除，刑期: ${minutes} 分钟。`
     );
 
     notifyLawStaff(

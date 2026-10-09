@@ -58,7 +58,7 @@ registerCommand("advokats", "Список адвокатов online", (player) =
   list.sort((a, b) => a.name.localeCompare(b.name) || a.slot - b.slot);
 
   if (list.length === 0) {
-    player.sendClientMessage(Color.white, "Сейчас нет адвокатов в игре.");
+    player.sendClientMessage(Color.white, "当前没有律师在线。");
     return;
   }
 

@@ -266,7 +266,7 @@ function showHireDialog(player: Player): void {
       "Нет"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -282,7 +282,7 @@ function showQuitDialog(player: Player, job: Job): void {
       "Нет"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -298,32 +298,32 @@ function hire(player: Player): void {
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сначала закончите лечение.");
+    player.sendClientMessage(Color.error, "请先完成治疗。");
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме работать нельзя.");
+    player.sendClientMessage(Color.error, "不能在监狱里工作。");
     return;
   }
 
   if (isMinerOnShift(player)) {
-    player.sendClientMessage(Color.error, "Сначала закончите смену на шахте.");
+    player.sendClientMessage(Color.error, "请先结束矿工班次。");
     return;
   }
 
   if (isArmyFactoryOnShift(player)) {
-    player.sendClientMessage(Color.error, "Сначала закончите смену в цехе патронов.");
+    player.sendClientMessage(Color.error, "请先结束弹药车间班次。");
     return;
   }
 
   if (getExam(player)) {
-    player.sendClientMessage(Color.error, "Сначала закончите экзамен в автошколе.");
+    player.sendClientMessage(Color.error, "请先完成驾校考试。");
     return;
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "Подойдите к месту устройства.");
+    player.sendClientMessage(Color.error, "请靠近工作地点。");
     return;
   }
 
@@ -350,7 +350,7 @@ function hire(player: Player): void {
   setPickupCheckpoint(player);
   player.sendClientMessage(
     Color.info,
-    "Рабочий день начат. Отнесите мешки с погрузки на склад — метка на радаре."
+    "工作日已开始。把装载区的麻袋送到仓库 — 标记点已显示在雷达上。"
   );
 }
 
@@ -363,7 +363,7 @@ function finishShift(player: Player): void {
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "Подойдите к месту устройства.");
+    player.sendClientMessage(Color.error, "请靠近工作地点。");
     return;
   }
 
@@ -383,7 +383,7 @@ function finishShift(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `Смена закончена. Мешков: ${bags}. Зарплата: $${salary}.`
+    `班次结束。麻袋: ${bags}. 工资: $${salary}.`
   );
 }
 
@@ -400,7 +400,7 @@ function abortShift(player: Player, notify: boolean): void {
   if (notify && isPlayerActive(player)) {
     player.sendClientMessage(
       Color.error,
-      "Смена сорвана. Невыплаченная зарплата сгорела."
+      "班次中断。未发放的工资已作废。"
     );
   }
 }
@@ -453,12 +453,12 @@ function takeBag(player: Player, job: Job): void {
   } catch {
     clearBag(player);
     setPickupCheckpoint(player);
-    player.sendClientMessage(Color.error, "Не удалось взять мешок. Попробуйте снова.");
+    player.sendClientMessage(Color.error, "无法拿起麻袋。请重试。");
     return;
   }
 
   job.phase = "carry";
-  player.sendClientMessage(Color.info, "Мешок в руках. Отнесите его к точке разгрузки.");
+  player.sendClientMessage(Color.info, "你拿着麻袋。把它送到卸货点。");
 }
 
 function deliverBag(player: Player, job: Job): void {
@@ -485,9 +485,9 @@ function deliverBag(player: Player, job: Job): void {
 
   player.sendClientMessage(
     Color.info,
-    `Мешков перенесено: ${job.bags}. +$${PAY_PER_BAG}`
+    `已搬运麻袋: ${job.bags}. +$${PAY_PER_BAG}`
   );
-  player.sendClientMessage(Color.white, `Зарплата за смену: $${job.salary}`);
+  player.sendClientMessage(Color.white, `本班工资: $${job.salary}`);
 }
 
 function dropBag(player: Player, message: string): void {

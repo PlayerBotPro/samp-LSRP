@@ -105,18 +105,18 @@ export function bindAdminTpcor(): void {
       }
 
       if (!canTeleport(player)) {
-        player.sendClientMessage(Color.error, "Сейчас нельзя телепортироваться.");
+        player.sendClientMessage(Color.error, "现在不能传送。");
         return;
       }
 
       if (!teleportToCoords(player, parsed.x, parsed.y, parsed.z)) {
-        player.sendClientMessage(Color.error, "Не удалось телепортироваться.");
+        player.sendClientMessage(Color.error, "无法传送。");
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `Вы телепортировались: ${formatCoord(parsed.x)}, ${formatCoord(parsed.y)}, ${formatCoord(parsed.z)}.`
+        `你已传送至: ${formatCoord(parsed.x)}, ${formatCoord(parsed.y)}, ${formatCoord(parsed.z)}.`
       );
     },
     true

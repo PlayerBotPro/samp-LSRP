@@ -69,60 +69,60 @@ registerCommand(
 
     const vehicleId = driverVehicleId(player);
     if (vehicleId === null) {
-      player.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+      player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
       return;
     }
 
     const slot = parseSlot(args);
     if (slot === null) {
-      player.sendClientMessage(Color.error, "Использование: /eject [id]");
+      player.sendClientMessage(Color.error, "用法: /eject [id]");
       return;
     }
 
     const target = findTarget(slot);
     if (!target) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     const selfId = playerId(player);
     const targetId = playerId(target);
     if (target === player || (selfId !== null && selfId === targetId)) {
-      player.sendClientMessage(Color.error, "Нельзя выкинуть самого себя.");
+      player.sendClientMessage(Color.error, "不能把自己踢出去。");
       return;
     }
 
     try {
       if (!target.isInAnyVehicle()) {
-        player.sendClientMessage(Color.error, "Этот игрок не в транспорте.");
+        player.sendClientMessage(Color.error, "该玩家不在载具中。");
         return;
       }
 
       if (target.getVehicleID() !== vehicleId) {
-        player.sendClientMessage(Color.error, "Этот игрок не в вашем транспорте.");
+        player.sendClientMessage(Color.error, "该玩家不在你的载具中。");
         return;
       }
 
       // Повторная проверка: водитель мог выйти / сменить ТС между проверками.
       if (driverVehicleId(player) !== vehicleId) {
-        player.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+        player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
         return;
       }
 
       target.removeFromVehicle();
     } catch {
-      player.sendClientMessage(Color.error, "Не удалось выкинуть игрока.");
+      player.sendClientMessage(Color.error, "无法将玩家踢出载具。");
       return;
     }
 
     player.sendClientMessage(
       Color.info,
-      `Вы выкинули из машины ${playerName(target)}.`
+      `你把 ${playerName(target)} 踢出了车。`
     );
     try {
       target.sendClientMessage(
         Color.info,
-        `${playerName(player)} выкинул вас из машины.`
+        `${playerName(player)} 把你踢出了车。`
       );
     } catch {
       // Уже вышел.

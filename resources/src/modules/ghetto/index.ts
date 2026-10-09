@@ -207,7 +207,7 @@ function showMenu(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -236,7 +236,7 @@ function buyArmyForm(player: Player): void {
   }
 
   if (!isNearDealer(player)) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к барыге.");
+    player.sendClientMessage(Color.error, "请靠近毒贩。");
     return;
   }
 
@@ -251,26 +251,26 @@ function buyArmyForm(player: Player): void {
   }
 
   if (account.jailSeconds > 0) {
-    player.sendClientMessage(Color.error, "В тюрьме форма недоступна.");
+    player.sendClientMessage(Color.error, "在监狱里无法更换服装。");
     return;
   }
 
   if (isArmyDisguised(player)) {
-    player.sendClientMessage(Color.error, `${DEALER_NAME}: ты уже в форме.`);
+    player.sendClientMessage(Color.error, `${DEALER_NAME}: 你已经穿好这套服装了。`);
     return;
   }
 
   if (account.money < FORM_PRICE) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно денег. Нужно $${FORM_PRICE}.`
+      `资金不足。需要 $${FORM_PRICE}.`
     );
     return;
   }
 
   // Сначала форма — иначе при сбое выдачи деньги уже списаны.
   if (!startArmyDisguise(player)) {
-    player.sendClientMessage(Color.error, "Не удалось выдать форму.");
+    player.sendClientMessage(Color.error, "无法发放服装。");
     return;
   }
 
@@ -287,11 +287,11 @@ function buyArmyForm(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `${DEALER_NAME}: держи форму за $${FORM_PRICE}. Ворота армии откроются.`
+    `${DEALER_NAME}: 给你服装，价格 $${FORM_PRICE}. 军队大门将会打开。`
   );
   player.sendClientMessage(
     Color.gray,
-    "После смерти или выхода форма снимется."
+    "死亡或退出后将脱下这套服装。"
   );
 }
 
@@ -307,7 +307,7 @@ function showBuyDialog(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -321,7 +321,7 @@ function onBuyResponse(player: Player, accepted: boolean, rawInput: string): voi
   }
 
   if (!isNearDealer(player)) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к барыге.");
+    player.sendClientMessage(Color.error, "请靠近毒贩。");
     return;
   }
 
@@ -337,33 +337,33 @@ function onBuyResponse(player: Player, accepted: boolean, rawInput: string): voi
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "Введите целое число больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
     showBuyDialog(player);
     return;
   }
 
   if (amount > MAX_BUY) {
-    player.sendClientMessage(Color.error, `За один раз можно купить не больше ${MAX_BUY} шт.`);
+    player.sendClientMessage(Color.error, `每次最多购买 ${MAX_BUY} 件。`);
     showBuyDialog(player);
     return;
   }
 
   const total = amount * DRUG_PRICE;
   if (!Number.isSafeInteger(total) || total <= 0) {
-    player.sendClientMessage(Color.error, "Слишком большое количество.");
+    player.sendClientMessage(Color.error, "数量过多。");
     showBuyDialog(player);
     return;
   }
 
   if (account.money < total) {
-    player.sendClientMessage(Color.error, `Недостаточно денег. Нужно $${total}.`);
+    player.sendClientMessage(Color.error, `资金不足。需要 $${total}.`);
     showBuyDialog(player);
     return;
   }
 
   const nextDrugs = account.drugs + amount;
   if (!Number.isSafeInteger(nextDrugs) || nextDrugs < account.drugs) {
-    player.sendClientMessage(Color.error, "Слишком большое количество.");
+    player.sendClientMessage(Color.error, "数量过多。");
     showBuyDialog(player);
     return;
   }
@@ -384,9 +384,9 @@ function onBuyResponse(player: Player, accepted: boolean, rawInput: string): voi
 
   player.sendClientMessage(
     Color.info,
-    `${DEALER_NAME}: держи, ${amount} шт. за $${total}.`
+    `${DEALER_NAME}: 给你，${amount} 件，价格 $${total}.`
   );
-  player.sendClientMessage(Color.white, `Наркотики: ${nextDrugs} шт.`);
+  player.sendClientMessage(Color.white, `毒品: ${nextDrugs} 件。`);
 }
 
 function denyOutsider(player: Player): void {
@@ -402,7 +402,7 @@ function denyOutsider(player: Player): void {
   }
 
   lastDenyAt.set(id, now);
-  player.sendClientMessage(Color.gray, `${DEALER_NAME}: Я работаю только с местными.`);
+  player.sendClientMessage(Color.gray, `${DEALER_NAME}: 我只和本地人做生意。`);
 }
 
 function isGhettoGangMember(player: Player): boolean {

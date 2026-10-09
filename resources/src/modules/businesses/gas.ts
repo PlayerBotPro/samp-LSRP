@@ -147,7 +147,7 @@ async function tryRefuel(player: Player): Promise<void> {
 
   const fuel = getVehicleFuel(vehicle);
   if (fuel >= MAX_VEHICLE_FUEL - 0.05) {
-    player.sendClientMessage(Color.error, "Бак уже полный.");
+    player.sendClientMessage(Color.error, "油箱已经加满。");
     return;
   }
 
@@ -156,7 +156,7 @@ async function tryRefuel(player: Player): Promise<void> {
   if (account.money < price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+      `现金不足。需要 ${formatMoney(price)}.`
     );
     return;
   }
@@ -166,7 +166,7 @@ async function tryRefuel(player: Player): Promise<void> {
   setControllable(player, false);
   player.sendClientMessage(
     Color.info,
-    `Заправка... ${formatMoney(price)} (${missing} л). Подождите.`
+    `正在加油... ${formatMoney(price)} (${missing} 升). 请稍候。`
   );
 
   await sleep(REFUEL_MS);
@@ -191,25 +191,25 @@ async function tryRefuel(player: Player): Promise<void> {
   try {
     if (player.getState() !== PLAYER_STATE_DRIVER) {
       abortRefuel(player);
-      player.sendClientMessage(Color.error, "Заправка отменена.");
+      player.sendClientMessage(Color.error, "加油已取消。");
       return;
     }
 
     liveVehicle = omp.vehicles.at(player.getVehicleID()) ?? null;
     if (!liveVehicle || Number(liveVehicle.getID()) !== vehicleId) {
       abortRefuel(player);
-      player.sendClientMessage(Color.error, "Заправка отменена.");
+      player.sendClientMessage(Color.error, "加油已取消。");
       return;
     }
 
     if (nearestGasStation(player, liveVehicle)?.id !== station.id) {
       abortRefuel(player);
-      player.sendClientMessage(Color.error, "Заправка отменена: вы уехали от колонки.");
+      player.sendClientMessage(Color.error, "加油已取消: 你已驶离油泵。");
       return;
     }
   } catch {
     abortRefuel(player);
-    player.sendClientMessage(Color.error, "Заправка отменена.");
+    player.sendClientMessage(Color.error, "加油已取消。");
     return;
   }
 
@@ -225,7 +225,7 @@ async function tryRefuel(player: Player): Promise<void> {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] АЗС biz=${station.id}: ${message}`);
     abortRefuel(player);
-    player.sendClientMessage(Color.error, "Оплата не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
   }
 
@@ -238,10 +238,10 @@ async function tryRefuel(player: Player): Promise<void> {
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+        `现金不足。需要 ${formatMoney(price)}.`
       );
     } else {
-      player.sendClientMessage(Color.error, "Оплата не прошла. Попробуйте ещё раз.");
+      player.sendClientMessage(Color.error, "付款失败。请重试。");
     }
     return;
   }
@@ -268,7 +268,7 @@ async function tryRefuel(player: Player): Promise<void> {
 
   player.sendClientMessage(
     Color.tryOk,
-    `Бак заправлен до ${MAX_VEHICLE_FUEL}. Оплачено ${formatMoney(price)}.`
+    `油箱已加满至 ${MAX_VEHICLE_FUEL}. 已支付 ${formatMoney(price)}.`
   );
 }
 

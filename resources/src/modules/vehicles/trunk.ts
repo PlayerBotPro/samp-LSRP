@@ -97,7 +97,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "Рядом нет вашего транспорта. Подойдите ближе или сядьте в него."
+      "附近没有你的载具。请靠近或上车。"
     );
     return;
   }
@@ -114,7 +114,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
 
   const personal = getPersonalRuntime(runtimeId);
   if (!personal || personal.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Это не ваш транспорт.");
+    player.sendClientMessage(Color.error, "这不是你的载具。");
     return;
   }
 
@@ -139,7 +139,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
     );
     showTrunkOpenLabel(player, account.gender);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть багажник.");
+    player.sendClientMessage(Color.error, "无法打开后备箱。");
   }
 }
 
@@ -162,7 +162,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "Рядом нет вашего транспорта. Подойдите ближе или сядьте в него."
+      "附近没有你的载具。请靠近或上车。"
     );
     return;
   }
@@ -255,7 +255,7 @@ function showAmountDialog(
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
     clearPending(player);
   }
 }
@@ -278,7 +278,7 @@ async function onAmountResponse(
   const slotId = playerId(player);
   const pending = slotId !== null ? pendingByPlayer.get(slotId) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "Операция прервана. Откройте багажник снова.");
+    player.sendClientMessage(Color.error, "操作中断。请重新打开后备箱。");
     return;
   }
 
@@ -292,7 +292,7 @@ async function onAmountResponse(
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "Рядом нет вашего транспорта. Подойдите ближе или сядьте в него."
+      "附近没有你的载具。请靠近或上车。"
     );
     clearPending(player);
     return;
@@ -317,14 +317,14 @@ async function onAmountResponse(
     personal.dbId !== pending.dbId ||
     runtimeId !== pending.runtimeId
   ) {
-    player.sendClientMessage(Color.error, "Операция прервана. Откройте багажник снова.");
+    player.sendClientMessage(Color.error, "操作中断。请重新打开后备箱。");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "Введите целое число больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
     showAmountDialog(player, pending.action, pending.item, personal);
     return;
   }
@@ -332,7 +332,7 @@ async function onAmountResponse(
   if (amount > MAX_TRANSFER) {
     player.sendClientMessage(
       Color.error,
-      `За один раз можно не больше ${MAX_TRANSFER} шт.`
+      `每次最多可存入 ${MAX_TRANSFER} 件。`
     );
     showAmountDialog(player, pending.action, pending.item, personal);
     return;
@@ -359,7 +359,7 @@ async function applyPut(
 
   const have = playerItemAmount(account, pending.item);
   if (have < amount) {
-    player.sendClientMessage(Color.error, `Недостаточно: ${ITEM_LABEL[pending.item]}.`);
+    player.sendClientMessage(Color.error, `数量不足: ${ITEM_LABEL[pending.item]}.`);
     showAmountDialog(player, "put", pending.item, personal);
     return;
   }
@@ -369,7 +369,7 @@ async function applyPut(
   if (trunkHave + amount > cap) {
     player.sendClientMessage(
       Color.error,
-      `В багажнике максимум ${cap} шт. Свободно: ${Math.max(0, cap - trunkHave)}.`
+      `后备箱最多可装 ${cap} 件。剩余空间: ${Math.max(0, cap - trunkHave)}.`
     );
     showAmountDialog(player, "put", pending.item, personal);
     return;
@@ -379,7 +379,7 @@ async function applyPut(
   const nextAmmo = pending.item === "ammo" ? account.ammo - amount : account.ammo;
   const nextMetal = pending.item === "metal" ? account.metal - amount : account.metal;
   if (nextDrugs < 0 || nextAmmo < 0 || nextMetal < 0) {
-    player.sendClientMessage(Color.error, `Недостаточно: ${ITEM_LABEL[pending.item]}.`);
+    player.sendClientMessage(Color.error, `数量不足: ${ITEM_LABEL[pending.item]}.`);
     showAmountDialog(player, "put", pending.item, personal);
     return;
   }
@@ -394,7 +394,7 @@ async function applyPut(
   if (!ok) {
     player.sendClientMessage(
       Color.error,
-      `В багажнике нет места для: ${ITEM_LABEL[pending.item]}.`
+      `后备箱没有空间存放: ${ITEM_LABEL[pending.item]}.`
     );
     showAmountDialog(player, "put", pending.item, personal);
     return;
@@ -409,7 +409,7 @@ async function applyPut(
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `Вы положили в багажник: ${ITEM_LABEL[pending.item]} ${amount} шт.`
+    `你放入后备箱: ${ITEM_LABEL[pending.item]} ${amount} 件。`
   );
 }
 
@@ -429,7 +429,7 @@ async function applyTake(
   if (trunkHave < amount) {
     player.sendClientMessage(
       Color.error,
-      `В багажнике недостаточно: ${ITEM_LABEL[pending.item]}.`
+      `后备箱中数量不足: ${ITEM_LABEL[pending.item]}.`
     );
     showAmountDialog(player, "take", pending.item, personal);
     return;
@@ -444,7 +444,7 @@ async function applyTake(
     !Number.isSafeInteger(nextAmmo) ||
     !Number.isSafeInteger(nextMetal)
   ) {
-    player.sendClientMessage(Color.error, "Слишком большое количество.");
+    player.sendClientMessage(Color.error, "数量过多。");
     clearPending(player);
     return;
   }
@@ -459,7 +459,7 @@ async function applyTake(
   if (!ok) {
     player.sendClientMessage(
       Color.error,
-      `В багажнике недостаточно: ${ITEM_LABEL[pending.item]}.`
+      `后备箱中数量不足: ${ITEM_LABEL[pending.item]}.`
     );
     showAmountDialog(player, "take", pending.item, personal);
     return;
@@ -474,7 +474,7 @@ async function applyTake(
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `Вы взяли из багажника: ${ITEM_LABEL[pending.item]} ${amount} шт.`
+    `你从后备箱取出: ${ITEM_LABEL[pending.item]} ${amount} 件。`
   );
 }
 

@@ -21,7 +21,7 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
   const subject = target ?? viewer;
   const account = getAccount(subject);
   if (!account) {
-    viewer.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    viewer.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -77,7 +77,7 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "Не удалось открыть статистику.");
+    viewer.sendClientMessage(Color.error, "无法打开统计信息。");
   }
 }
 

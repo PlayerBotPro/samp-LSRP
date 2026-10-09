@@ -79,28 +79,28 @@ async function openBuyBusinessDialog(player: Player): Promise<void> {
 
   const business = findNearbyForSaleBusiness(player);
   if (!business) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу свободного бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近空置企业的标记点。");
     return;
   }
 
   if (findOwnedBusiness(account.id)) {
-    player.sendClientMessage(Color.error, "У вас уже есть бизнес.");
+    player.sendClientMessage(Color.error, "你已经拥有企业。");
     return;
   }
 
   if (account.level < MIN_BUY_LEVEL) {
-    player.sendClientMessage(Color.error, "Купить бизнес можно с 3 уровня.");
+    player.sendClientMessage(Color.error, "达到 3 级后才能购买企业。");
     return;
   }
 
   if (!account.passport) {
-    player.sendClientMessage(Color.error, "Нужен паспорт. Оформите его в мэрии.");
+    player.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account.money));
   if (cash < business.price) {
-    player.sendClientMessage(Color.error, "Недостаточно наличных.");
+    player.sendClientMessage(Color.error, "现金不足。");
     return;
   }
 
@@ -126,7 +126,7 @@ async function openBuyBusinessDialog(player: Player): Promise<void> {
     );
   } catch {
     pendingBuy.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть окно покупки.");
+    player.sendClientMessage(Color.error, "无法打开购买窗口。");
   }
 }
 
@@ -139,33 +139,33 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
 
   const business = getBusiness(businessId);
   if (!business || business.ownerId !== null) {
-    player.sendClientMessage(Color.error, "Этот бизнес уже куплен.");
+    player.sendClientMessage(Color.error, "该企业已被购买。");
     return;
   }
 
   if (!isNearBusinessEntrance(player, businessId)) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近企业标记点。");
     return;
   }
 
   if (findOwnedBusiness(account.id)) {
-    player.sendClientMessage(Color.error, "У вас уже есть бизнес.");
+    player.sendClientMessage(Color.error, "你已经拥有企业。");
     return;
   }
 
   if (account.level < MIN_BUY_LEVEL) {
-    player.sendClientMessage(Color.error, "Купить бизнес можно с 3 уровня.");
+    player.sendClientMessage(Color.error, "达到 3 级后才能购买企业。");
     return;
   }
 
   if (!account.passport) {
-    player.sendClientMessage(Color.error, "Нужен паспорт. Оформите его в мэрии.");
+    player.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account.money));
   if (cash < business.price) {
-    player.sendClientMessage(Color.error, "Недостаточно наличных.");
+    player.sendClientMessage(Color.error, "现金不足。");
     return;
   }
 
@@ -181,25 +181,25 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] покупка бизнеса ${businessId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
   buying.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "owned") {
-      player.sendClientMessage(Color.error, "У вас уже есть бизнес.");
+      player.sendClientMessage(Color.error, "你已经拥有企业。");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "Недостаточно наличных.");
+      player.sendClientMessage(Color.error, "现金不足。");
       return;
     }
     if (result.reason === "sold") {
-      player.sendClientMessage(Color.error, "Этот бизнес уже куплен.");
+      player.sendClientMessage(Color.error, "该企业已被购买。");
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -212,7 +212,7 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
 
   const owned = setBusinessOwner(businessId, account.id, account.name);
   if (!owned) {
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -233,6 +233,6 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
 
   player.sendClientMessage(
     Color.info,
-    `Поздравляем с покупкой бизнеса «${owned.name}» (#${owned.id}) за ${formatMoney(owned.price)}!`
+    `恭喜你以 ${formatMoney(owned.price)} 的价格购买企业 «${owned.name}» (#${owned.id})!`
   );
 }

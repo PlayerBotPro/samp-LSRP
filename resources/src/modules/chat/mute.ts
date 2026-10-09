@@ -54,7 +54,7 @@ export function notifyIfMuted(player: Player, options?: { bubble?: boolean }): b
 
   player.sendClientMessage(
     Color.error,
-    `У вас запрет на чат. Осталось: ${formatMuteLeft(left)}.`
+    `你被禁止使用聊天。剩余时间: ${formatMuteLeft(left)}.`
   );
 
   if (options?.bubble) {
@@ -134,7 +134,7 @@ function expireMute(player: Player, notify: boolean): void {
   });
 
   if (notify && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, "Вы снова можете пользоваться чатом.");
+    player.sendClientMessage(Color.info, "你现在可以再次使用聊天了。");
   }
 }
 

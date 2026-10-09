@@ -107,7 +107,7 @@ function showMenu(player: Player): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть меню.");
+    player.sendClientMessage(Color.error, "无法打开菜单。");
   }
 }
 
@@ -123,7 +123,7 @@ function showRulesDialog(player: Player): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть правила.");
+    player.sendClientMessage(Color.error, "无法打开规则。");
   }
 }
 
@@ -145,7 +145,7 @@ function showInviteDialog(player: Player, error?: string): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть форму.");
+    player.sendClientMessage(Color.error, "无法打开表格。");
   }
 }
 
@@ -169,7 +169,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
   }
 
   if (account.invitedBy) {
-    player.sendClientMessage(Color.gray, "Пригласивший уже указан.");
+    player.sendClientMessage(Color.gray, "邀请人已经填写。");
     return;
   }
 
@@ -211,14 +211,14 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     }
 
     if (!saved) {
-      player.sendClientMessage(Color.gray, "Пригласивший уже указан.");
+      player.sendClientMessage(Color.gray, "邀请人已经填写。");
       return;
     }
 
     patchAccount(player, { invitedBy: row.name });
     player.sendClientMessage(
       Color.info,
-      `Пригласивший сохранён: ${row.name}.`
+      `已保存邀请人: ${row.name}.`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -226,7 +226,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.error,
-        "Не удалось сохранить. Попробуй позже."
+        "无法保存。请稍后重试。"
       );
     }
   }

@@ -135,11 +135,11 @@ function tickWantedDecay(): void {
         player.sendClientMessage(
           Color.info,
           dropped === 1
-            ? `Уровень розыска снижен: ${next}.`
-            : `Уровень розыска снижен: ${next} (-${dropped}).`
+            ? `通缉等级已降低: ${next}.`
+            : `通缉等级已降低: ${next} (-${dropped}).`
         );
       } else {
-        player.sendClientMessage(Color.info, "Розыск снят: срок давности.");
+        player.sendClientMessage(Color.info, "通缉已解除: 时效已过。");
       }
     } catch {
       // Уже вышел.

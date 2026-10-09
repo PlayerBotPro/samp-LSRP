@@ -7,7 +7,7 @@ import { registerCommand } from "./registry";
 registerCommand("s", "Крикнуть на большую дистанцию", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /s [текст]");
+    player.sendClientMessage(Color.error, "用法: /s [文本]");
     return;
   }
 

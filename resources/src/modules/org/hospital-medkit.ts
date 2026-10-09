@@ -150,7 +150,7 @@ function tickHospitalMedkit(): void {
       if (back > 0) {
         player.sendClientMessage(
           Color.info,
-          `Медикаменты (${back} ед.) возвращены на склад больницы.`
+          `药品 (${back} 件) 已归还医院仓库。`
         );
       }
       return;
@@ -218,7 +218,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   if (hasCase.has(id)) {
     standingOnStock.add(id);
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "У вас уже есть набор медикаментов.");
+      player.sendClientMessage(Color.error, "你已经有一套药品。");
     }
     return;
   }
@@ -227,14 +227,14 @@ function takeMedkitFromStock(player: Player, id: number): void {
   if (have > 0) {
     if (!attachMedkitCase(player)) {
       if (canDeny(id)) {
-        player.sendClientMessage(Color.error, "Не удалось взять чемодан.");
+        player.sendClientMessage(Color.error, "无法领取药箱。");
       }
       return;
     }
     standingOnStock.add(id);
     player.sendClientMessage(
       Color.info,
-      `Чемодан надет. Медикаментов: ${have}. Лечение: /medhelp [id] [сумма].`
+      `你已装备药箱。药品: ${have}. 治疗: /medhelp [id] [金额].`
     );
     return;
   }
@@ -243,7 +243,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   if (stock < 1) {
     // Не sticky — когда склад пополнят, можно взять не отходя.
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "На складе нет медикаментов.");
+      player.sendClientMessage(Color.error, "仓库里没有药品。");
     }
     return;
   }
@@ -251,7 +251,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   const take = Math.min(MEDKIT_TAKE_AMOUNT, stock);
   if (!takeWarehouseMeds(ORG_HOSPITAL_ID, take)) {
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "Не удалось взять медикаменты со склада.");
+      player.sendClientMessage(Color.error, "无法从仓库领取药品。");
     }
     return;
   }
@@ -262,7 +262,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
     addWarehouseMeds(ORG_HOSPITAL_ID, take);
     refreshHospitalMedsStockLabel();
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "Не удалось взять чемодан.");
+      player.sendClientMessage(Color.error, "无法领取药箱。");
     }
     return;
   }
@@ -271,7 +271,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   standingOnStock.add(id);
   player.sendClientMessage(
     Color.info,
-    `Вы взяли набор: ${take} ед. медикаментов. Лечение: /medhelp [id] [сумма].`
+    `你领取了药品套装: ${take} 件。治疗: /medhelp [id] [金额].`
   );
 }
 

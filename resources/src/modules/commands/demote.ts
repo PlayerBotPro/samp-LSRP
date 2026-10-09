@@ -43,7 +43,7 @@ registerCommand(
     ) {
       player.sendClientMessage(
         Color.error,
-        "Команда доступна сотрудникам FBI с 8 ранга."
+        "此命令仅供 8 级及以上的 FBI 员工使用。"
       );
       return;
     }
@@ -58,7 +58,7 @@ registerCommand(
     if (!idPart || !/^\d+$/.test(idPart) || !reason) {
       player.sendClientMessage(
         Color.error,
-        "Использование: /demote [id] [причина]"
+        "用法: /demote [id] [原因]"
       );
       return;
     }
@@ -67,7 +67,7 @@ registerCommand(
     if (!Number.isInteger(slot) || slot < 0) {
       player.sendClientMessage(
         Color.error,
-        "Использование: /demote [id] [причина]"
+        "用法: /demote [id] [原因]"
       );
       return;
     }
@@ -78,24 +78,24 @@ registerCommand(
     }
 
     if (slot === actorId) {
-      player.sendClientMessage(Color.error, "Нельзя уволить самого себя.");
+      player.sendClientMessage(Color.error, "不能解雇自己。");
       return;
     }
 
     const target = findTarget(slot);
     if (!target) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     const targetId = playerId(target);
     if (targetId === null) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-      player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+      player.sendClientMessage(Color.error, "玩家距离太远。");
       return;
     }
 
@@ -106,7 +106,7 @@ registerCommand(
     if (!targetAccount || !targetMembership) {
       player.sendClientMessage(
         Color.error,
-        "Игрок не состоит в государственной организации."
+        "该玩家不属于政府组织。"
       );
       return;
     }
@@ -114,7 +114,7 @@ registerCommand(
     if (!targetMembership.org.gov) {
       player.sendClientMessage(
         Color.error,
-        "Уволить можно только сотрудника государственной организации."
+        "只能解雇政府组织的员工。"
       );
       return;
     }
@@ -122,7 +122,7 @@ registerCommand(
     if (targetMembership.org.id === ORG_FBI_ID) {
       player.sendClientMessage(
         Color.error,
-        "Нельзя уволить сотрудника FBI."
+        "不能解雇 FBI 员工。"
       );
       return;
     }
@@ -131,7 +131,7 @@ registerCommand(
     if (targetRank < MIN_ORG_RANK || targetRank > DEMOTE_MAX_TARGET_RANK) {
       player.sendClientMessage(
         Color.error,
-        "Можно уволить только сотрудников 1–8 ранга."
+        "只能解雇 1–8 级员工。"
       );
       return;
     }
@@ -139,7 +139,7 @@ registerCommand(
     if (busy.has(actorId) || busy.has(targetId)) {
       player.sendClientMessage(
         Color.error,
-        "Подождите завершения предыдущего увольнения."
+        "请等待上一次解雇操作完成。"
       );
       return;
     }

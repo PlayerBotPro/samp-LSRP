@@ -201,7 +201,7 @@ function tryExitBusiness(player: Player): void {
     placeAt(player, exit);
     refreshStreamForPlayer(player);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось выйти из бизнеса.");
+    player.sendClientMessage(Color.error, "无法离开企业。");
   }
 }
 

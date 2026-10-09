@@ -204,19 +204,19 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
   }
 
   if (business.isLocked) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     return;
   }
 
   if (!hasBuyPickup(business)) {
-    player.sendClientMessage(Color.error, "Примерка в этом магазине недоступна.");
+    player.sendClientMessage(Color.error, "该商店暂不提供试穿服务。");
     return;
   }
 
   const gender = account.gender;
   const catalog = clothesCatalog(gender);
   if (catalog.length === 0) {
-    player.sendClientMessage(Color.error, "Нет доступных скинов.");
+    player.sendClientMessage(Color.error, "没有可用皮肤。");
     return;
   }
 
@@ -231,7 +231,7 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
 
   if (!skin) {
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть примерку.");
+    player.sendClientMessage(Color.error, "无法打开试穿界面。");
     return;
   }
 
@@ -301,7 +301,7 @@ function announceClothesSkin(
   const priceText = priced ? formatMoney(priced.price) : "?";
   player.sendClientMessage(
     Color.info,
-    `Скин: ${skin.label} | ID: ${skin.id} | Цена: ${priceText}`
+    `皮肤: ${skin.label} | ID: ${skin.id} | 价格: ${priceText}`
   );
 }
 
@@ -318,7 +318,7 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
   const skin =
     clothesCatalog(account.gender).find((item) => item.id === picked.id) ?? null;
   if (!skin || skin.price !== asClothesSkin(picked)?.price) {
-    player.sendClientMessage(Color.error, "Скин недоступен.");
+    player.sendClientMessage(Color.error, "该皮肤不可用。");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
@@ -331,32 +331,32 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
   }
 
   if (buying.has(account.id)) {
-    player.sendClientMessage(Color.error, "Подождите завершения покупки.");
+    player.sendClientMessage(Color.error, "请等待购买完成。");
     return;
   }
 
   const business = getBusiness(businessId);
   if (!business || !isClothesType(business.typeId)) {
-    player.sendClientMessage(Color.error, "Магазин недоступен.");
+    player.sendClientMessage(Color.error, "商店暂不可用。");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
 
   if (business.isLocked) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
 
   if (account.skin === skin.id) {
-    player.sendClientMessage(Color.error, "У вас уже этот скин.");
+    player.sendClientMessage(Color.error, "你已经拥有这个皮肤。");
     return;
   }
 
   if (account.money < skin.price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(skin.price)}.`
+      `现金不足。需要 ${formatMoney(skin.price)}.`
     );
     return;
   }
@@ -378,9 +378,9 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
     );
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "Недостаточно наличных.");
+        player.sendClientMessage(Color.error, "现金不足。");
       } else {
-        player.sendClientMessage(Color.error, "Не удалось купить скин.");
+        player.sendClientMessage(Color.error, "无法购买皮肤。");
       }
       return;
     }
@@ -398,7 +398,7 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
 
     player.sendClientMessage(
       Color.info,
-      `Вы купили скин «${skin.label}» за ${formatMoney(skin.price)}.`
+      `你已购买皮肤 «${skin.label}»，花费 ${formatMoney(skin.price)}.`
     );
 
     if (stillInClothesPicker()) {

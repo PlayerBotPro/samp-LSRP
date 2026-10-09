@@ -47,7 +47,7 @@ export function clearWantedByOfficer(officer: Player, target: Player): string | 
   );
 
   try {
-    target.sendClientMessage(Color.info, "С вас сняли розыск.");
+    target.sendClientMessage(Color.info, "你的通缉已被解除。");
   } catch {
     // Уже вышел.
   }
@@ -59,26 +59,26 @@ registerCommand("clear", "Снять розыск с игрока (полици�
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(
       Color.error,
-      "Команда доступна сотрудникам полиции и FBI."
+      "此命令仅供警察和 FBI 员工使用。"
     );
     return;
   }
 
   const raw = args.trim();
   if (!raw || !/^\d+$/.test(raw)) {
-    player.sendClientMessage(Color.error, "Использование: /clear [id]");
+    player.sendClientMessage(Color.error, "用法: /clear [id]");
     return;
   }
 
   const slot = Number(raw);
   if (!Number.isInteger(slot) || slot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /clear [id]");
+    player.sendClientMessage(Color.error, "用法: /clear [id]");
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 

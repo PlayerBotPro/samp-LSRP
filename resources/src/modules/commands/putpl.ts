@@ -32,7 +32,7 @@ registerCommand(
     const { officer, target } = resolved;
 
     if (isJailed(target)) {
-      officer.sendClientMessage(Color.error, "Игрок уже в тюрьме.");
+      officer.sendClientMessage(Color.error, "玩家已经在监狱里。");
       return;
     }
 
@@ -40,45 +40,45 @@ registerCommand(
     let vehicleId = -1;
     try {
       if (!officer.isInAnyVehicle() || officer.getState() !== PLAYER_STATE_DRIVER) {
-        officer.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+        officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
         return;
       }
 
       vehicleId = officer.getVehicleID();
       if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
-        officer.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+        officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
         return;
       }
 
       vehicle = omp.vehicles.at(vehicleId) ?? null;
     } catch {
-      officer.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+      officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
       return;
     }
 
     if (!vehicle) {
-      officer.sendClientMessage(Color.error, "Вы должны быть за рулём.");
+      officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
       return;
     }
 
     try {
       if (target.isInAnyVehicle() && target.getVehicleID() === vehicleId) {
-        officer.sendClientMessage(Color.error, "Этот игрок уже в вашем транспорте.");
+        officer.sendClientMessage(Color.error, "该玩家已经在你的载具里。");
         return;
       }
     } catch {
-      officer.sendClientMessage(Color.error, "Игрок не найден.");
+      officer.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-      officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+      officer.sendClientMessage(Color.error, "玩家距离太远。");
       return;
     }
 
     const seat = findFreePassengerSeat(vehicleId);
     if (seat === null) {
-      officer.sendClientMessage(Color.error, "В транспорте нет свободных мест.");
+      officer.sendClientMessage(Color.error, "载具内没有空位。");
       return;
     }
 
@@ -98,7 +98,7 @@ registerCommand(
       if (wasCuffed) {
         scheduleCuffRefreeze(target, 0);
       }
-      officer.sendClientMessage(Color.error, "Не удалось посадить игрока в транспорт.");
+      officer.sendClientMessage(Color.error, "无法将玩家放入载具。");
       return;
     }
 
@@ -121,9 +121,9 @@ registerCommand(
       `${officerName} ${verb} ${targetName} в транспорт.`
     );
 
-    officer.sendClientMessage(Color.info, `Вы посадили ${targetName} в транспорт.`);
+    officer.sendClientMessage(Color.info, `你将 ${targetName} 带上了载具。`);
     try {
-      target.sendClientMessage(Color.info, `${officerName} ${verb} вас в транспорт.`);
+      target.sendClientMessage(Color.info, `${officerName} ${verb}你上了载具。`);
     } catch {
       // Уже вышел.
     }

@@ -18,20 +18,20 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("lic", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account) {
-    viewer.sendClientMessage(Color.error, "Игрок уже не в сети.");
+    viewer.sendClientMessage(Color.error, "玩家已不在线。");
     return;
   }
 
   showLicenses(viewer, account);
   const verb = byGender(account.gender, "показал", "показала");
-  owner.sendClientMessage(Color.gray, `Вы ${verb} лицензии: ${playerName(viewer)}.`);
-  viewer.sendClientMessage(Color.gray, `${account.name} ${verb} вам лицензии.`);
+  owner.sendClientMessage(Color.gray, `你${verb}了证件: ${playerName(viewer)}.`);
+  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的证件。`);
 });
 
 registerCommand("lic", "Лицензии: посмотреть или показать по id", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -43,13 +43,13 @@ registerCommand("lic", "Лицензии: посмотреть или показ
 
   const slot = Number(rawId);
   if (!Number.isInteger(slot) || slot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /lic [id]");
+    player.sendClientMessage(Color.error, "用法: /lic [id]");
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -59,12 +59,12 @@ registerCommand("lic", "Лицензии: посмотреть или показ
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
@@ -91,6 +91,6 @@ function showLicenses(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "Не удалось открыть лицензии.");
+    viewer.sendClientMessage(Color.error, "无法打开证件。");
   }
 }

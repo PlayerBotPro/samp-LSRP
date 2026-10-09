@@ -131,7 +131,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Бизнес закрыт.");
+    player.sendClientMessage(Color.error, "企业已关闭。");
     return;
   }
 
@@ -142,7 +142,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   ) {
     player.sendClientMessage(
       Color.error,
-      "Для входа в магазин оружия нужна лицензия на оружие."
+      "进入武器商店需要武器执照。"
     );
     return;
   }
@@ -159,7 +159,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   if (fee > 0) {
     const cash = Math.max(0, Math.floor(account.money));
     if (cash < fee) {
-      player.sendClientMessage(Color.error, "Недостаточно наличных для входа.");
+      player.sendClientMessage(Color.error, "进入费用现金不足。");
       return;
     }
 
@@ -174,7 +174,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       omp.log(`[${SERVER_TAG}] вход в бизнес ${business.id} (${account.name}): ${message}`);
-      player.sendClientMessage(Color.error, "Не удалось оплатить вход.");
+      player.sendClientMessage(Color.error, "无法支付入场费。");
       return;
     } finally {
       entering.delete(account.id);
@@ -182,10 +182,10 @@ async function tryEnterBusiness(player: Player): Promise<void> {
 
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "Недостаточно наличных для входа.");
+        player.sendClientMessage(Color.error, "进入费用现金不足。");
         return;
       }
-      player.sendClientMessage(Color.error, "Не удалось оплатить вход.");
+      player.sendClientMessage(Color.error, "无法支付入场费。");
       return;
     }
 
@@ -210,7 +210,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   nearEntrance.delete(slotId);
 
   if (!teleportToBusinessInterior(player, business)) {
-    player.sendClientMessage(Color.error, "Не удалось войти в бизнес.");
+    player.sendClientMessage(Color.error, "无法进入企业。");
   }
 }
 

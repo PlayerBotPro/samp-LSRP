@@ -298,7 +298,7 @@ export function showGpsMenu(player: Player): void {
   const id = playerId(player);
   if (id !== null && activeByPlayer.has(id)) {
     clearRoute(player, id);
-    player.sendClientMessage(Color.gray, "Вы отключили GPS.");
+    player.sendClientMessage(Color.gray, "你已关闭 GPS。");
     return;
   }
 
@@ -361,7 +361,7 @@ function showMainMenu(player: Player): void {
     );
   } catch {
     menuState.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось открыть GPS.");
+    player.sendClientMessage(Color.error, "无法打开 GPS。");
   }
 }
 
@@ -389,7 +389,7 @@ function showCategoryMenu(player: Player, category: GpsCategory): void {
     );
   } catch {
     menuState.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось открыть GPS.");
+    player.sendClientMessage(Color.error, "无法打开 GPS。");
   }
 }
 
@@ -410,7 +410,7 @@ function onGpsListPick(player: Player, listItem: number): void {
 
     const target = category.targets[listItem];
     if (!target) {
-      player.sendClientMessage(Color.error, "Не удалось выбрать пункт GPS.");
+      player.sendClientMessage(Color.error, "无法选择 GPS 目的地。");
       showCategoryMenu(player, category);
       return;
     }
@@ -446,7 +446,7 @@ function onGpsListPick(player: Player, listItem: number): void {
     return;
   }
 
-  player.sendClientMessage(Color.error, "Не удалось выбрать пункт GPS.");
+  player.sendClientMessage(Color.error, "无法选择 GPS 目的地。");
   showMainMenu(player);
 }
 
@@ -455,7 +455,7 @@ function nearestBusinessTarget(player: Player, item: NearestBizItem): GpsTarget 
   try {
     pos = player.getPos();
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось определить вашу позицию.");
+    player.sendClientMessage(Color.error, "无法确定你的位置。");
     return null;
   }
 
@@ -489,7 +489,7 @@ function nearestBusinessTarget(player: Player, item: NearestBizItem): GpsTarget 
   }
 
   if (bestId === null) {
-    player.sendClientMessage(Color.error, `${item.label}: ничего не найдено.`);
+    player.sendClientMessage(Color.error, `${item.label}: 未找到任何内容。`);
     return null;
   }
 
@@ -537,7 +537,7 @@ function setRoute(player: Player, target: GpsTarget): void {
       Checkpoint.set(player, target.x, target.y, target.z, CHECKPOINT_RADIUS);
     }
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось поставить метку.");
+    player.sendClientMessage(Color.error, "无法设置标记点。");
     return;
   }
 
@@ -548,7 +548,7 @@ function setRoute(player: Player, target: GpsTarget): void {
   );
   player.sendClientMessage(
     Color.info,
-    `Метка: ${target.label}. Дистанция: ${meters} m.`
+    `标记点: ${target.label}. 距离: ${meters} m.`
   );
 }
 
@@ -603,7 +603,7 @@ function arrive(player: Player): void {
   clearRoute(player, id);
   player.sendClientMessage(
     Color.info,
-    `Вы прибыли к месту: ${target.label}.`
+    `你已到达地点: ${target.label}.`
   );
 }
 

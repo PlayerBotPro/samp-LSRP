@@ -21,23 +21,23 @@ registerCommand("cuff", "Надеть наручники (полиция / FBI)"
   const { officer, target } = resolved;
 
   if (isJailed(target)) {
-    officer.sendClientMessage(Color.error, "Игрок уже в тюрьме.");
+    officer.sendClientMessage(Color.error, "玩家已经在监狱里。");
     return;
   }
 
   if (isCuffed(target)) {
-    officer.sendClientMessage(Color.error, "На игроке уже надеты наручники.");
+    officer.sendClientMessage(Color.error, "玩家已经戴上手铐。");
     return;
   }
 
   // Повторно: цель могла отойти между проверками.
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    officer.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
   if (!applyCuff(target)) {
-    officer.sendClientMessage(Color.error, "Не удалось надеть наручники.");
+    officer.sendClientMessage(Color.error, "无法给玩家戴上手铐。");
     return;
   }
 
@@ -56,9 +56,9 @@ registerCommand("cuff", "Надеть наручники (полиция / FBI)"
     `${officerName} ${verb} наручники на ${targetName}.`
   );
 
-  officer.sendClientMessage(Color.info, `Вы надели наручники на ${targetName}.`);
+  officer.sendClientMessage(Color.info, `你给 ${targetName} 戴上了手铐。`);
   try {
-    target.sendClientMessage(Color.error, "На вас надели наручники.");
+    target.sendClientMessage(Color.error, "你被戴上了手铐。");
   } catch {
     // Уже вышел.
   }
@@ -77,17 +77,17 @@ registerCommand("uncuff", "Снять наручники (полиция / FBI)"
   const { officer, target } = resolved;
 
   if (!isCuffed(target)) {
-    officer.sendClientMessage(Color.error, "На игроке нет наручников.");
+    officer.sendClientMessage(Color.error, "玩家没有戴手铐。");
     return;
   }
 
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    officer.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
   if (!clearCuff(target)) {
-    officer.sendClientMessage(Color.error, "Не удалось снять наручники.");
+    officer.sendClientMessage(Color.error, "无法给玩家解开手铐。");
     return;
   }
 
@@ -106,9 +106,9 @@ registerCommand("uncuff", "Снять наручники (полиция / FBI)"
     `${officerName} ${verb} наручники с ${targetName}.`
   );
 
-  officer.sendClientMessage(Color.info, `Вы сняли наручники с ${targetName}.`);
+  officer.sendClientMessage(Color.info, `你解开了 ${targetName} 的手铐。`);
   try {
-    target.sendClientMessage(Color.info, "С вас сняли наручники.");
+    target.sendClientMessage(Color.info, "你的手铐已被解开。");
   } catch {
     // Уже вышел.
   }

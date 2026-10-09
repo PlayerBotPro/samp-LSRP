@@ -176,7 +176,7 @@ function showMenu(player: Player, orgId: number): void {
     );
     setOrgStockDialogBusy(player, true);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -192,7 +192,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const stock = findStockAtPlayer(player);
   if (!stock) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к складу.");
+    player.sendClientMessage(Color.error, "请靠近仓库。");
     return;
   }
 
@@ -217,7 +217,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const wh = getWarehouse(stock.orgId);
   if (mapped.action === "take" && wh?.isLocked) {
-    player.sendClientMessage(Color.error, "Склад закрыт.");
+    player.sendClientMessage(Color.error, "仓库已关闭。");
     return;
   }
 
@@ -289,7 +289,7 @@ function showAmountDialog(
     );
     setOrgStockDialogBusy(player, true);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
     clearPending(player);
   }
 }
@@ -308,13 +308,13 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
   const id = playerId(player);
   const pending = id !== null ? pendingByPlayer.get(id) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "Операция прервана. Зайдите на склад снова.");
+    player.sendClientMessage(Color.error, "操作中断。请重新进入仓库。");
     return;
   }
 
   const stock = findStockAtPlayer(player);
   if (!stock || stock.orgId !== pending.orgId) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к складу.");
+    player.sendClientMessage(Color.error, "请靠近仓库。");
     clearPending(player);
     return;
   }
@@ -329,14 +329,14 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
 
   const wh = getWarehouse(pending.orgId);
   if (pending.action === "take" && (!wh || wh.isLocked)) {
-    player.sendClientMessage(Color.error, "Склад закрыт.");
+    player.sendClientMessage(Color.error, "仓库已关闭。");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "Введите целое число больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
     showAmountDialog(player, pending.action, pending.item, pending.orgId);
     return;
   }
@@ -344,7 +344,7 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
   if (amount > MAX_TRANSFER) {
     player.sendClientMessage(
       Color.error,
-      `За один раз можно не больше ${MAX_TRANSFER} шт.`
+      `每次最多可转移 ${MAX_TRANSFER} 件。`
     );
     showAmountDialog(player, pending.action, pending.item, pending.orgId);
     return;
@@ -367,7 +367,7 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
 
   const have = playerItemAmount(account, item);
   if (have < amount) {
-    player.sendClientMessage(Color.error, `Недостаточно: ${ITEM_LABEL[item]}.`);
+    player.sendClientMessage(Color.error, `数量不足: ${ITEM_LABEL[item]}.`);
     showAmountDialog(player, "put", item, orgId);
     return;
   }
@@ -376,7 +376,7 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
   const nextAmmo = item === "ammo" ? account.ammo - amount : account.ammo;
   const nextMetal = item === "metal" ? account.metal - amount : account.metal;
   if (nextDrugs < 0 || nextAmmo < 0 || nextMetal < 0) {
-    player.sendClientMessage(Color.error, `Недостаточно: ${ITEM_LABEL[item]}.`);
+    player.sendClientMessage(Color.error, `数量不足: ${ITEM_LABEL[item]}.`);
     showAmountDialog(player, "put", item, orgId);
     return;
   }
@@ -399,7 +399,7 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `Вы положили на склад: ${ITEM_LABEL[item]} ${amount} шт.`
+    `你存入仓库: ${ITEM_LABEL[item]} ${amount} 件。`
   );
   broadcastStock(
     orgId,
@@ -423,7 +423,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
         : takeWarehouseDrugs(orgId, amount);
 
   if (!taken) {
-    player.sendClientMessage(Color.error, `На складе недостаточно: ${ITEM_LABEL[item]}.`);
+    player.sendClientMessage(Color.error, `仓库中数量不足: ${ITEM_LABEL[item]}.`);
     showAmountDialog(player, "take", item, orgId);
     return;
   }
@@ -445,7 +445,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
     } else {
       addWarehouseDrugs(orgId, amount);
     }
-    player.sendClientMessage(Color.error, "Слишком большое количество.");
+    player.sendClientMessage(Color.error, "数量过多。");
     clearPending(player);
     return;
   }
@@ -459,7 +459,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `Вы взяли со склада: ${ITEM_LABEL[item]} ${amount} шт.`
+    `你从仓库取出: ${ITEM_LABEL[item]} ${amount} 件。`
   );
   broadcastStock(
     orgId,
@@ -477,7 +477,7 @@ function toggleLock(player: Player, orgId: number): void {
   if (membership.rank.id < LOCK_MIN_RANK) {
     player.sendClientMessage(
       Color.error,
-      "Открывать и закрывать склад может только ранг 7 и выше."
+      "只有 7 级及以上成员才能打开或关闭仓库。"
     );
     return;
   }
@@ -496,7 +496,7 @@ function toggleLock(player: Player, orgId: number): void {
   const verb = nextLocked ? "закрыл склад" : "открыл склад";
   player.sendClientMessage(
     Color.info,
-    nextLocked ? "Склад закрыт." : "Склад открыт."
+    nextLocked ? "仓库已关闭。" : "仓库已开启。"
   );
   broadcastStock(
     orgId,
@@ -519,7 +519,7 @@ function denyOutsider(player: Player, orgId: number): void {
   lastDenyAt.set(id, now);
   const org = getOrganization(orgId);
   const name = org?.name ?? "организации";
-  player.sendClientMessage(Color.error, `Доступ к складу разрешён только ${name}.`);
+  player.sendClientMessage(Color.error, `仅 ${name} 可以进入仓库。`);
 }
 
 function broadcastStock(orgId: number, rawLine: string): void {

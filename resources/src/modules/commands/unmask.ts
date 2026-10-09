@@ -20,19 +20,19 @@ registerCommand("unmask", "Сорвать маску с игрока (полиц
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме нельзя снимать маски.");
+    player.sendClientMessage(Color.error, "在监狱里不能摘面具。");
     return;
   }
 
   const raw = args.trim();
   if (!raw || !/^\d+$/.test(raw)) {
-    player.sendClientMessage(Color.error, "Использование: /unmask [id]");
+    player.sendClientMessage(Color.error, "用法: /unmask [id]");
     return;
   }
 
   const slot = Number(raw);
   if (!Number.isInteger(slot) || slot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /unmask [id]");
+    player.sendClientMessage(Color.error, "用法: /unmask [id]");
     return;
   }
 
@@ -42,38 +42,38 @@ registerCommand("unmask", "Сорвать маску с игрока (полиц
   }
 
   if (slot === officerId) {
-    player.sendClientMessage(Color.error, "Нельзя сорвать маску с себя.");
+    player.sendClientMessage(Color.error, "不能摘掉自己的面具。");
     return;
   }
 
   const target = findPlayer(slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      player.sendClientMessage(Color.error, "Игрок не в игре.");
+      player.sendClientMessage(Color.error, "玩家不在线。");
       return;
     }
   } catch {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
   if (!isMasked(target)) {
-    player.sendClientMessage(Color.error, "На этом игроке нет маски.");
+    player.sendClientMessage(Color.error, "该玩家没有戴面具。");
     return;
   }
 
   if (!clearMask(target)) {
-    player.sendClientMessage(Color.error, "Не удалось снять маску.");
+    player.sendClientMessage(Color.error, "无法摘下面具。");
     return;
   }
 
@@ -94,12 +94,12 @@ registerCommand("unmask", "Сорвать маску с игрока (полиц
   );
 
   try {
-    target.sendClientMessage(Color.error, "С вас сорвали маску.");
+    target.sendClientMessage(Color.error, "你的面具被摘掉了。");
   } catch {
     // Уже вышел.
   }
 
-  player.sendClientMessage(Color.info, `Вы сорвали маску с ${targetName}.`);
+  player.sendClientMessage(Color.info, `你摘掉了 ${targetName} 的面具。`);
 });
 
 function findPlayer(slot: number): Player | null {

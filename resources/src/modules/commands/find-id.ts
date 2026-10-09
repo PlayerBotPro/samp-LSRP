@@ -104,7 +104,7 @@ function setMark(player: Player, mark: FindMark): void {
       Checkpoint.set(player, mark.x, mark.y, mark.z, CHECKPOINT_RADIUS);
     }
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось поставить метку.");
+    player.sendClientMessage(Color.error, "无法设置标记点。");
     return;
   }
 
@@ -114,7 +114,7 @@ function setMark(player: Player, mark: FindMark): void {
   );
   player.sendClientMessage(
     Color.info,
-    `Метка: ${mark.label}. Дистанция: ${meters} m.`
+    `标记点: ${mark.label}. 距离: ${meters} m.`
   );
 }
 
@@ -125,7 +125,7 @@ function handleFind(
   usage: string
 ): void {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -143,14 +143,14 @@ function handleFind(
   const current = activeByPlayer.get(slot);
   if (current && current.kind === kind && current.entityId === entityId) {
     clearMark(player, slot);
-    player.sendClientMessage(Color.gray, "Метка отключена.");
+    player.sendClientMessage(Color.gray, "标记点已关闭。");
     return;
   }
 
   if (kind === "house") {
     const house = getHouse(entityId);
     if (!house) {
-      player.sendClientMessage(Color.error, `Дом №${entityId} не найден.`);
+      player.sendClientMessage(Color.error, `未找到房屋 №${entityId}.`);
       return;
     }
 
@@ -167,7 +167,7 @@ function handleFind(
 
   const business = getBusiness(entityId);
   if (!business) {
-    player.sendClientMessage(Color.error, `Бизнес №${entityId} не найден.`);
+    player.sendClientMessage(Color.error, `未找到企业 №${entityId}.`);
     return;
   }
 
@@ -200,7 +200,7 @@ function tickFindMarks(): void {
         clearMark(player, slot);
         player.sendClientMessage(
           Color.info,
-          `Вы прибыли к месту: ${mark.label}.`
+          `你已到达地点: ${mark.label}.`
         );
         return;
       }

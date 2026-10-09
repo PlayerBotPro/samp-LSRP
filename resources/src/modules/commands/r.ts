@@ -18,7 +18,7 @@ registerCommand("r", "Рация организации", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership) {
-    player.sendClientMessage(Color.error, "Вы не состоите в организации.");
+    player.sendClientMessage(Color.error, "你不属于该组织。");
     return;
   }
 
@@ -28,7 +28,7 @@ registerCommand("r", "Рация организации", (player, args) => {
 
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /r [текст]");
+    player.sendClientMessage(Color.error, "用法: /r [文本]");
     return;
   }
 

@@ -388,7 +388,7 @@ function showInfoDialog(player: Player): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -404,7 +404,7 @@ function showMetalBuyDialog(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -419,13 +419,13 @@ function buyMetal(player: Player, rawInput: string): void {
   }
 
   if (!isOnFootAt(player, METAL_SELL_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "Подойдите к точке продажи металла.");
+    player.sendClientMessage(Color.error, "请靠近金属销售点。");
     return;
   }
 
   const kg = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(kg) || kg <= 0 || !Number.isSafeInteger(kg)) {
-    player.sendClientMessage(Color.error, "Введите целое число кг больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数公斤数。");
     showMetalBuyDialog(player);
     return;
   }
@@ -435,8 +435,8 @@ function buyMetal(player: Player, rawInput: string): void {
     player.sendClientMessage(
       Color.error,
       stock <= 0
-        ? "На складе нет металла."
-        : `На складе только ${stock} кг металла.`
+        ? "仓库里没有金属。"
+        : `仓库里只有 ${stock} 公斤金属。`
     );
     showMetalBuyDialog(player);
     return;
@@ -444,19 +444,19 @@ function buyMetal(player: Player, rawInput: string): void {
 
   const total = kg * METAL_PRICE_PER_KG;
   if (!Number.isSafeInteger(total) || total <= 0) {
-    player.sendClientMessage(Color.error, "Слишком большое количество.");
+    player.sendClientMessage(Color.error, "数量过多。");
     showMetalBuyDialog(player);
     return;
   }
 
   if (account.money < total) {
-    player.sendClientMessage(Color.error, `Недостаточно денег. Нужно $${total}.`);
+    player.sendClientMessage(Color.error, `资金不足。需要 $${total}.`);
     showMetalBuyDialog(player);
     return;
   }
 
   if (!takeMineMetal(kg)) {
-    player.sendClientMessage(Color.error, "На складе недостаточно металла.");
+    player.sendClientMessage(Color.error, "仓库里的金属不足。");
     showMetalBuyDialog(player);
     return;
   }
@@ -479,7 +479,7 @@ function buyMetal(player: Player, rawInput: string): void {
 
   player.sendClientMessage(
     Color.info,
-    `Вы купили ${kg} кг металла за $${total}.`
+    `你以 $${total} 购买了 ${kg} 公斤金属。`
   );
 }
 
@@ -495,7 +495,7 @@ function showHireDialog(player: Player): void {
       "Нет"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -511,7 +511,7 @@ function showQuitDialog(player: Player, job: Job): void {
       "Нет"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть диалог.");
+    player.sendClientMessage(Color.error, "无法打开对话框。");
   }
 }
 
@@ -527,22 +527,22 @@ function hire(player: Player): void {
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сначала закончите лечение.");
+    player.sendClientMessage(Color.error, "请先完成治疗。");
     return;
   }
 
   if (isLoaderOnShift(player)) {
-    player.sendClientMessage(Color.error, "Сначала закончите смену грузчика.");
+    player.sendClientMessage(Color.error, "请先结束搬运工班次。");
     return;
   }
 
   if (isArmyFactoryOnShift(player)) {
-    player.sendClientMessage(Color.error, "Сначала закончите смену в цехе патронов.");
+    player.sendClientMessage(Color.error, "请先结束弹药车间班次。");
     return;
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "Подойдите к месту устройства.");
+    player.sendClientMessage(Color.error, "请靠近工作地点。");
     return;
   }
 
@@ -570,7 +570,7 @@ function hire(player: Player): void {
 
   givePickaxe(player);
   setMineCheckpoint(player, job);
-  player.sendClientMessage(Color.info, "Вы устроились шахтёром. Идите к отметке и добывайте руду.");
+  player.sendClientMessage(Color.info, "你已成为矿工。前往标记点开采矿石。");
 }
 
 function finishShift(player: Player): void {
@@ -582,7 +582,7 @@ function finishShift(player: Player): void {
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "Подойдите к месту устройства.");
+    player.sendClientMessage(Color.error, "请靠近工作地点。");
     return;
   }
 
@@ -602,7 +602,7 @@ function finishShift(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `Смена закончена. Вы добыли ${kg} kg руды и получили $${salary}.`
+    `班次结束。你开采了 ${kg} kg 矿石并获得 $${salary}.`
   );
 }
 
@@ -623,7 +623,7 @@ function abortShift(player: Player, notify: boolean): void {
   if (notify && isPlayerActive(player)) {
     player.sendClientMessage(
       Color.error,
-      "Смена сорвана. Руда и зарплата сгорели."
+      "班次中断。矿石和工资均已作废。"
     );
   }
 }
@@ -810,7 +810,7 @@ function finishPickup(player: Player, expectedId: number): void {
     return;
   }
 
-  player.sendClientMessage(Color.info, "Руда в тачке. Отвезите её к складу.");
+  player.sendClientMessage(Color.info, "矿石在推车里。把它运到仓库。");
 }
 
 function deliver(player: Player, job: Job): void {
@@ -839,9 +839,9 @@ function deliver(player: Player, job: Job): void {
   const kind = special ? "особая" : "обычная";
   player.sendClientMessage(
     Color.info,
-    `Сдано: ${kind} руда, ${kg} kg. +$${pay}`
+    `已交付: ${kind} 矿石，${kg} kg. +$${pay}`
   );
-  player.sendClientMessage(Color.white, `Зарплата за смену: $${job.salary}`);
+  player.sendClientMessage(Color.white, `本班工资: $${job.salary}`);
 }
 
 function loseLoad(player: Player): void {
@@ -861,7 +861,7 @@ function loseLoad(player: Player): void {
   setMineCheckpoint(player, job);
   player.sendClientMessage(
     Color.error,
-    "Вы сломали телегу. Руда потеряна, добывайте снова."
+    "你弄坏了手推车。矿石丢失，请重新开采。"
   );
 }
 

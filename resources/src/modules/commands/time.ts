@@ -21,17 +21,17 @@ const labels = new Map<number, WatchLabel>();
 registerCommand("time", "Посмотреть время, мут и срок", (player) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
-  player.sendClientMessage(Color.info, `Время: ${formatClock()}.`);
+  player.sendClientMessage(Color.info, `时间: ${formatClock()}.`);
 
   const muteLeft = remainingMuteMs(player);
   if (muteLeft !== null) {
     player.sendClientMessage(
       Color.error,
-      `У вас мут. Осталось: ${formatMuteLeft(muteLeft)}.`
+      `你被禁言。剩余时间: ${formatMuteLeft(muteLeft)}.`
     );
   }
 
@@ -39,7 +39,7 @@ registerCommand("time", "Посмотреть время, мут и срок", (
     const left = getAccount(player)?.jailSeconds ?? 0;
     player.sendClientMessage(
       Color.error,
-      `Вы в тюрьме. Осталось: ${formatMuteLeft(left * 1000)}.`
+      `你在监狱里。剩余时间: ${formatMuteLeft(left * 1000)}.`
     );
   }
 

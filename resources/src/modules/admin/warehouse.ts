@@ -69,7 +69,7 @@ function showWarehouseList(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть список складов.");
+    player.sendClientMessage(Color.error, "无法打开仓库列表。");
   }
 }
 
@@ -105,7 +105,7 @@ function showWarehouseInfo(player: Player, orgId: number): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть склад.");
+    player.sendClientMessage(Color.error, "无法打开仓库。");
   }
 }
 

@@ -83,7 +83,7 @@ export function showBusinessBankMenu(player: Player): void {
         ""
       );
     } catch {
-      player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+      player.sendClientMessage(Color.error, "你没有企业。");
     }
     return;
   }
@@ -99,7 +99,7 @@ export function showBusinessBankMenu(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть меню бизнеса.");
+    player.sendClientMessage(Color.error, "无法打开企业菜单。");
   }
 }
 
@@ -139,7 +139,7 @@ export function showBusinessTaxMenu(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть оплату бизнеса.");
+    player.sendClientMessage(Color.error, "无法打开企业付款页面。");
   }
 }
 
@@ -151,7 +151,7 @@ function showDaysInputDialog(player: Player): void {
 
   const business = findOwnedBusiness(account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+    player.sendClientMessage(Color.error, "你没有企业。");
     return;
   }
 
@@ -176,7 +176,7 @@ function showDaysInputDialog(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть ввод дней.");
+    player.sendClientMessage(Color.error, "无法打开天数输入页面。");
   }
 }
 
@@ -188,7 +188,7 @@ function showWithdrawInputDialog(player: Player): void {
 
   const business = findOwnedBusiness(account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+    player.sendClientMessage(Color.error, "你没有企业。");
     return;
   }
 
@@ -210,7 +210,7 @@ function showWithdrawInputDialog(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть снятие.");
+    player.sendClientMessage(Color.error, "无法打开提款页面。");
   }
 }
 
@@ -283,13 +283,13 @@ export function handleBusinessTaxDialog(
 
     const business = findOwnedBusiness(account.id);
     if (!business) {
-      player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+      player.sendClientMessage(Color.error, "你没有企业。");
       return true;
     }
 
     const days = parseTaxDays(inputText);
     if (days === null) {
-      player.sendClientMessage(Color.error, "Введите целое число дней от 1 до 999.");
+      player.sendClientMessage(Color.error, "请输入 1 到 999 之间的整数天数。");
       showDaysInputDialog(player);
       return true;
     }
@@ -297,7 +297,7 @@ export function handleBusinessTaxDialog(
     const amount = taxAmountForDays(business.price, days);
     const bank = Math.max(0, Math.floor(account.bank));
     if (amount > bank) {
-      player.sendClientMessage(Color.error, "Недостаточно денег на банковском счёте.");
+      player.sendClientMessage(Color.error, "银行账户余额不足。");
       showDaysInputDialog(player);
       return true;
     }
@@ -328,7 +328,7 @@ export function handleBusinessTaxDialog(
       );
     } catch {
       clearBusinessTaxPending(player);
-      player.sendClientMessage(Color.error, "Не удалось открыть подтверждение.");
+      player.sendClientMessage(Color.error, "无法打开确认对话框。");
     }
     return true;
   }
@@ -353,26 +353,26 @@ export function handleBusinessTaxDialog(
 
     const business = findOwnedBusiness(account.id);
     if (!business) {
-      player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+      player.sendClientMessage(Color.error, "你没有企业。");
       return true;
     }
 
     const amount = parseAmount(inputText);
     if (amount === null) {
-      player.sendClientMessage(Color.error, "Введите целую сумму больше 0.");
+      player.sendClientMessage(Color.error, "请输入大于 0 的整数金额。");
       showWithdrawInputDialog(player);
       return true;
     }
 
     if (amount > business.balance) {
-      player.sendClientMessage(Color.error, "На счёте бизнеса недостаточно средств.");
+      player.sendClientMessage(Color.error, "企业账户资金不足。");
       showWithdrawInputDialog(player);
       return true;
     }
 
     const cash = Math.max(0, Math.floor(account.money));
     if (cash > MAX_MONEY - amount) {
-      player.sendClientMessage(Color.error, "Нельзя нести столько наличных.");
+      player.sendClientMessage(Color.error, "不能携带这么多现金。");
       showWithdrawInputDialog(player);
       return true;
     }
@@ -397,7 +397,7 @@ export function handleBusinessTaxDialog(
       );
     } catch {
       pendingWithdraw.delete(slotId);
-      player.sendClientMessage(Color.error, "Не удалось открыть подтверждение.");
+      player.sendClientMessage(Color.error, "无法打开确认对话框。");
     }
     return true;
   }
@@ -432,7 +432,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
   const business = findOwnedBusiness(account.id);
   if (!business || business.id !== pending.businessId) {
     clearBusinessTaxPending(player);
-    player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+    player.sendClientMessage(Color.error, "你没有企业。");
     return;
   }
 
@@ -448,7 +448,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
     payingTax.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] оплата бизнеса ${business.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Оплата не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
   }
   payingTax.delete(account.id);
@@ -456,15 +456,15 @@ async function confirmBusinessTax(player: Player): Promise<void> {
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+      player.sendClientMessage(Color.error, "你没有企业。");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "Недостаточно денег на банковском счёте.");
+      player.sendClientMessage(Color.error, "银行账户余额不足。");
       showDaysInputDialog(player);
       return;
     }
-    player.sendClientMessage(Color.error, "Оплата не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "付款失败。请重试。");
     return;
   }
 
@@ -483,11 +483,11 @@ async function confirmBusinessTax(player: Player): Promise<void> {
 
   player.sendClientMessage(
     Color.tryOk,
-    `Бизнес #${business.id} оплачен на ${pending.days} ${dayLabel(pending.days)}. Оплачено до: ${formatRentDate(result.paidUntil)}.`
+    `企业 #${business.id} 已支付 ${pending.days} ${dayLabel(pending.days)}。已付至: ${formatRentDate(result.paidUntil)}.`
   );
   player.sendClientMessage(
     Color.info,
-    `С банковского счёта списано ${formatMoney(result.amount)}. Баланс: ${formatMoney(result.bankLeft)}.`
+    `已从银行账户扣除 ${formatMoney(result.amount)}. 余额: ${formatMoney(result.bankLeft)}.`
   );
 }
 
@@ -507,7 +507,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
   const business = findOwnedBusiness(account.id);
   if (!business || business.id !== pending.businessId) {
     pendingWithdraw.delete(slotId);
-    player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+    player.sendClientMessage(Color.error, "你没有企业。");
     return;
   }
 
@@ -523,7 +523,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
     withdrawing.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] снятие с бизнеса ${business.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Снятие не прошло. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "提款失败。请重试。");
     return;
   }
   withdrawing.delete(account.id);
@@ -531,15 +531,15 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "У вас нет бизнеса.");
+      player.sendClientMessage(Color.error, "你没有企业。");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "На счёте бизнеса недостаточно средств.");
+      player.sendClientMessage(Color.error, "企业账户资金不足。");
       showWithdrawInputDialog(player);
       return;
     }
-    player.sendClientMessage(Color.error, "Снятие не прошло. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "提款失败。请重试。");
     return;
   }
 
@@ -558,11 +558,11 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы сняли ${formatMoney(result.amount)} с бизнеса #${business.id}. Наличные: ${formatMoney(result.cashLeft)}.`
+    `你已从企业 #${business.id} 提取 ${formatMoney(result.amount)}. 现金: ${formatMoney(result.cashLeft)}.`
   );
   player.sendClientMessage(
     Color.info,
-    `На счёте бизнеса осталось ${formatMoney(result.balanceLeft)}.`
+    `企业账户余额剩余 ${formatMoney(result.balanceLeft)}.`
   );
 }
 

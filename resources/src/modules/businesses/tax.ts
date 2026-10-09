@@ -50,17 +50,17 @@ export function notifyBusinessTaxReminder(player: Player): void {
     if (daysLeft === 0) {
       player.sendClientMessage(
         Color.error,
-        `Сегодня последний день оплаты бизнеса #${business.id}. Иначе государство заберёт его завтра.`
+        `今天是企业 #${business.id} 缴费的最后一天。否则政府明天会收回企业。`
       );
-      player.sendClientMessage(Color.gray, "Оплатите бизнес в банке.");
+      player.sendClientMessage(Color.gray, "请在银行缴纳企业费用。");
       return;
     }
 
     player.sendClientMessage(
       Color.tryOk,
-      `До оплаты бизнеса #${business.id} осталось ${daysLeft} ${rentDaysLeftLabel(daysLeft)}.`
+      `距离企业 #${business.id} 缴费还剩 ${daysLeft} ${rentDaysLeftLabel(daysLeft)}.`
     );
-    player.sendClientMessage(Color.gray, "Оплатите бизнес в банке.");
+    player.sendClientMessage(Color.gray, "请在银行缴纳企业费用。");
   } catch {
     // Игрок уже вышел.
   }

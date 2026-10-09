@@ -6,7 +6,7 @@ import { registerCommand } from "./registry";
 registerCommand("me", "Действие или эмоция от третьего лица", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /me [действие]");
+    player.sendClientMessage(Color.error, "用法: /me [动作]");
     return;
   }
 

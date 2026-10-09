@@ -20,7 +20,7 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("vbilet", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account?.militaryId) {
-    viewer.sendClientMessage(Color.error, "У игрока нет военного билета.");
+    viewer.sendClientMessage(Color.error, "该玩家没有军人证。");
     return;
   }
 
@@ -28,23 +28,23 @@ registerDocShowHandler("vbilet", (viewer, owner) => {
   const verb = byGender(account.gender, "показал", "показала");
   owner.sendClientMessage(
     Color.gray,
-    `Вы ${verb} военный билет: ${playerName(viewer)}.`
+    `你${verb}了军人证: ${playerName(viewer)}.`
   );
   viewer.sendClientMessage(
     Color.gray,
-    `${account.name} ${verb} вам военный билет.`
+    `${account.name} ${verb}了你的军人证。`
   );
 });
 
 registerCommand("vbilet", "Военный билет: посмотреть или показать по id", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войдите в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
   if (!account.militaryId) {
-    player.sendClientMessage(Color.error, "У вас нет военного билета.");
+    player.sendClientMessage(Color.error, "你没有军人证。");
     return;
   }
 
@@ -56,13 +56,13 @@ registerCommand("vbilet", "Военный билет: посмотреть ил�
 
   const slot = Number(rawId);
   if (!Number.isInteger(slot) || slot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /vbilet [id]");
+    player.sendClientMessage(Color.error, "用法: /vbilet [id]");
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -72,7 +72,7 @@ registerCommand("vbilet", "Военный билет: посмотреть ил�
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
@@ -93,36 +93,36 @@ registerCommand(
     ) {
       player.sendClientMessage(
         Color.error,
-        "Выдавать военный билет может сотрудник Армии с ранга 8 и выше."
+        "只有军队 8 级及以上员工才能发放军人证。"
       );
       return;
     }
 
     const slot = Number(args.trim());
     if (!Number.isInteger(slot) || slot < 0) {
-      player.sendClientMessage(Color.error, "Использование: /givevbilet [id]");
+      player.sendClientMessage(Color.error, "用法: /givevbilet [id]");
       return;
     }
 
     const target = omp.players.at(slot);
     if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (playerId(target) === playerId(player)) {
-      player.sendClientMessage(Color.error, "Нельзя выдать военный билет себе.");
+      player.sendClientMessage(Color.error, "不能给自己发放军人证。");
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (targetAccount.militaryId) {
-      player.sendClientMessage(Color.error, "У игрока уже есть военный билет.");
+      player.sendClientMessage(Color.error, "该玩家已经有军人证。");
       return;
     }
 
@@ -133,11 +133,11 @@ registerCommand(
 
     player.sendClientMessage(
       Color.info,
-      `Вы выдали военный билет игроку ${playerName(target)}.`
+      `你已向玩家 ${playerName(target)} 发放军人证。`
     );
     target.sendClientMessage(
       Color.info,
-      `${playerName(player)} выдал вам военный билет. Посмотреть: /vbilet`
+      `${playerName(player)} 给了你军人证。查看: /vbilet`
     );
   }
 );
@@ -161,7 +161,7 @@ function showMilitaryId(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "Не удалось открыть военный билет.");
+    viewer.sendClientMessage(Color.error, "无法打开军人证。");
   }
 }
 

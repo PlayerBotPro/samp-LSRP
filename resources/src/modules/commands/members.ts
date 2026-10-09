@@ -14,7 +14,7 @@ registerCommand("members", "Состав организации в сети", (p
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership) {
-    player.sendClientMessage(Color.error, "Вы не состоите в организации.");
+    player.sendClientMessage(Color.error, "你不属于该组织。");
     return;
   }
 
@@ -60,7 +60,7 @@ registerCommand("members", "Состав организации в сети", (p
   rows.sort((a, b) => b.rankId - a.rankId || a.name.localeCompare(b.name));
 
   if (rows.length === 0) {
-    player.sendClientMessage(Color.error, "В сети нет сотрудников организации.");
+    player.sendClientMessage(Color.error, "当前没有组织员工在线。");
     return;
   }
 

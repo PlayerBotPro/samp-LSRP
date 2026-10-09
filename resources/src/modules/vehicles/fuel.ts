@@ -200,7 +200,7 @@ function tickFuel(): void {
     try {
       player.sendClientMessage(
         Color.error,
-        "Бензин закончился. Двигатель заглушен."
+        "汽油耗尽。引擎已关闭。"
       );
     } catch {
       // Уже вышел.

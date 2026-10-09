@@ -45,7 +45,7 @@ export function showReportDialog(player: Player, error?: string): void {
   if (wait > 0 && !error) {
     player.sendClientMessage(
       Color.error,
-      `Репорт можно отправить через ${formatWait(wait)}.`
+      `你可以在 ${formatWait(wait)} 后再次提交举报。`
     );
     return;
   }
@@ -62,7 +62,7 @@ export function showReportDialog(player: Player, error?: string): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть репорт.");
+    player.sendClientMessage(Color.error, "无法打开举报窗口。");
   }
 }
 
@@ -76,7 +76,7 @@ function sendReport(player: Player, raw: string): void {
   if (wait > 0) {
     player.sendClientMessage(
       Color.error,
-      `Репорт можно отправить через ${formatWait(wait)}.`
+      `你可以在 ${formatWait(wait)} 后再次提交举报。`
     );
     return;
   }

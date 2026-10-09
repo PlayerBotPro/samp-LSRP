@@ -268,7 +268,7 @@ function tickStockPickup(player: Player, id: number): void {
 
 function tryTakeFromStock(player: Player, id: number): void {
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "Ящики может брать только Армия.");
+    player.sendClientMessage(Color.error, "只有军队可以领取箱子。");
     return;
   }
 
@@ -281,7 +281,7 @@ function tryTakeFromStock(player: Player, id: number): void {
     atStock.delete(id);
     player.sendClientMessage(
       Color.error,
-      `На складе Армии недостаточно патронов (нужно ${AMMO_PER_CRATE}).`
+      `军队仓库中的子弹不足 (需要 ${AMMO_PER_CRATE} 发)。`
     );
     return;
   }
@@ -290,7 +290,7 @@ function tryTakeFromStock(player: Player, id: number): void {
     addWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE);
     refreshArmyAmmoStockLabel();
     atStock.delete(id);
-    player.sendClientMessage(Color.error, "Не удалось взять ящик. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "无法领取箱子。请重试。");
     return;
   }
 
@@ -298,7 +298,7 @@ function tryTakeFromStock(player: Player, id: number): void {
   carrying.set(id, { source: "stock", dropOrgId: null });
   player.sendClientMessage(
     Color.info,
-    `Ящик в руках (+${AMMO_PER_CRATE} патронов). Подойдите к Barracks и введите /putammo.`
+    `你拿着箱子 (+${AMMO_PER_CRATE} 发子弹)。靠近 Barracks 并输入 /putammo.`
   );
 }
 
@@ -326,7 +326,7 @@ function tickDropProximity(player: Player, id: number): void {
       atDrop.add(id);
       player.sendClientMessage(
         Color.info,
-        `Точка разгрузки: ${near.name}. Встаньте на чекпоинт.`
+        `卸货点: ${near.name}. 请站上检查点。`
       );
     }
   } catch {
@@ -376,7 +376,7 @@ function onDropCheckpoint(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "Разгружать может только Армия.");
+    player.sendClientMessage(Color.error, "只有军队可以卸货。");
     return;
   }
 
@@ -395,7 +395,7 @@ function onDropCheckpoint(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `${drop.name}: сдано +${AMMO_PER_CRATE} патронов (склад: ${total}). +$${PAY_PER_CRATE}`
+    `${drop.name}: 已交付 +${AMMO_PER_CRATE} 发子弹 (仓库: ${total}). +$${PAY_PER_CRATE}`
   );
 }
 
@@ -410,19 +410,19 @@ function onPutAmmo(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "Команда только для Армии.");
+    player.sendClientMessage(Color.error, "此命令仅限军队使用。");
     return;
   }
 
   const carry = carrying.get(id);
   if (!carry) {
-    player.sendClientMessage(Color.error, "У вас нет ящика в руках.");
+    player.sendClientMessage(Color.error, "你手上没有箱子。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "Нужно быть пешком у грузовика.");
+      player.sendClientMessage(Color.error, "请步行靠近卡车。");
       return;
     }
   } catch {
@@ -431,7 +431,7 @@ function onPutAmmo(player: Player): void {
 
   const truck = nearestArmyTruck(player, TRUCK_RANGE);
   if (!truck) {
-    player.sendClientMessage(Color.error, "Рядом нет грузовика Barracks (433).");
+    player.sendClientMessage(Color.error, "附近没有 Barracks 卡车 (433).");
     return;
   }
 
@@ -449,7 +449,7 @@ function onPutAmmo(player: Player): void {
   if (cargo.crates >= MAX_CRATES) {
     player.sendClientMessage(
       Color.error,
-      `В грузовике уже максимум ящиков (${MAX_CRATES}).`
+      `卡车里已经装满箱子 (${MAX_CRATES}).`
     );
     return;
   }
@@ -462,7 +462,7 @@ function onPutAmmo(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `Ящик загружен. В кузове: ${cargo.crates}/${MAX_CRATES}.`
+    `箱子已装载。车厢内: ${cargo.crates}/${MAX_CRATES}.`
   );
 }
 
@@ -477,18 +477,18 @@ function onTakeAmmo(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "Команда только для Армии.");
+    player.sendClientMessage(Color.error, "此命令仅限军队使用。");
     return;
   }
 
   if (carrying.has(id)) {
-    player.sendClientMessage(Color.error, "У вас уже есть ящик в руках.");
+    player.sendClientMessage(Color.error, "你手上已经有箱子。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "Нужно быть пешком у грузовика.");
+      player.sendClientMessage(Color.error, "请步行靠近卡车。");
       return;
     }
   } catch {
@@ -497,7 +497,7 @@ function onTakeAmmo(player: Player): void {
 
   const truck = nearestArmyTruck(player, TRUCK_RANGE);
   if (!truck) {
-    player.sendClientMessage(Color.error, "Рядом нет грузовика Barracks (433).");
+    player.sendClientMessage(Color.error, "附近没有 Barracks 卡车 (433).");
     return;
   }
 
@@ -509,7 +509,7 @@ function onTakeAmmo(player: Player): void {
   ensureTruck(truckId, truck);
   const cargo = trucks.get(truckId);
   if (!cargo || cargo.crates <= 0) {
-    player.sendClientMessage(Color.error, "В грузовике нет ящиков.");
+    player.sendClientMessage(Color.error, "卡车里没有箱子。");
     return;
   }
 
@@ -519,7 +519,7 @@ function onTakeAmmo(player: Player): void {
   if (!giveCrate(player)) {
     cargo.crates += 1;
     updateTruckLabel(truckId, cargo);
-    player.sendClientMessage(Color.error, "Не удалось взять ящик. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "无法领取箱子。请重试。");
     return;
   }
 
@@ -527,7 +527,7 @@ function onTakeAmmo(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `Ящик в руках. В кузове осталось: ${cargo.crates}/${MAX_CRATES}.`
+    `你拿着箱子。车厢内剩余: ${cargo.crates}/${MAX_CRATES}.`
   );
 }
 

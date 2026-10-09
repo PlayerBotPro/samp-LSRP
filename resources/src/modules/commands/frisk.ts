@@ -27,7 +27,7 @@ registerCommand("frisk", "Обыскать игрока (полиция / FBI)",
   const { officer, target } = resolved;
   const account = getAccount(target);
   if (!account) {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -48,7 +48,7 @@ registerCommand("frisk", "Обыскать игрока (полиция / FBI)",
   );
 
   try {
-    target.sendClientMessage(Color.gray, `${playerName(officer)} обыскивает вас.`);
+    target.sendClientMessage(Color.gray, `${playerName(officer)} 正在搜查你。`);
   } catch {
     // Уже вышел.
   }
@@ -83,7 +83,7 @@ function showFriskResult(
     );
     return true;
   } catch {
-    viewer.sendClientMessage(Color.error, "Не удалось открыть результат обыска.");
+    viewer.sendClientMessage(Color.error, "无法打开搜查结果。");
     return false;
   }
 }

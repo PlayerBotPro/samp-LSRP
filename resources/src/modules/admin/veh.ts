@@ -98,19 +98,19 @@ export function bindAdminVeh(): void {
       if (!parsed) {
         player.sendClientMessage(
           Color.error,
-          "Использование: /veh [id] [color1] [color2] (400-611, цвета 0-255)"
+          "用法: /veh [id] [color1] [color2] (400-611, 颜色 0-255)"
         );
         return;
       }
 
       if (!canSpawn(player)) {
-        player.sendClientMessage(Color.error, "Сейчас нельзя создать машину.");
+        player.sendClientMessage(Color.error, "现在不能创建车辆。");
         return;
       }
 
       const spot = spawnInFront(player);
       if (!spot) {
-        player.sendClientMessage(Color.error, "Не удалось создать машину.");
+        player.sendClientMessage(Color.error, "无法创建车辆。");
         return;
       }
 
@@ -127,7 +127,7 @@ export function bindAdminVeh(): void {
       });
 
       if (!vehicle) {
-        player.sendClientMessage(Color.error, "Не удалось создать машину.");
+        player.sendClientMessage(Color.error, "无法创建车辆。");
         return;
       }
 
@@ -139,7 +139,7 @@ export function bindAdminVeh(): void {
 
       player.sendClientMessage(
         Color.info,
-        `Машина создана: ${parsed.model} (${parsed.color1}, ${parsed.color2}).`
+        `车辆已创建: ${parsed.model} (${parsed.color1}, ${parsed.color2}).`
       );
     },
     true
@@ -156,18 +156,18 @@ export function bindAdminVeh(): void {
       let vehicle;
       try {
         if (!player.isInAnyVehicle()) {
-          player.sendClientMessage(Color.error, "Вы должны быть в машине.");
+          player.sendClientMessage(Color.error, "你必须在车内。");
           return;
         }
 
         vehicle = omp.vehicles.at(player.getVehicleID());
       } catch {
-        player.sendClientMessage(Color.error, "Вы должны быть в машине.");
+        player.sendClientMessage(Color.error, "你必须在车内。");
         return;
       }
 
       if (!vehicle) {
-        player.sendClientMessage(Color.error, "Вы должны быть в машине.");
+        player.sendClientMessage(Color.error, "你必须在车内。");
         return;
       }
 
@@ -177,11 +177,11 @@ export function bindAdminVeh(): void {
       try {
         vehicle.destroy();
       } catch {
-        player.sendClientMessage(Color.error, "Не удалось удалить машину.");
+        player.sendClientMessage(Color.error, "无法删除车辆。");
         return;
       }
 
-      player.sendClientMessage(Color.info, "Машина удалена.");
+      player.sendClientMessage(Color.info, "车辆已删除。");
     },
     true
   );

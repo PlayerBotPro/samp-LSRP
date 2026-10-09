@@ -181,7 +181,7 @@ function toggleEngine(player: Player): void {
   try {
     player.sendClientMessage(
       Color.info,
-      running ? "Двигатель заглушен." : "Двигатель запущен."
+      running ? "引擎已关闭。" : "引擎已启动。"
     );
   } catch {
     // Игрок уже вышел.

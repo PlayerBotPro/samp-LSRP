@@ -47,19 +47,19 @@ registerCommand("take", "Изъять предметы у игрока (поли
 
   const { officer, target, officerId, targetId } = resolved;
   if (busy.has(officerId)) {
-    officer.sendClientMessage(Color.error, "Подождите завершения предыдущего изъятия.");
+    officer.sendClientMessage(Color.error, "请等待上一次没收操作完成。");
     return;
   }
 
   const account = getAccount(target);
   if (!account) {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   const items = buildTakeItems(account);
   if (items.length === 0) {
-    officer.sendClientMessage(Color.error, "У игрока нечего изымать.");
+    officer.sendClientMessage(Color.error, "该玩家没有可没收的物品。");
     return;
   }
 
@@ -83,7 +83,7 @@ registerCommand("take", "Изъять предметы у игрока (поли
     );
   } catch {
     pending.delete(officerId);
-    officer.sendClientMessage(Color.error, "Не удалось открыть список изъятия.");
+    officer.sendClientMessage(Color.error, "无法打开没收列表。");
   }
 });
 
@@ -109,12 +109,12 @@ export function bindTakeDialogs(): void {
     }
 
     if (isJailed(player)) {
-      player.sendClientMessage(Color.error, "В тюрьме команда недоступна.");
+      player.sendClientMessage(Color.error, "在监狱里无法使用此命令。");
       return;
     }
 
     if (busy.has(officerId)) {
-      player.sendClientMessage(Color.error, "Подождите завершения предыдущего изъятия.");
+      player.sendClientMessage(Color.error, "请等待上一次没收操作完成。");
       return;
     }
 
@@ -150,29 +150,29 @@ async function applyTake(
     !isAuthenticated(target) ||
     getAccount(target)?.id !== session.targetAccountId
   ) {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      officer.sendClientMessage(Color.error, "Игрок не в игре.");
+      officer.sendClientMessage(Color.error, "玩家不在线。");
       return;
     }
   } catch {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    officer.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
   if (!canLawSearchTarget(officer, target)) {
     officer.sendClientMessage(
       Color.error,
-      "Полиция может применять команду только к гражданским. FBI — к любым."
+      "警察只能对平民使用此命令。FBI 可以对任何人使用。"
     );
     return;
   }
@@ -186,7 +186,7 @@ async function applyTake(
 
   if (item.kind === "drugs") {
     if (account.drugs <= 0) {
-      officer.sendClientMessage(Color.error, "У игрока нет наркотиков.");
+      officer.sendClientMessage(Color.error, "该玩家没有毒品。");
       return;
     }
 
@@ -201,7 +201,7 @@ async function applyTake(
       await saveUserInventory(live.id, live.drugs, live.ammo, live.metal);
     } catch {
       patchAccount(target, { drugs: amount });
-      officer.sendClientMessage(Color.error, "Не удалось сохранить изъятие.");
+      officer.sendClientMessage(Color.error, "无法保存没收记录。");
       return;
     }
 
@@ -211,7 +211,7 @@ async function applyTake(
 
   if (item.kind === "ammo") {
     if (account.ammo <= 0) {
-      officer.sendClientMessage(Color.error, "У игрока нет патронов.");
+      officer.sendClientMessage(Color.error, "该玩家没有子弹。");
       return;
     }
 
@@ -226,7 +226,7 @@ async function applyTake(
       await saveUserInventory(live.id, live.drugs, live.ammo, live.metal);
     } catch {
       patchAccount(target, { ammo: amount });
-      officer.sendClientMessage(Color.error, "Не удалось сохранить изъятие.");
+      officer.sendClientMessage(Color.error, "无法保存没收记录。");
       return;
     }
 
@@ -235,7 +235,7 @@ async function applyTake(
   }
 
   if (!account.licenses[item.key]) {
-    officer.sendClientMessage(Color.error, "У игрока нет этой лицензии.");
+    officer.sendClientMessage(Color.error, "该玩家没有此执照。");
     return;
   }
 
@@ -247,7 +247,7 @@ async function applyTake(
     await saveUserLicenses(account.id, nextLicenses);
   } catch {
     patchAccount(target, { licenses: prevLicenses });
-    officer.sendClientMessage(Color.error, "Не удалось сохранить изъятие.");
+    officer.sendClientMessage(Color.error, "无法保存没收记录。");
     return;
   }
 
@@ -275,13 +275,13 @@ function roleplayTake(
   try {
     target.sendClientMessage(
       Color.error,
-      `${playerName(officer)} ${verb} у вас ${what}.`
+      `${playerName(officer)} ${verb}了你的${what}.`
     );
   } catch {
     // Уже вышел.
   }
 
-  officer.sendClientMessage(Color.info, `Вы изъяли ${what}.`);
+  officer.sendClientMessage(Color.info, `你没收了${what}.`);
 }
 
 function buildTakeItems(account: {

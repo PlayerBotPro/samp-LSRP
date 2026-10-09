@@ -176,7 +176,7 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     return;
   }
 
@@ -200,7 +200,7 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть витрину.");
+    player.sendClientMessage(Color.error, "无法打开商品展示柜。");
   }
 }
 
@@ -246,12 +246,12 @@ async function buyShopItem(
 
   const business = getBusiness(businessId);
   if (!business || !isShop247Type(business.typeId)) {
-    player.sendClientMessage(Color.error, "Магазин недоступен.");
+    player.sendClientMessage(Color.error, "商店暂不可用。");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     return;
   }
 
@@ -269,7 +269,7 @@ async function buyShopItem(
       slotId
     );
     if (!near || near.id !== businessId) {
-      player.sendClientMessage(Color.error, "Подойдите к витрине магазина.");
+      player.sendClientMessage(Color.error, "请靠近商店展示柜。");
       return;
     }
   } catch {
@@ -279,7 +279,7 @@ async function buyShopItem(
   if (item.kind === "phone" && account.phone) {
     player.sendClientMessage(
       Color.error,
-      `У вас уже есть телефон. Номер: ${account.phone}.`
+      `你已经有手机了。号码: ${account.phone}.`
     );
     return;
   }
@@ -287,7 +287,7 @@ async function buyShopItem(
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+      `现金不足。需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -323,23 +323,23 @@ async function buyPhone(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 24/7 телефон biz=${businessId} (${userName}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
   if (!result.ok) {
     if (result.reason === "owned") {
-      player.sendClientMessage(Color.error, "У вас уже есть телефон.");
+      player.sendClientMessage(Color.error, "你已经有手机了。");
       return;
     }
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+        `现金不足。需要 ${formatMoney(price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -357,7 +357,7 @@ async function buyPhone(
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили мобильный телефон за ${formatMoney(price)}. Ваш номер: ${result.phone}.`
+    `你已购买手机，花费 ${formatMoney(price)}. 你的号码: ${result.phone}.`
   );
 }
 
@@ -374,7 +374,7 @@ async function buyCamera(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 24/7 фото biz=${businessId} (${userName}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -382,11 +382,11 @@ async function buyCamera(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+        `现金不足。需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -405,7 +405,7 @@ async function buyCamera(
   grantWeapon(player, item.weaponId, item.ammo);
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили фотоаппарат (${item.ammo} фото) за ${formatMoney(item.price)}.`
+    `你已购买相机 (${item.ammo} 张照片)，花费 ${formatMoney(item.price)}.`
   );
 }
 
@@ -422,7 +422,7 @@ async function buyMask(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 24/7 маска biz=${businessId} (${userName}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -430,11 +430,11 @@ async function buyMask(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+        `现金不足。需要 ${formatMoney(price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -455,6 +455,6 @@ async function buyMask(
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили маску за ${formatMoney(price)}. Надеть: /mask. Всего масок: ${nextMasks}.`
+    `你已购买面具，花费 ${formatMoney(price)}. 使用: /mask. 面具总数: ${nextMasks}.`
   );
 }

@@ -77,32 +77,32 @@ export function tryEnterHouse(player: Player, houseId: number): void {
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме нельзя заходить в дома.");
+    player.sendClientMessage(Color.error, "在监狱里不能进入房屋。");
     return;
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сначала пройдите лечение в больнице.");
+    player.sendClientMessage(Color.error, "请先在医院完成治疗。");
     return;
   }
 
   const house = getHouse(houseId);
   if (!house || house.ownerId === null) {
-    player.sendClientMessage(Color.error, "Этот дом свободен.");
+    player.sendClientMessage(Color.error, "该房屋无人居住。");
     return;
   }
 
   if (!isNearHouseEntrance(player, houseId)) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу дома.");
+    player.sendClientMessage(Color.error, "请靠近房屋标记点。");
     return;
   }
 
   if (!canEnterHouse(player, house)) {
-    player.sendClientMessage(Color.error, "Дом закрыт.");
+    player.sendClientMessage(Color.error, "房屋已锁。");
     return;
   }
 
   if (!teleportToHouseInterior(player, house)) {
-    player.sendClientMessage(Color.error, "Не удалось войти в дом.");
+    player.sendClientMessage(Color.error, "无法进入房屋。");
   }
 }

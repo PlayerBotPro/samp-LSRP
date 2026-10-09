@@ -49,7 +49,7 @@ registerCommand("wanted", "Список игроков в розыске", (play
 
   const rows = collectWantedOnline();
   if (rows.length === 0) {
-    player.sendClientMessage(Color.info, "В сети нет игроков в розыске.");
+    player.sendClientMessage(Color.info, "当前没有被通缉的玩家在线。");
     return;
   }
 
@@ -79,7 +79,7 @@ registerCommand("wanted", "Список игроков в розыске", (play
     );
   } catch {
     wantedLists.delete(officerId);
-    player.sendClientMessage(Color.error, "Не удалось открыть список.");
+    player.sendClientMessage(Color.error, "无法打开列表。");
   }
 });
 
@@ -91,7 +91,7 @@ registerCommand("pursuit", "Прекратить слежку за розыск�
 
   const officerId = playerId(player);
   if (officerId === null || !pursuits.has(officerId)) {
-    player.sendClientMessage(Color.error, "Вы ни за кем не следите.");
+    player.sendClientMessage(Color.error, "你没有跟踪任何人。");
     return;
   }
 
@@ -138,7 +138,7 @@ export function bindWantedDialogs(): void {
       if (!target) {
         player.sendClientMessage(
           Color.error,
-          "Игрок не найден или уже не в розыске."
+          "未找到玩家或该玩家已不再被通缉。"
         );
         return;
       }
@@ -156,7 +156,7 @@ export function bindWantedDialogs(): void {
         );
       } catch {
         pendingTarget.delete(officerId);
-        player.sendClientMessage(Color.error, "Не удалось открыть меню.");
+        player.sendClientMessage(Color.error, "无法打开菜单。");
       }
       return;
     }
@@ -171,7 +171,7 @@ export function bindWantedDialogs(): void {
     if (!target) {
       player.sendClientMessage(
         Color.error,
-        "Игрок не найден или уже не в розыске."
+        "未找到玩家或该玩家已不再被通缉。"
       );
       return;
     }
@@ -190,7 +190,7 @@ export function bindWantedDialogs(): void {
       }
       player.sendClientMessage(
         Color.info,
-        `Вы сняли розыск с игрока ${playerChatName(target)}.`
+        `你已解除对玩家 ${playerChatName(target)} 的通缉。`
       );
     }
   });
@@ -271,17 +271,17 @@ function startPursuit(officer: Player, target: Player): void {
   const targetSlot = playerId(target);
   const targetAccount = getAccount(target);
   if (officerId === null || targetSlot === null || !targetAccount) {
-    officer.sendClientMessage(Color.error, "Игрок не найден.");
+    officer.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (targetSlot === officerId) {
-    officer.sendClientMessage(Color.error, "Нельзя следить за собой.");
+    officer.sendClientMessage(Color.error, "不能跟踪自己。");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    officer.sendClientMessage(Color.error, "Этот игрок не в розыске.");
+    officer.sendClientMessage(Color.error, "该玩家没有被通缉。");
     return;
   }
 
@@ -310,7 +310,7 @@ function startPursuit(officer: Player, target: Player): void {
 
   officer.sendClientMessage(
     Color.info,
-    `Слежка за ${playerChatName(target)}. Прекратить: /pursuit.`
+    `正在跟踪 ${playerChatName(target)}. 停止: /pursuit.`
   );
 }
 

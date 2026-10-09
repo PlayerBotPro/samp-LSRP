@@ -188,7 +188,7 @@ function handleDialog(
 
   if (!isAuthenticated(player) || !isAtTeller(player)) {
     if (isAuthenticated(player)) {
-      player.sendClientMessage(Color.gray, "Операцию нужно делать у кассы.");
+      player.sendClientMessage(Color.gray, "请在柜台办理此操作。");
     }
     return;
   }
@@ -328,7 +328,7 @@ function showMenu(player: Player): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть банк.");
+    player.sendClientMessage(Color.error, "无法打开银行。");
   }
 }
 
@@ -354,7 +354,7 @@ function showBalance(player: Player): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть баланс.");
+    player.sendClientMessage(Color.error, "无法打开余额页面。");
   }
 }
 
@@ -382,7 +382,7 @@ function showAmountDialog(player: Player, mode: "deposit" | "withdraw"): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть банк.");
+    player.sendClientMessage(Color.error, "无法打开银行。");
   }
 }
 
@@ -399,7 +399,7 @@ function showSendIdDialog(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть банк.");
+    player.sendClientMessage(Color.error, "无法打开银行。");
   }
 }
 
@@ -407,13 +407,13 @@ function showSendConfirm(player: Player, inputText: string): void {
   const senderId = playerId(player);
   const slot = parsePlayerSlot(inputText);
   if (senderId === null || slot === null) {
-    player.sendClientMessage(Color.error, "Введите ID игрока.");
+    player.sendClientMessage(Color.error, "请输入玩家 ID。");
     showSendIdDialog(player);
     return;
   }
 
   if (slot === senderId) {
-    player.sendClientMessage(Color.error, "Нельзя перевести себе.");
+    player.sendClientMessage(Color.error, "不能给自己转账。");
     showSendIdDialog(player);
     return;
   }
@@ -421,7 +421,7 @@ function showSendConfirm(player: Player, inputText: string): void {
   const target = findOnlinePlayer(slot);
   const targetAccount = target ? getAccount(target) : null;
   if (!target || !targetAccount) {
-    player.sendClientMessage(Color.error, "Игрок не в игре.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     showSendIdDialog(player);
     return;
   }
@@ -445,7 +445,7 @@ function showSendConfirm(player: Player, inputText: string): void {
     );
   } catch {
     clearPending(player);
-    player.sendClientMessage(Color.error, "Не удалось открыть банк.");
+    player.sendClientMessage(Color.error, "无法打开银行。");
   }
 }
 
@@ -459,7 +459,7 @@ function showSendAmountDialog(player: Player): void {
   }
 
   if (!resolvePendingTarget(player, pending)) {
-    player.sendClientMessage(Color.error, "Игрок не в игре.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     clearPending(player);
     showMenu(player);
     return;
@@ -476,7 +476,7 @@ function showSendAmountDialog(player: Player): void {
       "Назад"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть банк.");
+    player.sendClientMessage(Color.error, "无法打开银行。");
   }
 }
 
@@ -493,13 +493,13 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
   }
 
   if (!isAtTeller(player)) {
-    player.sendClientMessage(Color.error, "Подойдите к кассе.");
+    player.sendClientMessage(Color.error, "请靠近柜台。");
     return;
   }
 
   const amount = parseAmount(inputText);
   if (amount === null) {
-    player.sendClientMessage(Color.error, "Введите целую сумму больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数金额。");
     showSendAmountDialog(player);
     return;
   }
@@ -511,7 +511,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
 
   const senderBank = Math.max(0, Math.floor(senderAccount.bank));
   if (amount > senderBank) {
-    player.sendClientMessage(Color.error, "Недостаточно денег на счёте.");
+    player.sendClientMessage(Color.error, "账户余额不足。");
     showSendAmountDialog(player);
     return;
   }
@@ -519,7 +519,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
   const target = resolvePendingTarget(player, pending);
   const targetAccount = target ? getAccount(target) : null;
   if (!target || !targetAccount) {
-    player.sendClientMessage(Color.error, "Игрок не в игре.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     clearPending(player);
     if (isAtTeller(player)) {
       showMenu(player);
@@ -529,14 +529,14 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
 
   const targetSlot = playerId(target);
   if (targetSlot === null || busy.has(targetSlot)) {
-    player.sendClientMessage(Color.error, "Игрок сейчас занят. Подождите.");
+    player.sendClientMessage(Color.error, "玩家当前正忙。请稍候。");
     showSendAmountDialog(player);
     return;
   }
 
   const targetBank = Math.max(0, Math.floor(targetAccount.bank));
   if (targetBank > MAX_MONEY - amount) {
-    player.sendClientMessage(Color.error, "Счёт получателя не может принять эту сумму.");
+    player.sendClientMessage(Color.error, "收款账户无法接收该金额。");
     showSendAmountDialog(player);
     return;
   }
@@ -558,7 +558,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
     busy.delete(targetSlot);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] банк перевод ${senderAccount.name}: ${message}`);
-    player.sendClientMessage(Color.error, "Операция не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "操作失败。请重试。");
     if (isAtTeller(player)) {
       showMenu(player);
     }
@@ -573,7 +573,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
     const next = keepBankExtra(player, senderBank, nextSenderBank);
     player.sendClientMessage(
       Color.tryOk,
-      `Вы перевели ${formatMoney(amount)} игроку ${pending.label}. Баланс: ${formatMoney(next)}.`
+      `你已向玩家 ${pending.label} 转账 ${formatMoney(amount)}. 余额: ${formatMoney(next)}.`
     );
   }
 
@@ -581,7 +581,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
     keepBankExtra(target, targetBank, nextTargetBank);
     target.sendClientMessage(
       Color.info,
-      `Игрок ${senderAccount.name}[${senderId}] перевёл вам ${formatMoney(amount)}.`
+      `玩家 ${senderAccount.name}[${senderId}] 向你转账了 ${formatMoney(amount)}.`
     );
   }
 
@@ -663,7 +663,7 @@ async function transfer(
   }
 
   if (!isAtTeller(player)) {
-    player.sendClientMessage(Color.error, "Подойдите к кассе.");
+    player.sendClientMessage(Color.error, "请靠近柜台。");
     return;
   }
 
@@ -674,7 +674,7 @@ async function transfer(
 
   const amount = parseAmount(inputText);
   if (amount === null) {
-    player.sendClientMessage(Color.error, "Введите целую сумму больше 0.");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数金额。");
     showAmountDialog(player, mode);
     return;
   }
@@ -686,12 +686,12 @@ async function transfer(
   let nextBank = bank;
   if (mode === "deposit") {
     if (amount > cash) {
-      player.sendClientMessage(Color.error, "Недостаточно наличных.");
+      player.sendClientMessage(Color.error, "现金不足。");
       showAmountDialog(player, mode);
       return;
     }
     if (bank > MAX_MONEY - amount) {
-      player.sendClientMessage(Color.error, "Счёт не может принять эту сумму.");
+      player.sendClientMessage(Color.error, "账户无法接收该金额。");
       showAmountDialog(player, mode);
       return;
     }
@@ -699,12 +699,12 @@ async function transfer(
     nextBank = bank + amount;
   } else {
     if (amount > bank) {
-      player.sendClientMessage(Color.error, "Недостаточно денег на счёте.");
+      player.sendClientMessage(Color.error, "账户余额不足。");
       showAmountDialog(player, mode);
       return;
     }
     if (cash > MAX_MONEY - amount) {
-      player.sendClientMessage(Color.error, "Нельзя нести столько наличных.");
+      player.sendClientMessage(Color.error, "不能携带这么多现金。");
       showAmountDialog(player, mode);
       return;
     }
@@ -719,7 +719,7 @@ async function transfer(
     busy.delete(id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] bank ${account.name}: ${message}`);
-    player.sendClientMessage(Color.error, "Операция не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "操作失败。请重试。");
     if (isAtTeller(player)) {
       showMenu(player);
     }
@@ -747,12 +747,12 @@ async function transfer(
   if (mode === "deposit") {
     player.sendClientMessage(
       Color.tryOk,
-      `Счёт пополнен на ${formatMoney(amount)}. Баланс: ${formatMoney(bankNow)}.`
+      `账户已存入 ${formatMoney(amount)}. 余额: ${formatMoney(bankNow)}.`
     );
   } else {
     player.sendClientMessage(
       Color.tryOk,
-      `Вы сняли ${formatMoney(amount)}. Наличные: ${formatMoney(cashNow)}.`
+      `你已取出 ${formatMoney(amount)}. 现金: ${formatMoney(cashNow)}.`
     );
   }
 

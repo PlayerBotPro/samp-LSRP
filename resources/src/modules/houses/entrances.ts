@@ -209,7 +209,7 @@ function showFreeHouseDialog(player: Player, house: HouseRecord): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть окно дома.");
+    player.sendClientMessage(Color.error, "无法打开房屋窗口。");
   }
 }
 
@@ -234,7 +234,7 @@ function showOccupiedHouseDialog(player: Player, house: HouseRecord): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть окно дома.");
+    player.sendClientMessage(Color.error, "无法打开房屋窗口。");
   }
 }
 

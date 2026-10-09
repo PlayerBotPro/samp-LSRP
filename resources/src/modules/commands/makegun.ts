@@ -54,7 +54,7 @@ registerCommand(
 
 async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -65,32 +65,32 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   }
 
   if (craftSession.has(slot)) {
-    player.sendClientMessage(Color.error, "Вы уже собираете оружие.");
+    player.sendClientMessage(Color.error, "你已经在组装武器。");
     return;
   }
 
   if (account.hospitalized) {
     player.sendClientMessage(
       Color.error,
-      "Сначала пройдите лечение в больнице."
+      "请先在医院完成治疗。"
     );
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме нельзя собирать оружие.");
+    player.sendClientMessage(Color.error, "在监狱里不能组装武器。");
     return;
   }
 
   const membership = getMembership(account);
   if (!membership || !isGangOrgId(membership.org.id)) {
-    player.sendClientMessage(Color.error, "Команда доступна только бандам.");
+    player.sendClientMessage(Color.error, "此命令仅限帮派使用。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "Собирать оружие можно только пешком.");
+      player.sendClientMessage(Color.error, "只能步行组装武器。");
       return;
     }
 
@@ -100,7 +100,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     ) {
       player.sendClientMessage(
         Color.error,
-        "Собирать оружие можно только на улице."
+        "只能在室外组装武器。"
       );
       return;
     }
@@ -112,7 +112,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (!turf || turf.orgId !== membership.org.id) {
     player.sendClientMessage(
       Color.error,
-      "Собирать оружие можно только на территории своей банды."
+      "只能在自己帮派的地盘上组装武器。"
     );
     return;
   }
@@ -135,7 +135,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (account.ammo < ammoCost) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно патронов. Нужно: ${ammoCost} (есть ${account.ammo}).`
+      `子弹不足。需要: ${ammoCost} (当前 ${account.ammo}).`
     );
     return;
   }
@@ -143,7 +143,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (account.metal < metalCost) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно металла. Нужно: ${metalCost} (есть ${account.metal}).`
+      `金属不足。需要: ${metalCost} (当前 ${account.metal}).`
     );
     return;
   }
@@ -154,7 +154,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   playCraftAnim(player);
   player.sendClientMessage(
     Color.info,
-    `Сборка: ${recipe.label} (${ammoCost} патр.)...`
+    `正在组装: ${recipe.label} (${ammoCost} 发)...`
   );
 
   await sleep(CRAFT_MS);
@@ -176,7 +176,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
 
   if (live.hospitalized || isJailed(player)) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "Сборка отменена.");
+    player.sendClientMessage(Color.error, "组装已取消。");
     return;
   }
 
@@ -187,14 +187,14 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     liveMembership.org.id !== membership.org.id
   ) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "Сборка отменена.");
+    player.sendClientMessage(Color.error, "组装已取消。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
       finishCraft(player, slot, session);
-      player.sendClientMessage(Color.error, "Сборка отменена.");
+      player.sendClientMessage(Color.error, "组装已取消。");
       return;
     }
   } catch {
@@ -207,14 +207,14 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     finishCraft(player, slot, session);
     player.sendClientMessage(
       Color.error,
-      "Сборка отменена: вы покинули территорию."
+      "组装已取消: 你已离开地盘。"
     );
     return;
   }
 
   if (live.ammo < ammoCost || live.metal < metalCost) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "Недостаточно материалов для сборки.");
+    player.sendClientMessage(Color.error, "组装材料不足。");
     return;
   }
 
@@ -234,14 +234,14 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
       () => {}
     );
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "Не удалось выдать оружие.");
+    player.sendClientMessage(Color.error, "无法交付武器。");
     return;
   }
 
   finishCraft(player, slot, session);
   player.sendClientMessage(
     Color.info,
-    `Вы собрали ${recipe.label} (${ammoCost} патр.). -${ammoCost} патр., -${metalCost} металла.`
+    `你已组装 ${recipe.label} (${ammoCost} 发)。-${ammoCost} 发子弹，-${metalCost} 金属。`
   );
   sendNearby(
     player,

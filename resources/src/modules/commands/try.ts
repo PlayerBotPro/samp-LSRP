@@ -8,7 +8,7 @@ import { registerCommand } from "./registry";
 registerCommand("try", "Случайное действие: удачно или неудачно", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /try [действие]");
+    player.sendClientMessage(Color.error, "用法: /try [动作]");
     return;
   }
 

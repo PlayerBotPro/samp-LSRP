@@ -308,7 +308,7 @@ function resumeIfAfk(player: Player, track: Track, now: number): void {
     track.fromPause = false;
     player.sendClientMessage(
       Color.info,
-      `Вы простояли в AFK ${formatSpoken(lasted)}.`
+      `你在 AFK 状态停留了 ${formatSpoken(lasted)}.`
     );
   }
 

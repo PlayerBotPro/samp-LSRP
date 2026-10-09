@@ -38,19 +38,19 @@ registerCommand(
 
     const target = resolveTarget(parsed.slot);
     if (!target) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (playerId(target) === playerId(player)) {
-      player.sendClientMessage(Color.error, "Нельзя объявить розыск на себя.");
+      player.sendClientMessage(Color.error, "不能通缉自己。");
       return;
     }
 
     if (isLawOfficer(target)) {
       player.sendClientMessage(
         Color.error,
-        "Нельзя объявить розыск на сотрудника полиции или FBI."
+        "不能通缉警察或 FBI 员工。"
       );
       return;
     }
@@ -58,21 +58,21 @@ registerCommand(
     if (isJailed(target)) {
       player.sendClientMessage(
         Color.error,
-        "Нельзя объявить розыск на игрока в тюрьме."
+        "不能通缉监狱里的玩家。"
       );
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (targetAccount.wantedLevel >= MAX_WANTED) {
       player.sendClientMessage(
         Color.error,
-        "У игрока уже максимальный уровень розыска."
+        "该玩家的通缉等级已达上限。"
       );
       return;
     }
@@ -90,7 +90,7 @@ registerCommand(
     try {
       target.sendClientMessage(
         Color.error,
-        `Вам объявили розыск (+${added}, итого ${next}). Причина: ${parsed.reason}`
+        `你已被通缉 (+${added}, 共 ${next})。原因: ${parsed.reason}`
       );
     } catch {
       // Уже вышел.
@@ -98,7 +98,7 @@ registerCommand(
 
     player.sendClientMessage(
       Color.info,
-      `Розыск выдан: ${playerChatName(target)} (+${added}, итого ${next}).`
+      `已通缉玩家: ${playerChatName(target)} (+${added}, 共 ${next}).`
     );
   }
 );

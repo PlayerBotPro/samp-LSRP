@@ -161,7 +161,7 @@ function tryExitHouse(player: Player): void {
     placeAt(player, exit);
     refreshStreamForPlayer(player);
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось выйти из дома.");
+    player.sendClientMessage(Color.error, "无法离开房屋。");
   }
 }
 

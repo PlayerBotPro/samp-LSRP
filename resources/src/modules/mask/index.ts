@@ -214,7 +214,7 @@ function expireMask(player: Player, slotId: number, token: number): void {
 
   restoreVisuals?.(player);
   try {
-    player.sendClientMessage(Color.gray, "Маска снята: время вышло.");
+    player.sendClientMessage(Color.gray, "面具已摘下: 时间到。");
   } catch {
     // Слот пуст.
   }
@@ -237,7 +237,7 @@ export const maskModule: GameModule = {
       // Смерть — только снять эффект, без анимации.
       restoreVisuals?.(player);
       if (isPlayerActive(player)) {
-        player.sendClientMessage(Color.gray, "Маска снята.");
+        player.sendClientMessage(Color.gray, "面具已摘下。");
       }
     });
 

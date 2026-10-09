@@ -263,7 +263,7 @@ export async function toggleNearbyPersonalLock(player: Player): Promise<void> {
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "Рядом нет вашего транспорта. Подойдите ближе или сядьте в него."
+      "附近没有你的载具。请靠近或上车。"
     );
     return;
   }
@@ -287,7 +287,7 @@ export async function toggleNearbyPersonalLock(player: Player): Promise<void> {
   } catch {
     personal.locked = !nextLocked;
     refreshPersonalDoorLocks(runtimeId);
-    player.sendClientMessage(Color.error, "Не удалось сохранить статус замка.");
+    player.sendClientMessage(Color.error, "无法保存车锁状态。");
     return;
   }
 
@@ -295,7 +295,7 @@ export async function toggleNearbyPersonalLock(player: Player): Promise<void> {
 
   player.sendClientMessage(
     nextLocked ? Color.error : Color.tryOk,
-    nextLocked ? "Транспорт закрыт." : "Транспорт открыт."
+    nextLocked ? "载具已锁定。" : "载具已解锁。"
   );
 }
 
@@ -501,7 +501,7 @@ function handleEnterPersonal(player: Player, asPassenger: boolean): void {
 
   // Закрыта — никто, включая владельца.
   if (personal.locked) {
-    player.sendClientMessage(Color.error, "Транспорт закрыт.");
+    player.sendClientMessage(Color.error, "载具已锁定。");
     eject(player);
     return;
   }
@@ -520,7 +520,7 @@ async function notifyOwnerOnEnter(player: Player, ownerId: number): Promise<void
 
   const tag = await resolveOwnerTag(ownerId);
   try {
-    player.sendClientMessage(Color.info, `Транспорт принадлежит ${tag}.`);
+    player.sendClientMessage(Color.info, `载具属于 ${tag}.`);
   } catch {
     // Игрок вышел.
   }

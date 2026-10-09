@@ -141,7 +141,7 @@ function tryLootCrate(player: Player): void {
 
   const nextAmmo = account.ammo + take;
   if (!Number.isSafeInteger(nextAmmo)) {
-    player.sendClientMessage(Color.error, "Слишком много патронов при себе.");
+    player.sendClientMessage(Color.error, "你携带的子弹太多了。");
     return;
   }
 
@@ -155,7 +155,7 @@ function tryLootCrate(player: Player): void {
     // Кэш уже обновлён.
   });
   refreshArmyAmmoStockLabel();
-  player.sendClientMessage(Color.info, `+${take} патронов (склад армии).`);
+  player.sendClientMessage(Color.info, `+${take} 发子弹 (军队仓库).`);
 }
 
 function notifyEmpty(player: Player, id: number, now: number): void {
@@ -164,7 +164,7 @@ function notifyEmpty(player: Player, id: number, now: number): void {
   }
 
   lastEmptyMsgAt.set(id, now);
-  player.sendClientMessage(Color.error, "Ящик пуст: на складе армии нет патронов.");
+  player.sendClientMessage(Color.error, "箱子是空的: 军队仓库没有子弹。");
 }
 
 function onDeathInArmyBase(player: Player): void {
@@ -202,7 +202,7 @@ function onDeathInArmyBase(player: Player): void {
   });
   player.sendClientMessage(
     Color.error,
-    `На военной базе вы потеряли ${lost} патронов.`
+    `你在军事基地损失了 ${lost} 发子弹。`
   );
 }
 

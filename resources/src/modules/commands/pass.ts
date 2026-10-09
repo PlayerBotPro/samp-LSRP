@@ -20,27 +20,27 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("pass", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account?.passport) {
-    viewer.sendClientMessage(Color.error, "У игрока нет паспорта.");
+    viewer.sendClientMessage(Color.error, "该玩家没有护照。");
     return;
   }
 
   showPassport(viewer, account);
   const verb = byGender(account.gender, "показал", "показала");
-  owner.sendClientMessage(Color.gray, `Вы ${verb} паспорт: ${playerName(viewer)}.`);
-  viewer.sendClientMessage(Color.gray, `${account.name} ${verb} вам паспорт.`);
+  owner.sendClientMessage(Color.gray, `你${verb}了护照: ${playerName(viewer)}.`);
+  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的护照。`);
 });
 
 registerCommand("pass", "Паспорт: посмотреть или показать по id", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
   if (!account.passport) {
     player.sendClientMessage(
       Color.error,
-      "У вас нет паспорта. Обратитесь в мэрию."
+      "你没有护照。请前往市政厅办理。"
     );
     return;
   }
@@ -53,13 +53,13 @@ registerCommand("pass", "Паспорт: посмотреть или показ�
 
   const slot = Number(rawId);
   if (!Number.isInteger(slot) || slot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /pass [id]");
+    player.sendClientMessage(Color.error, "用法: /pass [id]");
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
@@ -69,12 +69,12 @@ registerCommand("pass", "Паспорт: посмотреть или показ�
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
@@ -110,6 +110,6 @@ function showPassport(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "Не удалось открыть паспорт.");
+    viewer.sendClientMessage(Color.error, "无法打开护照。");
   }
 }

@@ -98,7 +98,7 @@ export function bindBusinessMenu(): void {
     if (Date.now() > offer.expiresAt) {
       pendingOffers.delete(slot);
       releaseYnOffer(slot, "biz");
-      player.sendClientMessage(Color.error, "Предложение о покупке бизнеса истекло.");
+      player.sendClientMessage(Color.error, "企业购买报价已过期。");
       return;
     }
 
@@ -144,7 +144,7 @@ function showBusinessMenu(player: Player): void {
 
   const business = findNearbyOwnedBusiness(player, account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу своего бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近自己企业的标记点。");
     return;
   }
 
@@ -159,7 +159,7 @@ function showBusinessMenu(player: Player): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть меню бизнеса.");
+    player.sendClientMessage(Color.error, "无法打开企业菜单。");
   }
 }
 
@@ -193,7 +193,7 @@ function handleBizDialog(
 
     const business = findNearbyOwnedBusiness(player, account.id);
     if (!business) {
-      player.sendClientMessage(Color.error, "Подойдите к пикапу своего бизнеса.");
+      player.sendClientMessage(Color.error, "请靠近自己企业的标记点。");
       return;
     }
 
@@ -274,7 +274,7 @@ function showBusinessStats(player: Player, business: BusinessRecord): void {
       "Закрыть"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть статистику.");
+    player.sendClientMessage(Color.error, "无法打开统计信息。");
   }
 }
 
@@ -295,7 +295,7 @@ function showSellStateConfirm(player: Player, business: BusinessRecord): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть окно продажи.");
+    player.sendClientMessage(Color.error, "无法打开出售窗口。");
   }
 }
 
@@ -329,7 +329,7 @@ function showSellPlayerInput(player: Player, business: BusinessRecord): void {
     );
   } catch {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть ввод продажи.");
+    player.sendClientMessage(Color.error, "无法打开出售金额输入页面。");
   }
 }
 
@@ -343,19 +343,19 @@ function prepareSellToPlayer(player: Player, inputText: string): void {
   const business = findNearbyOwnedBusiness(player, account.id);
   if (!business) {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "Подойдите к пикапу своего бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近自己企业的标记点。");
     return;
   }
 
   const parsed = parseSellPlayerInput(inputText);
   if (!parsed) {
-    player.sendClientMessage(Color.error, "Формат: ID,цена — например 2,150000");
+    player.sendClientMessage(Color.error, "格式: ID,价格 — 例如 2,150000");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (parsed.slot === slotId) {
-    player.sendClientMessage(Color.error, "Нельзя продать бизнес себе.");
+    player.sendClientMessage(Color.error, "不能把企业卖给自己。");
     showSellPlayerInput(player, business);
     return;
   }
@@ -363,37 +363,37 @@ function prepareSellToPlayer(player: Player, inputText: string): void {
   const buyer = omp.players.at(parsed.slot);
   const buyerAccount = buyer ? getAccount(buyer) : null;
   if (!buyer || !isPlayerActive(buyer) || !buyerAccount || !isAuthenticated(buyer)) {
-    player.sendClientMessage(Color.error, "Игрок не в игре.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (!arePlayersNearby(player, buyer, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (buyerAccount.level < MIN_BUY_LEVEL) {
-    player.sendClientMessage(Color.error, "Покупателю нужен 3 уровень.");
+    player.sendClientMessage(Color.error, "买家需要达到 3 级。");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (!buyerAccount.passport) {
-    player.sendClientMessage(Color.error, "У покупателя нет паспорта.");
+    player.sendClientMessage(Color.error, "买家没有护照。");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (findOwnedBusiness(buyerAccount.id)) {
-    player.sendClientMessage(Color.error, "У игрока уже есть бизнес.");
+    player.sendClientMessage(Color.error, "该玩家已经拥有企业。");
     showSellPlayerInput(player, business);
     return;
   }
 
   if (buyerAccount.money < parsed.price) {
-    player.sendClientMessage(Color.error, "У игрока недостаточно наличных.");
+    player.sendClientMessage(Color.error, "玩家现金不足。");
     showSellPlayerInput(player, business);
     return;
   }
@@ -423,7 +423,7 @@ function prepareSellToPlayer(player: Player, inputText: string): void {
     );
   } catch {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть подтверждение.");
+    player.sendClientMessage(Color.error, "无法打开确认对话框。");
   }
 }
 
@@ -443,7 +443,7 @@ function sendSellOfferToPlayer(player: Player): void {
 
   const business = findNearbyOwnedBusiness(player, account.id);
   if (!business || business.id !== pending.businessId) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу своего бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近自己企业的标记点。");
     return;
   }
 
@@ -456,12 +456,12 @@ function sendSellOfferToPlayer(player: Player): void {
     buyerAccount.id !== pending.buyerUserId ||
     !isAuthenticated(buyer)
   ) {
-    player.sendClientMessage(Color.error, "Игрок не в игре.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     return;
   }
 
   if (!arePlayersNearby(player, buyer, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
@@ -471,7 +471,7 @@ function sendSellOfferToPlayer(player: Player): void {
   }
 
   if (pendingOffers.has(buyerSlot) || !claimYnOffer(buyerSlot, "biz")) {
-    player.sendClientMessage(Color.error, "У игрока уже есть активное предложение.");
+    player.sendClientMessage(Color.error, "该玩家已有有效报价。");
     return;
   }
 
@@ -485,15 +485,15 @@ function sendSellOfferToPlayer(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `Вы предложили бизнес «${business.name}» игроку ${playerName(buyer)} за ${formatMoney(pending.price)}.`
+    `你向玩家 ${playerName(buyer)} 提议以 ${formatMoney(pending.price)} 出售企业 «${business.name}».`
   );
   buyer.sendClientMessage(
     Color.white,
-    `${playerName(player)} предлагает купить бизнес «${business.name}» (#${business.id}) за ${formatMoney(pending.price)}.`
+    `${playerName(player)} 提议以 ${formatMoney(pending.price)} 购买企业 «${business.name}» (#${business.id}).`
   );
   buyer.sendClientMessage(
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы купить или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}购买，或按 {FF6600}N {FFFFFF}拒绝"
   );
 }
 
@@ -505,7 +505,7 @@ async function confirmSellToState(player: Player): Promise<void> {
 
   const business = findNearbyOwnedBusiness(player, account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу своего бизнеса.");
+    player.sendClientMessage(Color.error, "请靠近自己企业的标记点。");
     return;
   }
 
@@ -521,17 +521,17 @@ async function confirmSellToState(player: Player): Promise<void> {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] продажа бизнеса ${business.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
   sellingState.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "У вас нет этого бизнеса.");
+      player.sendClientMessage(Color.error, "你没有这家企业。");
       return;
     }
-    player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
 
@@ -541,7 +541,7 @@ async function confirmSellToState(player: Player): Promise<void> {
 
   const cleared = clearBusinessForSale(business.id);
   if (!cleared) {
-    player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
 
@@ -559,7 +559,7 @@ async function confirmSellToState(player: Player): Promise<void> {
   refreshBusinessLabel(business.id);
   player.sendClientMessage(
     Color.info,
-    `Вы продали бизнес «${business.name}» (#${business.id}) государству за ${formatMoney(result.price)}.`
+    `你已将企业 «${business.name}» (#${business.id}) 以 ${formatMoney(result.price)} 的价格卖给政府。`
   );
 }
 
@@ -577,17 +577,17 @@ async function acceptBizOffer(
   }
 
   if (buyerAccount.level < MIN_BUY_LEVEL) {
-    buyer.sendClientMessage(Color.error, "Купить бизнес можно с 3 уровня.");
+    buyer.sendClientMessage(Color.error, "达到 3 级后才能购买企业。");
     return;
   }
 
   if (!buyerAccount.passport) {
-    buyer.sendClientMessage(Color.error, "Нужен паспорт. Оформите его в мэрии.");
+    buyer.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
     return;
   }
 
   if (findOwnedBusiness(buyerAccount.id)) {
-    buyer.sendClientMessage(Color.error, "У вас уже есть бизнес.");
+    buyer.sendClientMessage(Color.error, "你已经拥有企业。");
     return;
   }
 
@@ -600,33 +600,33 @@ async function acceptBizOffer(
     sellerAccount.id !== offer.sellerUserId ||
     !isAuthenticated(seller)
   ) {
-    buyer.sendClientMessage(Color.error, "Продавец вышел из игры. Сделка отменена.");
+    buyer.sendClientMessage(Color.error, "卖家已退出游戏。交易已取消。");
     return;
   }
 
   if (!arePlayersNearby(buyer, seller, WHISPER_RADIUS)) {
-    buyer.sendClientMessage(Color.error, "Продавец слишком далеко. Сделка отменена.");
-    seller.sendClientMessage(Color.error, "Покупатель слишком далеко. Сделка отменена.");
+    buyer.sendClientMessage(Color.error, "卖家距离太远。交易已取消。");
+    seller.sendClientMessage(Color.error, "买家距离太远。交易已取消。");
     return;
   }
 
   if (!isNearBusinessEntrance(seller, offer.businessId)) {
-    buyer.sendClientMessage(Color.error, "Продавец должен быть у бизнеса. Сделка отменена.");
-    seller.sendClientMessage(Color.error, "Подойдите к пикапу бизнеса.");
+    buyer.sendClientMessage(Color.error, "卖家必须在企业附近。交易已取消。");
+    seller.sendClientMessage(Color.error, "请靠近企业标记点。");
     return;
   }
 
   const business = getBusiness(offer.businessId);
   if (!business || business.ownerId !== sellerAccount.id) {
-    buyer.sendClientMessage(Color.error, "Бизнес больше не принадлежит продавцу.");
+    buyer.sendClientMessage(Color.error, "该企业已不再属于卖家。");
     return;
   }
 
   if (buyerAccount.money < offer.price) {
-    buyer.sendClientMessage(Color.error, "Недостаточно наличных.");
+    buyer.sendClientMessage(Color.error, "现金不足。");
     seller.sendClientMessage(
       Color.error,
-      `${playerName(buyer)} не смог оплатить бизнес (${formatMoney(offer.price)}).`
+      `${playerName(buyer)} 无法支付购买企业的费用 (${formatMoney(offer.price)}).`
     );
     return;
   }
@@ -651,7 +651,7 @@ async function acceptBizOffer(
     transferring.delete(buyerAccount.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] передача бизнеса ${offer.businessId}: ${message}`);
-    buyer.sendClientMessage(Color.error, "Сделка не прошла. Попробуйте ещё раз.");
+    buyer.sendClientMessage(Color.error, "交易失败。请重试。");
     return;
   }
 
@@ -660,24 +660,24 @@ async function acceptBizOffer(
 
   if (!result.ok) {
     if (result.reason === "buyer_owned") {
-      buyer.sendClientMessage(Color.error, "У вас уже есть бизнес.");
+      buyer.sendClientMessage(Color.error, "你已经拥有企业。");
       return;
     }
     if (result.reason === "buyer_funds") {
-      buyer.sendClientMessage(Color.error, "Недостаточно наличных.");
+      buyer.sendClientMessage(Color.error, "现金不足。");
       return;
     }
     if (result.reason === "owner") {
-      buyer.sendClientMessage(Color.error, "Бизнес больше не принадлежит продавцу.");
+      buyer.sendClientMessage(Color.error, "该企业已不再属于卖家。");
       return;
     }
-    buyer.sendClientMessage(Color.error, "Сделка не прошла. Попробуйте ещё раз.");
+    buyer.sendClientMessage(Color.error, "交易失败。请重试。");
     return;
   }
 
   const owned = setBusinessOwner(offer.businessId, buyerAccount.id, buyerAccount.name);
   if (!owned) {
-    buyer.sendClientMessage(Color.error, "Сделка не прошла. Попробуйте ещё раз.");
+    buyer.sendClientMessage(Color.error, "交易失败。请重试。");
     return;
   }
 
@@ -692,7 +692,7 @@ async function acceptBizOffer(
     });
     buyer.sendClientMessage(
       Color.info,
-      `Вы купили бизнес «${owned.name}» (#${owned.id}) за ${formatMoney(offer.price)}.`
+      `你已购买企业 «${owned.name}» (#${owned.id})，花费 ${formatMoney(offer.price)}.`
     );
   }
 
@@ -707,7 +707,7 @@ async function acceptBizOffer(
     });
     seller.sendClientMessage(
       Color.info,
-      `Игрок ${playerName(buyer)} купил ваш бизнес «${owned.name}» за ${formatMoney(offer.price)}.`
+      `玩家 ${playerName(buyer)} 已将你的企业 «${owned.name}» 购买，花费 ${formatMoney(offer.price)}.`
     );
   }
 
@@ -717,13 +717,13 @@ async function acceptBizOffer(
 function refuseBizOffer(buyer: Player, buyerSlot: number, offer: BizOffer): void {
   pendingOffers.delete(buyerSlot);
   releaseYnOffer(buyerSlot, "biz");
-  buyer.sendClientMessage(Color.gray, "Вы отказались от покупки бизнеса.");
+  buyer.sendClientMessage(Color.gray, "你拒绝购买企业。");
 
   const seller = omp.players.at(offer.sellerSlot);
   if (seller && isPlayerActive(seller)) {
     seller.sendClientMessage(
       Color.gray,
-      `${playerName(buyer)} отказался от покупки бизнеса.`
+      `${playerName(buyer)} 拒绝购买企业。`
     );
   }
 }

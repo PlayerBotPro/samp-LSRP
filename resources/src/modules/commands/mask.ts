@@ -13,26 +13,26 @@ import { registerCommand } from "./registry";
 registerCommand("mask", "Надеть или снять маску", (player) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
   if (isMasked(player)) {
     removeMask(player);
-    player.sendClientMessage(Color.gray, "Вы сняли маску.");
+    player.sendClientMessage(Color.gray, "你摘下了面具。");
     return;
   }
 
   if (account.hospitalized) {
     player.sendClientMessage(
       Color.error,
-      "Сначала пройдите лечение в больнице."
+      "请先在医院完成治疗。"
     );
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме нельзя надевать маску.");
+    player.sendClientMessage(Color.error, "在监狱里不能戴面具。");
     return;
   }
 
@@ -40,18 +40,18 @@ registerCommand("mask", "Надеть или снять маску", (player) =>
   if (have < 1) {
     player.sendClientMessage(
       Color.error,
-      "У вас нет маски. Купите в магазине 24/7."
+      "你没有面具。请在 24/7 商店购买。"
     );
     return;
   }
 
   if (!wearMask(player)) {
-    player.sendClientMessage(Color.error, "Не удалось надеть маску.");
+    player.sendClientMessage(Color.error, "无法戴上面具。");
     return;
   }
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы надели маску на ${MASK_DURATION_MINUTES} мин. Осталось масок: ${have - 1}.`
+    `你已戴上面具 ${MASK_DURATION_MINUTES} 分钟。剩余面具数量: ${have - 1}.`
   );
 });

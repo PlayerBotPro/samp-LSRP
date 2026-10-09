@@ -66,7 +66,7 @@ function kickPlayer(player: Player, label: string): void {
   try {
     player.sendClientMessage(
       Color.error,
-      `Античит: ${label}. Вы отключены от сервера.`
+      `反作弊: ${label}. 你已与服务器断开连接。`
     );
   } catch {
     // Уже вышел.
@@ -124,7 +124,7 @@ export function reportCheat(
     try {
       player.sendClientMessage(
         Color.error,
-        `Античит: подозрение (${label}). Предупреждение ${strike}/${need}.`
+        `反作弊: 检测到可疑行为 (${label}). 警告 ${strike}/${need}.`
       );
     } catch {
       // Уже вышел.
@@ -134,7 +134,7 @@ export function reportCheat(
 
   if (!cfg.kickOnDetect) {
     try {
-      player.sendClientMessage(Color.error, `Античит: ${label} (кик выключен).`);
+      player.sendClientMessage(Color.error, `反作弊: ${label} (踢出功能已关闭).`);
     } catch {
       // ignore
     }

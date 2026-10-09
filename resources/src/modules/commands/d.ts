@@ -20,14 +20,14 @@ registerCommand("d", "Рация департамента", (player, args) => {
   if (!account || !membership || !membership.org.gov) {
     player.sendClientMessage(
       Color.error,
-      "Вы не состоите в государственной организации."
+      "你不属于政府组织。"
     );
     return;
   }
 
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /d [текст]");
+    player.sendClientMessage(Color.error, "用法: /d [文本]");
     return;
   }
 

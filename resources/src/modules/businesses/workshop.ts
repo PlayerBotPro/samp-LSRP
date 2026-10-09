@@ -227,7 +227,7 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
 
   if (business.isLocked && business.ownerId !== account.id) {
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Мастерская закрыта.");
+    player.sendClientMessage(Color.error, "修理厂已关闭。");
     return;
   }
 
@@ -290,7 +290,7 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть меню сервиса.");
+    player.sendClientMessage(Color.error, "无法打开维修菜单。");
   }
 }
 
@@ -306,7 +306,7 @@ function resolveServiceVehicle(
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "Сначала вызовите личный транспорт (/car), затем зайдите в сервис."
+      "请先呼叫你的私人车辆 (/car)，然后进入维修站。"
     );
     return null;
   }
@@ -321,7 +321,7 @@ function resolveServiceVehicle(
     if (!personal || personal.ownerId !== account.id) {
       player.sendClientMessage(
         Color.error,
-        "Сервис только для вашего личного транспорта."
+        "维修服务仅适用于你的私人车辆。"
       );
       return null;
     }
@@ -395,7 +395,7 @@ function showColorPicker(player: Player, businessId: number, step: 1 | 2): void 
   } catch {
     pendingMenu.delete(slotId);
     pendingPaint.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть выбор цвета.");
+    player.sendClientMessage(Color.error, "无法打开颜色选择页面。");
   }
 }
 
@@ -476,12 +476,12 @@ async function runWorkshopService(
   }
 
   if (busy.has(account.id)) {
-    player.sendClientMessage(Color.error, "Подождите завершения операции.");
+    player.sendClientMessage(Color.error, "请等待操作完成。");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Мастерская закрыта.");
+    player.sendClientMessage(Color.error, "修理厂已关闭。");
     return;
   }
 
@@ -496,7 +496,7 @@ async function runWorkshopService(
     paint &&
     paint.expectedRuntimeId !== runtimeId
   ) {
-    player.sendClientMessage(Color.error, "Транспорт изменился. Откройте сервис снова.");
+    player.sendClientMessage(Color.error, "车辆信息已变更。请重新打开维修站。");
     return;
   }
 
@@ -515,7 +515,7 @@ async function runWorkshopService(
       slotId
     );
     if (!near || near.id !== business.id) {
-      player.sendClientMessage(Color.error, "Подойдите к точке сервиса.");
+      player.sendClientMessage(Color.error, "请靠近维修站。");
       return;
     }
   } catch {
@@ -533,29 +533,29 @@ async function runWorkshopService(
     fuel = getVehicleFuel(vehicle);
     hasNitro = vehicle.getComponentInSlot(5) === NITRO_COMPONENT;
   } catch {
-    player.sendClientMessage(Color.error, "Транспорт недоступен.");
+    player.sendClientMessage(Color.error, "车辆不可用。");
     return;
   }
 
   if (kind === "repair") {
     if (health >= 999.5) {
-      player.sendClientMessage(Color.error, "Транспорт уже исправен.");
+      player.sendClientMessage(Color.error, "车辆已经修好。");
       return;
     }
     price = PRICE_REPAIR;
   } else if (kind === "fuel") {
     if (!vehicleUsesFuel(model)) {
-      player.sendClientMessage(Color.error, "Этому транспорту заправка не нужна.");
+      player.sendClientMessage(Color.error, "这辆车无需加油。");
       return;
     }
     if (fuel >= MAX_VEHICLE_FUEL - 0.05) {
-      player.sendClientMessage(Color.error, "Бак уже полный.");
+      player.sendClientMessage(Color.error, "油箱已经加满。");
       return;
     }
     price = Math.max(1, Math.ceil(MAX_VEHICLE_FUEL - fuel)) * PRICE_FUEL_UNIT;
   } else if (kind === "nitro") {
     if (hasNitro) {
-      player.sendClientMessage(Color.error, "Нитро уже установлено.");
+      player.sendClientMessage(Color.error, "已经安装了氮气。");
       return;
     }
     price = PRICE_NITRO;
@@ -571,7 +571,7 @@ async function runWorkshopService(
   if (account.money < price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+      `现金不足。需要 ${formatMoney(price)}.`
     );
     return;
   }
@@ -586,9 +586,9 @@ async function runWorkshopService(
     );
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "Недостаточно наличных.");
+        player.sendClientMessage(Color.error, "现金不足。");
       } else {
-        player.sendClientMessage(Color.error, "Оплата не прошла.");
+        player.sendClientMessage(Color.error, "付款失败。");
       }
       return;
     }
@@ -614,7 +614,7 @@ async function runWorkshopService(
       if (stillHere) {
         player.sendClientMessage(
           Color.info,
-          "Оплачено и сохранено. Обновите транспорт через /car."
+          "付款已完成并保存。请通过 /car 更新车辆。"
         );
       }
       return;
@@ -640,7 +640,7 @@ async function runWorkshopService(
       if (stillHere) {
         player.sendClientMessage(
           Color.info,
-          "Оплачено и сохранено. Обновите транспорт через /car."
+          "付款已完成并保存。请通过 /car 更新车辆。"
         );
       }
       return;
@@ -658,7 +658,7 @@ async function runWorkshopService(
     };
     player.sendClientMessage(
       Color.info,
-      `${labels[kind]} за ${formatMoney(price)}. Сохранено в гараже.`
+      `${labels[kind]}，花费 ${formatMoney(price)}. 已保存至车库。`
     );
   } finally {
     busy.delete(account.id);

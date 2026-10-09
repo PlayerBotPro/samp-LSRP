@@ -244,14 +244,14 @@ export function tryOccupyHospitalBed(player: Player): void {
 
   const account = getAccount(player);
   if (!account?.hospitalized) {
-    player.sendClientMessage(Color.error, "Вам не нужно лечение.");
+    player.sendClientMessage(Color.error, "你不需要治疗。");
     return;
   }
 
   if (treatingPlayers.has(id)) {
     player.sendClientMessage(
       Color.gray,
-      "Лечение уже идёт. Можете ходить по больнице; на улицу — после выздоровления."
+      "治疗正在进行中。你可以在医院内走动；痊愈后才能外出。"
     );
     return;
   }
@@ -266,7 +266,7 @@ export function tryOccupyHospitalBed(player: Player): void {
   }
 
   if (world !== HOSPITAL_WORLD) {
-    player.sendClientMessage(Color.error, "Койки только в больнице.");
+    player.sendClientMessage(Color.error, "只能在医院使用病床。");
     return;
   }
 
@@ -304,11 +304,11 @@ export function tryOccupyHospitalBed(player: Player): void {
   }
 
   if (nearestBusyName) {
-    player.sendClientMessage(Color.error, `Койка занята: ${nearestBusyName}.`);
+    player.sendClientMessage(Color.error, `病床已被占用: ${nearestBusyName}.`);
     return;
   }
 
-  player.sendClientMessage(Color.error, "Подойдите к свободной койке.");
+  player.sendClientMessage(Color.error, "请靠近空病床。");
 }
 
 function occupyBed(player: Player, playerSlot: number, bedIndex: number): void {
@@ -332,11 +332,11 @@ function occupyBed(player: Player, playerSlot: number, bedIndex: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `Вы заняли койку №${bedIndex + 1}. Лечение началось.`
+    `你占用了 №${bedIndex + 1} 号病床。治疗已开始。`
   );
   player.sendClientMessage(
     Color.gray,
-    "Можете ходить по больнице. На улицу — после выздоровления."
+    "你可以在医院内走动。痊愈后才能外出。"
   );
 }
 
@@ -365,7 +365,7 @@ function finishTreatment(player: Player, playerSlot: number): void {
     queueSave(player);
   }
 
-  player.sendClientMessage(Color.info, "Лечение завершено. Можете выйти на улицу.");
+  player.sendClientMessage(Color.info, "治疗已完成。你可以外出。");
 }
 
 function clearHospitalSlot(player: Player): void {
@@ -632,8 +632,8 @@ function tryLeaveHospital(player: Player): void {
     player.sendClientMessage(
       Color.error,
       treatingPlayers.has(id)
-        ? "Лечение ещё не закончено. На улицу — после выздоровления."
-        : "Вам нужно лечение. Займите койку: /hospital."
+        ? "治疗尚未结束。痊愈后才能外出。"
+        : "你需要治疗。请使用病床: /hospital."
     );
     return;
   }

@@ -33,33 +33,33 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
 
   const house = getHouse(houseId);
   if (!house || house.ownerId !== null) {
-    player.sendClientMessage(Color.error, "Этот дом уже куплен.");
+    player.sendClientMessage(Color.error, "该房屋已被购买。");
     return;
   }
 
   if (account.level < MIN_BUY_LEVEL) {
-    player.sendClientMessage(Color.error, "Купить дом можно с 3 уровня.");
+    player.sendClientMessage(Color.error, "达到 3 级后才能购买房屋。");
     return;
   }
 
   if (!account.passport) {
-    player.sendClientMessage(Color.error, "Нужен паспорт. Оформите его в мэрии.");
+    player.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
     return;
   }
 
   if (findOwnedHouse(account.id)) {
-    player.sendClientMessage(Color.error, "У вас уже есть дом.");
+    player.sendClientMessage(Color.error, "你已经有房屋。");
     return;
   }
 
   const cash = Math.max(0, Math.floor(account.money));
   if (cash < house.price) {
-    player.sendClientMessage(Color.error, "Недостаточно наличных.");
+    player.sendClientMessage(Color.error, "现金不足。");
     return;
   }
 
   if (!isNearHouseEntrance(player, houseId)) {
-    player.sendClientMessage(Color.error, "Подойдите к пикапу дома.");
+    player.sendClientMessage(Color.error, "请靠近房屋标记点。");
     return;
   }
 
@@ -75,25 +75,25 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] покупка дома ${houseId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
   buying.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "owned") {
-      player.sendClientMessage(Color.error, "У вас уже есть дом.");
+      player.sendClientMessage(Color.error, "你已经有房屋。");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "Недостаточно наличных.");
+      player.sendClientMessage(Color.error, "现金不足。");
       return;
     }
     if (result.reason === "sold") {
-      player.sendClientMessage(Color.error, "Этот дом уже куплен.");
+      player.sendClientMessage(Color.error, "该房屋已被购买。");
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -107,7 +107,7 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
 
   const owned = setHouseOwner(houseId, account.id, account.name);
   if (!owned) {
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -128,20 +128,20 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
   refreshAllHouseMapIcons();
 
   if (!teleportToHouseInterior(player, owned)) {
-    player.sendClientMessage(Color.error, "Дом куплен, но телепорт не удался.");
+    player.sendClientMessage(Color.error, "房屋已购买，但传送失败。");
     return;
   }
 
   player.sendClientMessage(
     Color.info,
-    `Поздравляем с покупкой дома №${owned.id} за ${formatMoney(owned.price)}!`
+    `恭喜你以 ${formatMoney(owned.price)} 的价格购买了房屋 №${owned.id}!`
   );
   player.sendClientMessage(
     Color.info,
-    "Дом оплачен на сегодня. Для продления обратитесь в банк и оплатите жильё."
+    "今天的房屋费用已付清。如需续费，请前往银行缴纳房屋费用。"
   );
   player.sendClientMessage(
     Color.info,
-    "Для управления домом используйте /home внутри интерьера."
+    "请在室内使用 /home 管理房屋。"
   );
 }

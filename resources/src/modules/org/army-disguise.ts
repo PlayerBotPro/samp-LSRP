@@ -104,7 +104,7 @@ export function bindArmyDisguise(): void {
     }
 
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.gray, "Армейская форма снята.");
+      player.sendClientMessage(Color.gray, "军装已脱下。");
     }
   });
 

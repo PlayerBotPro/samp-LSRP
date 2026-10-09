@@ -22,7 +22,7 @@ registerCommand("f", "Чат банды или мафии", (player, args) => {
 
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    player.sendClientMessage(Color.error, "Использование: /f [текст]");
+    player.sendClientMessage(Color.error, "用法: /f [文本]");
     return;
   }
 

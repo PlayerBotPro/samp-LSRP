@@ -49,7 +49,7 @@ export function handleCommand(player: Player, cmdtext: string): boolean {
   const cmd = commands.get(name);
 
   if (!cmd) {
-    player.sendClientMessage(Color.error, `Неизвестная команда: /${name}`);
+    player.sendClientMessage(Color.error, `未知命令: /${name}`);
     return true;
   }
 

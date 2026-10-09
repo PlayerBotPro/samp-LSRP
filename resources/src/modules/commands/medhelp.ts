@@ -79,7 +79,7 @@ export function bindMedhelpOffers(): void {
 
     if (Date.now() > offer.expiresAt) {
       clearExpiredMedhelpOffer(slot);
-      player.sendClientMessage(Color.error, "Предложение лечения истекло.");
+      player.sendClientMessage(Color.error, "治疗报价已过期。");
       return;
     }
 
@@ -110,7 +110,7 @@ export function bindMedhelpOffers(): void {
         releaseYnOffer(targetSlot, "medhelp");
         const target = omp.players.at(targetSlot);
         if (target && isPlayerActive(target)) {
-          target.sendClientMessage(Color.error, "Врач вышел из игры. Лечение отменено.");
+          target.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
         }
       }
     }
@@ -129,19 +129,19 @@ function tryMedhelp(player: Player, raw: string): void {
 
   const membership = getMembership(account);
   if (!membership || membership.org.id !== ORG_HOSPITAL_ID) {
-    player.sendClientMessage(Color.error, "Команда только для сотрудников больницы.");
+    player.sendClientMessage(Color.error, "此命令仅供医院员工使用。");
     return;
   }
 
   if (isJailed(player) || account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сейчас нельзя лечить.");
+    player.sendClientMessage(Color.error, "现在不能进行治疗。");
     return;
   }
 
   if (getCarriedHospitalMeds(player) < 1) {
     player.sendClientMessage(
       Color.error,
-      "Нет медикаментов. Возьмите набор на складе в служебном блоке больницы."
+      "没有药品。请到医院员工区的仓库领取药品包。"
     );
     return;
   }
@@ -149,7 +149,7 @@ function tryMedhelp(player: Player, raw: string): void {
   if (!canHealHere(player)) {
     player.sendClientMessage(
       Color.error,
-      "Лечить можно только в больнице или в транспорте больницы."
+      "只能在医院或医院车辆内治疗。"
     );
     return;
   }
@@ -158,7 +158,7 @@ function tryMedhelp(player: Player, raw: string): void {
   if (parts.length < 2) {
     player.sendClientMessage(
       Color.error,
-      `Использование: /medhelp [id] [сумма ${MIN_HEAL_PRICE}-${MAX_HEAL_PRICE}]`
+      `用法: /medhelp [id] [金额 ${MIN_HEAL_PRICE}-${MAX_HEAL_PRICE}]`
     );
     return;
   }
@@ -166,7 +166,7 @@ function tryMedhelp(player: Player, raw: string): void {
   const targetId = Number(parts[0]);
   const price = Math.floor(Number(parts[1]));
   if (!Number.isInteger(targetId) || targetId < 0) {
-    player.sendClientMessage(Color.error, "Некорректный id игрока.");
+    player.sendClientMessage(Color.error, "玩家 ID 无效。");
     return;
   }
 
@@ -178,21 +178,21 @@ function tryMedhelp(player: Player, raw: string): void {
   ) {
     player.sendClientMessage(
       Color.error,
-      `Сумма должна быть от ${formatMoney(MIN_HEAL_PRICE)} до ${formatMoney(MAX_HEAL_PRICE)}.`
+      `金额必须在 ${formatMoney(MIN_HEAL_PRICE)} 到 ${formatMoney(MAX_HEAL_PRICE)} 之间。`
     );
     return;
   }
 
   const target = omp.players.at(targetId);
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "Игрок не в сети.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     return;
   }
 
   const doctorSlot = playerId(player);
   const targetSlot = playerId(target);
   if (doctorSlot === null || targetSlot === null || doctorSlot === targetSlot) {
-    player.sendClientMessage(Color.error, "Нельзя лечить самого себя этой командой.");
+    player.sendClientMessage(Color.error, "不能用此命令治疗自己。");
     return;
   }
 
@@ -202,19 +202,19 @@ function tryMedhelp(player: Player, raw: string): void {
   }
 
   if (isJailed(target)) {
-    player.sendClientMessage(Color.error, "Игрок в тюрьме.");
+    player.sendClientMessage(Color.error, "玩家在监狱里。");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Подойдите ближе к пациенту.");
+    player.sendClientMessage(Color.error, "请靠近患者。");
     return;
   }
 
   if (!canHealHere(target)) {
     player.sendClientMessage(
       Color.error,
-      "Пациент должен быть в больнице или в транспорте больницы."
+      "患者必须在医院或医院车辆内。"
     );
     return;
   }
@@ -229,7 +229,7 @@ function tryMedhelp(player: Player, raw: string): void {
   if (!doctorInHospitalWorld && !sameHospitalVehicle(player, target)) {
     player.sendClientMessage(
       Color.error,
-      "Пациент должен быть в одном транспорте больницы с вами."
+      "患者必须和你在同一辆医院车辆内。"
     );
     return;
   }
@@ -242,14 +242,14 @@ function tryMedhelp(player: Player, raw: string): void {
   }
 
   if (targetHp >= MAX_HEALTH - 0.5) {
-    player.sendClientMessage(Color.error, "Игрок уже здоров.");
+    player.sendClientMessage(Color.error, "玩家已经健康。");
     return;
   }
 
   if (targetAccount.money < price) {
     player.sendClientMessage(
       Color.error,
-      `У пациента недостаточно наличных. Нужно ${formatMoney(price)}.`
+      `患者现金不足。需要 ${formatMoney(price)}.`
     );
     return;
   }
@@ -257,7 +257,7 @@ function tryMedhelp(player: Player, raw: string): void {
   clearExpiredMedhelpOffer(targetSlot);
 
   if (pendingOffers.has(targetSlot) || !claimYnOffer(targetSlot, "medhelp")) {
-    player.sendClientMessage(Color.error, "У игрока уже есть активное предложение.");
+    player.sendClientMessage(Color.error, "该玩家已有有效报价。");
     return;
   }
 
@@ -270,15 +270,15 @@ function tryMedhelp(player: Player, raw: string): void {
 
   player.sendClientMessage(
     Color.info,
-    `Вы предложили лечение игроку ${playerName(target)} за ${formatMoney(price)}.`
+    `你向玩家 ${playerName(target)} 提议治疗，费用为 ${formatMoney(price)}.`
   );
   target.sendClientMessage(
     Color.white,
-    `${playerName(player)} предлагает лечение за ${formatMoney(price)}.`
+    `${playerName(player)} 提议为你治疗，费用为 ${formatMoney(price)}.`
   );
   target.sendClientMessage(
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы согласиться или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}接受，或按 {FF6600}N {FFFFFF}拒绝"
   );
 }
 
@@ -293,40 +293,40 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
 
   const doctor = omp.players.at(offer.doctorId);
   if (!doctor || !isPlayerActive(doctor) || !isAuthenticated(doctor)) {
-    patient.sendClientMessage(Color.error, "Врач вышел из игры. Лечение отменено.");
+    patient.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
     return;
   }
 
   const doctorAccount = getAccount(doctor);
   if (!doctorAccount || doctorAccount.id !== offer.doctorUserId) {
-    patient.sendClientMessage(Color.error, "Врач вышел из игры. Лечение отменено.");
+    patient.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
     return;
   }
 
   const membership = getMembership(doctorAccount);
   if (!membership || membership.org.id !== ORG_HOSPITAL_ID) {
-    patient.sendClientMessage(Color.error, "Лечение отменено.");
-    doctor.sendClientMessage(Color.error, "Лечение доступно только сотрудникам больницы.");
+    patient.sendClientMessage(Color.error, "治疗已取消。");
+    doctor.sendClientMessage(Color.error, "只有医院员工才能进行治疗。");
     return;
   }
 
   if (isJailed(doctor) || doctorAccount.hospitalized || isJailed(patient)) {
-    patient.sendClientMessage(Color.error, "Лечение отменено.");
-    doctor.sendClientMessage(Color.error, "Сейчас нельзя лечить.");
+    patient.sendClientMessage(Color.error, "治疗已取消。");
+    doctor.sendClientMessage(Color.error, "现在不能进行治疗。");
     return;
   }
 
   if (!arePlayersNearby(doctor, patient, WHISPER_RADIUS)) {
-    patient.sendClientMessage(Color.error, "Врач слишком далеко. Лечение отменено.");
-    doctor.sendClientMessage(Color.error, "Пациент слишком далеко. Лечение отменено.");
+    patient.sendClientMessage(Color.error, "医生距离太远。治疗已取消。");
+    doctor.sendClientMessage(Color.error, "患者距离太远。治疗已取消。");
     return;
   }
 
   if (!canHealHere(doctor) || !canHealHere(patient)) {
-    patient.sendClientMessage(Color.error, "Лечение отменено.");
+    patient.sendClientMessage(Color.error, "治疗已取消。");
     doctor.sendClientMessage(
       Color.error,
-      "Лечить можно только в больнице или в транспорте больницы."
+      "只能在医院或医院车辆内治疗。"
     );
     return;
   }
@@ -339,10 +339,10 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   }
 
   if (!doctorInHospitalWorld && !sameHospitalVehicle(doctor, patient)) {
-    patient.sendClientMessage(Color.error, "Лечение отменено.");
+    patient.sendClientMessage(Color.error, "治疗已取消。");
     doctor.sendClientMessage(
       Color.error,
-      "Пациент должен быть в одном транспорте больницы с вами."
+      "患者必须和你在同一辆医院车辆内。"
     );
     return;
   }
@@ -355,14 +355,14 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   }
 
   if (patientHp >= MAX_HEALTH - 0.5) {
-    patient.sendClientMessage(Color.error, "Вы уже здоровы.");
-    doctor.sendClientMessage(Color.error, "Игрок уже здоров.");
+    patient.sendClientMessage(Color.error, "你已经健康。");
+    doctor.sendClientMessage(Color.error, "玩家已经健康。");
     return;
   }
 
   if (getCarriedHospitalMeds(doctor) < 1) {
-    patient.sendClientMessage(Color.error, "У врача нет медикаментов. Лечение отменено.");
-    doctor.sendClientMessage(Color.error, "Нет медикаментов.");
+    patient.sendClientMessage(Color.error, "医生没有药品。治疗已取消。");
+    doctor.sendClientMessage(Color.error, "没有药品。");
     return;
   }
 
@@ -370,11 +370,11 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   if (patientAccount.money < price) {
     patient.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+      `现金不足。需要 ${formatMoney(price)}.`
     );
     doctor.sendClientMessage(
       Color.error,
-      `${playerName(patient)} не смог оплатить лечение (${formatMoney(price)}).`
+      `${playerName(patient)} 无法支付治疗费用 (${formatMoney(price)}).`
     );
     return;
   }
@@ -388,7 +388,7 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
     liveDoctor.id !== doctorAccount.id ||
     livePatient.money < price
   ) {
-    patient.sendClientMessage(Color.error, "Не удалось провести оплату.");
+    patient.sendClientMessage(Color.error, "无法完成付款。");
     return;
   }
 
@@ -408,8 +408,8 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
     if (rollbackDoctor) {
       applyWallet(doctor, rollbackDoctor);
     }
-    patient.sendClientMessage(Color.error, "У врача нет медикаментов. Лечение отменено.");
-    doctor.sendClientMessage(Color.error, "Нет медикаментов.");
+    patient.sendClientMessage(Color.error, "医生没有药品。治疗已取消。");
+    doctor.sendClientMessage(Color.error, "没有药品。");
     return;
   }
 
@@ -433,11 +433,11 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   const verb = byGender(doctorAccount.gender, "вылечил", "вылечила");
   doctor.sendClientMessage(
     Color.info,
-    `Пациент ${playerName(patient)} вылечен. +${formatMoney(price)}. Медикаментов: ${left}.`
+    `患者 ${playerName(patient)} 已治愈。+${formatMoney(price)}. 剩余药品: ${left}.`
   );
   patient.sendClientMessage(
     Color.info,
-    `${playerName(doctor)} ${verb} вас. Оплачено ${formatMoney(price)}.`
+    `${playerName(doctor)} ${verb}了你。已支付 ${formatMoney(price)}.`
   );
 
   broadcastHospitalMed(membership.rank.title, doctor, patient, doctorAccount, price);
@@ -446,13 +446,13 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
 function refuseOffer(patient: Player, patientSlot: number, offer: MedhelpOffer): void {
   pendingOffers.delete(patientSlot);
   releaseYnOffer(patientSlot, "medhelp");
-  patient.sendClientMessage(Color.gray, "Вы отказались от лечения.");
+  patient.sendClientMessage(Color.gray, "你拒绝了治疗。");
 
   const doctor = omp.players.at(offer.doctorId);
   if (doctor && isPlayerActive(doctor)) {
     doctor.sendClientMessage(
       Color.gray,
-      `${playerName(patient)} отказался от лечения.`
+      `${playerName(patient)} 拒绝了治疗。`
     );
   }
 }

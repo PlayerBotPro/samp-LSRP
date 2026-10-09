@@ -42,7 +42,7 @@ export function bindPayLabels(): void {
 async function handlePay(player: Player, args: string): Promise<void> {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -50,7 +50,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
   if (!parsed) {
     player.sendClientMessage(
       Color.error,
-      `Использование: /pay [id] [сумма ${MIN_AMOUNT}-${MAX_AMOUNT}]`
+      `用法: /pay [id] [金额 ${MIN_AMOUNT}-${MAX_AMOUNT}]`
     );
     return;
   }
@@ -61,23 +61,23 @@ async function handlePay(player: Player, args: string): Promise<void> {
   }
 
   if (parsed.slot === senderId) {
-    player.sendClientMessage(Color.error, "Нельзя передать деньги самому себе.");
+    player.sendClientMessage(Color.error, "不能给自己转账。");
     return;
   }
 
   const target = findPlayer(parsed.slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "Игрок не найден.");
+    player.sendClientMessage(Color.error, "未找到玩家。");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    player.sendClientMessage(Color.error, "玩家距离太远。");
     return;
   }
 
@@ -87,7 +87,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
   }
 
   if (busy.has(senderId) || busy.has(targetId)) {
-    player.sendClientMessage(Color.error, "Подождите, операция ещё выполняется.");
+    player.sendClientMessage(Color.error, "请稍候，操作仍在进行中。");
     return;
   }
 
@@ -98,12 +98,12 @@ async function handlePay(player: Player, args: string): Promise<void> {
     const senderLive = getAccount(player);
     const targetLive = getAccount(target);
     if (!senderLive || !targetLive) {
-      player.sendClientMessage(Color.error, "Игрок не найден.");
+      player.sendClientMessage(Color.error, "未找到玩家。");
       return;
     }
 
     if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-      player.sendClientMessage(Color.error, "Игрок слишком далеко.");
+      player.sendClientMessage(Color.error, "玩家距离太远。");
       return;
     }
 
@@ -111,12 +111,12 @@ async function handlePay(player: Player, args: string): Promise<void> {
     const senderCash = Math.max(0, Math.floor(senderLive.money));
     const targetCash = Math.max(0, Math.floor(targetLive.money));
     if (senderCash < amount) {
-      player.sendClientMessage(Color.error, "Недостаточно наличных.");
+      player.sendClientMessage(Color.error, "现金不足。");
       return;
     }
 
     if (targetCash > MAX_CASH - amount) {
-      player.sendClientMessage(Color.error, "У игрока слишком много наличных.");
+      player.sendClientMessage(Color.error, "该玩家现金过多。");
       return;
     }
 
@@ -127,7 +127,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
       try {
         player.sendClientMessage(
           Color.error,
-          "Не удалось передать деньги. Попробуйте позже."
+          "无法转账。请稍后重试。"
         );
       } catch {
         // Отправитель уже вышел.
@@ -137,7 +137,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
 
     if (!ok) {
       try {
-        player.sendClientMessage(Color.error, "Недостаточно наличных.");
+        player.sendClientMessage(Color.error, "现金不足。");
       } catch {
         // Отправитель уже вышел.
       }
@@ -157,7 +157,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
       try {
         player.sendClientMessage(
           Color.info,
-          `Вы передали ${pretty} игроку ${targetTag}.`
+          `你向玩家 ${targetTag} 转账了 ${pretty}.`
         );
         showPayLabel(player, `-${pretty}`, COLOR_PAY_OUT);
       } catch {
@@ -172,7 +172,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
       try {
         target.sendClientMessage(
           Color.info,
-          `${senderTag} передал вам ${pretty}.`
+          `${senderTag} 向你转账了 ${pretty}.`
         );
         showPayLabel(target, `+${pretty}`, COLOR_PAY_IN);
       } catch {

@@ -91,7 +91,7 @@ registerCommand(
     if (!station) {
       officer.sendClientMessage(
         Color.error,
-        "Арестовать можно только рядом с участком LSPD или Областной полиции."
+        "只能在 LSPD 或州警局附近逮捕玩家。"
       );
       return;
     }
@@ -99,37 +99,37 @@ registerCommand(
     if (isLawOfficer(target)) {
       officer.sendClientMessage(
         Color.error,
-        "Нельзя арестовать сотрудника полиции или FBI."
+        "不能逮捕警察或 FBI 员工。"
       );
       return;
     }
 
     if (isJailed(target)) {
-      officer.sendClientMessage(Color.error, "Игрок уже в тюрьме.");
+      officer.sendClientMessage(Color.error, "玩家已经在监狱里。");
       return;
     }
 
     if (!isCuffed(target)) {
-      officer.sendClientMessage(Color.error, "На игроке должны быть наручники.");
+      officer.sendClientMessage(Color.error, "玩家必须戴着手铐。");
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount || targetAccount.wantedLevel <= 0) {
-      officer.sendClientMessage(Color.error, "У игрока нет розыска.");
+      officer.sendClientMessage(Color.error, "该玩家没有通缉等级。");
       return;
     }
 
     if (isTargetPending(targetId, targetAccount.id)) {
       officer.sendClientMessage(
         Color.error,
-        "Этого игрока уже ведут на арест."
+        "该玩家已经被押送去逮捕。"
       );
       return;
     }
 
     if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-      officer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+      officer.sendClientMessage(Color.error, "玩家距离太远。");
       return;
     }
 
@@ -145,7 +145,7 @@ registerCommand(
         CHECKPOINT_RADIUS
       );
     } catch {
-      officer.sendClientMessage(Color.error, "Не удалось поставить чекпоинт.");
+      officer.sendClientMessage(Color.error, "无法设置检查点。");
       return;
     }
 
@@ -173,12 +173,12 @@ registerCommand(
 
     officer.sendClientMessage(
       Color.info,
-      `Задержанный: ${targetName}. Заедьте на чекпоинт у ${station.name}, чтобы завершить арест.`
+      `已逮捕: ${targetName}. 驾车前往 ${station.name} 附近的检查点以完成逮捕。`
     );
     try {
       target.sendClientMessage(
         Color.error,
-        `${officerName} ведёт вас в участок (${station.name}).`
+        `${officerName} 正押送你前往警局 (${station.name}).`
       );
     } catch {
       // Уже вышел.
@@ -361,7 +361,7 @@ async function onArrestCheckpoint(
     try {
       target.sendClientMessage(
         Color.error,
-        `Вас арестовал ${playerName(player)}. Розыск снят.`
+        `你被 ${playerName(player)} 逮捕了。通缉已解除。`
       );
     } catch {
       // Уже в тюрьме / вышел.

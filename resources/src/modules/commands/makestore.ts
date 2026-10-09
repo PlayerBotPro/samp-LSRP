@@ -25,7 +25,7 @@ registerCommand(
 
 async function handleMakeStore(player: Player): Promise<void> {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "Сначала войдите в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
@@ -36,23 +36,23 @@ async function handleMakeStore(player: Player): Promise<void> {
   }
 
   if (busy.has(slot)) {
-    player.sendClientMessage(Color.error, "Подождите завершения операции.");
+    player.sendClientMessage(Color.error, "请等待操作完成。");
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "В тюрьме команда недоступна.");
+    player.sendClientMessage(Color.error, "在监狱里无法使用此命令。");
     return;
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сначала пройдите лечение в больнице.");
+    player.sendClientMessage(Color.error, "请先在医院完成治疗。");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "Нужно стоять пешком.");
+      player.sendClientMessage(Color.error, "必须步行。");
       return;
     }
   } catch {
@@ -63,7 +63,7 @@ async function handleMakeStore(player: Player): Promise<void> {
   if (!house) {
     player.sendClientMessage(
       Color.error,
-      "Установить шкаф можно только внутри своего дома."
+      "只能在自己的房屋内放置衣柜。"
     );
     return;
   }
@@ -86,7 +86,7 @@ async function handleMakeStore(player: Player): Promise<void> {
   try {
     const ok = await saveHouseStorePosition(house.id, account.id, x, y, z);
     if (!ok) {
-      player.sendClientMessage(Color.error, "Не удалось сохранить шкаф.");
+      player.sendClientMessage(Color.error, "无法保存衣柜。");
       return;
     }
 
@@ -96,8 +96,8 @@ async function handleMakeStore(player: Player): Promise<void> {
     player.sendClientMessage(
       Color.info,
       relocating
-        ? "Вы переставили шкаф. Управление: /use"
-        : "Шкаф установлен. Управление: /use"
+        ? "你已移动衣柜。管理: /use"
+        : "衣柜已放置。管理: /use"
     );
   } finally {
     busy.delete(slot);

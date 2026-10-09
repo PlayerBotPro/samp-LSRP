@@ -195,7 +195,7 @@ function openMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Закусочная закрыта.");
+    player.sendClientMessage(Color.error, "小吃店已关闭。");
     return;
   }
 
@@ -219,7 +219,7 @@ function openMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть меню.");
+    player.sendClientMessage(Color.error, "无法打开菜单。");
   }
 }
 
@@ -267,24 +267,24 @@ async function buyFood(
 
   const business = getBusiness(businessId);
   if (!business || !isFastfoodType(business.typeId) || !hasBuyPickup(business)) {
-    player.sendClientMessage(Color.error, "Закусочная недоступна.");
+    player.sendClientMessage(Color.error, "小吃店暂不可用。");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Закусочная закрыта.");
+    player.sendClientMessage(Color.error, "小吃店已关闭。");
     return;
   }
 
   if (!isAtBuyPickup(player, business)) {
-    player.sendClientMessage(Color.error, "Подойдите к стойке.");
+    player.sendClientMessage(Color.error, "请靠近柜台。");
     return;
   }
 
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+      `现金不足。需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -300,7 +300,7 @@ async function buyFood(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] закусочная biz=${businessId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   } finally {
     buying.delete(account.id);
@@ -310,11 +310,11 @@ async function buyFood(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+        `现金不足。需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -358,7 +358,7 @@ async function buyFood(
 
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили ${item.name} за ${formatMoney(item.price)}. Сытость: ${nextHunger}.`
+    `你已购买 ${item.name}，花费 ${formatMoney(item.price)}. 饱腹度: ${nextHunger}.`
   );
 }
 

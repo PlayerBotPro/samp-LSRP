@@ -55,7 +55,7 @@ export function offerDocShow(
   }
 
   if (!claimYnOffer(targetSlot, kind as YnOfferKind)) {
-    from.sendClientMessage(Color.error, "У игрока уже есть активное предложение.");
+    from.sendClientMessage(Color.error, "该玩家已有有效报价。");
     return false;
   }
 
@@ -74,15 +74,15 @@ export function offerDocShow(
 
   from.sendClientMessage(
     Color.gray,
-    `Вы предложили показать ${label}: ${playerName(to)}.`
+    `你提议展示 ${label}: ${playerName(to)}.`
   );
   to.sendClientMessage(
     Color.white,
-    `${playerName(from)} предлагает показать вам ${label}.`
+    `${playerName(from)} 提议向你展示 ${label}.`
   );
   to.sendClientMessage(
     Color.white,
-    "Нажмите {00CC00}Y {FFFFFF}чтобы посмотреть или {FF6600}N {FFFFFF}для отказа"
+    "按 {00CC00}Y {FFFFFF}查看，或按 {FF6600}N {FFFFFF}拒绝"
   );
   return true;
 }
@@ -150,7 +150,7 @@ function ensureBound(): void {
         clearOffer(targetSlot);
         const target = omp.players.at(targetSlot);
         if (target && isPlayerActive(target)) {
-          target.sendClientMessage(Color.error, "Предложение отменено.");
+          target.sendClientMessage(Color.error, "报价已取消。");
         }
       }
     }
@@ -162,20 +162,20 @@ function acceptOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): v
 
   const owner = omp.players.at(offer.fromSlot);
   if (!owner || !isPlayerActive(owner)) {
-    viewer.sendClientMessage(Color.error, "Игрок уже не в сети.");
+    viewer.sendClientMessage(Color.error, "玩家已不在线。");
     return;
   }
 
   if (getAccount(owner)?.id !== offer.fromUserId) {
-    viewer.sendClientMessage(Color.error, "Предложение уже неактуально.");
+    viewer.sendClientMessage(Color.error, "报价已失效。");
     return;
   }
 
   if (!arePlayersNearby(viewer, owner, WHISPER_RADIUS)) {
-    viewer.sendClientMessage(Color.error, "Игрок слишком далеко.");
+    viewer.sendClientMessage(Color.error, "玩家距离太远。");
     owner.sendClientMessage(
       Color.error,
-      `${playerName(viewer)} не смог посмотреть: слишком далеко.`
+      `${playerName(viewer)} 无法查看: 距离太远。`
     );
     return;
   }
@@ -190,13 +190,13 @@ function acceptOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): v
 
 function refuseOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): void {
   clearOffer(targetSlot);
-  viewer.sendClientMessage(Color.info, "Вы отказались смотреть.");
+  viewer.sendClientMessage(Color.info, "你拒绝了查看。");
 
   const owner = omp.players.at(offer.fromSlot);
   if (owner && isPlayerActive(owner) && getAccount(owner)?.id === offer.fromUserId) {
     owner.sendClientMessage(
       Color.info,
-      `${playerName(viewer)} отказался смотреть ${DOC_LABEL[offer.kind]}.`
+      `${playerName(viewer)} 拒绝查看 ${DOC_LABEL[offer.kind]}.`
     );
   }
 }
@@ -211,12 +211,12 @@ function expireOffer(targetSlot: number): void {
 
   const target = omp.players.at(targetSlot);
   if (target && isPlayerActive(target)) {
-    target.sendClientMessage(Color.error, "Предложение истекло.");
+    target.sendClientMessage(Color.error, "报价已过期。");
   }
 
   const owner = omp.players.at(offer.fromSlot);
   if (owner && isPlayerActive(owner) && getAccount(owner)?.id === offer.fromUserId) {
-    owner.sendClientMessage(Color.error, "Предложение истекло.");
+    owner.sendClientMessage(Color.error, "报价已过期。");
   }
 }
 

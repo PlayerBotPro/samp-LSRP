@@ -54,7 +54,7 @@ registerCommand("leaders", "Список лидеров online", (player) => {
   list.sort((a, b) => a.orgName.localeCompare(b.orgName) || a.slot - b.slot);
 
   if (list.length === 0) {
-    player.sendClientMessage(Color.white, "Сейчас нет лидеров в игре.");
+    player.sendClientMessage(Color.white, "目前没有组织领导在线。");
     return;
   }
 

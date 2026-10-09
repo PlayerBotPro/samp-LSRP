@@ -40,18 +40,18 @@ export function bindHouseSellDialog(): void {
 export function showSellHouseDialog(player: Player): void {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "Сначала войди в аккаунт.");
+    player.sendClientMessage(Color.error, "请先登录账号。");
     return;
   }
 
   const house = findOwnedHouse(account.id);
   if (!house) {
-    player.sendClientMessage(Color.error, "У вас нет дома.");
+    player.sendClientMessage(Color.error, "你没有房屋。");
     return;
   }
 
   if (!isNearOwnHouse(player, house.id)) {
-    player.sendClientMessage(Color.error, "Подойдите к своему дому.");
+    player.sendClientMessage(Color.error, "请靠近自己的房屋。");
     return;
   }
 
@@ -66,7 +66,7 @@ export function showSellHouseDialog(player: Player): void {
       "Отмена"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть окно продажи.");
+    player.sendClientMessage(Color.error, "无法打开出售窗口。");
   }
 }
 
@@ -79,12 +79,12 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   const house = findOwnedHouse(account.id);
   if (!house) {
-    player.sendClientMessage(Color.error, "У вас нет дома.");
+    player.sendClientMessage(Color.error, "你没有房屋。");
     return;
   }
 
   if (!isNearOwnHouse(player, house.id)) {
-    player.sendClientMessage(Color.error, "Подойдите к своему дому.");
+    player.sendClientMessage(Color.error, "请靠近自己的房屋。");
     return;
   }
 
@@ -100,17 +100,17 @@ async function confirmSellHouse(player: Player): Promise<void> {
     selling.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] продажа дома ${house.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
   selling.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "У вас нет дома.");
+      player.sendClientMessage(Color.error, "你没有房屋。");
       return;
     }
-    player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
 
@@ -122,7 +122,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   if (!cleared) {
     if (isPlayerActive(player) && getAccount(player)?.id === account.id) {
-      player.sendClientMessage(Color.error, "Продажа не прошла. Попробуйте ещё раз.");
+      player.sendClientMessage(Color.error, "出售失败。请重试。");
     }
     return;
   }
@@ -152,6 +152,6 @@ async function confirmSellHouse(player: Player): Promise<void> {
   const sold = getHouse(house.id);
   player.sendClientMessage(
     Color.info,
-    `Вы продали дом №${house.id} государству за ${formatMoney(sold?.price ?? result.price)}.`
+    `你已将房屋 №${house.id} 以 ${formatMoney(sold?.price ?? result.price)} 的价格卖给政府。`
   );
 }

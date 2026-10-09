@@ -171,12 +171,12 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (!account.licenses.gun) {
-    player.sendClientMessage(Color.error, "Для покупки нужна лицензия на оружие.");
+    player.sendClientMessage(Color.error, "购买需要武器执照。");
     return;
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     return;
   }
 
@@ -202,7 +202,7 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть витрину.");
+    player.sendClientMessage(Color.error, "无法打开商品展示柜。");
   }
 }
 
@@ -247,18 +247,18 @@ async function buyAmmuItem(
   }
 
   if (!account.licenses.gun) {
-    player.sendClientMessage(Color.error, "Для покупки нужна лицензия на оружие.");
+    player.sendClientMessage(Color.error, "购买需要武器执照。");
     return;
   }
 
   const business = getBusiness(businessId);
   if (!business || !isAmmuType(business.typeId)) {
-    player.sendClientMessage(Color.error, "Магазин недоступен.");
+    player.sendClientMessage(Color.error, "商店暂不可用。");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "Магазин закрыт.");
+    player.sendClientMessage(Color.error, "商店已关闭。");
     return;
   }
 
@@ -276,7 +276,7 @@ async function buyAmmuItem(
       slotId
     );
     if (!near || near.id !== businessId) {
-      player.sendClientMessage(Color.error, "Подойдите к витрине магазина.");
+      player.sendClientMessage(Color.error, "请靠近商店展示柜。");
       return;
     }
   } catch {
@@ -286,7 +286,7 @@ async function buyAmmuItem(
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+      `现金不足。需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -302,7 +302,7 @@ async function buyAmmuItem(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] аммунация biz=${businessId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   } finally {
     buying.delete(account.id);
@@ -312,11 +312,11 @@ async function buyAmmuItem(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(item.price)}.`
+        `现金不足。需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }
 
@@ -336,7 +336,7 @@ async function buyAmmuItem(
     grantArmour(player, MAX_ARMOR);
     player.sendClientMessage(
       Color.tryOk,
-      `Вы купили бронежилет за ${formatMoney(item.price)}.`
+      `你已购买防弹衣，花费 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -344,6 +344,6 @@ async function buyAmmuItem(
   grantWeapon(player, item.weaponId, item.ammo);
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили ${item.name} (${item.ammo} патр.) за ${formatMoney(item.price)}.`
+    `你已购买 ${item.name} (${item.ammo} 发子弹)，花费 ${formatMoney(item.price)}.`
   );
 }

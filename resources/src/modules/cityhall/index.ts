@@ -338,7 +338,7 @@ function tryGivePassport(player: Player): void {
   lastPassportMsgAt.set(id, now);
 
   if (account.passport) {
-    player.sendClientMessage(Color.gray, "У вас уже есть паспорт.");
+    player.sendClientMessage(Color.gray, "你已经有护照了。");
     return;
   }
 
@@ -348,9 +348,9 @@ function tryGivePassport(player: Player): void {
     omp.log(`[${SERVER_TAG}] не удалось сохранить паспорт ${account.name}: ${message}`);
   });
 
-  player.sendClientMessage(Color.info, "Вы получили паспорт Los Santos.");
+  player.sendClientMessage(Color.info, "你已获得洛圣都护照。");
   player.sendClientMessage(
     Color.gray,
-    "/pass — посмотреть, /pass [id] — показать другому."
+    "/pass — 查看护照，/pass [id] — 向他人出示。"
   );
 }

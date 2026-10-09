@@ -94,7 +94,7 @@ async function openCarMenu(player: Player): Promise<void> {
 
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "У вас нет личного транспорта.");
+    player.sendClientMessage(Color.error, "你没有私人载具。");
     return;
   }
 
@@ -111,7 +111,7 @@ async function openCarMenu(player: Player): Promise<void> {
     );
   } catch {
     pendingMenu.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть меню транспорта.");
+    player.sendClientMessage(Color.error, "无法打开载具菜单。");
   }
 }
 
@@ -127,7 +127,7 @@ async function handleCarMenuChoice(player: Player, listItem: number): Promise<vo
 
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "У вас нет личного транспорта.");
+    player.sendClientMessage(Color.error, "你没有私人载具。");
     return;
   }
 
@@ -211,7 +211,7 @@ function showCarInfo(
     );
   } catch {
     pendingMenu.delete(slotId);
-    player.sendClientMessage(Color.error, "Не удалось открыть информацию.");
+    player.sendClientMessage(Color.error, "无法打开信息。");
   }
 }
 
@@ -228,7 +228,7 @@ async function parkAtHouse(
   if (!house) {
     player.sendClientMessage(
       Color.error,
-      "У вас нет дома. Припарковать транспорт можно только у своего дома."
+      "你没有房屋。只能把载具停在自己的房屋旁。"
     );
     return;
   }
@@ -243,12 +243,12 @@ async function parkAtHouse(
   );
 
   if (!spawned) {
-    player.sendClientMessage(Color.error, "Не удалось припарковать транспорт.");
+    player.sendClientMessage(Color.error, "无法停放载具。");
     return;
   }
 
   player.sendClientMessage(
     Color.tryOk,
-    "Транспорт припаркован у вашего дома. Пассажиры высажены, если были в машине."
+    "载具已停在你的房屋旁。如有乘客，他们已下车。"
   );
 }
