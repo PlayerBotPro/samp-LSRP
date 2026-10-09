@@ -47,6 +47,10 @@ export function businessLabelText(business: BusinessRecord): string {
   if (isGasStationType(business.typeId)) {
     lines.push(`${C_FREE}按 H 加油`);
   }
+
+  // 显示进入提示
+  lines.push(`${C_FREE}按 步行键(ALT) 进入`);
+
   return lines.join("\n");
 }
 
