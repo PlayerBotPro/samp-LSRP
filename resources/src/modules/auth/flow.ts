@@ -224,7 +224,7 @@ export function holdAtAuth(player: Player): void {
 function welcome(player: Player, name: string): void {
   player.sendClientMessage(
     Color.info,
-    `Добро пожаловать на ${SERVER_NAME}, ${name}.`
+    `Welcome to ${SERVER_NAME}, ${name}.`
   );
 }
 
@@ -245,7 +245,7 @@ function newRegister(name: string): Extract<Pending, { kind: "register" }> {
 export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   if (playerId(player) === null) {
     if (attempt >= 4) {
-      kickLater(player, "Не удалось начать вход. Перезайди.");
+      kickLater(player, "Unable to start login. Please reconnect.");
       return;
     }
 
@@ -270,7 +270,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   refreshAuthViewSoon(player);
 
   if (!isDatabaseReady()) {
-    kickLater(player, "База данных недоступна. Попробуй позже.");
+    kickLater(player, "The database is unavailable. Please try again later.");
     return;
   }
 
@@ -283,7 +283,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   if (name === "Неизвестный" || !isRoleplayName(name)) {
     kickLater(
       player,
-      "Ник должен быть в формате Name_Surname, например John_Doe."
+      "Your name must use the Name_Surname format, for example John_Doe."
     );
     return;
   }
@@ -306,7 +306,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] ошибка входа ${name}: ${message}`);
     if (isPlayerActive(player)) {
-      kickLater(player, "Не удалось проверить аккаунт. Попробуй позже.");
+      kickLater(player, "Unable to check your account. Please try again later.");
     }
   }
 }
@@ -409,7 +409,7 @@ function showRegisterStep(player: Player, state: Extract<Pending, { kind: "regis
     case "confirm":
       showRegisterConfirmDialog(
         player,
-        `Ник: ${state.name}\nПочта: ${state.email}\nПол: ${state.gender ? genderLabel(state.gender) : "-"}\nДата рождения: ${formatBirthDate(state.birthDate)}\nСкин: ${state.skinLabel} (${state.skin})\n\nЗарегистрировать персонажа?`
+        `Name: ${state.name}\nEmail: ${state.email}\nGender: ${state.gender ? genderLabel(state.gender) : "-"}\nDate of birth: ${formatBirthDate(state.birthDate)}\nSkin: ${state.skinLabel} (${state.skin})\n\nCreate this character?`
       );
       break;
   }
@@ -431,8 +431,8 @@ function goBack(player: Player, state: Extract<Pending, { kind: "register" }>): 
     kickLater(
       player,
       state.step === "rules"
-        ? "Ты не принял правила сервера."
-        : "Регистрация отменена."
+        ? "You did not accept the server rules."
+        : "Registration cancelled."
     );
     clearPending(player);
     return;
@@ -532,7 +532,7 @@ async function finishRegister(
     }
     state.step = "email";
     setPending(player, state);
-    showEmailDialog(player, state.name, "Эта почта уже занята.");
+    showEmailDialog(player, state.name, "This email address is already in use.");
     return;
   }
 
@@ -589,7 +589,7 @@ async function finishRegister(
   welcome(player, account.name);
   player.sendClientMessage(
     Color.gray,
-    "Персонаж создан. /mn — меню (статистика и список команд)."
+    "Character created. Use /mn to open the menu (stats and commands)."
   );
   omp.log(`[${SERVER_TAG}] ${account.name} зарегистрировался`);
 }
@@ -601,13 +601,13 @@ async function handleLogin(
   input: string
 ): Promise<void> {
   if (!ok) {
-    kickLater(player, "Авторизация отменена.");
+    kickLater(player, "Login cancelled.");
     clearPending(player);
     return;
   }
 
   if (!input) {
-    showLoginDialog(player, state.name, "Введи пароль.");
+    showLoginDialog(player, state.name, "Enter your password.");
     return;
   }
 
@@ -621,7 +621,7 @@ async function handleLogin(
     if (error instanceof Error && error.message === "bad-password") {
       state.attempts += 1;
       if (state.attempts >= LOGIN_ATTEMPTS) {
-        kickLater(player, "Слишком много попыток. Перезайди.");
+        kickLater(player, "Too many attempts. Please reconnect.");
         clearPending(player);
         return;
       }
@@ -630,14 +630,14 @@ async function handleLogin(
       showLoginDialog(
         player,
         state.name,
-        `Неверный пароль. Осталось попыток: ${LOGIN_ATTEMPTS - state.attempts}.`
+        `Incorrect password. Attempts remaining: ${LOGIN_ATTEMPTS - state.attempts}.`
       );
       return;
     }
 
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] ошибка авторизации ${state.name}: ${message}`);
-    kickLater(player, "Ошибка авторизации. Попробуй позже.");
+    kickLater(player, "Login failed. Please try again later.");
     clearPending(player);
   }
 }
@@ -680,13 +680,13 @@ async function handleRegister(
           if (!isSamePlayer(player, id, state.name)) {
             return;
           }
-          showEmailDialog(player, state.name, "Эта почта уже занята.");
+          showEmailDialog(player, state.name, "This email address is already in use.");
           return;
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         omp.log(`[${SERVER_TAG}] ошибка проверки почты: ${message}`);
-        kickLater(player, "Не удалось проверить почту. Попробуй позже.");
+        kickLater(player, "Unable to check your email address. Please try again later.");
         clearPending(player);
         return;
       }
@@ -718,7 +718,7 @@ async function handleRegister(
 
     case "passwordConfirm": {
       if (input !== state.password) {
-        showPasswordConfirmDialog(player, "Пароли не совпадают.");
+        showPasswordConfirmDialog(player, "Passwords do not match.");
         return;
       }
 
@@ -801,13 +801,13 @@ async function handleRegister(
           }
           state.step = "email";
           setPending(player, state);
-          showEmailDialog(player, state.name, "Эта почта или ник уже заняты.");
+          showEmailDialog(player, state.name, "This email address or name is already in use.");
           return;
         }
 
         const message = error instanceof Error ? error.message : String(error);
         omp.log(`[${SERVER_TAG}] ошибка регистрации ${state.name}: ${message}`);
-        kickLater(player, "Не удалось создать персонажа. Попробуй позже.");
+        kickLater(player, "Unable to create your character. Please try again later.");
         clearPending(player);
       }
     }

@@ -110,9 +110,9 @@ export function banDaysWord(days: number): string {
 
 export function kickBannedPlayer(player: Player, untilUnix: number, reason: string): void {
   const days = remainingBanDays(untilUnix);
-  const word = banDaysWord(days);
-  const reasonText = reason.trim() || "не указана";
-  const chat = `Вы забанены на ${days} ${word}. Причина: ${reasonText}.`;
+  const word = days === 1 ? "day" : "days";
+  const reasonText = reason.trim() || "not specified";
+  const chat = `You are banned for ${days} ${word}. Reason: ${reasonText}.`;
 
   try {
     player.sendClientMessage(Color.error, chat);
@@ -125,8 +125,8 @@ export function kickBannedPlayer(player: Player, untilUnix: number, reason: stri
       player,
       BAN_NOTICE_DIALOG_ID,
       DialogStyle.msgbox,
-      "Бан",
-      `Вы забанены на этом сервере.\nСрок: ${days} ${word}.\nПричина: ${reasonText}`,
+      "Banned",
+      `You are banned from this server.\nDuration: ${days} ${word}.\nReason: ${reasonText}`,
       "OK",
       ""
     );

@@ -68,29 +68,29 @@ export function showRulesDialog(player: Player): void {
     DialogStyle.msgbox,
     RULES_TITLE,
     SERVER_RULES,
-    "Принимаю",
-    "Отказаться"
+    "Accept",
+    "Decline"
   );
 }
 
 export function showLoginDialog(player: Player, name: string, error?: string): void {
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
-    prefix + `Добро пожаловать на сервер ${SERVER_NAME}`,
-    "Ваш ник зарегистрирован.",
+    prefix + `Welcome to ${SERVER_NAME}`,
+    "An account with this name already exists.",
     "",
-    `Логин: {33FF33}${name}{FFFFFF}`,
+    `Account: {33FF33}${name}{FFFFFF}`,
     "",
-    "Введите пароль:",
+    "Enter your password:",
   ].join("\n");
 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Авторизация",
+    "Login",
     body,
-    "Войти",
-    "Выход"
+    "Log in",
+    "Exit"
   );
 }
 
@@ -99,36 +99,36 @@ export function showEmailDialog(player: Player, name: string, error?: string): v
   showAuthDialog(
     player,
     DialogStyle.input,
-    "Регистрация",
-    `${prefix}Ник {33FF33}${name}{FFFFFF} свободен.\nВведите почту:`,
-    "Далее",
-    "Назад"
+    "Registration",
+    `${prefix}The name {33FF33}${name}{FFFFFF} is available.\nEnter your email address:`,
+    "Next",
+    "Back"
   );
 }
 
 export function showPasswordDialog(player: Player, error?: string): void {
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
-    prefix + `Добро пожаловать на сервер ${SERVER_NAME}`,
-    "Чтобы начать игру, вам необходимо пройти регистрацию.",
+    prefix + `Welcome to ${SERVER_NAME}`,
+    "Create an account to start playing.",
     "",
-    "Введите пароль для вашего аккаунта.",
-    "Он будет запрашиваться каждый раз, когда вы заходите на сервер.",
+    "Choose a password for your account.",
+    "You will need it each time you join the server.",
     "",
-    "{33FF33}Примечания:",
-    "- Пароль может состоять из русских и латинских символов",
-    "- Пароль чувствителен к регистру",
-    "- Пароль не должен содержать пробелы",
-    "- Длина пароля от 6 до 32 символов",
+    "{33FF33}Notes:",
+    "- Your password may contain Cyrillic and Latin characters",
+    "- Your password is case-sensitive",
+    "- Your password must not contain spaces",
+    "- Your password must be 6 to 32 characters long",
   ].join("\n");
 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Регистрация",
+    "Registration",
     body,
-    "Далее",
-    "Назад"
+    "Next",
+    "Back"
   );
 }
 
@@ -137,10 +137,10 @@ export function showPasswordConfirmDialog(player: Player, error?: string): void 
   showAuthDialog(
     player,
     DialogStyle.password,
-    "Регистрация",
-    `${prefix}Повторите пароль:`,
-    "Далее",
-    "Назад"
+    "Registration",
+    `${prefix}Enter your password again:`,
+    "Next",
+    "Back"
   );
 }
 
@@ -149,10 +149,10 @@ export function showBirthDateDialog(player: Player, error?: string): void {
   showAuthDialog(
     player,
     DialogStyle.input,
-    "Регистрация",
-    `${prefix}Дата рождения (DD.MM.YYYY):\nНапример 15.04.1998`,
-    "Далее",
-    "Назад"
+    "Registration",
+    `${prefix}Date of birth (DD.MM.YYYY):\nExample: 15.04.1998`,
+    "Next",
+    "Back"
   );
 }
 
@@ -160,10 +160,10 @@ export function showGenderDialog(player: Player): void {
   showAuthDialog(
     player,
     DialogStyle.list,
-    "Пол персонажа",
+    "Character gender",
     `${GENDER_LIST_MALE}\n${GENDER_LIST_FEMALE}`,
-    "Выбрать",
-    "Назад"
+    "Select",
+    "Back"
   );
 }
 
@@ -171,10 +171,10 @@ export function showSkinDialog(player: Player, gender: Gender): void {
   showAuthDialog(
     player,
     DialogStyle.list,
-    "Выбор скина",
+    "Choose a skin",
     skinListBody(gender),
-    "Выбрать",
-    "Назад"
+    "Select",
+    "Back"
   );
 }
 
@@ -182,9 +182,9 @@ export function showRegisterConfirmDialog(player: Player, body: string): void {
   showAuthDialog(
     player,
     DialogStyle.msgbox,
-    "Подтверждение",
+    "Confirmation",
     body,
-    "Готово",
-    "Назад"
+    "Finish",
+    "Back"
   );
 }
