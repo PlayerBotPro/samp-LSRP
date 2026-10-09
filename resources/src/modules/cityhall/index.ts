@@ -229,7 +229,7 @@ function tickCityHall(): void {
         tryGivePassport(player);
       }
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空或玩家已退出。
     }
   });
 }
@@ -268,7 +268,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
     return;
   }
@@ -280,7 +280,7 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
   iconShown.delete(id);
 }
@@ -318,7 +318,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -345,7 +345,7 @@ function tryGivePassport(player: Player): void {
   patchAccount(player, { passport: true });
   void saveUserPassport(account.id).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] не удалось сохранить паспорт ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的身份证：${message}`);
   });
 
   player.sendClientMessage(Color.info, "你已获得洛圣都护照。");
