@@ -19,7 +19,7 @@ const DENY_COOLDOWN_MS = 2500;
 /** F / Enter. KEY_SECONDARY_ATTACK = 16. */
 const KEY_ENTER_VEHICLE = 16;
 const ENTER_RANGE = 5;
-const DEFAULT_DENY = "Вы не можете сидеть в этом транспорте.";
+const DEFAULT_DENY = "你不能乘坐这辆车。";
 
 type OrgVehicleAccess = {
   orgIds: readonly number[];
@@ -68,7 +68,7 @@ export function unregisterOrgVehicle(vehicle: Vehicle): void {
   }
 }
 
-/** Гражданская работа (автобус и т.п.). */
+/** 民用职业（公交司机等）。 */
 export function registerJobVehicle(
   vehicle: Vehicle,
   jobId: number,
@@ -99,7 +99,7 @@ export function unregisterJobVehicle(vehicle: Vehicle): void {
   }
 }
 
-/** ТС зарегистрирован за организацией (больница, полиция…). */
+/** 登记在组织名下的车辆（医院、警察局等）。 */
 export function isRegisteredOrgVehicle(vehicle: Vehicle, orgId: number): boolean {
   const access = accessFor(vehicle);
   return access !== null && access.orgIds.includes(orgId);
@@ -146,7 +146,7 @@ export function bindOrgVehicleAccess(): void {
         newState === PLAYER_STATE_PASSENGER
       );
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -189,7 +189,7 @@ function ejectFromForbiddenOrgVehicle(player: Player): void {
       player.getState() === PLAYER_STATE_PASSENGER
     );
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -256,7 +256,7 @@ function nearestVehicle(player: Player, range: number): Vehicle | null {
         best = vehicle;
       }
     } catch {
-      // Транспорт уже уничтожен.
+      // 车辆已被销毁。
     }
   }
 
@@ -277,7 +277,7 @@ function refuseIfForbidden(
   }
 
   const jobAccess = jobAccessFor(vehicle);
-  // Пассажирам job-ТС можно; за руль — только с нужной работой.
+  // 可以乘坐职业车辆；只有从事相应职业才能驾驶。
   if (!passenger && jobAccess && !canUseJobVehicle(player, jobAccess.jobId)) {
     deny(player, jobAccess.denyMessage);
     eject(player, entering);
@@ -303,7 +303,7 @@ function eject(player: Player, entering: boolean): void {
     }
     player.removeFromVehicle();
   } catch {
-    // Уже не в транспорте.
+    // 已不在车辆中。
   }
 }
 
@@ -320,12 +320,12 @@ function applyDoorLock(vehicle: Vehicle, player: Player): void {
       allowed = canUseOrgVehicle(player, access.orgIds, vehicle);
     }
     if (allowed && jobAccess) {
-      // Двери job-ТС открыты всем (пассажиры), ограничение — только водитель.
+      // 职业车辆对所有人开放车门（可作为乘客），仅驾驶员受职业限制。
       allowed = true;
     }
     vehicle.setParamsForPlayer(player, 0, allowed ? DOORS_UNLOCKED : DOORS_LOCKED);
   } catch {
-    // Слот или транспорт уже не в мире.
+    // 槽位或车辆已不在游戏世界中。
   }
 }
 
@@ -462,6 +462,6 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

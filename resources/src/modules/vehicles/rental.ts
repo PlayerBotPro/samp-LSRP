@@ -28,11 +28,11 @@ export const VEHICLE_RENT_CONFIRM_DIALOG_ID = 83;
 /** Sentinel. */
 const MODEL = 405;
 const COLOR = 93;
-/** Высокий respawn — возвращаем машину только своей логикой. */
+/** 将重生时间设得较长，车辆只由本模块逻辑归还。 */
 const RESPAWN_SEC = 999_999;
-/** Стоимость одной аренды (наличные). */
+/** 一次租车的费用（现金）。 */
 const RENT_PRICE = 500;
-/** Сколько ждать возврата в машину после выхода. */
+/** 玩家离车后等待其返回的时间。 */
 const LEAVE_GRACE_MS = 5 * 60_000;
 const PLAYER_STATE_DRIVER = 2;
 const PLAYER_STATE_PASSENGER = 3;
@@ -41,7 +41,7 @@ const ANIM_SYNC_ALL = 1;
 const DOORS_LOCKED = 1;
 const DOORS_UNLOCKED = 0;
 
-/** businesses.id из seed. */
+/** seed 数据中的 businesses.id。 */
 const BIZ_BEACH = 49;
 const BIZ_JEFFERSON = 50;
 
@@ -56,7 +56,7 @@ type RentalDef = {
 type RentalSlot = {
   businessId: number;
   vehicleId: number;
-  /** Указатель сущности — защита от переиспользования vehicle id. */
+  /** 实体指针，用于防止重用 vehicle ID 时产生错误。 */
   ptr: number;
   spawnX: number;
   spawnY: number;
@@ -90,12 +90,12 @@ const RENTAL_DEFS: readonly RentalDef[] = [
 const slotsByVehicle = new Map<number, RentalSlot>();
 /** userId → vehicleId */
 const vehicleByRenter = new Map<number, number>();
-/** player slot → vehicleId (нужно на disconnect, когда аккаунт уже сброшен) */
+/** player slot → vehicleId（disconnect 时账号可能已被清除，因此需要此映射）。 */
 const vehicleBySlot = new Map<number, number>();
 const pendingOffer = new Map<number, PendingOffer>();
 const paying = new Set<number>();
 
-/** Арендованная (занятая) машина — /respcar её не трогает. */
+/** 已出租（被占用）的车辆不会被 /respcar 处理。 */
 export function isActiveRentalVehicle(vehicleId: number): boolean {
   const slot = slotsByVehicle.get(vehicleId);
   return !!slot && slot.renterUserId !== null;
@@ -104,16 +104,16 @@ export function isActiveRentalVehicle(vehicleId: number): boolean {
 export function spawnRentalVehicles(): void {
   for (const def of RENTAL_DEFS) {
     if (!createRentalSlot(def)) {
-      omp.log(`[${SERVER_TAG}] аренда авто: не удалось создать машину бизнеса #${def.businessId}`);
+      omp.log(`[${SERVER_TAG}] 车辆租赁：无法创建企业 #${def.businessId} 的车辆`);
     }
   }
 
   bindRentalEvents();
-  registerCommand("unrent", "Завершить аренду автомобиля", (player) => {
+  registerCommand("unrent", "结束车辆租赁", (player) => {
     endPlayerRental(player, "command");
   });
 
-  omp.log(`[${SERVER_TAG}] аренда авто: ${slotsByVehicle.size} машин`);
+  omp.log(`[${SERVER_TAG}] 车辆租赁：${slotsByVehicle.size} 辆车`);
 }
 
 function createRentalSlot(def: RentalDef): boolean {
@@ -143,7 +143,7 @@ function createRentalSlot(def: RentalDef): boolean {
     return false;
   }
 
-  // На этом id мог остаться «мёртвый» слот после destroy — перезаписываем.
+  // destroy 后此 ID 可能残留无效槽位，直接覆盖。
   const stale = slotsByVehicle.get(vehicleId);
   if (stale) {
     clearLeaveTimer(stale);
@@ -170,7 +170,7 @@ function createRentalSlot(def: RentalDef): boolean {
   return true;
 }
 
-/** Слот аренды только если это та же сущность (ptr) и модель Sentinel. */
+/** 只有实体指针相同且车型为 Sentinel 时，才视为同一个租赁槽位。 */
 function resolveRentalSlot(vehicle: Vehicle): RentalSlot | null {
   const vehicleId = liveVehicleId(vehicle);
   if (vehicleId === null) {
@@ -209,7 +209,7 @@ function dropStaleRentalSlot(slot: RentalSlot): void {
   }
   slotsByVehicle.delete(slot.vehicleId);
 
-  // Восстанавливаем точку аренды новой машиной.
+  // 使用新车辆恢复租赁点。
   createRentalSlot({
     businessId: slot.businessId,
     x: slot.spawnX,
@@ -224,7 +224,7 @@ function bindRentalEvents(): void {
     applyRentalDoorLock(vehicle, player);
   });
 
-  // Смерть арендной машины: сдать аренду и вернуть на точку (тот же id/ptr).
+  // 租赁车辆被毁：结束租赁并将车辆归还到原位置（ID/指针不变）。
   omp.on("vehicleDeath", (vehicle) => {
     const slot = resolveRentalSlot(vehicle);
     if (!slot) {
@@ -273,7 +273,7 @@ function bindRentalEvents(): void {
     ) {
       const leaveSlotId = playerId(player);
       if (leaveSlotId !== null && pendingOffer.has(leaveSlotId)) {
-        // Закрыл диалог выходом из машины — разморозить.
+        // 玩家通过离开车辆关闭对话框，解除冻结。
         pendingOffer.delete(leaveSlotId);
         setControllable(player, true);
       }
@@ -303,7 +303,7 @@ function bindRentalEvents(): void {
       paying.delete(account.id);
     }
 
-    // Аккаунт к этому моменту может быть уже очищен — ищем аренду по слоту.
+    // 此时账号可能已被清除，因此按玩家槽位查找租赁车辆。
     endRentalOnDisconnect(player, slotId, account?.id ?? null);
   });
 }
@@ -333,20 +333,20 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
     return;
   }
 
-  // Уже арендована другим — нельзя садиться.
+  // 已被其他玩家租用，不能上车。
   if (slot.renterUserId !== null && slot.renterUserId !== account.id) {
     player.sendClientMessage(Color.error, "这辆车已经被租用了。");
     eject(player);
     return;
   }
 
-  // Своя аренда — вернулся в машину, сбрасываем таймер.
+  // 玩家返回自己的租赁车辆，重置计时器。
   if (slot.renterUserId === account.id) {
     clearLeaveTimer(slot);
     return;
   }
 
-  // Свободная машина, но игрок уже арендует другую.
+  // 车辆空闲，但玩家已租用另一辆车。
   const ownedVehicleId = vehicleByRenter.get(account.id);
   if (ownedVehicleId !== undefined) {
     player.sendClientMessage(
@@ -357,14 +357,14 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
     return;
   }
 
-  // Пассажир не может начать аренду.
+  // 乘客不能开始租车。
   if (asPassenger) {
     player.sendClientMessage(Color.error, "租车前请坐上驾驶位。");
     eject(player);
     return;
   }
 
-  // Нужны права на авто (дубль на случай обхода access).
+  // 需要汽车驾照（重复校验以防绕过 access）。
   if (!account.licenses.car) {
     player.sendClientMessage(Color.error, "你没有汽车执照。");
     eject(player);
@@ -385,7 +385,7 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
     businessId: slot.businessId,
   });
 
-  // Пока диалог открыт — нельзя уехать бесплатно.
+  // 对话框打开期间不能免费开走车辆。
   setControllable(player, false);
 
   try {
@@ -469,7 +469,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     return;
   }
 
-  // Игрок должен всё ещё сидеть в этой машине.
+  // 玩家必须仍在这辆车内。
   if (!isDriverOf(player, pending.vehicleId)) {
     setControllable(player, true);
     player.sendClientMessage(Color.error, "请上车后租用车辆。");
@@ -492,7 +492,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     return;
   }
 
-  // Резерв до оплаты — второй игрок не перехватит слот.
+  // 付款前先预留槽位，避免其他玩家抢占。
   assignRental(slot, account.id, slotId);
   clearLeaveTimer(slot);
   refreshDoorLocks(pending.vehicleId);
@@ -506,7 +506,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     releaseReservation(account.id, pending.vehicleId);
     setControllable(player, true);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] аренда авто бизнес #${pending.businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 企业 #${pending.businessId} 车辆租赁 (${account.name})：${message}`);
     player.sendClientMessage(Color.error, "租车失败。请重试。");
     eject(player);
     return;
@@ -530,7 +530,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
 
   setBusinessBalance(pending.businessId, result.balance);
 
-  // Вышел из игры во время оплаты — аренду уже сняли в disconnect.
+  // 玩家在付款期间退出，disconnect 处理时已结束租赁。
   const liveSlot = slotsByVehicle.get(pending.vehicleId);
   if (!liveSlot || liveSlot.renterUserId !== account.id) {
     setControllable(player, true);
@@ -538,7 +538,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   }
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {
-    // Не оставляем «призрачную» аренду на 5 минут — сразу сдаём машину.
+    // 不保留 5 分钟的无效租赁，立即归还车辆。
     forceEndRentalByUser(account.id, "disconnect");
     return;
   }
@@ -551,7 +551,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   }
 
   if (!isDriverOf(player, pending.vehicleId)) {
-    // Оплатил, но уже вышел — 5 минут на возврат.
+    // 玩家已付款但离开车辆，给予 5 分钟返回。
     handleLeaveRental(player);
   }
 
@@ -611,7 +611,7 @@ function endRentalOnDisconnect(
     return;
   }
 
-  // На всякий случай: очистка только по слоту.
+  // 保险起见，仅按槽位清理。
   if (slotId !== null) {
     vehicleBySlot.delete(slotId);
   }
@@ -623,7 +623,7 @@ function endRentalOnDisconnect(
   try {
     player.removeFromVehicle();
   } catch {
-    // Уже не в машине.
+    // 已不在车内。
   }
   ejectOccupants(vehicleId);
   respawnRentalVehicle(vehicleId);
@@ -658,7 +658,7 @@ function handleLeaveRental(player: Player): void {
       "你有 5 分钟返回租用的车辆。"
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -688,7 +688,7 @@ function endPlayerRental(player: Player, reason: "command" | "timeout" | "discon
         }
       }
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   }
 
@@ -721,13 +721,13 @@ function forceEndRentalByUser(
   slot.renterUserId = null;
   slot.renterSlotId = null;
 
-  // Выкинуть чужих/арендатора, если ещё в машине.
+  // 如果他人或租车玩家仍在车内，将其移出车辆。
   ejectOccupants(vehicleId);
   respawnRentalVehicle(vehicleId);
   refreshDoorLocks(vehicleId);
 
   if (reason === "timeout") {
-    notifyUser(userId, Color.error, "Время аренды истекло: вы не вернулись в автомобиль.");
+    notifyUser(userId, Color.error, "租赁时间已到：你没有及时返回车辆。");
   }
 }
 
@@ -740,7 +740,7 @@ function respawnRentalVehicle(vehicleId: number): void {
   try {
     vehicle.setToRespawn();
   } catch {
-    // Уже уничтожена.
+    // 已被销毁。
   }
 }
 
@@ -772,7 +772,7 @@ function applyRentalDoorLock(vehicle: Vehicle, player: Player): void {
   try {
     vehicle.setParamsForPlayer(player, 0, allowed ? DOORS_UNLOCKED : DOORS_LOCKED);
   } catch {
-    // Слот или транспорт уже не в мире.
+    // 槽位或车辆已不在游戏世界中。
   }
 }
 
@@ -797,7 +797,7 @@ function ejectOccupants(vehicleId: number): void {
       }
       eject(player);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -818,7 +818,7 @@ function eject(player: Player): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.removeFromVehicle();
   } catch {
-    // Уже не в транспорте.
+    // 已不在车辆中。
   }
 }
 
@@ -826,7 +826,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -851,7 +851,7 @@ function notifyUser(userId: number, color: number, text: string): void {
     try {
       player.sendClientMessage(color, text);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   });
 }

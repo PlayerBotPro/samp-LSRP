@@ -99,7 +99,7 @@ export const vehiclesModule: GameModule = {
         await ensurePlayerVehiclesTable();
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] player_vehicles: ошибка — ${message}`);
+        omp.log(`[${SERVER_TAG}] player_vehicles: error — ${message}`);
       }
     }
 

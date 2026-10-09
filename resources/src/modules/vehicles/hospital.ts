@@ -30,21 +30,21 @@ import { createServerVehicle } from "./spawn";
 export const HOSPITAL_MED_DELIVERY_DIALOG_ID = 62;
 
 const RESPAWN_SEC = 1800;
-const DENY = "Вы не состоите в больнице.";
+const DENY = "你不属于医院。";
 const PLAYER_STATE_ONFOOT = 1;
 const PLAYER_STATE_DRIVER = 2;
 const DIALOG_STYLE_MSGBOX = 0;
 const CHECKPOINT_RADIUS = 4;
 const LABEL_DRAW_DISTANCE = 40;
 const LABEL_OFFSET_Z = 2.35;
-/** Время автоматической загрузки на складе поставщика. */
+/** 供应商仓库自动装货所需时间。 */
 const LOAD_SEC = 12;
 const LOAD_TICK_MS = 1000;
-/** Сколько медикаментов грузится за один рейс. */
+/** 每趟运输装载的药品数量。 */
 const LOAD_AMOUNT = 50;
-/** В одной коробке при разгрузке. */
+/** 卸货时每箱药品的数量。 */
 const BOX_AMOUNT = 10;
-/** Оплата за сдачу одной коробки на склад. */
+/** 每向仓库交付一箱药品的报酬。 */
 const PAY_PER_BOX = 40;
 const PICK_RANGE = 6;
 const STOCK_RADIUS = 1.8;
@@ -55,7 +55,7 @@ const SPECIAL_ACTION_CARRY = 25;
 const SLOT_BOX = 1;
 const BOX_MODEL = 1580;
 
-const LABEL_TITLE = "{FFFFFF}Доставка {FF0000}лекарств";
+const LABEL_TITLE = "{FFFFFF}药品{FF0000}运输";
 
 const MED_VAN = {
   model: 428,
@@ -67,22 +67,22 @@ const MED_VAN = {
   color2: 3,
 } as const;
 
-/** Склад поставщика — сюда едем за грузом. */
+/** 供应商仓库：前往此处领取货物。 */
 const LOAD_POINT = {
   x: 1351.3651,
   y: 355.8297,
   z: 20.1462,
 } as const;
 
-/** Парковка фургона у больницы — сюда возвращаемся после загрузки. */
+/** 医院旁的货车停车点：装货后返回此处。 */
 const RETURN_POINT = {
   x: MED_VAN.x,
   y: MED_VAN.y,
   z: MED_VAN.z,
 } as const;
-/** Фургон считается на базе, если в этом радиусе от парковки. */
+/** 货车位于停车点此半径内时视为在基地。 */
 const PARK_RANGE = 18;
-/** Допуск к чекпоинту загрузки/возврата (не чужой CP). */
+/** 装货或返程检查点的验证距离（避免使用他人的检查点）。 */
 const CP_VERIFY_RANGE = 12;
 
 const HOSPITAL_VEHICLES: ReadonlyArray<{
@@ -114,11 +114,11 @@ type DeliveryJob = {
 
 let medVanId: number | null = null;
 let medVanLabel: TextLabel | null = null;
-/** Текущий груз фургона (ед. медикаментов). */
+/** 货车当前运载的药品数量。 */
 let vanMeds = 0;
 const offerPending = new Set<number>();
 const jobs = new Map<number, DeliveryJob>();
-/** Игрок несёт коробку: сколько ед. в руках. */
+/** 玩家手持药箱时，其中包含的药品数量。 */
 const carrying = new Map<number, number>();
 const atStock = new Set<number>();
 
@@ -178,7 +178,7 @@ function bindMedVan(vehicle: Vehicle): void {
 }
 
 function bindMedDelivery(): void {
-  registerCommand("pickmed", "Взять коробку медикаментов из фургона", (player) => {
+  registerCommand("pickmed", "从货车中取出一箱药品", (player) => {
     onPickMed(player);
   });
 
@@ -190,7 +190,7 @@ function bindMedDelivery(): void {
       return;
     }
 
-    abortAllDeliveryJobs("Фургон доставки был зареспавнен. Рейс отменён.");
+    abortAllDeliveryJobs("药品运输货车已重生，本次运输已取消。");
     vanMeds = 0;
     attachMedVanLabel(vehicle);
   });
@@ -201,7 +201,7 @@ function bindMedDelivery(): void {
       if (id !== null) {
         const job = jobs.get(id);
         if (job?.phase === "loading") {
-          cancelLoading(player, id, "Загрузка прервана: вы покинули фургон.");
+          cancelLoading(player, id, "装货已中断：你已离开货车。");
         }
       }
       return;
@@ -209,7 +209,7 @@ function bindMedDelivery(): void {
 
     const id = playerId(player);
     if (id !== null && carrying.has(id)) {
-      returnCarriedToVan(player, id, "Вы сели в транспорт — коробка возвращена в фургон.");
+      returnCarriedToVan(player, id, "你已进入车辆，药箱已放回货车。");
     }
 
     tryOfferDelivery(player);
@@ -230,7 +230,7 @@ function bindMedDelivery(): void {
   omp.on("playerDeath", (player) => {
     const id = playerId(player);
     if (id !== null && carrying.has(id)) {
-      returnCarriedToVan(player, id, "Вы потеряли коробку — медикаменты возвращены в фургон.");
+      returnCarriedToVan(player, id, "你丢失了药箱，药品已放回货车。");
     }
   });
 
@@ -269,7 +269,7 @@ function destroyMedVanLabel(): void {
   try {
     medVanLabel.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已被销毁。
   }
 
   medVanLabel = null;
@@ -289,14 +289,14 @@ function updateMedVanLabel(text: string): void {
 
 function medsLabelText(meds: number, loading = false): string {
   if (loading) {
-    return `${LABEL_TITLE}\n{FFAA00}Загрузка: ${meds}/${LOAD_AMOUNT}`;
+    return `${LABEL_TITLE}\n{FFAA00}装载中：${meds}/${LOAD_AMOUNT}`;
   }
 
   if (meds <= 0) {
-    return `${LABEL_TITLE}\n{FFAA00}Медикаменты: 0`;
+    return `${LABEL_TITLE}\n{FFAA00}药品：0`;
   }
 
-  return `${LABEL_TITLE}\n{33CC66}Медикаменты: ${meds}`;
+  return `${LABEL_TITLE}\n{33CC66}药品：${meds}`;
 }
 
 function loadedAmountForTick(loadLeft: number): number {
@@ -314,7 +314,7 @@ function tryOfferDelivery(player: Player): void {
     return;
   }
 
-  // Один рейс на фургон: иначе второй курьер залипает с чекпоинтом.
+  // 每辆货车只允许一趟运输，否则第二名快递员的检查点会卡住。
   if (jobs.size > 0 || offerPending.size > 0) {
     return;
   }
@@ -434,7 +434,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
     try {
       Checkpoint.disable(player);
     } catch {
-      // Уже снят.
+      // 已移除。
     }
     player.sendClientMessage(
       Color.error,
@@ -446,7 +446,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Уже снят.
+    // 已移除。
   }
 
   vanMeds = 0;
@@ -457,7 +457,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     player.toggleControllable(false);
   } catch {
-    cancelLoading(player, id, "Не удалось начать загрузку.");
+    cancelLoading(player, id, "无法开始装货。");
     return;
   }
 
@@ -487,7 +487,7 @@ function tickLoading(player: Player, expectedId: number): void {
   }
 
   if (!isPlayerActive(player) || !isInMedVanAsDriver(player)) {
-    cancelLoading(player, id, "Загрузка прервана: вы покинули фургон.");
+    cancelLoading(player, id, "装货已中断：你已离开货车。");
     return;
   }
 
@@ -515,7 +515,7 @@ function finishLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     player.toggleControllable(true);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 
   if (!isPlayerActive(player)) {
@@ -551,7 +551,7 @@ function finishReturn(player: Player, id: number): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Уже снят.
+    // 已移除。
   }
 
   const boxes = Math.ceil(vanMeds / BOX_AMOUNT);
@@ -689,7 +689,7 @@ function tickUnload(): void {
       atStock.add(id);
       depositBox(player, id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   });
 }
@@ -755,7 +755,7 @@ function returnCarriedToVan(player: Player, id: number, message: string): void {
 
 function giveBox(player: Player): void {
   clearBox(player);
-  // На всякий случай сбрасываем флаг чемодана врача (слоты разные, состояние общее).
+  // 保险起见，重置医生医疗箱标记（玩家槽位不同，但状态是共享的）。
   clearMedkitCase(player);
   player.setAttachedObject(
     SLOT_BOX,
@@ -780,14 +780,14 @@ function clearBox(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_BOX);
   } catch {
-    // Слота не было.
+    // 槽位不存在。
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -810,7 +810,7 @@ function cancelLoading(player: Player, id: number, message: string): void {
     player.toggleControllable(true);
     Checkpoint.disable(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 
   if (isPlayerActive(player)) {
@@ -836,7 +836,7 @@ function abortAllDeliveryJobs(message: string): void {
       Checkpoint.disable(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已退出。
     }
   }
 }
@@ -880,7 +880,7 @@ function clearPlayerDelivery(player: Player): void {
     player.toggleControllable(true);
     Checkpoint.disable(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -964,7 +964,7 @@ function ejectFromVehicle(player: Player): void {
     player.removeFromVehicle();
     player.sendClientMessage(Color.gray, "你拒绝了配送。");
   } catch {
-    // Уже не в машине.
+    // 已不在车内。
   }
 }
 

@@ -7,7 +7,7 @@ import { attachLightBar } from "./light-bar";
 const PLAYER_STATE_DRIVER = 2;
 /** Left Ctrl. KEY_ACTION = 1. */
 const KEY_ACTION = 1;
-/** LMB. KEY_FIRE = 4. В pawn на этой клавише фары. */
+/** 鼠标左键。KEY_FIRE = 4。在 Pawn 中此键用于车灯。 */
 const KEY_FIRE = 4;
 const PARAM_ON = 1;
 const PARAM_OFF = 0;
@@ -27,12 +27,12 @@ export type ServerVehicleDef = {
   lightBar?: boolean;
 };
 
-/** Ручной двигатель для всего транспорта на сервере. */
+/** 手动控制服务器上所有车辆的发动机。 */
 export function startEngineControl(): void {
   try {
     Vehicle.useManualEngineAndLights();
   } catch {
-    // Ядро уже в ручном режиме.
+    // 核心已处于手动模式。
   }
 
   for (const vehicle of omp.vehicles.all()) {
@@ -55,7 +55,7 @@ export function startEngineControl(): void {
   });
 }
 
-/** Единственная точка спавна транспорта: мир, двигатель выключен. */
+/** 车辆的唯一生成入口：置于游戏世界中，发动机关闭。 */
 export function createServerVehicle(def: ServerVehicleDef): Vehicle | null {
   let vehicle: Vehicle;
   try {
@@ -78,7 +78,7 @@ export function createServerVehicle(def: ServerVehicleDef): Vehicle | null {
     vehicle.setVirtualWorld(def.world ?? STREET_WORLD);
     setEngine(vehicle, false, false);
   } catch {
-    // Машина уже в мире — параметры догонятся на vehicleSpawn.
+    // 车辆已在游戏世界中，参数会在 vehicleSpawn 时同步。
   }
 
   if (def.lightBar) {
@@ -88,7 +88,7 @@ export function createServerVehicle(def: ServerVehicleDef): Vehicle | null {
   return vehicle;
 }
 
-/** Публичная установка двигателя (и опционально фар). */
+/** 对外提供的发动机设置接口（可选设置车灯）。 */
 export function setVehicleEngine(
   vehicle: Vehicle,
   on: boolean,
@@ -101,7 +101,7 @@ type EngineStartBlocker = (player: Player, vehicle: Vehicle) => string | null;
 
 let engineStartBlocker: EngineStartBlocker | null = null;
 
-/** Блокировка запуска (например пустой бак). */
+/** 阻止发动机启动（例如油箱已空）。 */
 export function setEngineStartBlocker(
   blocker: EngineStartBlocker | null
 ): void {
@@ -121,7 +121,7 @@ function setEngine(vehicle: Vehicle, on: boolean, lights?: boolean): void {
       asParam(params.objective)
     );
   } catch {
-    // Транспорт уже уничтожен.
+    // 车辆已被销毁。
   }
 }
 
@@ -138,7 +138,7 @@ function setLights(vehicle: Vehicle, on: boolean): void {
       asParam(params.objective)
     );
   } catch {
-    // Транспорт уже уничтожен.
+    // 车辆已被销毁。
   }
 }
 
@@ -171,7 +171,7 @@ function toggleEngine(player: Player): void {
       try {
         player.sendClientMessage(Color.error, deny);
       } catch {
-        // Уже вышел.
+        // 已退出。
       }
       return;
     }
@@ -184,7 +184,7 @@ function toggleEngine(player: Player): void {
       running ? "引擎已关闭。" : "引擎已启动。"
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -207,7 +207,7 @@ function playToggleSound(player: Player): void {
     try {
       player.playGameSound(LIGHTS_SOUND_ID, 0, 0, 0);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   }
 }

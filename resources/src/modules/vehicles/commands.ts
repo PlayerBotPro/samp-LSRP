@@ -26,20 +26,20 @@ export const CAR_INFO_DIALOG_ID = 87;
 const DIALOG_STYLE_LIST = 2;
 const DIALOG_STYLE_MSGBOX = 0;
 const MENU_ITEMS = [
-  "Информация",
-  "Припарковать",
-  "Продать машину",
-  "Продать машину игроку",
+  "信息",
+  "停放车辆",
+  "出售车辆",
+  "将车辆卖给玩家",
 ] as const;
 
 const pendingMenu = new Set<number>();
 
 export function bindPersonalVehicleCommands(): void {
-  registerCommand("lock", "Открыть / закрыть свой транспорт", (player) => {
+  registerCommand("lock", "锁定或解锁自己的车辆", (player) => {
     void toggleNearbyPersonalLock(player);
   });
 
-  registerCommand("car", "Меню личного транспорта", (player) => {
+  registerCommand("car", "个人车辆菜单", (player) => {
     void openCarMenu(player);
   });
 
@@ -104,10 +104,10 @@ async function openCarMenu(player: Player): Promise<void> {
       player,
       CAR_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Личный транспорт",
+      "个人车辆",
       MENU_ITEMS.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     pendingMenu.delete(slotId);
@@ -148,7 +148,7 @@ async function handleCarMenuChoice(player: Player, listItem: number): Promise<vo
           fuel = getVehicleFuel(live);
         }
       } catch {
-        // Машины уже нет в мире.
+        // 车辆已不在游戏世界中。
       }
     }
     showCarInfo(
@@ -192,11 +192,11 @@ function showCarInfo(
 
   pendingMenu.add(slotId);
   const body = [
-    `ID машины:\t${id}`,
-    `Бензин:\t${Math.round(fuel)}`,
-    `Здоровье:\t${Math.round(health)}`,
-    `Статус:\t${locked ? "закрыта" : "открыта"}`,
-    `Цена покупки:\t${formatMoney(purchasePrice)}`,
+    `车辆 ID：\t${id}`,
+    `燃油：\t${Math.round(fuel)}`,
+    `耐久度：\t${Math.round(health)}`,
+    `状态：\t${locked ? "已锁定" : "已解锁"}`,
+    `购买价格：\t${formatMoney(purchasePrice)}`,
   ].join("\n");
 
   try {
@@ -204,10 +204,10 @@ function showCarInfo(
       player,
       CAR_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Информация о транспорте",
+      "车辆信息",
       body,
-      "Назад",
-      "Закрыть"
+      "返回",
+      "关闭"
     );
   } catch {
     pendingMenu.delete(slotId);

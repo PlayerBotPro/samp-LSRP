@@ -110,7 +110,7 @@ export function startDealerships(): void {
   });
 
   const count = listBusinesses().filter((b) => DEALERSHIP_TYPES.has(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] автосалоны: точек ${count}`);
+  omp.log(`[${SERVER_TAG}] 汽车经销店：${count} 个地点`);
 }
 
 function catalogForType(typeId: number): readonly CatalogItem[] | null {
@@ -132,12 +132,12 @@ function licenseForType(typeId: number): "car" | "moto" {
 
 function shopTitle(typeId: number): string {
   if (typeId === BusinessType.CAR_ELITE) {
-    return "Элитный автосалон";
+    return "高级汽车经销店";
   }
   if (typeId === BusinessType.CAR_ECONOMY) {
-    return "Автосалон эконом";
+    return "经济型汽车经销店";
   }
-  return "Моторынок";
+  return "汽车市场";
 }
 
 function tickDealerships(): void {
@@ -247,7 +247,7 @@ function openDealership(player: Player, shop: BusinessRecord): void {
   pendingBuy.delete(slotId);
 
   const lines = [
-    "Модель\tЦена",
+    "车型\t价格",
     ...catalog.map((item) => `${item.name}\t${formatMoney(item.price)}`),
   ];
 
@@ -258,8 +258,8 @@ function openDealership(player: Player, shop: BusinessRecord): void {
       DIALOG_STYLE_TABLIST_HEADERS,
       shopTitle(shop.typeId),
       lines.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     pendingList.delete(slotId);
@@ -387,7 +387,7 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] покупка ТС ${pending.item.modelId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 购买车辆 ${pending.item.modelId} (${account.name})：${message}`);
     player.sendClientMessage(Color.error, "购买失败。请重试。");
     return;
   }

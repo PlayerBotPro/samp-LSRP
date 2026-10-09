@@ -26,9 +26,9 @@ const DOORS_LOCKED = 1;
 const DOORS_UNLOCKED = 0;
 const PLAYER_STATE_DRIVER = 2;
 const PLAYER_STATE_PASSENGER = 3;
-/** Радиус /lock рядом с машиной. */
+/** /lock 的车辆判定半径。 */
 export const PERSONAL_LOCK_RADIUS = 5;
-/** Звук замка (25800) слышен в радиусе 10 м от машины. */
+/** 锁车音效（25800）可在车辆周围 10 米内听到。 */
 const LOCK_SOUND_ID = 25800;
 const LOCK_SOUND_RADIUS = 10;
 
@@ -45,7 +45,7 @@ export type PersonalRuntime = {
 const runtimeByDbId = new Map<number, number>();
 /** runtime vehicle id → meta */
 const personalByRuntime = new Map<number, PersonalRuntime>();
-/** Чтобы не спамить текст владельца при входе. */
+/** 避免玩家上车时重复显示车主信息。 */
 const ownerHintShown = new Set<number>();
 
 export function getPersonalRuntime(runtimeId: number): PersonalRuntime | null {
@@ -65,7 +65,7 @@ export function findRuntimeIdByDbId(dbId: number): number | undefined {
   return runtimeByDbId.get(dbId);
 }
 
-/** Обновить кэш багажника после успешной записи в БД. */
+/** 数据库写入成功后更新后备箱缓存。 */
 export function adjustPersonalTrunk(
   runtimeId: number,
   item: "ammo" | "metal" | "drugs",
@@ -84,7 +84,7 @@ export function adjustPersonalTrunk(
   }
 }
 
-/** Сменить владельца в runtime после продажи игроку. */
+/** 出售给玩家后更新运行时车主信息。 */
 export function setPersonalOwner(runtimeId: number, ownerId: number): void {
   const personal = personalByRuntime.get(runtimeId);
   if (!personal) {
@@ -93,7 +93,7 @@ export function setPersonalOwner(runtimeId: number, ownerId: number): void {
   personal.ownerId = ownerId;
 }
 
-/** Игрок в этом ТС или в радиусе от него. */
+/** 玩家在这辆车内或位于其附近。 */
 export function isPlayerNearPersonalVehicle(
   player: Player,
   runtimeId: number,
@@ -104,7 +104,7 @@ export function isPlayerNearPersonalVehicle(
       return true;
     }
   } catch {
-    // Не в машине.
+    // 不在车内。
   }
 
   const vehicle = omp.vehicles.at(runtimeId);
@@ -191,14 +191,14 @@ export function spawnPersonalVehicle(
   try {
     vehicle.setHealth(Math.max(250, Math.min(1000, record.health)));
   } catch {
-    // Игнор.
+    // 忽略。
   }
 
   if (record.hasNitro) {
     try {
       vehicle.addComponent(1010);
     } catch {
-      // Модель без нитро.
+      // 此车型没有氮气。
     }
   }
 
@@ -216,7 +216,7 @@ export function spawnPersonalVehicle(
   return vehicle;
 }
 
-/** Уничтожить runtime-машину. При saveState — сохранить HP в БД. */
+/** 销毁运行时车辆。若 saveState 为 true，则将耐久度保存到数据库。 */
 export function destroyPersonalVehicleByDbId(dbId: number, saveState: boolean): void {
   const runtimeId = runtimeByDbId.get(dbId);
   if (runtimeId === undefined) {
@@ -229,7 +229,7 @@ export function destroyPersonalVehicleByDbId(dbId: number, saveState: boolean): 
       void updatePlayerVehicleHealth(dbId, vehicle.getHealth());
       void updatePlayerVehicleFuel(dbId, getVehicleFuel(vehicle));
     } catch {
-      // Уже уничтожена.
+      // 已被销毁。
     }
   }
 
@@ -245,7 +245,7 @@ export function destroyPersonalVehicleByDbId(dbId: number, saveState: boolean): 
   try {
     vehicle.destroy();
   } catch {
-    // Уже уничтожена.
+    // 已被销毁。
   }
 }
 
@@ -324,12 +324,12 @@ function playLockSoundNearVehicle(vehicle: Vehicle): void {
       }
       other.playGameSound(LOCK_SOUND_ID, x, y, z);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
 
-/** Любой заспавненный личный ТС владельца (без проверки дистанции). */
+/** 车主生成的任意个人车辆（不检查距离）。 */
 export function findOwnedPersonalVehicle(ownerId: number): Vehicle | null {
   for (const [runtimeId, personal] of personalByRuntime) {
     if (personal.ownerId !== ownerId) {
@@ -343,7 +343,7 @@ export function findOwnedPersonalVehicle(ownerId: number): Vehicle | null {
   return null;
 }
 
-/** Найти личный ТС владельца: сначала в чём сидит, иначе ближайший в радиусе. */
+/** 查找车主的个人车辆：优先查找其当前乘坐的车辆，否则查找半径内最近的车辆。 */
 export function findOwnedPersonalVehicleNear(
   player: Player,
   ownerId: number,
@@ -363,7 +363,7 @@ export function findOwnedPersonalVehicleNear(
       }
     }
   } catch {
-    // Не в машине.
+    // 不在车内。
   }
 
   let x = 0;
@@ -395,7 +395,7 @@ export function findOwnedPersonalVehicleNear(
         best = vehicle;
       }
     } catch {
-      // Уничтожена.
+      // 已被销毁。
     }
   }
   return best;
@@ -421,7 +421,7 @@ export async function parkPersonalVehicleAtHouse(
         record.health = hp;
         record.fuel = Math.round(fuel);
       } catch {
-        // Игнор.
+        // 忽略。
       }
     }
     destroyPersonalVehicleByDbId(record.id, false);
@@ -452,10 +452,9 @@ async function saveDriverVehicleState(player: Player): Promise<void> {
     return;
   }
 
-  // После выхода getVehicleID уже пуст — ищем по owner в runtime и сохраняем HP
-  // через последнее известное… На leave мы ещё можем не иметь vehicle.
-  // Сохраняем все runtime машины владельца, в которых он был водителем — упрощённо
-  // все его заспавненные авто.
+  // 离车后 getVehicleID 已为空，因此按运行时车主查找并保存耐久度。
+  // 通过最后已知信息处理，因为 leave 事件发生时 vehicle 可能尚不可用。
+  // 简化处理：保存车主生成的所有运行时车辆的状态。
   for (const [runtimeId, personal] of personalByRuntime) {
     if (personal.ownerId !== account.id) {
       continue;
@@ -468,7 +467,7 @@ async function saveDriverVehicleState(player: Player): Promise<void> {
       await updatePlayerVehicleHealth(personal.dbId, vehicle.getHealth());
       await updatePlayerVehicleFuel(personal.dbId, getVehicleFuel(vehicle));
     } catch {
-      // Игнор.
+      // 忽略。
     }
   }
 }
@@ -499,7 +498,7 @@ function handleEnterPersonal(player: Player, asPassenger: boolean): void {
     return;
   }
 
-  // Закрыта — никто, включая владельца.
+  // 车辆已锁定，任何人都不能上车，包括车主。
   if (personal.locked) {
     player.sendClientMessage(Color.error, "载具已锁定。");
     eject(player);
@@ -522,7 +521,7 @@ async function notifyOwnerOnEnter(player: Player, ownerId: number): Promise<void
   try {
     player.sendClientMessage(Color.info, `载具属于 ${tag}.`);
   } catch {
-    // Игрок вышел.
+    // 玩家已退出。
   }
 }
 
@@ -548,9 +547,9 @@ async function resolveOwnerTag(ownerId: number): Promise<string> {
       [ownerId]
     );
     const name = String(rows[0]?.name ?? "").trim();
-    return name || "Неизвестный";
+    return name || "未知玩家";
   } catch {
-    return "Неизвестный";
+    return "未知玩家";
   }
 }
 
@@ -565,7 +564,7 @@ function applyPersonalDoorLock(vehicle: Vehicle, player: Player): void {
     return;
   }
 
-  // Закрыта → двери закрыты для всех; открыта → для всех.
+  // 锁定时所有人都无法开门；解锁时所有人都可以开门。
   try {
     vehicle.setParamsForPlayer(
       player,
@@ -573,7 +572,7 @@ function applyPersonalDoorLock(vehicle: Vehicle, player: Player): void {
       personal.locked ? DOORS_LOCKED : DOORS_UNLOCKED
     );
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -602,7 +601,7 @@ function ejectOccupants(vehicleId: number): void {
       }
       eject(player);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -612,7 +611,7 @@ function eject(player: Player): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.removeFromVehicle();
   } catch {
-    // Уже не в транспорте.
+    // 已不在车辆中。
   }
 }
 

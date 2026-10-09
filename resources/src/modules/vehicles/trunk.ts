@@ -45,9 +45,9 @@ type TrunkOpenLabel = {
 };
 
 const ITEM_LABEL: Record<TrunkItem, string> = {
-  ammo: "патроны",
-  metal: "металл",
-  drugs: "наркотики",
+  ammo: "弹药",
+  metal: "金属",
+  drugs: "毒品",
 };
 
 const pendingByPlayer = new Map<number, PendingTrunk>();
@@ -56,7 +56,7 @@ const openLabels = new Map<number, TrunkOpenLabel>();
 export function bindPersonalTrunk(): void {
   registerCommand(
     "trunk",
-    "Багажник личного транспорта (положить / взять)",
+    "个人车辆后备箱（存入 / 取出）",
     (player) => {
       void openTrunkMenu(player);
     }
@@ -119,12 +119,12 @@ async function openTrunkMenu(player: Player): Promise<void> {
   }
 
   const body = [
-    "Положить патроны",
-    "Положить металл",
-    "Положить наркотики",
-    `${LIME}Взять патроны`,
-    `${LIME}Взять металл`,
-    `${LIME}Взять наркотики`,
+    "存入弹药",
+    "存入金属",
+    "存入毒品",
+    `${LIME}取出弹药`,
+    `${LIME}取出金属`,
+    `${LIME}取出毒品`,
   ].join("\n");
 
   try {
@@ -132,10 +132,10 @@ async function openTrunkMenu(player: Player): Promise<void> {
       player,
       TRUNK_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Багажник",
+      "后备箱",
       body,
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
     showTrunkOpenLabel(player, account.gender);
   } catch {
@@ -238,11 +238,11 @@ function showAmountDialog(
   const playerHave = playerItemAmount(account, item);
   const trunkHave = trunkItemAmount(personal, item);
   const cap = trunkCap(item);
-  const verb = action === "put" ? "положить в багажник" : "взять из багажника";
+  const verb = action === "put" ? "存入后备箱" : "从后备箱取出";
   const available =
     action === "put"
-      ? `У вас: ${playerHave} шт.\nВ багажнике: ${trunkHave} / ${cap} шт.`
-      : `В багажнике: ${trunkHave} / ${cap} шт.\nУ вас: ${playerHave} шт.`;
+      ? `你有：${playerHave} 件\n后备箱：${trunkHave} / ${cap} 件`
+      : `后备箱：${trunkHave} / ${cap} 件\n你有：${playerHave} 件`;
 
   try {
     Dialog.show(
@@ -403,7 +403,7 @@ async function applyPut(
   adjustPersonalTrunk(pending.runtimeId, pending.item, amount);
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   clearPending(player);
@@ -468,7 +468,7 @@ async function applyTake(
   adjustPersonalTrunk(pending.runtimeId, pending.item, -amount);
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   clearPending(player);
@@ -532,7 +532,7 @@ function showTrunkOpenLabel(
     return;
   }
 
-  const text = byGender(gender, "Открыл багажник", "Открыла багажник");
+  const text = byGender(gender, "打开了后备箱", "打开了后备箱");
 
   try {
     const pos = player.getPos();
@@ -554,7 +554,7 @@ function showTrunkOpenLabel(
 
     openLabels.set(id, { label, timer });
   } catch {
-    // Слот уже невалиден.
+    // 槽位已失效。
   }
 }
 
@@ -577,6 +577,6 @@ function hideTrunkOpenLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // Уже снята.
+    // 已移除。
   }
 }

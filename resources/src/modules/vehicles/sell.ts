@@ -65,7 +65,7 @@ type CarOffer = {
 const pendingPlayerSale = new Map<number, PendingPlayerSale>();
 const pendingOffers = new Map<number, CarOffer>();
 const sellingState = new Set<number>();
-/** vehicleId → идёт передача игроку. */
+/** vehicleId → 正在转让给玩家。 */
 const transferring = new Set<number>();
 
 export function bindPersonalVehicleSell(): void {
@@ -300,7 +300,7 @@ async function confirmSellToState(player: Player): Promise<void> {
   } catch (error: unknown) {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] продажа ТС ${vehicle.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] 出售车辆 ${vehicle.id} (${account.name})：${message}`);
     player.sendClientMessage(Color.error, "出售失败。请重试。");
     return;
   }
@@ -644,7 +644,7 @@ async function acceptCarOffer(
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] передача ТС ${offer.vehicleId}: ${message}`);
+    omp.log(`[${SERVER_TAG}] 转让车辆 ${offer.vehicleId}：${message}`);
     buyer.sendClientMessage(Color.error, "交易失败。请重试。");
     return;
   } finally {
@@ -713,33 +713,33 @@ function refuseCarOffer(buyer: Player, buyerSlot: number, offer: CarOffer): void
   }
 }
 
-/** null — можно купить; иначе текст ошибки для продавца/покупателя. */
+/** 返回 null 表示可以购买；否则返回给卖家或买家的错误信息。 */
 async function buyerCanPurchaseVehicle(
   buyer: Player,
   modelId: number
 ): Promise<string | null> {
   const account = getAccount(buyer);
   if (!account) {
-    return "Игрок не в игре.";
+    return "玩家不在线。";
   }
 
   if (await findOwnedPlayerVehicle(account.id)) {
-    return "У игрока уже есть личный транспорт.";
+    return "该玩家已经拥有个人车辆。";
   }
 
   if (!findOwnedHouse(account.id)) {
-    return "У покупателя нет дома.";
+    return "买家没有房屋。";
   }
 
   const need = requiredDriveLicense(modelId);
   if (need === "moto" && !account.licenses.moto) {
-    return "У покупателя нет лицензии на мотоциклы.";
+    return "买家没有摩托车驾照。";
   }
   if (need === "car" && !account.licenses.car) {
-    return "У покупателя нет лицензии на автомобили.";
+    return "买家没有汽车驾照。";
   }
   if (need === "fly" && !account.licenses.fly) {
-    return "У покупателя нет лицензии на полёты.";
+    return "买家没有飞行执照。";
   }
 
   return null;

@@ -13,7 +13,7 @@ export const MAX_VEHICLE_FUEL = DEFAULT_VEHICLE_FUEL;
 
 type EngineExtraBlocker = (player: Player, vehicle: Vehicle) => string | null;
 
-/** Доп. блок запуска (АЗС и т.п.) — без циклических импортов. */
+/** 额外的启动限制（如加油站），避免循环导入。 */
 let extraEngineBlocker: EngineExtraBlocker | null = null;
 
 export function setExtraEngineBlocker(blocker: EngineExtraBlocker | null): void {
@@ -21,10 +21,10 @@ export function setExtraEngineBlocker(blocker: EngineExtraBlocker | null): void 
 }
 
 /**
- * Полный бак:
- * — ≈ 45 мин езды;
- * — ≈ 90 мин холостого хода (двигатель вкл., водитель внутри);
- * двигатель выкл. — расход 0.
+ * 满油箱：
+ * — 约可行驶 45 分钟；
+ * — 约可怠速 90 分钟（发动机开启且驾驶员在车内）；
+ * 发动机关闭时不消耗燃油。
  */
 const DRAIN_MOVING_PER_SEC = MAX_VEHICLE_FUEL / (45 * 60);
 const DRAIN_IDLE_PER_SEC = MAX_VEHICLE_FUEL / (90 * 60);
@@ -42,7 +42,7 @@ const AIRCRAFT = new Set([
 ]);
 const BICYCLES = new Set([481, 509, 510]);
 
-/** runtime vehicle id → топливо (дробное). */
+/** runtime vehicle ID → 燃油量（可为小数）。 */
 const fuelByRuntime = new Map<number, number>();
 
 export function vehicleUsesFuel(model: number): boolean {
@@ -119,7 +119,7 @@ export function startFuelSystem(): void {
     }
 
     if (getVehicleFuel(vehicle) <= 0) {
-      return "Бак пуст. Заправьтесь на АЗС (сигнал H у колонки).";
+      return "油箱已空。请前往加油站，在加油泵旁按 H 加油。";
     }
 
     return null;
@@ -203,7 +203,7 @@ function tickFuel(): void {
         "汽油耗尽。引擎已关闭。"
       );
     } catch {
-      // Уже вышел.
+      // 已退出。
     }
   });
 }

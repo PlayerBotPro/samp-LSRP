@@ -8,7 +8,7 @@ const RESPAWN_SEC = 1800;
 const RANDOM_COLOR = -1;
 const ARMY_CAR_COLOR = 173;
 const COLORED_MODELS = new Set([431, 445, 500]);
-const DENY = "Вы не состоите в армии.";
+const DENY = "你不属于军队。";
 const BARRACKS_MODEL = 433;
 
 const ARMY_VEHICLES: ReadonlyArray<{

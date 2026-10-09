@@ -33,7 +33,7 @@ import { addWarehouseAmmo, takeWarehouseAmmo } from "../warehouse";
 
 const TRUCK_MODEL = 433;
 const MAX_CRATES = 5;
-/** Патронов в одном ящике (списывается со склада Армии при взятии). */
+/** 每箱弹药数量（取出时从军队仓库扣除）。 */
 const AMMO_PER_CRATE = 100;
 const PAY_PER_CRATE = 75;
 
@@ -56,7 +56,7 @@ const SLOT_CRATE = 1;
 
 const LABEL_DRAW_DISTANCE = 40;
 const LABEL_OFFSET_Z = 2.5;
-/** Слегка жёлто-оранжевый текст лейбла груза. */
+/** 货物标签使用浅黄橙色文字。 */
 const LABEL_COLOR = 0xffaa33ff;
 
 const STOCK_POINT = {
@@ -83,7 +83,7 @@ const DROP_POINTS: readonly DropPoint[] = [
   },
   {
     orgId: ORG_POLICE_ID,
-    name: "Областная полиция",
+    name: "州警察局",
     x: 618.8522,
     y: -586.4384,
     z: 17.233,
@@ -102,12 +102,12 @@ type TruckCargo = {
   label: TextLabel | null;
 };
 
-/** Источник ящика в руках: склад базы или id грузовика. */
+/** 手持弹药箱的来源：基地仓库或卡车 ID。 */
 type CarrySource = "stock" | number;
 
 type CarryState = {
   source: CarrySource;
-  /** Активный чекпоинт разгрузки (orgId), если рядом с точкой. */
+  /** 附近卸货点对应的活动检查点（orgId）。 */
   dropOrgId: number | null;
 };
 
@@ -123,7 +123,7 @@ export function isArmyAmmoCarrying(player: Player): boolean {
   return id !== null && carrying.has(id);
 }
 
-/** Привязать Barracks (433) к системе ящиков. */
+/** 将 Barracks（433）接入箱子系统。 */
 export function bindArmyAmmoTruck(vehicle: Vehicle): void {
   const id = liveVehicleId(vehicle);
   if (id === null) {
@@ -164,10 +164,10 @@ export function bindArmyAmmoDelivery(): void {
     false
   );
 
-  registerCommand("putammo", "Положить ящик с патронами в грузовик", (player) => {
+  registerCommand("putammo", "将一箱弹药放入卡车", (player) => {
     onPutAmmo(player);
   });
-  registerCommand("takeammo", "Взять ящик с патронами из грузовика", (player) => {
+  registerCommand("takeammo", "从卡车中取出一箱弹药", (player) => {
     onTakeAmmo(player);
   });
 
@@ -186,12 +186,12 @@ export function bindArmyAmmoDelivery(): void {
       newState === PLAYER_STATE_DRIVER ||
       newState === PLAYER_STATE_PASSENGER
     ) {
-      returnCarried(player, "Вы сели в транспорт — патроны возвращены на склад.");
+      returnCarried(player, "你已进入车辆，弹药已退回仓库。");
     }
   });
 
   omp.on("playerDeath", (player) => {
-    returnCarried(player, "Вы потеряли ящик — патроны возвращены на склад.");
+    returnCarried(player, "你丢失了弹药箱，弹药已退回仓库。");
   });
 
   omp.on("playerDisconnect", (player) => {
@@ -200,7 +200,7 @@ export function bindArmyAmmoDelivery(): void {
   });
 
   omp.on("playerConnect", (player) => {
-    // Слот мог остаться «грязным» после краша без disconnect — сначала возврат на склад.
+    // 崩溃后未触发 disconnect 时槽位可能残留状态，先将弹药退回仓库。
     returnCarried(player, null);
     clearPlayer(player);
   });
@@ -236,7 +236,7 @@ function tickDelivery(): void {
       tickStockPickup(player, id);
       tickDropProximity(player, id);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -277,7 +277,7 @@ function tryTakeFromStock(player: Player, id: number): void {
   }
 
   if (!takeWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE)) {
-    // Снимаем «залипание» на пикапе, чтобы после пополнения склада можно было взять снова.
+    // 清除拾取点的卡住状态，以便仓库补货后可以再次取用。
     atStock.delete(id);
     player.sendClientMessage(
       Color.error,
@@ -351,7 +351,7 @@ function clearDropCheckpoint(player: Player, id: number): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Уже выключен.
+    // 已关闭。
   }
 }
 
@@ -386,7 +386,7 @@ function onDropCheckpoint(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Ок.
+    // 正常。
   }
 
   const total = addWarehouseAmmo(drop.orgId, AMMO_PER_CRATE);
@@ -548,10 +548,10 @@ function returnCarried(player: Player, message: string | null): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Ок.
+    // 正常。
   }
 
-  // Смерть / выход / посадка: патроны всегда обратно на склад Армии.
+  // 死亡、退出或上车时，弹药始终退回军队仓库。
   addWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE);
   refreshArmyAmmoStockLabel();
 
@@ -654,7 +654,7 @@ function updateTruckLabel(truckId: number, cargo: TruckCargo): void {
 }
 
 function cratesLabelText(crates: number): string {
-  return `Загружено ящиков: ${crates}`;
+  return `已装载箱数：${crates}`;
 }
 
 function destroyLabel(label: TextLabel | null): void {
@@ -665,7 +665,7 @@ function destroyLabel(label: TextLabel | null): void {
   try {
     label.destroy();
   } catch {
-    // Уже уничтожен.
+    // 已被销毁。
   }
 }
 
@@ -699,14 +699,14 @@ function clearCrate(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_CRATE);
   } catch {
-    // Слота не было.
+    // 槽位不存在。
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已退出。
   }
 }
 
@@ -736,7 +736,7 @@ function nearestArmyTruck(player: Player, range: number): Vehicle | null {
         best = vehicle;
       }
     } catch {
-      // Уничтожен.
+      // 已被销毁。
     }
   }
 
