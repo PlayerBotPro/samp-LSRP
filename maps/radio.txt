@@ -221,7 +221,7 @@ SetDynamicObjectMaterial(radioint, 0, 14533, "pleas_dome", "ab_metaldisc", 0x0);
 radioint = CreateDynamicObject(2699, 1429.847900, 1045.596313, 1061.605957, 0.000000, 180.000000, 0.000000, -1, -1);
 SetDynamicObjectMaterial(radioint, 0, 2028, "cj_games", "CJ_speaker4", 0x0);
 radioint = CreateDynamicObject(19476, 1425.250977, 1047.020020, 1060.469971, 0.000000, 0.000000, -180.000000, -1, -1);
-SetDynamicObjectMaterialText(radioint, 0, "КОМНАТА ЭФИРОВ\n№1", 120, "Calibri", 70, 1, 0xffffffff, 0x00000000, 1);
+SetDynamicObjectMaterialText(radioint, 0, "1号播音室", 120, "Microsoft YaHei", 70, 1, 0xffffffff, 0x00000000, 1);
 radioint = CreateDynamicObject(2075, 1427.982788, 1067.317505, 1061.508301, 0.000000, 0.000007, 0.000000, -1, -1);
 SetDynamicObjectMaterial(radioint, 0, 16271, "des_factory", "dish_cylinder_a", 0x0);
 SetDynamicObjectMaterial(radioint, 2, 18029, "genintintsmallrest", "GB_restaursmll11", 0x0);
@@ -312,7 +312,7 @@ SetDynamicObjectMaterial(radioint, 0, 2823, "gb_kitchtake", "GB_pizzabox01", 0x0
 radioint = CreateDynamicObject(19383, 1422.878906, 1066.240601, 1059.501099, -0.000007, 0.000007, -179.999878, -1, -1);
 SetDynamicObjectMaterial(radioint, 0, 9583, "bigshap_sfw", "bridge_walls2_sfw", 0x0);
 radioint = CreateDynamicObject(19476, 1422.970825, 1047.020020, 1060.469971, 0.000000, 0.000000, 0.000000, -1, -1);
-SetDynamicObjectMaterialText(radioint, 0, "КОМНАТА ЭФИРОВ\n№2", 120, "Calibri", 70, 1, 0xffffffff, 0x00000000, 1);
+SetDynamicObjectMaterialText(radioint, 0, "2号播音室", 120, "Microsoft YaHei", 70, 1, 0xffffffff, 0x00000000, 1);
 radioint = CreateDynamicObject(2714, 1424.040649, 1046.273071, 1061.215454, 90.000000, 270.000000, 0.000000, -1, -1);
 SetDynamicObjectMaterial(radioint, 0, 14560, "triad_bar", "triad_decor1", 0x0);
 radioint = CreateDynamicObject(7313, 1433.354858, 1069.364990, 1058.430298, -90.000000, 0.000000, -90.000000, -1, -1);

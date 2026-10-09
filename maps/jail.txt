@@ -14,7 +14,7 @@ CreateDynamicObject(2776, -95.917381, 2441.104980, 1178.686768, 0.000151, 0.0000
 CreateDynamicObject(1812, -91.270508, 2446.578613, 1182.141724, 0.000000, 0.000213, 0.000000);
 CreateDynamicObject(1812, -91.270508, 2443.738281, 1182.141724, 0.000000, 0.000213, 0.000000);
 jailint = CreateDynamicObject(19477, -96.041908, 2439.784912, 1180.820190, 0.000000, 0.000000, 90.000000);
-SetDynamicObjectMaterialText(jailint, 0, "ДЕЖУРНЫЙ", 130, "Ariel", 70, 1, 0xFF000000, 0, 1);
+SetDynamicObjectMaterialText(jailint, 0, "值班员", 130, "Microsoft YaHei", 70, 1, 0xFF000000, 0, 1);
 CreateDynamicObject(2959, -89.575760, 2444.009277, 1178.279419, 0.000000, 0.000000, 0.000000);
 jailint = CreateDynamicObject(19377, -89.561249, 2444.467773, 1176.898438, 0.000000, 0.000151, 0.000000);
 SetDynamicObjectMaterial(jailint, 5, 10101, "2notherbuildsfe", "ws_rooftarmac1", 0);
@@ -175,9 +175,9 @@ SetDynamicObjectMaterial(jailint, 5, 10101, "2notherbuildsfe", "ws_rooftarmac1",
 SetDynamicObjectMaterial(jailint, 1, 10101, "2notherbuildsfe", "ws_rooftarmac1", 0);
 SetDynamicObjectMaterial(jailint, 0, 9254, "carparkssfn", "parking2plain", 0);
 jailint = CreateDynamicObject(19477, -99.299286, 2434.837891, 1188.213501, 0.000000, 0.000151, 0.000000, -1, -1);
-SetDynamicObjectMaterialText(jailint, 0, "Комната охраны", 130, "Ariel", 70, 1, 0xFF000000, 0, 1);
+SetDynamicObjectMaterialText(jailint, 0, "警卫室", 130, "Microsoft YaHei", 70, 1, 0xFF000000, 0, 1);
 jailint = CreateDynamicObject(19477, -99.259300, 2434.837891, 1188.213501, 0.000000, 0.000151, 0.000000);
-SetDynamicObjectMaterialText(jailint, 0, "Комната охраны", 130, "Ariel", 70, 1, 0xFF000000, 0, 1);
+SetDynamicObjectMaterialText(jailint, 0, "警卫室", 130, "Microsoft YaHei", 70, 1, 0xFF000000, 0, 1);
 CreateDynamicObject(11729, -98.968628, 2431.664551, 1178.319580, 0.000151, 0.000000, 89.999542);
 jailint = CreateDynamicObject(19377, -81.714386, 2449.200195, 1183.558716, 0.000151, 0.000000, 89.999542);
 SetDynamicObjectMaterial(jailint, 5, 10101, "2notherbuildsfe", "ws_rooftarmac1", 0);
@@ -724,7 +724,7 @@ CreateDynamicObject(19273, 1759.643555, -1561.418701, 10.205389, 0.000000, 0.000
 CreateDynamicObject(11729, 1750.060425, -1545.277466, 8.347173, 0.000007, 0.000000, 92.899994);
 CreateDynamicObject(2930, 1760.005859, -1561.506104, 11.185300, 0.000000, 0.000000, 88.599998);
 jailint = CreateDynamicObject(19477, 1749.821167, -1544.255981, 11.088639, 0.000000, 0.000000, 0.000000);
-SetDynamicObjectMaterialText(jailint, 0, "ИНВЕНТАРЬ", 130, "Ariel", 70, 1, 0xFF000000, 0, 1);
+SetDynamicObjectMaterialText(jailint, 0, "物资清单", 130, "Microsoft YaHei", 70, 1, 0xFF000000, 0, 1);
 CreateDynamicObject(11729, 1750.026855, -1544.608276, 8.347173, 0.000007, 0.000000, 92.899994);
 CreateDynamicObject(11729, 1749.992554, -1543.939331, 8.347173, 0.000007, 0.000000, 92.899994);
 CreateDynamicObject(11729, 1749.959229, -1543.269775, 8.347173, 0.000007, 0.000000, 92.899994);
