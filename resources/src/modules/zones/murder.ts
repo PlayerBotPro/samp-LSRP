@@ -12,7 +12,7 @@ import { isCaptureCombatKill, isCaptureParticipantOnTurf } from "./capture";
 import { districtNameAt } from "./district";
 
 const ALERT_SOUND_ID = 21001;
-/** Как у /arrest и сдачи: 1★ = 10 мин. */
+/** 与 /arrest 和自首相同：1★ = 10 分钟。 */
 const MINUTES_PER_WANTED = 10;
 
 function isPlayable(player: Player): boolean {
@@ -30,9 +30,9 @@ function districtLabelAt(player: Player): string {
   try {
     const pos = player.getPos();
     const name = districtNameAt(pos.x, pos.y);
-    return name === "Unknown" ? "неизвестный район" : name;
+    return name === "Unknown" ? "未知区域" : name;
   } catch {
-    return "неизвестный район";
+    return "未知区域";
   }
 }
 
@@ -45,7 +45,7 @@ function playAlertForLaw(): void {
       const pos = officer.getPos();
       officer.playGameSound(ALERT_SOUND_ID, pos.x, pos.y, pos.z);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -59,13 +59,13 @@ function onPlayerMurder(victim: Player, killer: Player | null | undefined): void
     return;
   }
 
-  // Полиция / LSPD / FBI — нейтрализация разыскиваемых (не уголовка на офицера).
+  // 警察 / LSPD / FBI：击毙通缉犯（不算警员犯罪）。
   if (isLawOfficer(killer)) {
     void tryLawNeutralize(victim, killer);
     return;
   }
 
-  // Капт банд не считаем уголовным убийством.
+  // 帮派争夺战中的击杀不算刑事谋杀。
   if (isCaptureCombatKill(victim, killer)) {
     return;
   }
@@ -77,18 +77,18 @@ function onPlayerMurder(victim: Player, killer: Player | null | undefined): void
 
   setPlayerWantedLevel(killer, account.wantedLevel + 1);
   notifyLawStaff(
-    `Подозреваемый ${playerChatName(killer)} совершил убийство в районе ${districtLabelAt(victim)}`
+    `嫌疑人 ${playerChatName(killer)} 在${districtLabelAt(victim)}实施了谋杀`
   );
   playAlertForLaw();
 }
 
 async function tryLawNeutralize(victim: Player, killer: Player): Promise<void> {
-  // Свои / другие силовые структуры — не считаем.
+  // 不统计己方或其他执法机构成员。
   if (isLawOfficer(victim)) {
     return;
   }
 
-  // Бандит на активном капте — не считаем, даже с розыском.
+  // 正在参与帮派争夺战的帮派成员不计入，即使其被通缉。
   if (isCaptureParticipantOnTurf(victim)) {
     return;
   }
@@ -117,15 +117,15 @@ async function tryLawNeutralize(victim: Player, killer: Player): Promise<void> {
 
   const killerAccount = getAccount(killer);
   const membership = killerAccount ? getMembership(killerAccount) : null;
-  const rankTitle = membership?.rank.title ?? "Офицер";
+  const rankTitle = membership?.rank.title ?? "警员";
   const verb = byGender(
     killerAccount?.gender ?? null,
-    "нейтрализовал",
-    "нейтрализовала"
+    "击毙了",
+    "击毙了"
   );
 
   notifyLawStaff(
-    `${rankTitle} ${playerChatName(killer)} ${verb} преступника в районе: ${district}.`
+    `${rankTitle} ${playerChatName(killer)}在${district}击毙了罪犯。`
   );
 }
 

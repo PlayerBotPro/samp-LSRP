@@ -20,7 +20,7 @@ import { clearOrgStockVisit } from "./stock-visit";
 const LABEL_HEIGHT = 1.2;
 const LABEL_DRAW_DISTANCE = 12;
 const CHECKPOINT_RADIUS = 1.5;
-/** Выход с маркера (чуть больше радиуса — без дребезга на границе). */
+/** 离开标记点（半径稍大，避免在边界反复触发）。 */
 const LEAVE_RADIUS = 2.8;
 const SHOW_DISTANCE = 45;
 const TICK_MS = 400;
@@ -38,7 +38,7 @@ type GangStock = GangStockDef & {
   label: TextLabel;
 };
 
-/** Интерьеры HQ из spawn банд; точки склада — отдельные. */
+/** 帮派出生点中的总部室内；仓库点单独设置。 */
 const GANG_STOCK_DEFS: readonly GangStockDef[] = [
   {
     orgId: ORG_AZTECAS_ID,
@@ -126,12 +126,12 @@ export function refreshGangWarehouseLabels(): void {
     try {
       stock.label.updateText(Color.info, stockLabelText(stock.orgId));
     } catch {
-      // Лейбл уже уничтожен.
+      // 标签已销毁。
     }
   }
 }
 
-/** Точка склада банды, если игрок в радиусе чекпоинта. */
+/** 玩家处于检查点范围内时的帮派仓库点。 */
 export function findGangStockAtPlayer(player: Player): {
   orgId: number;
   x: number;
@@ -211,13 +211,13 @@ function updateCheckpointForPlayer(player: Player): void {
       }
       activeStockByPlayer.set(id, stock);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
     notifyOrgStockStanding(player, onCheckpoint);
     return;
   }
 
-  // Не наш склад — не трогаем pending/visit (иначе тик мафии сбивает банду и наоборот).
+  // 不是我们的仓库，不处理 pending/visit（否则黑手党的定时检查会影响帮派，反之亦然）。
   if (!checkpointShown.has(id)) {
     return;
   }
@@ -229,6 +229,6 @@ function updateCheckpointForPlayer(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }

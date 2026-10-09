@@ -65,7 +65,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, clipClientMessage(text));
     }
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 
@@ -154,7 +154,7 @@ function sendToSides(current: CaptureState, color: number, text: string): void {
 }
 
 function scoreLine(orgId: number, kills: number): string {
-  const name = getOrganization(orgId)?.name ?? "Банда";
+  const name = getOrganization(orgId)?.name ?? "帮派";
   return `${name}: ~r~${kills}`;
 }
 
@@ -197,7 +197,7 @@ function showCaptureIcon(player: Player, current: CaptureState): void {
       MAPICON_GLOBAL
     );
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -205,7 +205,7 @@ function hideCaptureIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Иконки не было.
+    // 没有图标。
   }
 }
 
@@ -213,7 +213,7 @@ function flashTurf(turf: LiveTurf, color: number): void {
   try {
     turf.zone.flashForAll(color);
   } catch {
-    // Зона уже уничтожена.
+    // 区域已销毁。
   }
 }
 
@@ -222,7 +222,7 @@ function restoreTurf(turf: LiveTurf): void {
     turf.zone.stopFlashForAll();
     turf.zone.showForAll(turfColor(turf.orgId));
   } catch {
-    // Зона уже уничтожена.
+    // 区域已销毁。
   }
 }
 
@@ -249,7 +249,7 @@ export function refreshCaptureView(player: Player): void {
       turf.zone.showForPlayer(player, turfColor(turf.orgId));
       turf.zone.flashForPlayer(player, turfColor(state.attackerId));
     } catch {
-      // Зона уже уничтожена.
+      // 区域已销毁。
     }
   }
 
@@ -287,8 +287,8 @@ async function finishCapture(current: CaptureState): Promise<void> {
   clearInterval(current.timer);
 
   const turf = getTurf(current.zoneId);
-  const attackerName = getOrganization(current.attackerId)?.name ?? "Банда";
-  const defenderName = getOrganization(current.defenderId)?.name ?? "Банда";
+  const attackerName = getOrganization(current.attackerId)?.name ?? "帮派";
+  const defenderName = getOrganization(current.defenderId)?.name ?? "帮派";
   let transferred = false;
 
   try {
@@ -308,18 +308,18 @@ async function finishCapture(current: CaptureState): Promise<void> {
       sendToSides(
         current,
         NEWS_COLOR,
-        `${attackerName} захватили территорию у банды ${defenderName} в районе ${current.district}`
+        `${attackerName}在${current.district}夺取了帮派${defenderName}的领地`
       );
     } else {
       sendToSides(
         current,
         NEWS_COLOR,
-        `Попытка ${attackerName} захватить территорию у ${defenderName} провалилась`
+        `${attackerName}试图夺取${defenderName}的领地，但失败了`
       );
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] капт: ${message}`);
+    omp.log(`[${SERVER_TAG}] 领地战：${message}`);
     if (!transferred && turf) {
       restoreTurf(turf);
     }
@@ -354,8 +354,8 @@ function beginCapture(
 ): void {
   const gen = ++generation;
   const district = districtNameAt((turf.minX + turf.maxX) / 2, (turf.minY + turf.maxY) / 2);
-  const attackerName = getOrganization(attackerId)?.name ?? "Банда";
-  const defenderName = getOrganization(defenderId)?.name ?? "Банда";
+  const attackerName = getOrganization(attackerId)?.name ?? "帮派";
+  const defenderName = getOrganization(defenderId)?.name ?? "帮派";
 
   const current: CaptureState = {
     gen,
@@ -380,13 +380,13 @@ function beginCapture(
   sendToSides(
     current,
     NEWS_COLOR,
-    `${attackerName} начали захват территории банды ${defenderName} в районе ${district}`
+    `${attackerName}开始争夺${district}的帮派${defenderName}领地`
   );
-  sendToGang(attackerId, GANG_HINT_COLOR, `${rankTitle} ${playerChatName(player)} инициировал захват`);
+  sendToGang(attackerId, GANG_HINT_COLOR, `${rankTitle} ${playerChatName(player)}发起了领地争夺`);
   sendToSides(
     current,
     GPS_HINT_COLOR,
-    "Место отмечено на GPS. Отправляйтесь туда и поддержите свою банду"
+    "地点已标记在 GPS 上。前往那里支援你的帮派"
   );
 }
 
@@ -402,12 +402,12 @@ export function tryStartCapture(player: Player): void {
   }
 
   if (membership.rank.id < CAPTURE_MIN_RANK) {
-    tell(player, 0xb4b5b7ff, "Захват доступен с 8 ранга.");
+    tell(player, 0xb4b5b7ff, "领地争夺从 8 级开始开放。");
     return;
   }
 
   if (ending) {
-    tell(player, 0xb4b5b7ff, "Уже идёт захват одной из зон. Дождитесь окончания!");
+    tell(player, 0xb4b5b7ff, "已有区域正在争夺中，请等待结束！");
     return;
   }
 
@@ -416,28 +416,28 @@ export function tryStartCapture(player: Player): void {
     tell(
       player,
       0xb4b5b7ff,
-      "Вы должны находиться на территории банды, которую хотите захватить."
+      "你必须位于想要争夺的帮派领地内。"
     );
     return;
   }
 
   if (turf.orgId === membership.org.id) {
-    tell(player, 0xb4b5b7ff, "Эта территория принадлежит вашей банде.");
+    tell(player, 0xb4b5b7ff, "这片领地属于你的帮派。");
     return;
   }
 
   if (state) {
-    tell(player, 0xb4b5b7ff, "Уже идёт захват одной из зон. Дождитесь окончания!");
+    tell(player, 0xb4b5b7ff, "已有区域正在争夺中，请等待结束！");
     return;
   }
 
   if (turf.spawnProtected) {
-    tell(player, 0xb4b5b7ff, "Нельзя начать захват территории спавна банды!");
+    tell(player, 0xb4b5b7ff, "不能争夺帮派出生点领地！");
     return;
   }
 
   if (!isGangOrgId(turf.orgId)) {
-    tell(player, 0xb4b5b7ff, "Эта территория не принадлежит банде.");
+    tell(player, 0xb4b5b7ff, "这片领地不属于任何帮派。");
     return;
   }
 
@@ -445,7 +445,7 @@ export function tryStartCapture(player: Player): void {
     tell(
       player,
       0xb4b5b7ff,
-      "В сети нет членов банды, которая владеет этой территорией."
+      "拥有这片领地的帮派目前没有成员在线。"
     );
     return;
   }
@@ -478,7 +478,7 @@ function scoreCaptureKill(victim: Player, killer: Player): void {
   }
 }
 
-/** Убийство на зоне активного капта между атакующей и защищающейся бандой. */
+/** 在进攻帮派与防守帮派交战的活动区域中击杀。 */
 export function isCaptureCombatKill(victim: Player, killer: Player): boolean {
   const current = state;
   if (!current || ending) {
@@ -510,7 +510,7 @@ export function isCaptureCombatKill(victim: Player, killer: Player): boolean {
   );
 }
 
-/** Участник активного капта (атака/защита), стоящий на зоне капта. */
+/** 处于争夺区域内的活动争夺参与者（进攻方/防守方）。 */
 export function isCaptureParticipantOnTurf(player: Player): boolean {
   const current = state;
   if (!current || ending) {
@@ -532,7 +532,7 @@ export function isCaptureParticipantOnTurf(player: Player): boolean {
 
 export function startCapture(): void {
   if (!startCaptureHud()) {
-    omp.log(`[${SERVER_TAG}] текстрау каптов не создан`);
+    omp.log(`[${SERVER_TAG}] 未能创建领地战 TextDraw`);
   }
 
   omp.on("playerDeath", (player, killer) => {

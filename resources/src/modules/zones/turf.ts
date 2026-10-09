@@ -13,7 +13,7 @@ import {
 
 const EMPTY_COLOR = 0x808080aa;
 
-/** Id зон респа из старого дампа — их нельзя каптить. */
+/** 旧数据转储中的出生点区域 ID，不可争夺。 */
 const LEGACY_SPAWN_ZONE_IDS: ReadonlySet<number> = new Set([7, 25, 67, 74, 90]);
 
 export type LiveTurf = {
@@ -45,7 +45,7 @@ export function getTurf(zoneId: number): LiveTurf | undefined {
   return turfs.find((item) => item.id === zoneId);
 }
 
-/** Сколько гангзон сейчас принадлежит org (включая спавн-зоны). */
+/** 当前属于该组织的帮派区域数量（包括出生点区域）。 */
 export function countTurfsOwnedBy(orgId: number): number {
   if (!isGangOrgId(orgId)) {
     return 0;
@@ -112,7 +112,7 @@ export function findTurfAtPlayer(player: Player): LiveTurf | null {
 
 export async function startGangTurf(): Promise<void> {
   if (!isDatabaseReady()) {
-    omp.log(`[${SERVER_TAG}] гангзоны: нет БД`);
+    omp.log(`[${SERVER_TAG}] 帮派区域：数据库不可用`);
     return;
   }
 
@@ -137,12 +137,12 @@ export async function startGangTurf(): Promise<void> {
           zone,
         });
       } catch {
-        // Пул зон заполнен.
+        // 区域池已满。
       }
     }
 
     turfs = markSpawnProtected(created);
-    omp.log(`[${SERVER_TAG}] гангзоны: ${turfs.length}/${records.length}`);
+    omp.log(`[${SERVER_TAG}] 帮派区域：${turfs.length}/${records.length}`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] gang_zones: ${message}`);
@@ -158,7 +158,7 @@ export function showGangTurf(player: Player): void {
     try {
       turf.zone.showForPlayer(player, turfColor(turf.orgId));
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
   }
 }
@@ -188,7 +188,7 @@ export async function setGangZoneOwner(zoneId: number, orgId: number): Promise<b
     turf.zone.stopFlashForAll();
     turf.zone.showForAll(turfColor(orgId));
   } catch {
-    // Зона уже уничтожена.
+    // 区域已销毁。
   }
   return true;
 }

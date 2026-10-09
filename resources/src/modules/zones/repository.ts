@@ -29,7 +29,7 @@ const COLUMN_MIGRATIONS = [
   { name: "max_y", sql: "max_y FLOAT NOT NULL DEFAULT 0 AFTER max_x" },
 ] as const;
 
-/** Старые org_id из дампа (1–5) → текущие банды 9–13. */
+/** 转储中的旧 org_id（1–5）→ 当前帮派 9–13。 */
 const LEGACY_ORG_REMAP: ReadonlyArray<readonly [number, number]> = [
   [1, ORG_AZTECAS_ID],
   [2, ORG_BALLAS_ID],
@@ -101,19 +101,19 @@ async function seedGangZones(): Promise<void> {
 function loadGangZonesSeedSql(): string {
   const schemaPath = join(process.cwd(), "sql", "schema.sql");
   if (!existsSync(schemaPath)) {
-    throw new Error("sql/schema.sql не найден");
+    throw new Error("未找到 sql/schema.sql");
   }
 
   const sql = readFileSync(schemaPath, "utf8");
   const start = sql.indexOf("INSERT INTO gang_zones");
   if (start < 0) {
-    throw new Error("INSERT gang_zones не найден в schema.sql");
+    throw new Error("schema.sql 中未找到 INSERT gang_zones");
   }
 
   const end = sql.indexOf(";", start);
   const statement = (end < 0 ? sql.slice(start) : sql.slice(start, end + 1)).trim();
   if (!statement.toUpperCase().startsWith("INSERT INTO GANG_ZONES")) {
-    throw new Error("seed gang_zones повреждён");
+    throw new Error("gang_zones 初始数据已损坏");
   }
 
   return statement;

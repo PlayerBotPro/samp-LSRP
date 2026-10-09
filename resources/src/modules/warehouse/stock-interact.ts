@@ -56,9 +56,9 @@ type OrgStockPoint = {
 };
 
 const ITEM_LABEL: Record<StockItem, string> = {
-  ammo: "патроны",
-  metal: "металл",
-  drugs: "наркотики",
+  ammo: "弹药",
+  metal: "金属",
+  drugs: "毒品",
 };
 
 const pendingByPlayer = new Map<number, PendingTransfer>();
@@ -96,15 +96,15 @@ export function bindOrgWarehouseInteract(): void {
 }
 
 /**
- * Тик складов: игрок вышел из радиуса маркера — сброс визита
- * (снова открыть меню = отойти и зайти на маркер).
+ * 仓库定时检查：玩家离开标记点范围后重置访问状态
+ * （再次打开菜单需要先离开再进入标记点）。
  */
 export function notifyOrgStockStanding(player: Player, inside: boolean): void {
   if (inside) {
     return;
   }
 
-  // Пока открыт диалог — не сбрасываем pending (иначе ввод количества «молча» пропадает).
+  // 对话框打开时不要重置 pending（否则输入的数量会无声丢失）。
   if (isOrgStockDialogBusy(player)) {
     return;
   }
@@ -151,16 +151,16 @@ function tryOpenStockMenu(player: Player): void {
 
 function showMenu(player: Player, orgId: number): void {
   const wh = getWarehouse(orgId);
-  // Закрыт → «Открыть склад», открыт → «Закрыть склад».
+  // 已关闭 →“打开仓库”，已打开 →“关闭仓库”。
   const lockLabel =
-    wh && !wh.isLocked ? "Закрыть склад" : "Открыть склад";
+    wh && !wh.isLocked ? "关闭仓库" : "打开仓库";
   const body = [
-    "Положить патроны",
-    "Положить металл",
-    "Положить наркотики",
-    `${LIME}Взять патроны`,
-    `${LIME}Взять металл`,
-    `${LIME}Взять наркотики`,
+    "存入弹药",
+    "存入金属",
+    "存入毒品",
+    `${LIME}取出弹药`,
+    `${LIME}取出金属`,
+    `${LIME}取出毒品`,
     lockLabel,
   ].join("\n");
 
@@ -169,10 +169,10 @@ function showMenu(player: Player, orgId: number): void {
       player,
       ORG_WAREHOUSE_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Склад организации",
+      "组织仓库",
       body,
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
     setOrgStockDialogBusy(player, true);
   } catch {
@@ -205,7 +205,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   if (listItem === 6) {
     toggleLock(player, stock.orgId);
-    // Сразу показать меню с актуальным «Открыть/Закрыть».
+    // 立即显示状态最新的“打开/关闭”菜单。
     showMenu(player, stock.orgId);
     return;
   }
@@ -271,11 +271,11 @@ function showAmountDialog(
   const label = ITEM_LABEL[item];
   const playerHave = playerItemAmount(account, item);
   const stockHave = wh ? warehouseItemAmount(wh, item) : 0;
-  const verb = action === "put" ? "положить на склад" : "взять со склада";
+  const verb = action === "put" ? "存入仓库" : "从仓库取出";
   const available =
     action === "put"
-      ? `У вас: ${playerHave} шт.\nНа складе: ${stockHave} шт.`
-      : `На складе: ${stockHave} шт.\nУ вас: ${playerHave} шт.`;
+      ? `你拥有：${playerHave} 个\n仓库库存：${stockHave} 个`
+      : `仓库库存：${stockHave} 个\n你拥有：${playerHave} 个`;
 
   try {
     Dialog.show(
@@ -392,7 +392,7 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
   }
 
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   refreshStockLabels(orgId);
@@ -403,7 +403,7 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
   );
   broadcastStock(
     orgId,
-    `[Склад] ${membership.rank.title} ${playerChatName(player)} положил на склад: ${ITEM_LABEL[item]} ${amount} шт.`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}存入：${ITEM_LABEL[item]} ${amount} 个`
   );
 }
 
@@ -437,7 +437,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
     !Number.isSafeInteger(nextAmmo) ||
     !Number.isSafeInteger(nextMetal)
   ) {
-    // Откат склада в кэше/БД через обратное добавление.
+    // 通过反向添加回滚缓存/数据库中的仓库数据。
     if (item === "ammo") {
       addWarehouseAmmo(orgId, amount);
     } else if (item === "metal") {
@@ -452,7 +452,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
 
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // Кэш уже обновлён.
+    // 缓存已更新。
   });
 
   refreshStockLabels(orgId);
@@ -463,7 +463,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
   );
   broadcastStock(
     orgId,
-    `[Склад] ${membership.rank.title} ${playerChatName(player)} взял со склада: ${ITEM_LABEL[item]} ${amount} шт.`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}取出：${ITEM_LABEL[item]} ${amount} 个`
   );
 }
 
@@ -488,19 +488,19 @@ function toggleLock(player: Player, orgId: number): void {
 
   const wh = getWarehouse(orgId);
   const currentlyOpen = Boolean(wh && !wh.isLocked);
-  // Открыт → закрыть; закрыт → открыть.
+  // 已打开 → 关闭；已关闭 → 打开。
   const nextLocked = currentlyOpen;
   setWarehouseLocked(orgId, nextLocked);
   refreshStockLabels(orgId);
 
-  const verb = nextLocked ? "закрыл склад" : "открыл склад";
+  const verb = nextLocked ? "关闭了仓库" : "打开了仓库";
   player.sendClientMessage(
     Color.info,
     nextLocked ? "仓库已关闭。" : "仓库已开启。"
   );
   broadcastStock(
     orgId,
-    `[Склад] ${membership.rank.title} ${playerChatName(player)} ${verb}.`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}${verb}。`
   );
 }
 
@@ -518,7 +518,7 @@ function denyOutsider(player: Player, orgId: number): void {
 
   lastDenyAt.set(id, now);
   const org = getOrganization(orgId);
-  const name = org?.name ?? "организации";
+  const name = org?.name ?? "组织";
   player.sendClientMessage(Color.error, `仅 ${name} 可以进入仓库。`);
 }
 
@@ -546,7 +546,7 @@ function broadcastStock(orgId: number, rawLine: string): void {
     try {
       other.sendClientMessage(Color.info, line);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }

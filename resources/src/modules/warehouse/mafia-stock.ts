@@ -81,12 +81,12 @@ export function refreshMafiaWarehouseLabels(): void {
     try {
       stock.label.updateText(Color.info, stockLabelText(stock.orgId));
     } catch {
-      // Лейбл уже уничтожен.
+      // 标签已销毁。
     }
   }
 }
 
-/** Точка склада мафии, если игрок в радиусе чекпоинта. */
+/** 玩家处于检查点范围内时的黑手党仓库点。 */
 export function findMafiaStockAtPlayer(player: Player): {
   orgId: number;
   x: number;
@@ -161,13 +161,13 @@ function updateCheckpointForPlayer(player: Player): void {
         checkpointShown.add(id);
       }
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
     notifyOrgStockStanding(player, onCheckpoint);
     return;
   }
 
-  // Не наш склад — не трогаем pending/visit.
+  // 不是我们的仓库，不处理 pending/visit。
   if (!checkpointShown.has(id)) {
     return;
   }
@@ -178,6 +178,6 @@ function updateCheckpointForPlayer(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }

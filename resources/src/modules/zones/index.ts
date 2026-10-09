@@ -7,7 +7,7 @@ import { startCapture, refreshCaptureView } from "./capture";
 import { startMurderReports } from "./murder";
 import { showGangTurf, startGangTurf } from "./turf";
 
-/** Чёрный, альфа FF — без прозрачности. */
+/** 黑色，Alpha 为 FF，即完全不透明。 */
 const ZONE_COLOR = 0x000000ff;
 
 type ClosedZone = {
@@ -65,7 +65,7 @@ function showClosedZones(player: Player): void {
     try {
       zone.showForPlayer(player, ZONE_COLOR);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
   }
 }

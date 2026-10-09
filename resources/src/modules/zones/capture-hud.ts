@@ -101,7 +101,7 @@ export function updateCaptureHud(
     hud.attackers.setString(attackerLine);
     hud.defenders.setString(defenderLine);
   } catch {
-    // TextDraw уже уничтожен.
+    // TextDraw 已销毁。
   }
 }
 
@@ -122,7 +122,7 @@ export function showCaptureHud(player: Player): void {
     hud.defenders.showForPlayer(player);
     visible.add(id);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -142,7 +142,7 @@ export function hideCaptureHud(player: Player): void {
     hud.attackers.hideForPlayer(player);
     hud.defenders.hideForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }
 
@@ -158,7 +158,7 @@ export function hideCaptureHudAll(): void {
     hud.attackers.hideForAll();
     hud.defenders.hideForAll();
   } catch {
-    // TextDraw уже уничтожен.
+    // TextDraw 已销毁。
   }
 }
 
