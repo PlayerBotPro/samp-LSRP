@@ -72,22 +72,22 @@ export function isWorkshopType(typeId: number): boolean {
 
 const TYPE_LABEL: Readonly<Record<number, string>> = {
   [BusinessType.SHOP_247]: "24/7",
-  [BusinessType.AMMU]: "Магазин оружия",
-  [BusinessType.CAR_ELITE]: "Автосалон элитный",
-  [BusinessType.CAR_ECONOMY]: "Автосалон эконом",
-  [BusinessType.MOTO]: "Моторынок",
-  [BusinessType.GAS]: "АЗС",
-  [BusinessType.FASTFOOD]: "Закусочная",
-  [BusinessType.GYM]: "Спортзал",
-  [BusinessType.CLOTHES]: "Магазин одежды",
-  [BusinessType.BAR]: "Бар",
-  [BusinessType.CLUB]: "Клуб",
-  [BusinessType.WORKSHOP]: "Автомастерская",
-  [BusinessType.STREET_FOOD]: "Ларек с уличной едой",
-  [BusinessType.VEHICLE_RENT]: "Аренда транспорта",
-  [BusinessType.CASINO]: "Казино",
+  [BusinessType.AMMU]: "武器店",
+  [BusinessType.CAR_ELITE]: "豪华汽车经销店",
+  [BusinessType.CAR_ECONOMY]: "经济型汽车经销店",
+  [BusinessType.MOTO]: "摩托车市场",
+  [BusinessType.GAS]: "加油站",
+  [BusinessType.FASTFOOD]: "快餐店",
+  [BusinessType.GYM]: "健身房",
+  [BusinessType.CLOTHES]: "服装店",
+  [BusinessType.BAR]: "酒吧",
+  [BusinessType.CLUB]: "俱乐部",
+  [BusinessType.WORKSHOP]: "汽车修理厂",
+  [BusinessType.STREET_FOOD]: "街头小吃摊",
+  [BusinessType.VEHICLE_RENT]: "车辆租赁",
+  [BusinessType.CASINO]: "赌场",
 };
 
 export function businessTypeLabel(typeId: number): string {
-  return TYPE_LABEL[typeId] ?? `Тип ${typeId}`;
+  return TYPE_LABEL[typeId] ?? `类型 ${typeId}`;
 }
