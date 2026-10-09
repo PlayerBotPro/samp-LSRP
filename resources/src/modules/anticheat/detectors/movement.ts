@@ -34,7 +34,7 @@ export function checkMovement(player: Player): void {
       }
       const inVeh =
         pState === PLAYER_STATE.driver || pState === PLAYER_STATE.passenger;
-      // Пешком 50 м за grace ок; в ТС за ~3 с легко уехать дальше → FP TeleportVeh.
+      // 宽限期内步行 50 米尚可；乘车约 3 秒就能驶得更远，可能误报 TeleportVeh。
       const adoptBubble = inVeh
         ? Math.max(cfg.teleportVehDist * 3, 180)
         : cfg.teleportFootDist;
@@ -75,7 +75,7 @@ export function checkMovement(player: Player): void {
   const inVeh =
     pState === PLAYER_STATE.driver || pState === PLAYER_STATE.passenger;
 
-  // Ожидаемый путь с запасом на лаг (velocity SA → м/с ≈ speed/179).
+  // 预期移动距离包含延迟余量（SA 速度换算为米/秒约为 speed/179）。
   const expected = (speed / 179.28625) * dtSec * 2.2 + 2.5;
 
   if (!inVeh && isCodeEnabled(AcCode.SpeedHackFoot) && speed > cfg.speedFootMax) {

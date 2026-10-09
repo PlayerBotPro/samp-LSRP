@@ -29,7 +29,7 @@ export const anticheatModule: GameModule = {
     const cfg = getConfig();
     bindAnticheat();
     omp.log(
-      `[${SERVER_TAG}] anticheat: ${cfg.enabled ? "включён" : "выключен"}, kick=${cfg.kickOnDetect}`
+      `[${SERVER_TAG}] anticheat: ${cfg.enabled ? "已启用" : "已禁用"}, kick=${cfg.kickOnDetect}`
     );
   },
 };

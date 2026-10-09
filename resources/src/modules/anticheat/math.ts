@@ -12,7 +12,7 @@ export function dist3(
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-/** Скорость в условных «км/ч» из velocity SA-MP. */
+/** 根据 SA-MP 速度向量计算约略的“公里/小时”速度。 */
 export function speedFromVelocity(vx: number, vy: number, vz: number): number {
   return Math.round(Math.hypot(vx, vy, vz) * 179.28625);
 }

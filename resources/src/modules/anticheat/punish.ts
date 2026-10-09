@@ -35,11 +35,11 @@ function notifyAdmins(message: string): void {
       try {
         player.sendClientMessage(Color.adminChat, message);
       } catch {
-        // Слот пустой.
+        // 武器槽为空。
       }
     });
   } catch {
-    // players недоступен.
+    // players 不可用。
   }
 }
 
@@ -69,7 +69,7 @@ function kickPlayer(player: Player, label: string): void {
       `反作弊: ${label}. 你已与服务器断开连接。`
     );
   } catch {
-    // Уже вышел.
+    // 玩家已离开。
   }
 
   kickSamePlayer(
@@ -127,7 +127,7 @@ export function reportCheat(
         `反作弊: 检测到可疑行为 (${label}). 警告 ${strike}/${need}.`
       );
     } catch {
-      // Уже вышел.
+      // 玩家已离开。
     }
     return;
   }
@@ -175,7 +175,7 @@ export function reportWarning(
   return false;
 }
 
-/** Сброс устаревших soft-страйков (вызывать из тика). */
+/** 重置过期的软处罚计数（在循环中调用）。 */
 export function decaySoftStrikes(): void {
   const cfg = getConfig();
   const now = Date.now();

@@ -8,7 +8,7 @@ import { getPlayerState } from "../state";
 
 const KEY_FIRE = 4;
 
-/** Урон, который в GTA SA идёт в HP, минуя броню. */
+/** GTA SA 中绕过护甲、直接扣除 HP 的伤害。 */
 const HEALTH_ONLY_WEAPONS = new Set([
   37, // flamethrower
   49, // vehicle collision
@@ -114,10 +114,10 @@ export function onTakeDamage(
 
   if (amount > 0) {
     if (HEALTH_ONLY_WEAPONS.has(weaponId)) {
-      // Падение / коллизия / утопление — броня в игре не тратится.
+      // 跌落、碰撞或溺水不会消耗游戏中的护甲。
       state.health = Math.max(0, state.health - amount);
     } else {
-      // Оружие / рукопашная: сначала броня, потом HP.
+      // 武器或近战伤害：先扣护甲，再扣 HP。
       let left = amount;
       if (state.armour > 0) {
         const soak = Math.min(state.armour, left);
@@ -129,7 +129,7 @@ export function onTakeDamage(
       }
     }
 
-    // Если клиент уже применил урон — подтянуть зеркало вниз (не вверх).
+    // 如果客户端已应用伤害，则调低镜像值（不要调高）。
     try {
       const liveHp = player.getHealth();
       const liveAr = player.getArmor();
@@ -140,11 +140,11 @@ export function onTakeDamage(
         state.armour = liveAr;
       }
     } catch {
-      // Слот пуст.
+      // 武器槽为空。
     }
 
     const until = nowMs() + DAMAGE_TRUST_MS;
-    // Не укорачивать более длинный trust (сейф-зона / лечение).
+    // 不要缩短剩余时间更长的 trust（安全区或治疗）。
     state.healthTrustedUntil = Math.max(state.healthTrustedUntil, until);
     state.armourTrustedUntil = Math.max(state.armourTrustedUntil, until);
   }
@@ -161,7 +161,7 @@ export function onGiveDamage(player: Player): void {
   const cfg = getConfig();
   if (state.lastShotAt > 0) {
     const dt = now - state.lastShotAt;
-    // Одинаковый тик / дробовик (несколько пеллетов) не считаем читом.
+    // 同一游戏帧内的多次命中（例如霰弹枪的多颗弹丸）不算作弊。
     if (dt > 0 && dt < cfg.rapidFireMinMs) {
       state.warnRapid += 1;
       if (

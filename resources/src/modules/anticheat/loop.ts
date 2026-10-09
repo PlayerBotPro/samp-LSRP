@@ -146,7 +146,7 @@ export function bindAnticheat(): void {
   });
 
   omp.on("playerTakeDamage", (player, issuer, amount, weaponId) => {
-    // Сейф-зона уже откатила HP/броню + trust; повторный вычет в зеркале → FP.
+    // 安全区已回滚 HP/护甲并更新 trust；镜像中再次扣减会造成误报。
     if (isSafeZoneDamage(player, issuer ?? undefined)) {
       return;
     }

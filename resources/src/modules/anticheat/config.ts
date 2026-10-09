@@ -7,9 +7,9 @@ export type AcConfig = {
   maxPingWarnings: number;
   maxConnectsPerIp: number;
   kickOnDetect: boolean;
-  /** Сколько срабатываний одного кода до кика (soft). */
+  /** 同一检测代码触发多少次后踢出玩家（软处罚）。 */
   softStrikeMax: number;
-  /** За сколько мс сбрасывается soft-страйк без повторов. */
+  /** 多久没有再次触发后重置软处罚计数（毫秒）。 */
   softStrikeDecayMs: number;
   reconnectMinMs: number;
   airBreakWarnings: number;
@@ -39,7 +39,7 @@ function allTrue(n: number, except: number[] = []): boolean[] {
   return arr;
 }
 
-/** Коды без реализации или с высоким FP - выключены. */
+/** 尚未实现或误报率较高的检测代码已禁用。 */
 const DISABLED_CODES = [
   AcCode.Parkour,
   AcCode.UnFreeze,
@@ -73,7 +73,7 @@ const DISABLED_CODES = [
   AcCode.CjRun,
 ];
 
-/** Эти коды кикают сразу, без soft-страйков. */
+/** 这些检测代码会立即踢出玩家，不经过软处罚计数。 */
 export const INSTANT_KICK_CODES = new Set<AcCode>([
   AcCode.WeaponCrasher,
   AcCode.FakeSpawn,
