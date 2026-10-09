@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth/session";
 import { ANIM_COUNT, openAnimDialog, playAnimByIndex } from "../anim";
 import { registerCommand } from "./registry";
 
-registerCommand("anim", "Список анимаций или /anim [1-74]", (player, args) => {
+registerCommand("anim", "动作列表或 /anim [1-74]", (player, args) => {
   if (!isAuthenticated(player)) {
     player.sendClientMessage(Color.error, "请先登录账号。");
     return;

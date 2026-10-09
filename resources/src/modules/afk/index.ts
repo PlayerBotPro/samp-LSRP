@@ -38,7 +38,7 @@ export function isPlayerAfk(player: Player): boolean {
   return tracks.get(id)?.afkSince != null;
 }
 
-/** Сколько мс игрок в AFK, или `null` если не AFK. */
+/** 玩家处于 AFK 状态的毫秒数；如果不在 AFK 状态则返回 `null`。 */
 export function getAfkElapsedMs(player: Player): number | null {
   const id = playerId(player);
   if (id === null) {
@@ -53,7 +53,7 @@ export function getAfkElapsedMs(player: Player): number | null {
   return Math.max(0, Date.now() - since);
 }
 
-/** Короткий срок AFK: `45с`, `12м 05с`, `1ч 02м`. */
+/** 简短显示 AFK 时长，例如：`45秒`、`12分 05秒`、`1小时 02分`。 */
 export function formatAfkElapsed(ms: number): string {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
   const hours = Math.floor(totalSec / 3600);
@@ -61,14 +61,14 @@ export function formatAfkElapsed(ms: number): string {
   const seconds = totalSec % 60;
 
   if (hours > 0) {
-    return `${hours}ч ${String(minutes).padStart(2, "0")}м`;
+    return `${hours}小时 ${String(minutes).padStart(2, "0")}分`;
   }
 
   if (minutes > 0) {
-    return `${minutes}м ${String(seconds).padStart(2, "0")}с`;
+    return `${minutes}分 ${String(seconds).padStart(2, "0")}秒`;
   }
 
-  return `${seconds}с`;
+  return `${seconds}秒`;
 }
 
 export const afkModule: GameModule = {
@@ -358,12 +358,12 @@ function formatSpoken(ms: number): string {
   const s = total % 60;
   const parts: string[] = [];
   if (h > 0) {
-    parts.push(`${h} ч`);
+    parts.push(`${h} 小时`);
   }
   if (m > 0 || h > 0) {
-    parts.push(`${m} мин`);
+    parts.push(`${m} 分钟`);
   }
-  parts.push(`${s} сек`);
+  parts.push(`${s} 秒`);
   return parts.join(" ");
 }
 

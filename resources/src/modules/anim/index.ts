@@ -19,7 +19,7 @@ const DIALOG_STYLE_MSGBOX = 0;
 const PLAYER_STATE_ONFOOT = 1;
 const ANIM_SYNC_ALL = 1;
 const SPECIAL_ACTION_NONE = 0;
-/** Левый ALT (KEY_WALK) — остановка анимации. */
+/** 左 ALT（KEY_WALK）用于停止动作。 */
 const KEY_WALK = 1024;
 
 const active = new Set<number>();
@@ -66,7 +66,7 @@ export function isPlayingAnim(player: Player): boolean {
   return id !== null && active.has(id);
 }
 
-/** Сбросить special action / ApplyAnimation и спрятать TD (всегда). */
+/** 重置 special action / ApplyAnimation，并隐藏 TD（始终执行）。 */
 function forceClearAnim(player: Player): void {
   const id = playerId(player);
   if (id !== null) {
@@ -77,13 +77,13 @@ function forceClearAnim(player: Player): void {
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
@@ -105,7 +105,7 @@ function showStopTd(player: Player): void {
   try {
     stopTd.showForPlayer(player);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
@@ -117,12 +117,12 @@ function hideStopTd(player: Player): void {
   try {
     stopTd.hideForPlayer(player);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
 function applyLibraryAnim(player: Player, entry: Extract<AnimEntry, { kind: "library" }>): void {
-  // SA-MP: первый ApplyAnimation только подгружает библиотеку, второй — играет.
+  // SA-MP：第一次 ApplyAnimation 只加载动作库，第二次才会播放动作。
   player.applyAnimation(
     entry.lib,
     entry.name,
@@ -161,7 +161,7 @@ function applyEntry(player: Player, entry: AnimEntry): boolean {
   }
 }
 
-/** Подгрузить уникальные библиотеки заранее (на спавне). */
+/** 在玩家重生时预先加载各个动作库。 */
 function preloadAnimLibraries(player: Player): void {
   const seen = new Set<string>();
   try {
@@ -184,13 +184,13 @@ function preloadAnimLibraries(player: Player): void {
     }
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Подтянется при /anim.
+    // 使用 /anim 时会加载。
   }
 }
 
 /**
- * Запустить анимацию по индексу 0..73.
- * @returns false — нельзя / неверный индекс.
+ * 按索引 0..73 播放动作。
+ * @returns false 表示无法播放或索引无效。
  */
 export function playAnimByIndex(player: Player, index: number): boolean {
   if (!isAuthenticated(player) || !isPlayerActive(player)) {
@@ -214,7 +214,7 @@ export function playAnimByIndex(player: Player, index: number): boolean {
     return false;
   }
 
-  // Всегда чистим прошлую анимацию (не только если был наш TD).
+  // 始终清除上一个动作（不只是在显示过我们的 TD 时）。
   forceClearAnim(player);
 
   if (!applyEntry(player, entry)) {
@@ -246,10 +246,10 @@ export function openAnimDialog(player: Player): void {
       player,
       ANIM_LIST_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "{660099}Анимации",
+      "{660099}动作",
       dialogAnimList(),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开动画列表。");
@@ -262,9 +262,9 @@ function showAnimInfo(player: Player): void {
       player,
       ANIM_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "{FFCD00}Информация",
-      "{FFFFFF}Для быстрого запуска нужной анимации можно использовать {66CC33}/anim [номер]{FFFFFF} из списка.",
-      "Закрыть",
+      "{FFCD00}信息",
+      "{FFFFFF}如需快速播放动作，可在列表中使用 {66CC33}/anim [编号]{FFFFFF}。",
+      "关闭",
       ""
     );
   } catch {
@@ -338,8 +338,8 @@ export const animModule: GameModule = {
 
     omp.on("playerStateChange", (player, newState) => {
       const state = Number(newState);
-      // Водитель / пассажир: только сброс нашего /anim.
-      // ClearAnimations при посадке выкидывает из ТС (баг SA-MP).
+      // 驾驶员 / 乘客：只停止通过我们的 /anim 播放的动作。
+      // 上车时调用 ClearAnimations 会把玩家踢出车辆（SA-MP 的错误）。
       if (state === 2 || state === 3) {
         stopPlayerAnim(player);
       }
