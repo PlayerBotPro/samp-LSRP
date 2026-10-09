@@ -393,7 +393,7 @@ function getAccountBySlot(slot: number): ReturnType<typeof getAccount> {
 
 function createBedLabels(bed: SpawnPoint, index: number): BedLabelSet {
   const title = new TextLabel(
-    `Койка №${index + 1}`,
+    `病床 №${index + 1}`,
     Color.white,
     bed.x,
     bed.y,
@@ -403,7 +403,7 @@ function createBedLabels(bed: SpawnPoint, index: number): BedLabelSet {
     false
   );
   const status = new TextLabel(
-    "Свободна",
+    "空闲",
     Color.tryOk,
     bed.x,
     bed.y,
@@ -437,10 +437,10 @@ function updateBedLabel(index: number): void {
 
   try {
     if (name) {
-      labels.status.updateText(Color.error, `Занята: ${name}`);
+      labels.status.updateText(Color.error, `占用：${name}`);
       labels.hint.updateText(Color.gray, " ");
     } else {
-      labels.status.updateText(Color.tryOk, "Свободна");
+      labels.status.updateText(Color.tryOk, "空闲");
       labels.hint.updateText(Color.gray, "/hospital");
     }
   } catch {

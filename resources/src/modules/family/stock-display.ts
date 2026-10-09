@@ -39,13 +39,12 @@ function stockLabelText(familyId: number): string {
   const metal = family?.metal ?? 0;
   const drugs = family?.drugs ?? 0;
   const money = family?.money ?? 0;
-  const status = family && !family.isLocked ? "Склад открыт" : "Склад закрыт";
-
+  const status = family && !family.isLocked ? "仓库已开放" : "仓库已关闭";
   return (
-    `Патроны: ${ammo}\n` +
-    `Металл: ${metal}\n` +
-    `Наркотики: ${drugs}\n` +
-    `Деньги: ${formatMoney(money)}\n\n` +
+    `子弹：${ammo}\n` +
+    `金属：${metal}\n` +
+    `毒品：${drugs}\n` +
+    `现金：${formatMoney(money)}\n\n` +
     status
   );
 }

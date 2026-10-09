@@ -27,7 +27,7 @@ export const GHETTO_DEALER_MENU_DIALOG_ID = 63;
 export const GHETTO_DEALER_BUY_DIALOG_ID = 64;
 
 const DEALER_SKIN = 28;
-const DEALER_NAME = "Смоки";
+const DEALER_NAME = "斯莫基";
 const KEY_WALK = 1024;
 const PLAYER_STATE_ONFOOT = 1;
 const DIALOG_STYLE_TABLIST_HEADERS = 5;
@@ -78,7 +78,7 @@ function spawnDealer(): void {
   setTimeout(() => applyDealerAnimation(actor), 250);
 
   new TextLabel(
-    `${DEALER_NAME}\nБарыга`,
+    `${DEALER_NAME}\n毒贩`,
     Color.info,
     DEALER.x,
     DEALER.y,

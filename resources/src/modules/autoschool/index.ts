@@ -773,7 +773,7 @@ export const autoschoolModule: GameModule = {
   name: "autoschool",
   start() {
     new TextLabel(
-      "Экзамен\nПрава",
+      "考试\n驾照",
       Color.info,
       MARKER.x,
       MARKER.y,

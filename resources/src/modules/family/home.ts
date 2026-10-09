@@ -77,7 +77,7 @@ export function startFamilyHome(): void {
     STREET_WORLD
   );
   new TextLabel(
-    "Дом семьи\nВход",
+    "家族住宅\n入口",
     Color.info,
     STREET_PICKUP.x,
     STREET_PICKUP.y,
@@ -121,7 +121,7 @@ export function ensureFamilyHomeExit(familyId: number): void {
     world
   );
   const label = new TextLabel(
-    "Выход на улицу",
+    "出口到街道",
     Color.info,
     INTERIOR_PICKUP.x,
     INTERIOR_PICKUP.y,

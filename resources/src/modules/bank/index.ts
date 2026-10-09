@@ -84,7 +84,7 @@ export const bankModule: GameModule = {
     );
 
     new TextLabel(
-      "Банк\nВход",
+      "银行\n入口",
       Color.info,
       STREET_PICKUP.x,
       STREET_PICKUP.y,
@@ -103,7 +103,7 @@ export const bankModule: GameModule = {
       BANK_WORLD
     );
     new TextLabel(
-      "Выход на улицу",
+      "出口到街道",
       Color.info,
       INTERIOR_PICKUP.x,
       INTERIOR_PICKUP.y,

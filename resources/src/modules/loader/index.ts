@@ -84,7 +84,7 @@ export const loaderModule: GameModule = {
     );
 
     new TextLabel(
-      "Склад\nРабота грузчика",
+      "仓库\n搬运工工作",
       Color.info,
       HIRE_POINT.x,
       HIRE_POINT.y,

@@ -129,7 +129,7 @@ function spawnPickups(): void {
     ARMY_FACTORY_WORLD
   );
   new TextLabel(
-    "Цех патронов\nРаздевалка",
+    "弹药车间\n更衣室",
     Color.info,
     HIRE_POINT.x,
     HIRE_POINT.y,
@@ -149,7 +149,7 @@ function spawnPickups(): void {
       ARMY_FACTORY_WORLD
     );
     new TextLabel(
-      "Заготовки\nГильзы",
+      "弹药毛坯\n弹壳",
       Color.info,
       point.x,
       point.y,
@@ -170,7 +170,7 @@ function spawnPickups(): void {
       ARMY_FACTORY_WORLD
     );
     new TextLabel(
-      "Станок\nСборка патронов",
+      "机器\n组装子弹",
       Color.info,
       bench.pickup.x,
       bench.pickup.y,
@@ -191,7 +191,7 @@ function spawnPickups(): void {
       ARMY_FACTORY_WORLD
     );
     new TextLabel(
-      "Склад\nГотовые патроны",
+      "仓库\n成品子弹",
       Color.info,
       point.x,
       point.y,

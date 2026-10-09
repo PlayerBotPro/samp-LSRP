@@ -30,7 +30,7 @@ const inside = new Set<number>();
 export function bindMeriyaLocker(): void {
   new Pickup(PICKUP_MODEL, PICKUP_TYPE, POINT.x, POINT.y, POINT.z, MERIYA_WORLD);
   new TextLabel(
-    "Склад мэрии\nБроня, дубинка, Deagle",
+    "市政厅仓库\n护甲、警棍、沙漠之鹰",
     Color.info,
     POINT.x,
     POINT.y,

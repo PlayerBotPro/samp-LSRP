@@ -93,7 +93,7 @@ export const cityHallModule: GameModule = {
     );
 
     new TextLabel(
-      "Мэрия\nВход",
+      "市政厅\n入口",
       Color.info,
       STREET_PICKUP.x,
       STREET_PICKUP.y,
@@ -103,7 +103,7 @@ export const cityHallModule: GameModule = {
       false
     );
     new TextLabel(
-      "Выход на улицу",
+      "出口到街道",
       Color.info,
       INTERIOR_PICKUP.x,
       INTERIOR_PICKUP.y,
@@ -123,7 +123,7 @@ export const cityHallModule: GameModule = {
     );
 
     new TextLabel(
-      "Получить паспорт",
+      "领取护照",
       Color.info,
       PASSPORT_PICKUP.x,
       PASSPORT_PICKUP.y,
@@ -160,7 +160,7 @@ function spawnPassportClerk(): void {
   actor.setInvulnerable(true);
 
   new TextLabel(
-    "Паспортистка\nВыдача документов",
+    "护照办理员\n证件发放",
     Color.info,
     PASSPORT_CLERK.x,
     PASSPORT_CLERK.y,

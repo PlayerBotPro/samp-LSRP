@@ -44,7 +44,7 @@ const mustLeaveCp = new Set<number>();
 
 export function bindJobHire(): void {
   new TextLabel(
-    "{FFCC00}Биржа труда\n{FFFFFF}Устройство на работу",
+    "{FFCC00}就业中心\n{FFFFFF}求职",
     Color.info,
     JOB_POINT.x,
     JOB_POINT.y,

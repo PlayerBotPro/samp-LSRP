@@ -38,7 +38,7 @@ export function isPrisonYardOpen(): boolean {
 }
 
 function yardLabelText(): string {
-  return yardOpen ? "Тюремный двор\nОткрыт" : "Тюремный двор\nЗакрыт";
+  return yardOpen ? "监狱院子\n开放" : "监狱院子\n关闭";
 }
 
 function yardLabelColor(): number {
@@ -59,7 +59,7 @@ function refreshYardLabel(): void {
 
 export function bindPrisonControl(): void {
   new TextLabel(
-    "Для управления введите /pult.",
+    "请输入 /pult 进行控制。",
     Color.info,
     POINT.x,
     POINT.y,

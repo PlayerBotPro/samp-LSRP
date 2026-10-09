@@ -88,7 +88,7 @@ export function startTellers(world: number): void {
   for (const point of TELLERS) {
     new Pickup(PICKUP_MODEL, PICKUP_TYPE, point.x, point.y, point.z, world);
     new TextLabel(
-      "Банковский счёт",
+      "银行账户",
       Color.info,
       point.x,
       point.y,

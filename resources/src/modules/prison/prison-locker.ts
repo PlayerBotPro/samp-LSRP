@@ -43,7 +43,7 @@ const inside = new Set<number>();
 export function bindPrisonLocker(): void {
   new Pickup(PICKUP_MODEL, PICKUP_TYPE, POINT.x, POINT.y, POINT.z, PRISON_WORLD);
   new TextLabel(
-    "Оружейная\nСклад тюрьмы",
+    "军械库\n监狱仓库",
     Color.info,
     POINT.x,
     POINT.y,

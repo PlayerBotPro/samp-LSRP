@@ -56,7 +56,7 @@ export function startFamilyCreateOffice(): void {
     CREATE_PICKUP.world
   );
   new TextLabel(
-    "Регистрация семьи",
+    "家族注册",
     Color.info,
     CREATE_PICKUP.x,
     CREATE_PICKUP.y,

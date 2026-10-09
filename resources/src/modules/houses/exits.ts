@@ -35,7 +35,7 @@ export function startHouseExits(): void {
       world
     );
     new TextLabel(
-      "Выход",
+      "出口",
       Color.info,
       house.interiorX,
       house.interiorY,

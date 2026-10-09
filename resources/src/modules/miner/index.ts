@@ -121,7 +121,7 @@ export const minerModule: GameModule = {
     );
 
     new TextLabel(
-      "Шахта\nРабота шахтёра",
+      "矿井\n矿工工作",
       Color.info,
       HIRE_POINT.x,
       HIRE_POINT.y,
@@ -132,7 +132,7 @@ export const minerModule: GameModule = {
     );
 
     new TextLabel(
-      "Шахта\nИнформация",
+      "矿井\n信息",
       Color.info,
       INFO_POINT.x,
       INFO_POINT.y,
@@ -172,7 +172,7 @@ export const minerModule: GameModule = {
     );
 
     new TextLabel(
-      "Продажа металла\n15$ за 1кг.",
+      "出售金属\n每公斤 15$",
       Color.info,
       METAL_SELL_POINT.x,
       METAL_SELL_POINT.y,

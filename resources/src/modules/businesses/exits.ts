@@ -39,7 +39,7 @@ export function startBusinessExits(): void {
     const z = business.interiorZ as number;
 
     new Pickup(EXIT_PICKUP_MODEL, PICKUP_TYPE, x, y, z, world);
-    new TextLabel("Выход", Color.info, x, y, z + LABEL_HEIGHT, LABEL_DRAW_DISTANCE, world, false);
+    new TextLabel("出口", Color.info, x, y, z + LABEL_HEIGHT, LABEL_DRAW_DISTANCE, world, false);
 
     if (
       business.buyPickupX !== null &&
@@ -57,7 +57,7 @@ export function startBusinessExits(): void {
 
       if (isWorkshopType(business.typeId)) {
         new TextLabel(
-          "Сервис",
+          "服务",
           Color.info,
           business.buyPickupX,
           business.buyPickupY,

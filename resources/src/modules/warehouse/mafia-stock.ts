@@ -47,14 +47,8 @@ function stockLabelText(orgId: number): string {
   const ammo = wh?.ammo ?? 0;
   const metal = wh?.metal ?? 0;
   const drugs = wh?.drugs ?? 0;
-  const status = wh && !wh.isLocked ? "Склад открыт" : "Склад закрыт";
-
-  return (
-    `Патроны: ${ammo}\n` +
-    `Металл: ${metal}\n` +
-    `Наркотики: ${drugs}\n\n` +
-    status
-  );
+  const status = wh && !wh.isLocked ? "仓库已开放" : "仓库已关闭";
+  return `子弹：${ammo}\n金属：${metal}\n毒品：${drugs}\n\n${status}`;
 }
 
 export function startMafiaWarehouseDisplays(): void {

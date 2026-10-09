@@ -74,7 +74,7 @@ export function ensureFamilyHealPickup(familyId: number): void {
     world
   );
   const label = new TextLabel(
-    "Здоровье",
+    "健康",
     Color.info,
     HEAL_POINT.x,
     HEAL_POINT.y,

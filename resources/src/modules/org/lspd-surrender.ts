@@ -46,7 +46,7 @@ export function bindLspdSurrender(): void {
     PICKUP.world
   );
   new TextLabel(
-    "Сдаться с повинной",
+    "投案自首",
     Color.info,
     PICKUP.x,
     PICKUP.y,

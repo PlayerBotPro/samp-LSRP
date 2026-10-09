@@ -28,7 +28,7 @@ const inside = new Set<number>();
 export function bindRadioLocker(): void {
   new Pickup(PICKUP_MODEL, PICKUP_TYPE, POINT.x, POINT.y, POINT.z, RADIO_WORLD);
   new TextLabel(
-    "Фотоаппарат",
+    "相机",
     Color.info,
     POINT.x,
     POINT.y,

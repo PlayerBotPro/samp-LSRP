@@ -32,7 +32,7 @@ export function startSpawnHealthPickup(): void {
   try {
     new Pickup(HEART_PICKUP, PICKUP_TYPE, POINT.x, POINT.y, POINT.z, STREET_WORLD);
     new TextLabel(
-      "Здоровье",
+      "健康",
       Color.info,
       POINT.x,
       POINT.y,

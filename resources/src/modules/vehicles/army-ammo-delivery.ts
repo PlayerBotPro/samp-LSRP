@@ -154,7 +154,7 @@ export function bindArmyAmmoDelivery(): void {
     STREET_WORLD
   );
   new TextLabel(
-    "Склад патронов\nЯщики для доставки",
+    "弹药仓库\n待运送的箱子",
     Color.info,
     STOCK_POINT.x,
     STOCK_POINT.y,
