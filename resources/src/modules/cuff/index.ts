@@ -17,10 +17,10 @@ import type { GameModule } from "../types";
 const ANIM_SYNC_ALL = 1;
 const PLAYER_STATE_DRIVER = 2;
 const PLAYER_STATE_PASSENGER = 3;
-/** Максимальный срок как при 6★ (/arrest, сдача): 6 × 10 мин. */
+/** 最高拘留时长（对应 6 星通缉；/arrest 或自首）：6 × 10 分钟。 */
 const ESCAPE_JAIL_MINUTES = 60;
 
-/** Сессионный флаг наручников (слот игрока). */
+/** 警员手铐状态的会话标记（按玩家槽位记录）。 */
 const cuffed = new Set<number>();
 
 export function isCuffed(player: Player): boolean {
@@ -32,7 +32,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
@@ -42,17 +42,17 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // Уже пешком.
+    // 已经下车。
   }
 }
 
 function applyCuffAnim(player: Player): void {
   try {
-    // SA-MP: первый вызов подгружает библиотеку, второй — играет.
+    // SA-MP：第一次调用会加载动画库，第二次调用才会播放动画。
     player.applyAnimation("ped", "cpr_loop", 4.1, false, false, false, true, 0, ANIM_SYNC_ALL);
     player.applyAnimation("ped", "cpr_loop", 4.1, false, false, false, true, 0, ANIM_SYNC_ALL);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
@@ -60,11 +60,11 @@ function clearCuffAnim(player: Player): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Слот пуст.
+    // 槽位为空。
   }
 }
 
-/** Надеть наручники: высадка из ТС, freeze, анимация. */
+/** 给玩家戴上手铐：让其下车、冻结并播放动画。 */
 export function applyCuff(player: Player): boolean {
   const id = playerId(player);
   if (id === null || !isPlayerActive(player) || cuffed.has(id)) {
@@ -78,7 +78,7 @@ export function applyCuff(player: Player): boolean {
   return true;
 }
 
-/** Снять наручники и вернуть управление (если игрок ещё в слоте). */
+/** 解开手铐并恢复控制（玩家仍在该槽位时）。 */
 export function clearCuff(player: Player): boolean {
   const id = playerId(player);
   if (id === null || !cuffed.has(id)) {
@@ -96,7 +96,7 @@ export function clearCuff(player: Player): boolean {
   return true;
 }
 
-/** Повторно заморозить, если флаг наручников ещё висит (после телепорта и т.п.). */
+/** 如果手铐标记仍存在，则重新冻结玩家（例如传送后）。 */
 export function refreshCuffFreeze(player: Player): void {
   if (!isCuffed(player)) {
     return;
@@ -105,7 +105,7 @@ export function refreshCuffFreeze(player: Player): void {
   setControllable(player, false);
 
   try {
-    // ClearAnimations / cuff-anim в ТС выкидывает из машины (баг SA-MP).
+    // SA-MP 有时会因载具状态清除动画，因此在车外重新播放。
     if (!player.isInAnyVehicle()) {
       applyCuffAnim(player);
     }
@@ -114,7 +114,7 @@ export function refreshCuffFreeze(player: Player): void {
   }
 }
 
-/** Кратко разморозить перед PutPlayerInVehicle (флаг наручников остаётся). */
+/** 调用 PutPlayerInVehicle 前暂时解除冻结（保留手铐标记）。 */
 export function releaseCuffForVehiclePut(player: Player): void {
   if (!isCuffed(player)) {
     return;
@@ -123,7 +123,7 @@ export function releaseCuffForVehiclePut(player: Player): void {
   setControllable(player, true);
 }
 
-/** Снова заморозить после посадки в ТС. */
+/** 玩家上车后重新冻结。 */
 export function scheduleCuffRefreeze(player: Player, delayMs = 1000): void {
   const id = playerId(player);
   if (id === null || !cuffed.has(id)) {
@@ -152,14 +152,14 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
 
 /**
- * Выход в наручниках → максимальный тюремный срок в БД + объявление всем.
- * Вызывать до persist.queueSave на disconnect, чтобы срок не перетёрся нулём.
+ * 玩家戴着手铐时退出：在数据库中设置最高监禁时长，并向所有玩家广播。
+ * disconnect 时调用，避免监禁时长被持久化队列覆盖为零。
  */
 export function applyCuffDisconnectJail(player: Player): void {
   const slotId = playerId(player);
@@ -167,7 +167,7 @@ export function applyCuffDisconnectJail(player: Player): void {
     return;
   }
 
-  // Снимаем флаг сразу — повторный disconnect/handler не посадит дважды.
+  // 立即清除标记，避免重复触发 disconnect 处理逻辑。
   cuffed.delete(slotId);
 
   if (!isAuthenticated(player)) {
@@ -196,23 +196,23 @@ export function applyCuffDisconnectJail(player: Player): void {
 
   broadcastAll(
     Color.error,
-    `Игрок ${name} вышел при аресте и был отправлен в тюрьму.`
+    `玩家 ${name} 在被捕时退出，已被送入监狱。`
   );
 
   const userId = account.id;
   void saveUserJailedSeconds(userId, seconds).catch(() => {
-    // persist.queueSave повторит jail_seconds из кэша.
+    // 持久化队列会从缓存重试保存 jail_seconds。
   });
   void saveUserHospitalized(userId, false, MAX_HEALTH).catch(() => {
-    // Не критично для посадки.
+    // 保存失败不会影响玩家重生。
   });
 }
 
 export const cuffModule: GameModule = {
   name: "cuff",
   start() {
-    // Смерть НЕ снимает флаг наручников: иначе выход с Wasted обходит тюрьму за побег.
-    // Снятие — на spawn (больница) или через applyJail / uncuff / disconnect-штраф.
+    // 死亡时不要清除手铐标记，否则玩家可借 Wasted 状态逃避监禁。
+    // 在 spawn（医院）、applyJail、解铐或 disconnect 罚则时清除标记。
 
     omp.on("playerConnect", (player) => {
       const id = playerId(player);
@@ -229,8 +229,7 @@ export const cuffModule: GameModule = {
     });
 
     omp.on("playerSpawn", (player) => {
-      // После смерти/респавна снимаем наручники. Флаг до spawn нужен, чтобы
-      // выход с Wasted всё ещё ловил applyCuffDisconnectJail.
+      // 死亡或重生后解开手铐。标记需保留到 spawn，以便处理 Wasted 状态下的退出监禁。
       if (isCuffed(player)) {
         clearCuff(player);
       }
@@ -243,14 +242,14 @@ export const cuffModule: GameModule = {
 
       const state = Number(newState);
 
-      // Водительское место в наручниках запрещено.
+      // 戴着手铐时禁止坐驾驶位。
       if (state === PLAYER_STATE_DRIVER) {
         leaveVehicle(player);
         refreshCuffFreeze(player);
         return;
       }
 
-      // Пассажир (/putpl) — оставляем в ТС, только freeze без анимации.
+      // 作为乘客（/putpl）时允许留在车内，只冻结玩家，不播放动画。
       if (state === PLAYER_STATE_PASSENGER) {
         setControllable(player, false);
       }
