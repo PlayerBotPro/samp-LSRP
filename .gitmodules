@@ -1,0 +1,3 @@
+[submodule "external/omp-node"]
+	path = external/omp-node
+	url = https://github.com/PlayerBotPro/omp-node.git
