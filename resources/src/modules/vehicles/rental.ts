@@ -393,17 +393,17 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
       player,
       VEHICLE_RENT_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Аренда автомобиля",
+      "租车",
       [
-        "Вы хотите арендовать этот автомобиль?",
+        "确定要租用这辆车吗？",
         "",
-        `Стоимость: ${formatMoney(RENT_PRICE)}`,
-        "Оплата наличными.",
+        `费用：${formatMoney(RENT_PRICE)}`,
+        "现金支付。",
         "",
-        "Завершить аренду: /unrent",
+        "结束租赁：/unrent",
       ].join("\n"),
-      "Аренда",
-      "Отмена"
+      "租赁",
+      "取消"
     );
   } catch {
     pendingOffer.delete(slotId);

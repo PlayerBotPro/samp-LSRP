@@ -282,10 +282,10 @@ function showAmountDialog(
       player,
       ORG_WAREHOUSE_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Склад организации",
-      `Сколько ${label} ${verb}?\n${available}\nМаксимум за раз: ${MAX_TRANSFER}`,
-      "ОК",
-      "Отмена"
+      "组织仓库",
+      `要${verb}多少${label}？\n${available}\n单次最多：${MAX_TRANSFER}`,
+      "确定",
+      "取消"
     );
     setOrgStockDialogBusy(player, true);
   } catch {

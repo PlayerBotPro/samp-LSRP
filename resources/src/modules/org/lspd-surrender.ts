@@ -164,17 +164,17 @@ function openSurrenderDialog(player: Player, slotId: number): void {
       player,
       LSPD_SURRENDER_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "{FFCC00}Сдаться с повинной",
+      "{FFCC00}向警方自首",
       [
-        "{FFFFFF}Вы хотите добровольно сдаться полиции?",
+        "{FFFFFF}确定要向警方自首吗？",
         "",
-        `Уровень розыска: {FF6347}${account.wantedLevel}`,
-        `Срок заключения: {33CCFF}${minutes} мин.`,
+        `通缉等级：{FF6347}${account.wantedLevel}`,
+        `监禁时间：{33CCFF}${minutes} 分钟`,
         "",
-        "{AAAAAA}Розыск будет снят, вас отправят в тюрьму.",
+        "{AAAAAA}通缉状态将被移除，你将被送入监狱。",
       ].join("\n"),
-      "Сдаться",
-      "Отмена"
+      "自首",
+      "取消"
     );
   } catch {
     pending.delete(slotId);

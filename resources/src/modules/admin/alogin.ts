@@ -60,13 +60,13 @@ function showPasswordDialog(
 ): void {
   setMode(player, mode);
   const prefix = error ? `${error}\n\n` : "";
-  const title = mode === "login" ? "Админка: вход" : "Админка: пароль";
+  const title = mode === "login" ? "管理员面板：登录" : "管理员面板：密码";
   const body =
     mode === "login"
-      ? `${prefix}Введи пароль от админки:`
+      ? `${prefix}请输入管理员面板密码：`
       : mode === "set"
-        ? `${prefix}Пароль от админки ещё не задан.\nПридумай пароль (от 6 символов):`
-        : `${prefix}Повтори пароль от админки:`;
+        ? `${prefix}尚未设置管理员面板密码。\n请设置密码（至少 6 个字符）：`
+        : `${prefix}请再次输入管理员面板密码：`;
 
   try {
     Dialog.show(
@@ -76,7 +76,7 @@ function showPasswordDialog(
       title,
       body,
       "OK",
-      "Отмена"
+      "取消"
     );
   } catch {
     // Игрок уже вышел.

@@ -398,10 +398,10 @@ function showMetalBuyDialog(player: Player): void {
       player,
       MINER_METAL_BUY_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Покупка металла",
-      "Сколько кг металла вы хотите купить?\nЦена за кг: 15$",
-      "Купить",
-      "Отмена"
+      "购买金属",
+      "要购买多少公斤金属？\n每公斤价格：15$",
+      "购买",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -489,10 +489,10 @@ function showHireDialog(player: Player): void {
       player,
       MINER_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Шахта",
-      "Вы хотите устроиться на работу шахтёра?",
-      "Да",
-      "Нет"
+      "矿场",
+      "要应聘矿工吗？",
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -505,10 +505,10 @@ function showQuitDialog(player: Player, job: Job): void {
       player,
       MINER_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Шахта",
-      `Завершить смену и получить вознаграждение?\nСейчас: ${job.kg} kg, $${job.salary}`,
-      "Да",
-      "Нет"
+      "矿场",
+      `要结束工作并领取报酬吗？\n当前：${job.kg} 公斤，$${job.salary}`,
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");

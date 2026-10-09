@@ -822,10 +822,10 @@ function showHireDialog(player: Player): void {
       player,
       ARMY_FACTORY_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Цех патронов",
-      "Переодеться и начать смену в цехе изготовления патронов?",
-      "Да",
-      "Нет"
+      "弹药车间",
+      "要换上制服并开始弹药车间的工作吗？",
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -839,10 +839,10 @@ function showQuitDialog(player: Player, job: Job): void {
       player,
       ARMY_FACTORY_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Цех патронов",
-      `Завершить смену и получить зарплату?\nПартий: ${job.delivered}, брак: ${job.defects}, к выплате: $${salary}`,
-      "Да",
-      "Нет"
+      "弹药车间",
+      `要结束工作并领取工资吗？\n批次：${job.delivered}，次品：${job.defects}，应发工资：$${salary}`,
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");

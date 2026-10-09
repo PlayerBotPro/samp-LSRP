@@ -198,10 +198,10 @@ function onBecameDriver(player: Player): void {
       player,
       BUS_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "{FFCC00}Водитель автобуса",
-      "{FFFFFF}Начать работу на маршруте?",
-      "Да",
-      "Нет"
+      "{FFCC00}公交车司机",
+      "{FFFFFF}开始线路工作吗？",
+      "是",
+      "否"
     );
   } catch {
     pendingSetup.delete(slot);

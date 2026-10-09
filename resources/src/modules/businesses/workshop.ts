@@ -384,10 +384,10 @@ function showColorPicker(player: Player, businessId: number, step: 1 | 2): void 
       player,
       step === 1 ? WORKSHOP_COLOR1_DIALOG_ID : WORKSHOP_COLOR2_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      step === 1 ? "Покраска — основной цвет" : "Покраска — доп. цвет",
+      step === 1 ? "喷漆 — 主颜色" : "喷漆 — 副颜色",
       rows.join("\n"),
-      step === 1 ? "Далее" : "Готово",
-      "Отмена"
+      step === 1 ? "下一步" : "完成",
+      "取消"
     );
     if (step === 1) {
       pendingMenu.set(slotId, businessId);

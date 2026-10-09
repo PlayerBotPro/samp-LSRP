@@ -414,12 +414,12 @@ function showDeleteConfirm(player: Player): void {
       player,
       FAMILY_DELETE_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Удалить семью",
-      `Семья «${membership.family.name}» будет удалена.\n` +
-        `Все участники будут исключены.\n\n` +
-        `Подтвердить удаление?`,
-      "Удалить",
-      "Отмена"
+      "删除家族",
+      `家族「${membership.family.name}」将被删除。\n` +
+        `所有成员都将被移出。\n\n` +
+        `确认删除吗？`,
+      "删除",
+      "取消"
     );
   } catch {
     tell(player, Color.error, "Не удалось открыть подтверждение.");

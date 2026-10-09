@@ -249,10 +249,10 @@ function showAmountDialog(
       player,
       TRUNK_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Багажник",
-      `Сколько ${label} ${verb}?\n${available}\nМаксимум за раз: ${MAX_TRANSFER}`,
-      "ОК",
-      "Отмена"
+      "后备箱",
+      `要${verb}多少${label}？\n${available}\n单次最多：${MAX_TRANSFER}`,
+      "确定",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");

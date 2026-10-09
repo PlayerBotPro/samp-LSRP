@@ -260,10 +260,10 @@ function showHireDialog(player: Player): void {
       player,
       LOADER_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Склад",
-      "Вы хотите устроиться на работу грузчика?",
-      "Да",
-      "Нет"
+      "仓库",
+      "要应聘搬运工吗？",
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");
@@ -276,10 +276,10 @@ function showQuitDialog(player: Player, job: Job): void {
       player,
       LOADER_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Склад",
-      `Завершить смену и получить зарплату?\nПеренесено мешков: ${job.bags}, $${job.salary}`,
-      "Да",
-      "Нет"
+      "仓库",
+      `要结束工作并领取工资吗？\n已搬运袋数：${job.bags}，工资：$${job.salary}`,
+      "是",
+      "否"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");

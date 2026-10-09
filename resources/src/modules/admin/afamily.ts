@@ -514,11 +514,11 @@ function showDeleteConfirm(player: Player): void {
       player,
       AFAMILY_DELETE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Удалить семью",
-      `Удалить семью «${family.name}» (ID ${family.id})?\n` +
-        `Все участники будут исключены, склад и дом семьи сброшены.`,
-      "Удалить",
-      "Отмена"
+      "删除家族",
+      `确定要删除家族「${family.name}」（ID ${family.id}）吗？\n` +
+        `所有成员都将被移出，家族仓库和房屋将被重置。`,
+      "删除",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开确认对话框。");

@@ -122,11 +122,11 @@ const DOORS: readonly FbiDoor[] = [
       interior: 0,
       world: STREET_WORLD,
     },
-    label: "FBI\nКрыша",
+    label: "FBI\n屋顶",
     staffOnly: true,
     options: [
-      { key: "interior", label: "1. Офис" },
-      { key: "ammunation", label: "2. Аммунация" },
+      { key: "interior", label: "1. 办公室" },
+      { key: "ammunation", label: "2. 枪械店" },
     ],
   },
   {
@@ -138,11 +138,11 @@ const DOORS: readonly FbiDoor[] = [
       interior: FBI_INTERIOR,
       world: FBI_WORLD,
     },
-    label: "Крыша\nАммунация",
+    label: "屋顶\n枪械店",
     staffOnly: true,
     options: [
-      { key: "roof", label: "1. Крыша" },
-      { key: "ammunation", label: "2. Аммунация" },
+      { key: "roof", label: "1. 屋顶" },
+      { key: "ammunation", label: "2. 枪械店" },
     ],
   },
   {
@@ -154,12 +154,12 @@ const DOORS: readonly FbiDoor[] = [
       interior: AMMUNATION_INTERIOR,
       world: ORG_FBI_ID,
     },
-    label: "Выход",
-    dialogTitle: "Выход",
+    label: "出口",
+    dialogTitle: "出口",
     staffOnly: false,
     options: [
-      { key: "roof", label: "1. Крыша" },
-      { key: "interior", label: "2. Офис" },
+      { key: "roof", label: "1. 屋顶" },
+      { key: "interior", label: "2. 办公室" },
     ],
   },
 ];
@@ -312,10 +312,10 @@ function openMenu(player: Player, door: FbiDoor): void {
       player,
       FBI_SERVICE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      door.dialogTitle ?? "Служебный выход",
+      door.dialogTitle ?? "员工出口",
       door.options.map((option) => option.label).join("\n"),
-      "Выбрать",
-      "Отмена"
+      "选择",
+      "取消"
     );
   } catch {
     pending.delete(id);

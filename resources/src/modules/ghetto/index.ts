@@ -301,10 +301,10 @@ function showBuyDialog(player: Player): void {
       player,
       GHETTO_DEALER_BUY_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Покупка наркотиков",
-      `Сколько штук купить?\nЦена за 1 шт.: $${DRUG_PRICE}`,
-      "Купить",
-      "Отмена"
+      "购买毒品",
+      `要购买多少个？\n单价：$${DRUG_PRICE}`,
+      "购买",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开对话框。");

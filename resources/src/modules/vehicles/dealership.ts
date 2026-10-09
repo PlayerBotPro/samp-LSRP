@@ -291,17 +291,17 @@ function handleListResponse(player: Player, ok: boolean, listItem: number): void
       player,
       DEALERSHIP_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Покупка транспорта",
+      "购买车辆",
       [
-        `Купить ${item.name}?`,
+        `要购买 ${item.name} 吗？`,
         "",
-        `Цена: ${formatMoney(item.price)}`,
-        "Оплата наличными.",
-        "Цвет: белый.",
-        "Машина появится на парковке у вашего дома.",
+        `价格：${formatMoney(item.price)}`,
+        "现金支付。",
+        "颜色：白色。",
+        "车辆将出现在你家附近的停车场。",
       ].join("\n"),
-      "Купить",
-      "Отмена"
+      "购买",
+      "取消"
     );
   } catch {
     pendingBuy.delete(slotId);

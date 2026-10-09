@@ -190,10 +190,10 @@ async function openMedkitFlow(player: Player, houseId: number): Promise<void> {
       player,
       HOUSE_MEDKIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Аптечка",
-      `Купить аптечку за ${formatMoney(MEDKIT_PRICE)}?`,
-      "Купить",
-      "Отмена"
+      "急救包",
+      `要花费 ${formatMoney(MEDKIT_PRICE)} 购买急救包吗？`,
+      "购买",
+      "取消"
     );
   } catch {
     pendingMedkitHouse.delete(account.id);

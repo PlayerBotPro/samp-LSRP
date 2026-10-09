@@ -60,10 +60,10 @@ export function showSellHouseDialog(player: Player): void {
       player,
       HOUSE_SELL_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Продажа дома",
-      `Вы хотите продать дом (№${house.id}) государству за: ${formatMoney(house.price)}?`,
-      "Продать",
-      "Отмена"
+      "出售房屋",
+      `确定要以 ${formatMoney(house.price)} 的价格将房屋（编号 ${house.id}）出售给政府吗？`,
+      "出售",
+      "取消"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开出售窗口。");

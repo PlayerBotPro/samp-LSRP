@@ -337,11 +337,11 @@ function tryOfferDelivery(player: Player): void {
       player,
       HOSPITAL_MED_DELIVERY_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Доставка лекарств",
-      `Фургон пуст. Загрузить ${LOAD_AMOUNT} ед. медикаментов у поставщика?\n` +
-        `После возврата разгружайте коробками по ${BOX_AMOUNT} ед. (/pickmed).`,
-      "Принять",
-      "Отмена"
+      "药品配送",
+      `货车是空的。要在供应商处装载 ${LOAD_AMOUNT} 单位药品吗？\n` +
+        `返回后请按每箱 ${BOX_AMOUNT} 单位卸货（/pickmed）。`,
+      "接受",
+      "取消"
     );
   } catch {
     offerPending.delete(id);

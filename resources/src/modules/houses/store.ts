@@ -269,12 +269,12 @@ function showAmountDialog(
       player,
       HOUSE_STORE_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Шкаф",
-      `Сколько ${ITEM_LABEL[item]} ${verb}?\n` +
+      "储物柜",
+      `要${verb}多少${ITEM_LABEL[item]}？\n` +
         `${playerHaveText}\n${stockHaveText}\n` +
-        `Максимум за раз: ${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
+        `单次最多：${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
       "OK",
-      "Отмена"
+      "取消"
     );
   } catch {
     setDialogBusy(player, false);

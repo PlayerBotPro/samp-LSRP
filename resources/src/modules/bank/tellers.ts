@@ -52,12 +52,12 @@ const DIALOG_STYLE_LIST = 2;
 const MAX_MONEY = 2_147_483_647;
 
 const MENU_ITEMS = [
-  "Посмотреть баланс",
-  "Пополнить счёт",
-  "Снять со счёта",
-  "Перевести на счёт",
-  "Оплатить дом",
-  "Бизнес",
+  "查看余额",
+  "存款",
+  "取款",
+  "转账",
+  "支付房租",
+  "企业",
 ] as const;
 
 type PendingSend = {
@@ -322,10 +322,10 @@ function showMenu(player: Player): void {
       player,
       BANK_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      "Банк",
+      "银行",
       MENU_ITEMS.join("\n"),
-      "Выбрать",
-      "Закрыть"
+      "选择",
+      "关闭"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开银行。");
@@ -339,8 +339,8 @@ function showBalance(player: Player): void {
   }
 
   const body = [
-    `Наличные: ${formatMoney(account.money)}`,
-    `Банковский счёт: ${formatMoney(account.bank)}`,
+    `现金：${formatMoney(account.money)}`,
+    `银行账户：${formatMoney(account.bank)}`,
   ].join("\n");
 
   try {
@@ -348,9 +348,9 @@ function showBalance(player: Player): void {
       player,
       BANK_BALANCE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Баланс",
+      "余额",
       body,
-      "Назад",
+      "返回",
       ""
     );
   } catch {
@@ -364,12 +364,12 @@ function showAmountDialog(player: Player, mode: "deposit" | "withdraw"): void {
     return;
   }
 
-  const title = mode === "deposit" ? "Пополнение" : "Снятие";
+  const title = mode === "deposit" ? "存款" : "取款";
   const available = mode === "deposit" ? account.money : account.bank;
   const body =
     mode === "deposit"
-      ? `Наличные: ${formatMoney(available)}\nВведите сумму пополнения:`
-      : `Банковский счёт: ${formatMoney(available)}\nВведите сумму снятия:`;
+      ? `现金：${formatMoney(available)}\n请输入存款金额：`
+      : `银行账户：${formatMoney(available)}\n请输入取款金额：`;
 
   try {
     Dialog.show(
@@ -379,7 +379,7 @@ function showAmountDialog(player: Player, mode: "deposit" | "withdraw"): void {
       title,
       body,
       "OK",
-      "Назад"
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开银行。");
@@ -393,10 +393,10 @@ function showSendIdDialog(player: Player): void {
       player,
       BANK_SEND_ID_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Перевод",
-      "Введите ID игрока:",
-      "Далее",
-      "Назад"
+      "转账",
+      "请输入玩家 ID：",
+      "下一步",
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开银行。");
@@ -438,10 +438,10 @@ function showSendConfirm(player: Player, inputText: string): void {
       player,
       BANK_SEND_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Подтверждение",
-      `Перевести на счёт ${label}?`,
-      "Да",
-      "Нет"
+      "确认",
+      `要转账至 ${label} 的账户吗？`,
+      "是",
+      "否"
     );
   } catch {
     clearPending(player);
@@ -470,10 +470,10 @@ function showSendAmountDialog(player: Player): void {
       player,
       BANK_SEND_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
-      "Перевод",
-      `${pending.label}\nВаш счёт: ${formatMoney(account.bank)}\nВведите сумму перевода:`,
+      "转账",
+      `${pending.label}\n您的账户余额：${formatMoney(account.bank)}\n请输入转账金额：`,
       "OK",
-      "Назад"
+      "返回"
     );
   } catch {
     player.sendClientMessage(Color.error, "无法打开银行。");
