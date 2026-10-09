@@ -172,7 +172,7 @@ function tickBank(): void {
 
       tickTellers(player, world, interior);
     } catch {
-      // Слот пустой или игрок уже вышел.
+      // 槽位为空，或玩家已离开。
     }
   });
 }
@@ -229,7 +229,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // Игрок уже вышел.
+      // 玩家已离开。
     }
     return;
   }
@@ -241,7 +241,7 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
   iconShown.delete(id);
 }
@@ -279,6 +279,6 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离开。
   }
 }

@@ -56,7 +56,7 @@ export const chatModule: GameModule = {
 
       const masked = isMasked(player);
       const inOrg = account ? getMembership(account) : null;
-      const verb = byGender(account?.gender ?? null, "сказал", "сказала");
+      const verb = byGender(account?.gender ?? null, "说", "说");
       const nameColor = masked
         ? MASK_COLOR
         : account && inOrg

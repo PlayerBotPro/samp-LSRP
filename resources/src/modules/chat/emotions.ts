@@ -22,7 +22,7 @@ type Emotion = {
   anim?: EmotionAnim;
 };
 
-/** Более длинные триггеры раньше коротких (`))` до `)`). */
+/** 较长的触发符应排在较短的前面（先匹配 `))`，再匹配 `)`）。 */
 const EMOTIONS: Emotion[] = [
   {
     trigger: "))",
@@ -50,7 +50,7 @@ const EMOTIONS: Emotion[] = [
 
 function canPlayEmotionAnim(player: Player): boolean {
   try {
-    // Наручники: applyAnimation сбросит freeze-позу cpr_loop.
+    // 手铐状态下，applyAnimation 会重置 cpr_loop 冻结姿势。
     if (
       isCuffed(player) ||
       player.isInAnyVehicle() ||
@@ -67,8 +67,8 @@ function canPlayEmotionAnim(player: Player): boolean {
 }
 
 /**
- * Точные IC-эмоции в чате: `)`, `))`, `(`, `((`, `=0`.
- * Рядом — как `/me` (`Color.action`) + пузырь над головой.
+ * 聊天中的精确 IC 情绪触发符：`)`、`))`、`(`、`((`、`=0`。
+ * 附近玩家会像 `/me`（`Color.action`）一样看到动作消息和头顶气泡。
  */
 export function tryChatEmotion(
   player: Player,
@@ -87,7 +87,7 @@ export function tryChatEmotion(
   try {
     player.setChatBubble(status, Color.action, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // Пузырь не обязателен.
+    // 聊天气泡不是必需的。
   }
 
   if (emotion.anim && canPlayEmotionAnim(player)) {
@@ -104,7 +104,7 @@ export function tryChatEmotion(
         ANIM_SYNC_ALL
       );
     } catch {
-      // Анимация опциональна.
+      // 动画是可选的。
     }
   }
 
