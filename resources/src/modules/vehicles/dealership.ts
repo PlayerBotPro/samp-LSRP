@@ -110,7 +110,7 @@ export function startDealerships(): void {
   });
 
   const count = listBusinesses().filter((b) => DEALERSHIP_TYPES.has(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] Car dealerships: ${count} locations`);
+  omp.log(`Car dealerships: ${count} locations`);
 }
 
 function catalogForType(typeId: number): readonly CatalogItem[] | null {
@@ -387,7 +387,7 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Purchase vehicle ${pending.item.modelId} (${account.name}): ${message}`);
+    omp.log(`Purchase vehicle ${pending.item.modelId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }

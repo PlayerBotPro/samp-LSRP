@@ -557,7 +557,7 @@ async function sendToPlayer(player: Player, inputText: string): Promise<void> {
     busy.delete(senderId);
     busy.delete(targetSlot);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Bank transfer ${senderAccount.name}: ${message}`);
+    omp.log(`Bank transfer ${senderAccount.name}: ${message}`);
     player.sendClientMessage(Color.error, "操作失败.请重试.");
     if (isAtTeller(player)) {
       showMenu(player);
@@ -718,7 +718,7 @@ async function transfer(
   } catch (error: unknown) {
     busy.delete(id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] bank ${account.name}: ${message}`);
+    omp.log(`bank ${account.name}: ${message}`);
     player.sendClientMessage(Color.error, "操作失败.请重试.");
     if (isAtTeller(player)) {
       showMenu(player);

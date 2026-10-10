@@ -552,7 +552,7 @@ async function startPaidTest(player: Player, exam: ExamSession): Promise<void> {
   } catch (error: unknown) {
     busy.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] autoschool fee ${account.name}: ${message}`);
+    omp.log(`autoschool fee ${account.name}: ${message}`);
     abortExam(player, "考试费用支付失败,请重试.");
     return;
   }
@@ -731,7 +731,7 @@ async function finishPractice(player: Player, exam: ExamSession): Promise<void> 
     exam.cpIndex = EXAM_ROUTE.length - 1;
     showRaceCp(player, exam);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] autoschool exam ${account.name}: ${message}`);
+    omp.log(`autoschool exam ${account.name}: ${message}`);
     tell(player, Color.error, "无法保存驾照,请重试.");
     return;
   }

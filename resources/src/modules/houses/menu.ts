@@ -144,7 +144,7 @@ async function toggleHouseLock(player: Player, houseId: number): Promise<void> {
     saved = await saveHouseLock(houseId, account.id, nextLocked);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] House lock ${houseId} (${account.name}): ${message}`);
+    omp.log(`House lock ${houseId} (${account.name}): ${message}`);
   } finally {
     savingLock.delete(account.id);
   }
@@ -239,7 +239,7 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
   } catch (error: unknown) {
     buyingMedkit.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] House first aid kit ${houseId} (${account.name}): ${message}`);
+    omp.log(`House first aid kit ${houseId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
@@ -272,7 +272,7 @@ async function buyMedkit(player: Player, houseId: number): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save money for ${account.name}: ${message}`);
+    omp.log(`Failed to save money for ${account.name}: ${message}`);
   });
 
   player.sendClientMessage(Color.info, `已购买急救包,花费 ${formatMoney(MEDKIT_PRICE)}.`);

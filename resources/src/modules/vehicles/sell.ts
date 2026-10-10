@@ -300,7 +300,7 @@ async function confirmSellToState(player: Player): Promise<void> {
   } catch (error: unknown) {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Sell vehicle ${vehicle.id} (${account.name}): ${message}`);
+    omp.log(`Sell vehicle ${vehicle.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
@@ -644,7 +644,7 @@ async function acceptCarOffer(
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Transfer vehicle ${offer.vehicleId}: ${message}`);
+    omp.log(`Transfer vehicle ${offer.vehicleId}: ${message}`);
     buyer.sendClientMessage(Color.error, "交易失败.请重试.");
     return;
   } finally {

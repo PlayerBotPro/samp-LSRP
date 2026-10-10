@@ -173,7 +173,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
       result = await payBusinessEntranceFee(business.id, account.id, fee);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Enter business ${business.id} (${account.name}): ${message}`);
+      omp.log(`Enter business ${business.id} (${account.name}): ${message}`);
       player.sendClientMessage(Color.error, "无法支付入场费.");
       return;
     } finally {

@@ -117,7 +117,7 @@ export function reportCheat(
     ? `[AC] ${name} - ${label}${suffix} [${strike}/${need}]`
     : `[AC] ${name} - ${label}${suffix}`;
 
-  omp.log(`[${SERVER_TAG}] ${line} ip=${ip} code=${code}`);
+  omp.log(`${line} ip=${ip} code=${code}`);
   notifyAdmins(softHit ? `[AC] ${name}: ${label} (${strike}/${need})` : `[AC] ${name}: ${label}`);
 
   if (softHit) {

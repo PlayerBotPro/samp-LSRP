@@ -93,7 +93,7 @@ export function startStreetFoodStalls(): void {
   });
 
   const count = listBusinesses().filter((b) => isStreetFoodType(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] Street food: ${count} stalls`);
+  omp.log(`Street food: ${count} stalls`);
 }
 
 function tickStreetFood(): void {
@@ -293,7 +293,7 @@ async function buyFood(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Street food biz=${businessId} (${account.name}): ${message}`);
+    omp.log(`Street food biz=${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   } finally {

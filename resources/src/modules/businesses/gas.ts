@@ -73,7 +73,7 @@ export function startGasStations(): void {
   });
 
   const count = listBusinesses().filter((b) => isGasStationType(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] Gas stations: ${count} locations`);
+  omp.log(`Gas stations: ${count} locations`);
 }
 
 function abortRefuel(player: Player): void {
@@ -223,7 +223,7 @@ async function tryRefuel(player: Player): Promise<void> {
     );
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Gas station business=${station.id}: ${message}`);
+    omp.log(`Gas station business=${station.id}: ${message}`);
     abortRefuel(player);
     player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;

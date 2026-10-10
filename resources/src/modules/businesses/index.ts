@@ -27,7 +27,7 @@ export const businessesModule: GameModule = {
   name: "businesses",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] Businesses: database unavailable`);
+      omp.log(`Businesses: database unavailable`);
       return;
     }
 
@@ -47,10 +47,10 @@ export const businessesModule: GameModule = {
       bindBusinessPurchase();
       bindBusinessMenu();
       startBusinessTaxScheduler();
-      omp.log(`[${SERVER_TAG}] Businesses: loaded ${listBusinesses().length}`);
+      omp.log(`Businesses: loaded ${listBusinesses().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Businesses: failed to load - ${message}`);
+      omp.log(`Businesses: failed to load - ${message}`);
     }
 
     omp.on("playerSpawn", (player) => {

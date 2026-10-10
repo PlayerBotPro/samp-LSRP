@@ -73,7 +73,7 @@ export function startShop247(): void {
   const count = listBusinesses().filter(
     (b) => isShop247Type(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 24/7 stores: ${count} points of sale`);
+  omp.log(`24/7 stores: ${count} points of sale`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -322,7 +322,7 @@ async function buyPhone(
     result = await payBusinessPhonePurchase(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 phone business=${businessId} (${userName}): ${message}`);
+    omp.log(`24/7 phone business=${businessId} (${userName}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
@@ -373,7 +373,7 @@ async function buyCamera(
     result = await payBusinessCashShare(businessId, userId, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 camera business=${businessId} (${userName}): ${message}`);
+    omp.log(`24/7 camera business=${businessId} (${userName}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
@@ -421,7 +421,7 @@ async function buyMask(
     result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 mask business=${businessId} (${userName}): ${message}`);
+    omp.log(`24/7 mask business=${businessId} (${userName}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }

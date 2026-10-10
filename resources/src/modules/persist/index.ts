@@ -72,7 +72,7 @@ function readLiveHealth(player: Player, fallback: number): number {
 function persistJailSeconds(userId: number, seconds: number, name: string): void {
   void saveUserJailedSeconds(userId, seconds).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save jail time for ${name}: ${message}`);
+    omp.log(`Failed to save jail time for ${name}: ${message}`);
   });
 }
 
@@ -91,7 +91,7 @@ export function queueSave(player: Player): void {
     patchAccount(player, { health, hunger });
     void saveUserHealth(account.id, health).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Failed to save health for ${account.name}: ${message}`);
+      omp.log(`Failed to save health for ${account.name}: ${message}`);
     });
     void saveUserHunger(account.id, hunger).catch(() => {
       // 定期保存会处理此状态.
@@ -108,7 +108,7 @@ export function queueSave(player: Player): void {
 
   void saveUserVitals(account.id, health, money, bank, hunger).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save character ${account.name}: ${message}`);
+    omp.log(`Failed to save character ${account.name}: ${message}`);
   });
 }
 

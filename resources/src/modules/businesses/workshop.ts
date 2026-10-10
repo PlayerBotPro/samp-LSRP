@@ -110,7 +110,7 @@ export function startWorkshopShops(): void {
   const count = listBusinesses().filter(
     (b) => isWorkshopType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] Auto repair shops: ${count} service points`);
+  omp.log(`Auto repair shops: ${count} service points`);
 }
 
 function clearPlayerWorkshop(player: Player): void {

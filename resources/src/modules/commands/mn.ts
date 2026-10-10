@@ -222,7 +222,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Referral system error ${account.name}: ${message}`);
+    omp.log(`Referral system error ${account.name}: ${message}`);
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.error,

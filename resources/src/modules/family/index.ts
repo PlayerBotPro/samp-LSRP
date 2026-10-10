@@ -51,7 +51,7 @@ export const familyModule: GameModule = {
   name: "family",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] Families: database unavailable`);
+      omp.log(`Families: database unavailable`);
       return;
     }
 
@@ -65,10 +65,10 @@ export const familyModule: GameModule = {
       bindFamilyCommands();
       bindFamilyMenu();
       startFamilyTags();
-      omp.log(`[${SERVER_TAG}] Families: loaded ${listFamilies().length}`);
+      omp.log(`Families: loaded ${listFamilies().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Families: failed to load - ${message}`);
+      omp.log(`Families: failed to load - ${message}`);
     }
   },
 };

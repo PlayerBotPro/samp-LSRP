@@ -20,7 +20,7 @@ export const housesModule: GameModule = {
   name: "houses",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] Houses: database unavailable`);
+      omp.log(`Houses: database unavailable`);
       return;
     }
 
@@ -34,10 +34,10 @@ export const housesModule: GameModule = {
       bindHouseMenuDialogs();
       bindHouseSellDialog();
       startHouseRentScheduler();
-      omp.log(`[${SERVER_TAG}] Houses: loaded ${listHouses().length}`);
+      omp.log(`Houses: loaded ${listHouses().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Houses: failed to load - ${message}`);
+      omp.log(`Houses: failed to load - ${message}`);
     }
 
     omp.on("playerSpawn", (player) => {

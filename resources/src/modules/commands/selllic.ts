@@ -653,7 +653,7 @@ async function completeSale(
     busy.delete(sellerAccount.id);
     busy.delete(buyerAccount.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] selllic ${sellerAccount.name}: ${message}`);
+    omp.log(`selllic ${sellerAccount.name}: ${message}`);
     tell(seller, Color.error, "交易未能完成,请重试.");
     tell(buyer, Color.error, "交易未能完成,请重试.");
     return;

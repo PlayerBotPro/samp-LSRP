@@ -16,7 +16,7 @@ export const mappingModule: GameModule = {
     try {
       files = readdirSync(MAPS_DIR).filter((name) => name.toLowerCase().endsWith(".txt"));
     } catch {
-      omp.log(`[${SERVER_TAG}] Maps directory not found`);
+      omp.log(`Maps directory not found`);
       return;
     }
 
@@ -34,7 +34,7 @@ export const mappingModule: GameModule = {
         );
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] Failed to load map ${file}: ${message}`);
+        omp.log(`Failed to load map ${file}: ${message}`);
       }
     }
 

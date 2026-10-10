@@ -73,7 +73,7 @@ export function startAmmuShops(): void {
   const count = listBusinesses().filter(
     (b) => isAmmuType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] Ammunation stores: ${count} points of sale`);
+  omp.log(`Ammunation stores: ${count} points of sale`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -301,7 +301,7 @@ async function buyAmmuItem(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Ammunation business=${businessId} (${account.name}): ${message}`);
+    omp.log(`Ammunation business=${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   } finally {

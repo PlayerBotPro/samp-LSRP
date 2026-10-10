@@ -22,10 +22,10 @@ export const authModule: GameModule = {
   async start() {
     try {
       await ensureUsersTable();
-      omp.log(`[${SERVER_TAG}] Users table is ready`);
+      omp.log(`Users table is ready`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] Failed to prepare users table: ${message}`);
+      omp.log(`Failed to prepare users table: ${message}`);
     }
 
     bindWantedDecay();

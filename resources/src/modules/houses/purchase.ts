@@ -74,7 +74,7 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Purchase house ${houseId} (${account.name}): ${message}`);
+    omp.log(`Purchase house ${houseId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
@@ -121,7 +121,7 @@ export async function tryPurchaseHouse(player: Player, houseId: number): Promise
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save money for ${account.name}: ${message}`);
+    omp.log(`Failed to save money for ${account.name}: ${message}`);
   });
 
   updateEntrancePickup(houseId);

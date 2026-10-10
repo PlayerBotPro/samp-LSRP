@@ -112,7 +112,7 @@ export function findTurfAtPlayer(player: Player): LiveTurf | null {
 
 export async function startGangTurf(): Promise<void> {
   if (!isDatabaseReady()) {
-    omp.log(`[${SERVER_TAG}] Gang zones: database unavailable`);
+    omp.log(`Gang zones: database unavailable`);
     return;
   }
 
@@ -142,10 +142,10 @@ export async function startGangTurf(): Promise<void> {
     }
 
     turfs = markSpawnProtected(created);
-    omp.log(`[${SERVER_TAG}] Gang zones: ${turfs.length}/${records.length}`);
+    omp.log(`Gang zones: ${turfs.length}/${records.length}`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] gang_zones: ${message}`);
+    omp.log(`gang_zones: ${message}`);
   }
 }
 

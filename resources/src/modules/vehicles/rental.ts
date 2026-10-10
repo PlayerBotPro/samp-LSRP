@@ -104,7 +104,7 @@ export function isActiveRentalVehicle(vehicleId: number): boolean {
 export function spawnRentalVehicles(): void {
   for (const def of RENTAL_DEFS) {
     if (!createRentalSlot(def)) {
-      omp.log(`[${SERVER_TAG}] Vehicle rental: failed to create vehicles for business #${def.businessId}`);
+      omp.log(`Vehicle rental: failed to create vehicles for business #${def.businessId}`);
     }
   }
 
@@ -113,7 +113,7 @@ export function spawnRentalVehicles(): void {
     endPlayerRental(player, "command");
   });
 
-  omp.log(`[${SERVER_TAG}] Vehicle rental: ${slotsByVehicle.size} vehicles`);
+  omp.log(`Vehicle rental: ${slotsByVehicle.size} vehicles`);
 }
 
 function createRentalSlot(def: RentalDef): boolean {
@@ -506,7 +506,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     releaseReservation(account.id, pending.vehicleId);
     setControllable(player, true);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Vehicle rental for business #${pending.businessId} (${account.name}): ${message}`);
+    omp.log(`Vehicle rental for business #${pending.businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "租车失败.请重试.");
     eject(player);
     return;

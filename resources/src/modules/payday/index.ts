@@ -41,7 +41,7 @@ export const paydayModule: GameModule = {
 
 function runPayday(now: Date): void {
   const clock = formatClock(now);
-  omp.log(`[${SERVER_TAG}] payday ${clock}`);
+  omp.log(`payday ${clock}`);
 
   // 为整个 payday 固定快照:同一帮派的所有成员获得相同奖金,
   // 即使在遍历玩家时帮派战改变了区域归属也一样.
@@ -77,7 +77,7 @@ function payPlayer(
   applyScore(player, next.level);
   void saveUserProgress(account.id, next.level, next.exp, lawfulness).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save payday for ${account.name}: ${message}`);
+    omp.log(`Failed to save payday for ${account.name}: ${message}`);
   });
 
   playPaydaySound(player);

@@ -180,7 +180,7 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Purchase business ${businessId} (${account.name}): ${message}`);
+    omp.log(`Purchase business ${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
@@ -226,7 +226,7 @@ async function tryPurchaseBusiness(player: Player, businessId: number): Promise<
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] Failed to save funds for ${account.name}: ${message}`);
+    omp.log(`Failed to save funds for ${account.name}: ${message}`);
   });
 
   refreshBusinessLabel(businessId);
