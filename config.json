@@ -24,8 +24,8 @@
         "gravity": 0.00800000037997961,
         "group_player_objects": false,
         "lag_compensation_mode": 1,
-        "map": "Los Santos",
-        "mode": "LSRP",
+        "map": "botTest Ls",
+        "mode": "botTest MoDe",
         "nametag_draw_radius": 70.0,
         "player_marker_draw_radius": 250.0,
         "player_marker_mode": 1,
@@ -46,7 +46,7 @@
         "vehicle_respawn_time": 10000,
         "weather": 10
     },
-    "language": "RU",
+    "language": "Chinese",
     "logging": {
         "enable": true,
         "file": "log.txt",
@@ -63,7 +63,7 @@
     },
     "max_bots": 0,
     "max_players": 50,
-    "name": "Los Santos Role Play",
+    "name": "change in server.cfg",
     "network": {
         "acks_limit": 3000,
         "aiming_sync_rate": 30,
@@ -127,5 +127,5 @@
     },
     "sleep": 5.0,
     "use_dyn_ticks": true,
-    "website": "open.mp"
+    "website": "bilibili.com"
 }
