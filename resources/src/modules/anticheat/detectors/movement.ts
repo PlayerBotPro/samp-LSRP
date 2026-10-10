@@ -117,6 +117,13 @@ export function checkMovement(player: Player): void {
     dist > expected + 15
   ) {
     reportCheat(player, AcCode.TeleportFoot, `d=${dist.toFixed(1)}`);
+    // Rebase after reporting so a persistent position delta is not reported
+    // again on every playerUpdate when kickOnDetect is disabled.
+    state.x = pos.x;
+    state.y = pos.y;
+    state.z = pos.z;
+    state.speed = speed;
+    state.lastUpdateAt = now;
     return;
   }
 
@@ -127,6 +134,11 @@ export function checkMovement(player: Player): void {
     dist > expected + 20
   ) {
     reportCheat(player, AcCode.TeleportVeh, `d=${dist.toFixed(1)}`);
+    state.x = pos.x;
+    state.y = pos.y;
+    state.z = pos.z;
+    state.speed = speed;
+    state.lastUpdateAt = now;
     return;
   }
 
