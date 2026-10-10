@@ -1,5 +1,5 @@
 import { omp } from "@omp-node/core";
-import { SERVER_NAME, SERVER_TAG } from "./shared/brand";
+import { SERVER_NAME } from "./shared/brand";
 import { databaseModule } from "./modules/database";
 import { persistModule } from "./modules/persist";
 import { authModule } from "./modules/auth";

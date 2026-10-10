@@ -1,5 +1,4 @@
 import { GangZone, omp, type Player } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { isDatabaseReady } from "../../shared/database";
 import { isPlayerActive } from "../../shared/player";
 import { isAuthenticated } from "../auth/session";

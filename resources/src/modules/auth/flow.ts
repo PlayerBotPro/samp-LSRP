@@ -1,7 +1,7 @@
 import type { Player } from "@omp-node/core";
 import { omp } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_NAME, SERVER_TAG } from "../../shared/brand";
+import { SERVER_NAME } from "../../shared/brand";
 import { isDatabaseReady } from "../../shared/database";
 import { isPlayerActive, playerId, playerIp, playerName } from "../../shared/player";
 import { placeAt, writeSpawnInfo } from "../spawn/point";

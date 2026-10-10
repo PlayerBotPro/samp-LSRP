@@ -1,6 +1,5 @@
 import { omp, type Player } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { formatMoney } from "../../shared/money";
 import { isPlayerActive } from "../../shared/player";
 import { saveUserProgress } from "../auth/repository";

@@ -1,6 +1,5 @@
 import { omp, type Player } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { playerChatName } from "../../shared/player";
 import { registerCommand } from "../commands/registry";
 import { applyAdminVacatedHouse } from "../houses/rent";

@@ -1,6 +1,5 @@
 import { Dialog, omp, type Player } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { arePlayersNearby } from "../../shared/nearby";
 import { isPlayerActive, playerChatName, playerId } from "../../shared/player";
 import {

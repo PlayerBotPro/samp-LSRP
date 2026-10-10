@@ -1,6 +1,5 @@
 import { Dialog, omp, type Player } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { isPlayerActive } from "../../shared/player";
 import { RULES_TITLE, SERVER_RULES } from "../auth/rules";
 import { findUserByName, saveUserInvitedBy } from "../auth/repository";

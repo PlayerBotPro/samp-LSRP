@@ -1,7 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { omp } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import type { GameModule } from "../types";
 import { parsePawnMap, type MapBuildingRemove, type MapObjectDef } from "./pawn-map";
 import { startObjectStream } from "./stream";
@@ -30,7 +29,7 @@ export const mappingModule: GameModule = {
         objects.push(...parsed.objects);
         removals.push(...parsed.removals);
         omp.log(
-          `[${SERVER_TAG}] Map ${file}: streamed ${parsed.objects.length} objects, removed ${parsed.removals.length} buildings`
+          `Map ${file}: streamed ${parsed.objects.length} objects, removed ${parsed.removals.length} buildings`
         );
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);

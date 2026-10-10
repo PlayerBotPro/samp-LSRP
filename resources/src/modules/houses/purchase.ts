@@ -5,7 +5,6 @@ import { isPlayerActive, playerId } from "../../shared/player";
 import { saveUserMoney } from "../auth/repository";
 import { applyWallet, getAccount, patchAccount } from "../auth/session";
 import { refreshStreamForPlayer } from "../mapping/stream";
-import { SERVER_TAG } from "../../shared/brand";
 import { updateEntrancePickup } from "./entrances";
 import { teleportToHouseInterior } from "./enter";
 import { refreshAllHouseMapIcons } from "./map-icons";

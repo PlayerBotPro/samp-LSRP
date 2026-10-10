@@ -1,6 +1,5 @@
 import { Dialog, omp, type Player } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { formatMoney } from "../../shared/money";
 import { saveUserMoney } from "../auth/repository";
 import { applyWallet, getAccount, patchAccount } from "../auth/session";

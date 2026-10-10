@@ -1,6 +1,5 @@
 import type { GameModule } from "../types";
 import { omp } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { getConfig } from "./config";
 import { bindAnticheat } from "./loop";
 

@@ -1,5 +1,4 @@
 import { omp, type Player } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { isPlayerActive, playerChatName, playerId } from "../../shared/player";
 import { getAccount, isAuthenticated } from "../auth/session";
 import { clipClientMessage } from "../../shared/nearby";

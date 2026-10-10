@@ -1,5 +1,4 @@
 import { omp } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { isDatabaseReady } from "../../shared/database";
 import { STREET_WORLD } from "../spawn/point";
 import type { GameModule } from "../types";

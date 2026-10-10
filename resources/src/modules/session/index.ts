@@ -1,5 +1,4 @@
 import { omp } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { playerName } from "../../shared/player";
 import type { GameModule } from "../types";
 

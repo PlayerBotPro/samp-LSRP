@@ -2,7 +2,6 @@ import { Actor, omp, Pickup, TextLabel, type Player } from "@omp-node/core";
 import { isAuthenticated } from "../auth/session";
 import { isPlayerActive, playerId } from "../../shared/player";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import type { GameModule } from "../types";
 import { saveUserPassport } from "../auth/repository";
 import { getAccount, patchAccount } from "../auth/session";

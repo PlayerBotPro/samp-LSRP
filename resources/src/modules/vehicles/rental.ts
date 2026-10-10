@@ -6,7 +6,6 @@ import {
   type Vehicle,
 } from "@omp-node/core";
 import { Color } from "../../shared/colors";
-import { SERVER_TAG } from "../../shared/brand";
 import { formatMoney } from "../../shared/money";
 import { isPlayerActive, playerId } from "../../shared/player";
 import {

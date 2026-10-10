@@ -1,5 +1,4 @@
 import { Dialog, omp, type Player } from "@omp-node/core";
-import { SERVER_TAG } from "../../shared/brand";
 import { Color } from "../../shared/colors";
 import { formatMoney } from "../../shared/money";
 import { WHISPER_RADIUS, arePlayersNearby } from "../../shared/nearby";
