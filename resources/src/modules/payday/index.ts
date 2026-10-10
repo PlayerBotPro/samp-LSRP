@@ -77,7 +77,7 @@ function payPlayer(
   applyScore(player, next.level);
   void saveUserProgress(account.id, next.level, next.exp, lawfulness).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的 payday:${message}`);
+    omp.log(`[${SERVER_TAG}] Failed to save payday for ${account.name}: ${message}`);
   });
 
   playPaydaySound(player);

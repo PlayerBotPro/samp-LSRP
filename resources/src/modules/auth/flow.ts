@@ -304,7 +304,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     showRulesDialog(player);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 登录错误 ${name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] Login error ${name}: ${message}`);
     if (isPlayerActive(player)) {
       kickLater(player, "无法查询账号,请稍后再试.");
     }
@@ -475,7 +475,7 @@ async function finishLogin(player: Player, name: string, password: string): Prom
         await saveUserBan(row.id, resolved.untilUnix, banReason);
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] 无法保存封禁记录 ${name}: ${message}`);
+        omp.log(`[${SERVER_TAG}] Failed to save ban record for ${name}: ${message}`);
       }
     }
 
@@ -487,7 +487,7 @@ async function finishLogin(player: Player, name: string, password: string): Prom
   if (resolved.untilUnix != null) {
     void clearUserBan(row.id).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 无法清除过期封禁 ${name}: ${message}`);
+      omp.log(`[${SERVER_TAG}] Failed to clear expired ban for ${name}: ${message}`);
     });
   }
 
@@ -504,10 +504,10 @@ async function finishLogin(player: Player, name: string, password: string): Prom
   if (ip) {
     void saveUserLastIp(account.id, ip).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 无法保存 last_ip ${account.name}: ${message}`);
+      omp.log(`[${SERVER_TAG}] Failed to save last_ip for ${account.name}: ${message}`);
     });
   }
-  omp.log(`[${SERVER_TAG}] ${account.name} 已登录`);
+  omp.log(`[${SERVER_TAG}] ${account.name} logged in`);
 }
 
 async function finishRegister(
@@ -591,7 +591,7 @@ async function finishRegister(
     Color.gray,
     "角色创建成功.输入 /mn 可打开菜单,查看状态和命令."
   );
-  omp.log(`[${SERVER_TAG}] ${account.name} 已注册`);
+  omp.log(`[${SERVER_TAG}] ${account.name} registered`);
 }
 
 async function handleLogin(
@@ -636,7 +636,7 @@ async function handleLogin(
     }
 
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 登录验证错误 ${state.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] Login verification error ${state.name}: ${message}`);
     kickLater(player, "登录失败,请稍后再试.");
     clearPending(player);
   }
@@ -685,7 +685,7 @@ async function handleRegister(
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] 邮箱验证错误:${message}`);
+        omp.log(`[${SERVER_TAG}] Email verification error: ${message}`);
         kickLater(player, "无法验证电子邮箱,请稍后再试.");
         clearPending(player);
         return;
@@ -806,7 +806,7 @@ async function handleRegister(
         }
 
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] 注册错误 ${state.name}: ${message}`);
+        omp.log(`[${SERVER_TAG}] Registration error ${state.name}: ${message}`);
         kickLater(player, "无法创建角色,请稍后再试.");
         clearPending(player);
       }

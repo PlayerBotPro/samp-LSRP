@@ -99,7 +99,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     businessIds = await forfeitExpiredBusinesses();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 企业税款(${source}):${message}`);
+    omp.log(`[${SERVER_TAG}] Business tax (${source}): ${message}`);
     return;
   }
 
@@ -107,7 +107,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     return;
   }
 
-  omp.log(`[${SERVER_TAG}] 企业税款(${source}):已收回 ${businessIds.length} 家`);
+  omp.log(`[${SERVER_TAG}] Business tax (${source}): collected from ${businessIds.length} businesses`);
 
   for (const businessId of businessIds) {
     applyForfeitedBusiness(businessId);

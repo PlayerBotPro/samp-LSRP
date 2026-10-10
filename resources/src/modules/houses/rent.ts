@@ -97,7 +97,7 @@ async function runRentForfeiture(source: "startup" | "midnight"): Promise<void> 
     houseIds = await forfeitExpiredHouses();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 房屋租赁 (${source}): ${message}`);
+    omp.log(`[${SERVER_TAG}] House rental (${source}): ${message}`);
     return;
   }
 
@@ -105,7 +105,7 @@ async function runRentForfeiture(source: "startup" | "midnight"): Promise<void> 
     return;
   }
 
-  omp.log(`[${SERVER_TAG}] 房屋租赁 (${source}): 已收回 ${houseIds.length}`);
+  omp.log(`[${SERVER_TAG}] House rental (${source}): collected ${houseIds.length} payments`);
 
   for (const houseId of houseIds) {
     applyForfeitedHouse(houseId);

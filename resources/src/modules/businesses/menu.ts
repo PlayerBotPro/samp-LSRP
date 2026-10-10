@@ -520,7 +520,7 @@ async function confirmSellToState(player: Player): Promise<void> {
   } catch (error: unknown) {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 出售企业 ${business.id}(${account.name}):${message}`);
+    omp.log(`[${SERVER_TAG}] Sell business ${business.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
@@ -553,7 +553,7 @@ async function confirmSellToState(player: Player): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的资金:${message}`);
+    omp.log(`[${SERVER_TAG}] Failed to save funds for ${account.name}: ${message}`);
   });
 
   refreshBusinessLabel(business.id);
@@ -650,7 +650,7 @@ async function acceptBizOffer(
     transferring.delete(sellerAccount.id);
     transferring.delete(buyerAccount.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 转让企业 ${offer.businessId}:${message}`);
+    omp.log(`[${SERVER_TAG}] Transfer business ${offer.businessId}: ${message}`);
     buyer.sendClientMessage(Color.error, "交易失败.请重试.");
     return;
   }

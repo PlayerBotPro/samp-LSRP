@@ -92,7 +92,7 @@ export function startFastfoodShops(): void {
   const count = listBusinesses().filter(
     (b) => isFastfoodType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 小吃店:销售点 ${count} 个`);
+  omp.log(`[${SERVER_TAG}] Fast food stores: ${count} points of sale`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -299,7 +299,7 @@ async function buyFood(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 小吃店 biz=${businessId} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] Fast food biz=${businessId} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   } finally {

@@ -27,7 +27,7 @@ export const businessesModule: GameModule = {
   name: "businesses",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] 企业:数据库不可用`);
+      omp.log(`[${SERVER_TAG}] Businesses: database unavailable`);
       return;
     }
 
@@ -47,10 +47,10 @@ export const businessesModule: GameModule = {
       bindBusinessPurchase();
       bindBusinessMenu();
       startBusinessTaxScheduler();
-      omp.log(`[${SERVER_TAG}] 企业:已加载 ${listBusinesses().length} 家`);
+      omp.log(`[${SERVER_TAG}] Businesses: loaded ${listBusinesses().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 企业:加载失败 - ${message}`);
+      omp.log(`[${SERVER_TAG}] Businesses: failed to load - ${message}`);
     }
 
     omp.on("playerSpawn", (player) => {

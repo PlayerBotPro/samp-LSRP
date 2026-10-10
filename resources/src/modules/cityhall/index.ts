@@ -345,7 +345,7 @@ function tryGivePassport(player: Player): void {
   patchAccount(player, { passport: true });
   void saveUserPassport(account.id).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的身份证:${message}`);
+    omp.log(`[${SERVER_TAG}] Failed to save ID card for ${account.name}: ${message}`);
   });
 
   player.sendClientMessage(Color.info, "你已获得洛圣都护照.");

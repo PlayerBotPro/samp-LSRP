@@ -16,7 +16,7 @@ export const mappingModule: GameModule = {
     try {
       files = readdirSync(MAPS_DIR).filter((name) => name.toLowerCase().endsWith(".txt"));
     } catch {
-      omp.log(`[${SERVER_TAG}] 未找到 maps 文件夹`);
+      omp.log(`[${SERVER_TAG}] Maps directory not found`);
       return;
     }
 
@@ -30,17 +30,17 @@ export const mappingModule: GameModule = {
         objects.push(...parsed.objects);
         removals.push(...parsed.removals);
         omp.log(
-          `[${SERVER_TAG}] 地图 ${file}:流式加载 ${parsed.objects.length} 个对象,移除 ${parsed.removals.length} 个建筑`
+          `[${SERVER_TAG}] Map ${file}: streamed ${parsed.objects.length} objects, removed ${parsed.removals.length} buildings`
         );
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] 地图 ${file} 加载失败:${message}`);
+        omp.log(`[${SERVER_TAG}] Failed to load map ${file}: ${message}`);
       }
     }
 
     startObjectStream(objects, removals);
     omp.log(
-      `[${SERVER_TAG}] 对象流式加载器:共 ${objects.length} 个对象,移除 ${removals.length} 个建筑`
+      `[${SERVER_TAG}] Object streamer: ${objects.length} objects total, removed ${removals.length} buildings`
     );
   },
 };

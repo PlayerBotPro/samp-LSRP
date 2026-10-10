@@ -319,7 +319,7 @@ async function finishCapture(current: CaptureState): Promise<void> {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 领地战:${message}`);
+    omp.log(`[${SERVER_TAG}] Turf war: ${message}`);
     if (!transferred && turf) {
       restoreTurf(turf);
     }
@@ -532,7 +532,7 @@ export function isCaptureParticipantOnTurf(player: Player): boolean {
 
 export function startCapture(): void {
   if (!startCaptureHud()) {
-    omp.log(`[${SERVER_TAG}] 未能创建领地战 TextDraw`);
+    omp.log(`[${SERVER_TAG}] Failed to create turf war TextDraw`);
   }
 
   omp.on("playerDeath", (player, killer) => {

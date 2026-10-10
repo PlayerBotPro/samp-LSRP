@@ -65,7 +65,7 @@ export const hudModule: GameModule = {
   start() {
     layers = createLogo();
     if (layers.length === 0) {
-      omp.log(`[${SERVER_TAG}] 标志未能创建`);
+      omp.log(`[${SERVER_TAG}] Failed to create marker`);
     }
 
     startSpeedo();

@@ -70,7 +70,7 @@ export function startClothesShops(): void {
   const count = listBusinesses().filter(
     (b) => isClothesType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 服装店:试衣点数量 ${count}`);
+  omp.log(`[${SERVER_TAG}] Clothing stores: ${count} fitting points`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {

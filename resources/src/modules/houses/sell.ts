@@ -99,7 +99,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
   } catch (error: unknown) {
     selling.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 出售房屋 ${house.id} (${account.name}): ${message}`);
+    omp.log(`[${SERVER_TAG}] Sell house ${house.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
@@ -146,7 +146,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   void saveUserMoney(account.id, result.cashLeft, account.bank).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存金钱 ${account.name}: ${message}`);
+    omp.log(`[${SERVER_TAG}] Failed to save money for ${account.name}: ${message}`);
   });
 
   const sold = getHouse(house.id);

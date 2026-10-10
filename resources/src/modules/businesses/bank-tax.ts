@@ -447,7 +447,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
   } catch (error: unknown) {
     payingTax.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 缴纳企业税款 ${business.id}(${account.name}):${message}`);
+    omp.log(`[${SERVER_TAG}] Pay business tax ${business.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;
   }
@@ -522,7 +522,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
   } catch (error: unknown) {
     withdrawing.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 提取企业资金 ${business.id}(${account.name}):${message}`);
+    omp.log(`[${SERVER_TAG}] Withdraw business funds ${business.id} (${account.name}): ${message}`);
     player.sendClientMessage(Color.error, "提款失败.请重试.");
     return;
   }
