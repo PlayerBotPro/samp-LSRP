@@ -78,8 +78,8 @@ const modules: GameModule[] = [
 omp.on("resourceStart", async () => {
   for (const mod of modules) {
     await mod.start();
-    omp.log(`[${SERVER_TAG}] Module started: ${mod.name}`);
+    omp.log(`Module started: ${mod.name}`);
   }
 
-  omp.log(`[${SERVER_TAG}] Server Ready: ${SERVER_NAME}`);
+  omp.log(`Server Ready: ${SERVER_NAME}`);
 });
