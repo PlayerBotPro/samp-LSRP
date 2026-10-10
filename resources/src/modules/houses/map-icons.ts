@@ -11,7 +11,7 @@ const MAP_ICON_SLOT_MAX = 49;
 const ICON_FOR_SALE = 31;
 const ICON_OWNED = 32;
 const MAPICON_LOCAL = 0;
-const ICON_RADIUS = 300;
+const ICON_RADIUS = 25;//BOT: 只显示25米范围内的房屋图标
 const TICK_MS = 200;
 
 type ActiveIcon = {
@@ -177,7 +177,7 @@ function collectNearbyHouses(
   }
 
   nearby.sort((left, right) => left.distance - right.distance);
-  const maxIcons = MAP_ICON_SLOT_MAX - MAP_ICON_SLOT_MIN + 1;
+  const maxIcons = 1;//BOT: 只显示1个
   return nearby.slice(0, maxIcons).map((item) => item.house);
 }
 
