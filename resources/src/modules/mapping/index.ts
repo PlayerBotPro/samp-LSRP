@@ -40,7 +40,7 @@ export const mappingModule: GameModule = {
 
     startObjectStream(objects, removals);
     omp.log(
-      `[${SERVER_TAG}] Object streamer: ${objects.length} objects total, removed ${removals.length} buildings`
+      `Object streamer: ${objects.length} objects total, removed ${removals.length} buildings`
     );
   },
 };

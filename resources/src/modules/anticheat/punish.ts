@@ -164,7 +164,7 @@ export function reportWarning(
   const cfg = getConfig();
   if (cfg.debug) {
     omp.log(
-      `[${SERVER_TAG}] [AC warn] ${playerChatName(player)} ${codeName(code)} ${count}/${max} ${detail}`
+      `[AC warn] ${playerChatName(player)} ${codeName(code)} ${count}/${max} ${detail}`
     );
   }
 
