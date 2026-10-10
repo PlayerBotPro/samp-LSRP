@@ -72,7 +72,7 @@ function showList(player: Player, page: number): void {
   }
 
   if (businesses().length === 0) {
-    player.sendClientMessage(Color.error, "企业尚未加载。");
+    player.sendClientMessage(Color.error, "企业尚未加载.");
     return;
   }
 
@@ -92,7 +92,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     pageByPlayer.delete(id);
-    player.sendClientMessage(Color.error, "无法打开企业列表。");
+    player.sendClientMessage(Color.error, "无法打开企业列表.");
   }
 }
 
@@ -138,7 +138,7 @@ function teleportToBusiness(player: Player, business: BusinessRecord): boolean {
       player.removeFromVehicle();
     }
   } catch {
-    // 已经下车。
+    // 已经下车.
   }
 
   try {
@@ -159,12 +159,12 @@ function teleportToBusiness(player: Player, business: BusinessRecord): boolean {
 
 function goToBusiness(player: Player, business: BusinessRecord): void {
   if (!canTeleport(player)) {
-    player.sendClientMessage(Color.error, "现在不能传送。");
+    player.sendClientMessage(Color.error, "现在不能传送.");
     return;
   }
 
   if (!teleportToBusiness(player, business)) {
-    player.sendClientMessage(Color.error, "无法传送。");
+    player.sendClientMessage(Color.error, "无法传送.");
     return;
   }
 
@@ -199,7 +199,7 @@ export function bindAdminTpbiz(): void {
         const maxId = all.length > 0 ? all[all.length - 1]!.id : 0;
         player.sendClientMessage(
           Color.error,
-          maxId > 0 ? `用法: /tpbiz [1-${maxId}]` : "企业尚未加载。"
+          maxId > 0 ? `用法: /tpbiz [1-${maxId}]` : "企业尚未加载."
         );
         return;
       }

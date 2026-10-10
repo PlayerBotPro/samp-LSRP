@@ -16,7 +16,7 @@ const LABEL_HEIGHT = 0.25;
 const PICKUP_LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const CMD_RADIUS = 2.5;
-const DENY = "只有 LSPD、州警和 FBI 警员可以开启。";
+const DENY = "只有 LSPD,州警和 FBI 警员可以开启.";
 
 const POINT = {
   x: -96.0945,
@@ -53,13 +53,13 @@ function refreshYardLabel(): void {
   try {
     yardLabel.updateText(yardLabelColor(), yardLabelText());
   } catch {
-    // 标签已被销毁。
+    // 标签已被销毁.
   }
 }
 
 export function bindPrisonControl(): void {
   new TextLabel(
-    "请输入 /pult 进行控制。",
+    "请输入 /pult 进行控制.",
     Color.info,
     POINT.x,
     POINT.y,
@@ -119,13 +119,13 @@ registerCommand(
     }
 
     if (isJailed(player)) {
-      tell(player, Color.error, "你正在服刑。");
+      tell(player, Color.error, "你正在服刑.");
       return;
     }
 
     try {
       if (player.getState() !== PLAYER_STATE_ONFOOT) {
-        tell(player, Color.error, "只能步行时使用管理功能。");
+        tell(player, Color.error, "只能步行时使用管理功能.");
         return;
       }
     } catch {
@@ -133,7 +133,7 @@ registerCommand(
     }
 
     if (!atPanel(player)) {
-      tell(player, Color.error, "只能在控制台旁使用管理功能。");
+      tell(player, Color.error, "只能在控制台旁使用管理功能.");
       return;
     }
 
@@ -150,7 +150,7 @@ function handleCmdMenu(player: Player, listItem: number, inputText: string): voi
   }
 
   if (choice === 1) {
-    tell(player, Color.info, "牢房功能仍在开发中。");
+    tell(player, Color.info, "牢房功能仍在开发中.");
   }
 }
 
@@ -158,25 +158,25 @@ function handleYardMenu(player: Player, listItem: number, inputText: string): vo
   const choice = pickChoice(listItem, inputText, ["打开", "关闭"]);
   if (choice === 0) {
     if (yardOpen) {
-      tell(player, Color.info, "院子已经开放。");
+      tell(player, Color.info, "院子已经开放.");
       return;
     }
 
     yardOpen = true;
     refreshYardLabel();
-    tell(player, Color.info, "院子已开放。");
+    tell(player, Color.info, "院子已开放.");
     return;
   }
 
   if (choice === 1) {
     if (!yardOpen) {
-      tell(player, Color.info, "院子已经关闭。");
+      tell(player, Color.info, "院子已经关闭.");
       return;
     }
 
     yardOpen = false;
     refreshYardLabel();
-    tell(player, Color.info, "院子已关闭。");
+    tell(player, Color.info, "院子已关闭.");
   }
 }
 
@@ -192,7 +192,7 @@ function showCmdMenu(player: Player): void {
       "关闭"
     );
   } catch {
-    tell(player, Color.error, "无法打开菜单。");
+    tell(player, Color.error, "无法打开菜单.");
   }
 }
 
@@ -208,7 +208,7 @@ function showYardMenu(player: Player): void {
       "返回"
     );
   } catch {
-    tell(player, Color.error, "无法打开菜单。");
+    tell(player, Color.error, "无法打开菜单.");
   }
 }
 
@@ -224,7 +224,7 @@ function isLawStaff(player: Player, tellDeny: boolean): boolean {
 
   if (account.hospitalized) {
     if (tellDeny) {
-      tell(player, Color.error, "请先在医院接受治疗。");
+      tell(player, Color.error, "请先在医院接受治疗.");
     }
     return false;
   }
@@ -268,7 +268,7 @@ function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

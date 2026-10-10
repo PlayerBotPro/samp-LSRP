@@ -204,8 +204,8 @@ export async function transferFamilyOwner(
 }
 
 /**
- * 以原子操作转让所有者和等级（原所有者变为副手，新所有者变为老大）。
- * false 表示家族或所有者不匹配，或其中一名玩家不属于该家族。
+ * 以原子操作转让所有者和等级(原所有者变为副手,新所有者变为老大).
+ * false 表示家族或所有者不匹配,或其中一名玩家不属于该家族.
  */
 export async function transferFamilyOwnershipWithRanks(
   familyId: number,
@@ -276,7 +276,7 @@ export async function deleteFamily(familyId: number): Promise<void> {
 }
 
 /**
- * 仅当所有者是唯一成员时删除家族（防止 leave 与 invite 并发竞争）。
+ * 仅当所有者是唯一成员时删除家族(防止 leave 与 invite 并发竞争).
  */
 export async function tryDeleteFamilyIfSoleMember(
   familyId: number,
@@ -389,7 +389,7 @@ export function addFamilyMoney(familyId: number, amount: number): number {
   return record.money;
 }
 
-/** 将资金存入仓库，并等待数据库写入完成。 */
+/** 将资金存入仓库,并等待数据库写入完成. */
 export async function addFamilyMoneyAwaited(
   familyId: number,
   amount: number
@@ -429,7 +429,7 @@ export function takeFamilyMoney(familyId: number, amount: number): boolean {
   return takeStock(familyId, "money", amount);
 }
 
-/** 从仓库扣款：执行条件 UPDATE 并核对 affectedRows。 */
+/** 从仓库扣款:执行条件 UPDATE 并核对 affectedRows. */
 export async function takeFamilyMoneyAwaited(
   familyId: number,
   amount: number
@@ -472,7 +472,7 @@ export function setFamilyLocked(familyId: number, locked: boolean): boolean {
     locked ? 1 : 0,
     familyId,
   ]).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
   return true;
 }
@@ -509,7 +509,7 @@ function persistStockAdd(familyId: number, field: StockField, amount: number): v
     amount,
     familyId,
   ]).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 }
 
@@ -518,7 +518,7 @@ function persistStockTake(familyId: number, field: StockField, amount: number): 
     `UPDATE families SET ${field} = GREATEST(0, CAST(${field} AS SIGNED) - ?) WHERE id = ?`,
     [amount, familyId]
   ).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 }
 

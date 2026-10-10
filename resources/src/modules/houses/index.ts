@@ -20,7 +20,7 @@ export const housesModule: GameModule = {
   name: "houses",
   async start() {
     if (!isDatabaseReady()) {
-      omp.log(`[${SERVER_TAG}] 房屋：数据库不可用`);
+      omp.log(`[${SERVER_TAG}] 房屋:数据库不可用`);
       return;
     }
 
@@ -34,10 +34,10 @@ export const housesModule: GameModule = {
       bindHouseMenuDialogs();
       bindHouseSellDialog();
       startHouseRentScheduler();
-      omp.log(`[${SERVER_TAG}] 房屋：已加载 ${listHouses().length}`);
+      omp.log(`[${SERVER_TAG}] 房屋:已加载 ${listHouses().length}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 房屋：加载错误 — ${message}`);
+      omp.log(`[${SERVER_TAG}] 房屋:加载错误 - ${message}`);
     }
 
     omp.on("playerSpawn", (player) => {

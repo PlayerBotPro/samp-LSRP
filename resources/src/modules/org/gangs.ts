@@ -8,7 +8,7 @@ export const ORG_VAGOS_ID = 11;
 export const ORG_RIFA_ID = 12;
 export const ORG_AZTECAS_ID = 13;
 
-/** 帮派据点使用原版室内，每个帮派都有自己的 VW（即组织 ID). */
+/** 帮派据点使用原版室内,每个帮派都有自己的 VW(即组织 ID). */
 export const GROVE_WORLD = 9;
 export const BALLAS_WORLD = 10;
 export const VAGOS_WORLD = 11;
@@ -17,7 +17,7 @@ export const AZTECAS_WORLD = 13;
 
 const GANG_PAY = [800, 1100, 1500, 2000, 2600, 3300, 4100, 5000, 6000, 7200];
 
-/** 发薪时：每控制一个帮派地盘，额外增加对应等级的工资。 */
+/** 发薪时:每控制一个帮派地盘,额外增加对应等级的工资. */
 export const GANG_TURF_PAY_BONUS = 100;
 
 type GangRankRow = {

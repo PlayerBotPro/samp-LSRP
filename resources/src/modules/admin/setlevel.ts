@@ -72,12 +72,12 @@ export function bindAdminSetlevel(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
@@ -94,7 +94,7 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
   }
 
   if (pending.has(account.id)) {
-    admin.sendClientMessage(Color.error, "该玩家的等级正在被更改。请稍候。");
+    admin.sendClientMessage(Color.error, "该玩家的等级正在被更改.请稍候.");
     return;
   }
 
@@ -110,7 +110,7 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
     if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
       admin.sendClientMessage(
         Color.info,
-        `你已设置等级 ${level}. 玩家已离线，等级已保存。`
+        `你已设置等级 ${level}. 玩家已离线,等级已保存.`
       );
       return;
     }
@@ -139,7 +139,7 @@ async function applyLevel(admin: Player, target: Player, level: number): Promise
       );
     }
   } catch {
-    admin.sendClientMessage(Color.error, "无法保存等级。");
+    admin.sendClientMessage(Color.error, "无法保存等级.");
   } finally {
     pending.delete(account.id);
   }

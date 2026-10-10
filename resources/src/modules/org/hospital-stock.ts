@@ -9,7 +9,7 @@ const PICKUP_TYPE = 1;
 const LABEL_HEIGHT = 1.85;
 const LABEL_DRAW_DISTANCE = 14;
 
-/** 医院服务区的药品仓库。 */
+/** 医院服务区的药品仓库. */
 export const HOSPITAL_MEDS_STOCK_POINT = {
   x: 1156.484,
   y: -1342.847,
@@ -32,11 +32,11 @@ export function refreshHospitalMedsStockLabel(): void {
   try {
     medsStockLabel.updateText(Color.info, medsStockLabelText());
   } catch {
-    // 标签已销毁。
+    // 标签已销毁.
   }
 }
 
-/** 服务区的药品仓库。 */
+/** 服务区的药品仓库. */
 export function bindHospitalStock(): void {
   new Pickup(
     PICKUP_MODEL,

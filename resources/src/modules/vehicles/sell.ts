@@ -65,7 +65,7 @@ type CarOffer = {
 const pendingPlayerSale = new Map<number, PendingPlayerSale>();
 const pendingOffers = new Map<number, CarOffer>();
 const sellingState = new Set<number>();
-/** vehicleId → 正在转让给玩家。 */
+/** vehicleId → 正在转让给玩家. */
 const transferring = new Set<number>();
 
 export function bindPersonalVehicleSell(): void {
@@ -98,7 +98,7 @@ export function bindPersonalVehicleSell(): void {
     if (Date.now() > offer.expiresAt) {
       pendingOffers.delete(slot);
       releaseYnOffer(slot, "car");
-      player.sendClientMessage(Color.error, "载具购买报价已过期。");
+      player.sendClientMessage(Color.error, "载具购买报价已过期.");
       return;
     }
 
@@ -160,7 +160,7 @@ export function showSellStateConfirm(
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开出售窗口。");
+    player.sendClientMessage(Color.error, "无法打开出售窗口.");
   }
 }
 
@@ -178,7 +178,7 @@ export function showSellPlayerInput(
   if (!near) {
     player.sendClientMessage(
       Color.error,
-      "要把载具卖给玩家，请靠近自己的载具或坐进车内。"
+      "要把载具卖给玩家,请靠近自己的载具或坐进车内."
     );
     return;
   }
@@ -197,7 +197,7 @@ export function showSellPlayerInput(
   if (!personal || personal.dbId !== vehicle.id) {
     player.sendClientMessage(
       Color.error,
-      "要把载具卖给玩家，请靠近自己的载具或坐进车内。"
+      "要把载具卖给玩家,请靠近自己的载具或坐进车内."
     );
     return;
   }
@@ -227,7 +227,7 @@ export function showSellPlayerInput(
     );
   } catch {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开出售金额输入页面。");
+    player.sendClientMessage(Color.error, "无法打开出售金额输入页面.");
   }
 }
 
@@ -289,7 +289,7 @@ async function confirmSellToState(player: Player): Promise<void> {
 
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "你没有私人载具。");
+    player.sendClientMessage(Color.error, "你没有私人载具.");
     return;
   }
 
@@ -300,14 +300,14 @@ async function confirmSellToState(player: Player): Promise<void> {
   } catch (error: unknown) {
     sellingState.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 出售车辆 ${vehicle.id} (${account.name})：${message}`);
-    player.sendClientMessage(Color.error, "出售失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 出售车辆 ${vehicle.id} (${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
   sellingState.delete(account.id);
 
   if (!result.ok) {
-    player.sendClientMessage(Color.error, "出售失败。请重试。");
+    player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
 
@@ -339,7 +339,7 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "你没有私人载具。");
+    player.sendClientMessage(Color.error, "你没有私人载具.");
     return;
   }
 
@@ -348,7 +348,7 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
     pendingPlayerSale.delete(slotId);
     player.sendClientMessage(
       Color.error,
-      "要把载具卖给玩家，请靠近自己的载具或坐进车内。"
+      "要把载具卖给玩家,请靠近自己的载具或坐进车内."
     );
     return;
   }
@@ -370,20 +370,20 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
     pendingPlayerSale.delete(slotId);
     player.sendClientMessage(
       Color.error,
-      "要把载具卖给玩家，请靠近自己的载具或坐进车内。"
+      "要把载具卖给玩家,请靠近自己的载具或坐进车内."
     );
     return;
   }
 
   const parsed = parseSellPlayerInput(inputText);
   if (!parsed) {
-    player.sendClientMessage(Color.error, "格式: ID,价格 — 例如 2,150000");
+    player.sendClientMessage(Color.error, "格式: ID,价格 - 例如 2,150000");
     showSellPlayerInput(player, vehicle);
     return;
   }
 
   if (parsed.slot === slotId) {
-    player.sendClientMessage(Color.error, "不能把载具卖给自己。");
+    player.sendClientMessage(Color.error, "不能把载具卖给自己.");
     showSellPlayerInput(player, vehicle);
     return;
   }
@@ -391,13 +391,13 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
   const buyer = omp.players.at(parsed.slot);
   const buyerAccount = buyer ? getAccount(buyer) : null;
   if (!buyer || !isPlayerActive(buyer) || !buyerAccount || !isAuthenticated(buyer)) {
-    player.sendClientMessage(Color.error, "玩家不在线。");
+    player.sendClientMessage(Color.error, "玩家不在线.");
     showSellPlayerInput(player, vehicle);
     return;
   }
 
   if (!arePlayersNearby(player, buyer, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     showSellPlayerInput(player, vehicle);
     return;
   }
@@ -405,7 +405,7 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
   if (!isPlayerNearPersonalVehicle(buyer, runtimeId)) {
     player.sendClientMessage(
       Color.error,
-      "买家必须在车内或靠近车辆。"
+      "买家必须在车内或靠近车辆."
     );
     showSellPlayerInput(player, vehicle);
     return;
@@ -419,7 +419,7 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
   }
 
   if (buyerAccount.money < parsed.price) {
-    player.sendClientMessage(Color.error, "玩家现金不足。");
+    player.sendClientMessage(Color.error, "玩家现金不足.");
     showSellPlayerInput(player, vehicle);
     return;
   }
@@ -450,7 +450,7 @@ async function prepareSellToPlayer(player: Player, inputText: string): Promise<v
     );
   } catch {
     pendingPlayerSale.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开确认对话框。");
+    player.sendClientMessage(Color.error, "无法打开确认对话框.");
   }
 }
 
@@ -470,14 +470,14 @@ function sendSellOfferToPlayer(player: Player): void {
   if (!isPlayerNearPersonalVehicle(player, pending.runtimeId)) {
     player.sendClientMessage(
       Color.error,
-      "请靠近自己的载具或坐进车内。"
+      "请靠近自己的载具或坐进车内."
     );
     return;
   }
 
   const personal = getPersonalRuntime(pending.runtimeId);
   if (!personal || personal.dbId !== pending.vehicleId || personal.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "这已经不是你的载具了。");
+    player.sendClientMessage(Color.error, "这已经不是你的载具了.");
     return;
   }
 
@@ -490,19 +490,19 @@ function sendSellOfferToPlayer(player: Player): void {
     buyerAccount.id !== pending.buyerUserId ||
     !isAuthenticated(buyer)
   ) {
-    player.sendClientMessage(Color.error, "玩家不在线。");
+    player.sendClientMessage(Color.error, "玩家不在线.");
     return;
   }
 
   if (!arePlayersNearby(player, buyer, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
   if (!isPlayerNearPersonalVehicle(buyer, pending.runtimeId)) {
     player.sendClientMessage(
       Color.error,
-      "买家必须在车内或靠近车辆。"
+      "买家必须在车内或靠近车辆."
     );
     return;
   }
@@ -513,7 +513,7 @@ function sendSellOfferToPlayer(player: Player): void {
   }
 
   if (pendingOffers.has(buyerSlot) || !claimYnOffer(buyerSlot, "car")) {
-    player.sendClientMessage(Color.error, "该玩家已有有效报价。");
+    player.sendClientMessage(Color.error, "该玩家已有有效报价.");
     return;
   }
 
@@ -536,7 +536,7 @@ function sendSellOfferToPlayer(player: Player): void {
   );
   buyer.sendClientMessage(
     Color.white,
-    "按 {00CC00}Y {FFFFFF}购买，或按 {FF6600}N {FFFFFF}拒绝"
+    "按 {00CC00}Y {FFFFFF}购买,或按 {FF6600}N {FFFFFF}拒绝"
   );
 }
 
@@ -555,7 +555,7 @@ async function acceptCarOffer(
 
   const vehicle = await findOwnedPlayerVehicle(offer.sellerUserId);
   if (!vehicle || vehicle.id !== offer.vehicleId) {
-    buyer.sendClientMessage(Color.error, "该载具已售出或不可用。");
+    buyer.sendClientMessage(Color.error, "该载具已售出或不可用.");
     return;
   }
 
@@ -581,13 +581,13 @@ async function acceptCarOffer(
     sellerAccount.id !== offer.sellerUserId ||
     !isAuthenticated(seller)
   ) {
-    buyer.sendClientMessage(Color.error, "卖家已退出游戏。交易已取消。");
+    buyer.sendClientMessage(Color.error, "卖家已退出游戏.交易已取消.");
     return;
   }
 
   if (!arePlayersNearby(buyer, seller, WHISPER_RADIUS)) {
-    buyer.sendClientMessage(Color.error, "卖家距离太远。交易已取消。");
-    seller.sendClientMessage(Color.error, "买家距离太远。交易已取消。");
+    buyer.sendClientMessage(Color.error, "卖家距离太远.交易已取消.");
+    seller.sendClientMessage(Color.error, "买家距离太远.交易已取消.");
     return;
   }
 
@@ -597,11 +597,11 @@ async function acceptCarOffer(
   ) {
     buyer.sendClientMessage(
       Color.error,
-      "双方都必须在车内或靠近车辆。交易已取消。"
+      "双方都必须在车内或靠近车辆.交易已取消."
     );
     seller.sendClientMessage(
       Color.error,
-      "双方都必须在车内或靠近车辆。交易已取消。"
+      "双方都必须在车内或靠近车辆.交易已取消."
     );
     return;
   }
@@ -612,7 +612,7 @@ async function acceptCarOffer(
     personal.dbId !== offer.vehicleId ||
     personal.ownerId !== offer.sellerUserId
   ) {
-    buyer.sendClientMessage(Color.error, "载具不可用。交易已取消。");
+    buyer.sendClientMessage(Color.error, "载具不可用.交易已取消.");
     return;
   }
 
@@ -629,7 +629,7 @@ async function acceptCarOffer(
   }
 
   if (transferring.has(offer.vehicleId)) {
-    buyer.sendClientMessage(Color.error, "交易正在处理中。");
+    buyer.sendClientMessage(Color.error, "交易正在处理中.");
     return;
   }
 
@@ -644,8 +644,8 @@ async function acceptCarOffer(
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 转让车辆 ${offer.vehicleId}：${message}`);
-    buyer.sendClientMessage(Color.error, "交易失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 转让车辆 ${offer.vehicleId}:${message}`);
+    buyer.sendClientMessage(Color.error, "交易失败.请重试.");
     return;
   } finally {
     transferring.delete(offer.vehicleId);
@@ -653,18 +653,18 @@ async function acceptCarOffer(
 
   if (!result.ok) {
     if (result.reason === "owned") {
-      buyer.sendClientMessage(Color.error, "你已经有私人载具。");
+      buyer.sendClientMessage(Color.error, "你已经有私人载具.");
       return;
     }
     if (result.reason === "funds") {
-      buyer.sendClientMessage(Color.error, "现金不足。");
+      buyer.sendClientMessage(Color.error, "现金不足.");
       return;
     }
     if (result.reason === "vehicle") {
-      buyer.sendClientMessage(Color.error, "该载具已售出或不可用。");
+      buyer.sendClientMessage(Color.error, "该载具已售出或不可用.");
       return;
     }
-    buyer.sendClientMessage(Color.error, "交易失败。请重试。");
+    buyer.sendClientMessage(Color.error, "交易失败.请重试.");
     return;
   }
 
@@ -702,44 +702,44 @@ async function acceptCarOffer(
 function refuseCarOffer(buyer: Player, buyerSlot: number, offer: CarOffer): void {
   pendingOffers.delete(buyerSlot);
   releaseYnOffer(buyerSlot, "car");
-  buyer.sendClientMessage(Color.info, "你拒绝了购买载具。");
+  buyer.sendClientMessage(Color.info, "你拒绝了购买载具.");
 
   const seller = omp.players.at(offer.sellerSlot);
   if (seller && isPlayerActive(seller)) {
     seller.sendClientMessage(
       Color.error,
-      `${playerName(buyer)} 拒绝购买载具。`
+      `${playerName(buyer)} 拒绝购买载具.`
     );
   }
 }
 
-/** 返回 null 表示可以购买；否则返回给卖家或买家的错误信息。 */
+/** 返回 null 表示可以购买;否则返回给卖家或买家的错误信息. */
 async function buyerCanPurchaseVehicle(
   buyer: Player,
   modelId: number
 ): Promise<string | null> {
   const account = getAccount(buyer);
   if (!account) {
-    return "玩家不在线。";
+    return "玩家不在线.";
   }
 
   if (await findOwnedPlayerVehicle(account.id)) {
-    return "该玩家已经拥有个人车辆。";
+    return "该玩家已经拥有个人车辆.";
   }
 
   if (!findOwnedHouse(account.id)) {
-    return "买家没有房屋。";
+    return "买家没有房屋.";
   }
 
   const need = requiredDriveLicense(modelId);
   if (need === "moto" && !account.licenses.moto) {
-    return "买家没有摩托车驾照。";
+    return "买家没有摩托车驾照.";
   }
   if (need === "car" && !account.licenses.car) {
-    return "买家没有汽车驾照。";
+    return "买家没有汽车驾照.";
   }
   if (need === "fly" && !account.licenses.fly) {
-    return "买家没有飞行执照。";
+    return "买家没有飞行执照.";
   }
 
   return null;

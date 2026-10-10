@@ -21,11 +21,11 @@ const PICKUP_TYPE = 1;
 const PLAYER_STATE_ONFOOT = 1;
 const PICKUP_RADIUS = 1.6;
 const TICK_MS = 400;
-/** 玩家站在弹药箱旁时的弹药发放间隔。 */
+/** 玩家站在弹药箱旁时的弹药发放间隔. */
 const LOOT_INTERVAL_MS = 2500;
-/** 每个周期从军队仓库取出的子弹数量。 */
+/** 每个周期从军队仓库取出的子弹数量. */
 const AMMO_PER_TICK = 20;
-/** 在基地死亡时损失的子弹比例。 */
+/** 在基地死亡时损失的子弹比例. */
 const DEATH_AMMO_LOSS_RATIO = 0.3;
 const EMPTY_MSG_COOLDOWN_MS = 4000;
 
@@ -42,7 +42,7 @@ const CRATES: readonly { x: number; y: number; z: number }[] = [
   { x: 2743.3081, y: -2454.3604, z: 13.8623 },
 ];
 
-/** 军事基地范围（死亡时会损失一定比例的子弹）。 */
+/** 军事基地范围(死亡时会损失一定比例的子弹). */
 const ARMY_BASE_ZONE = {
   minX: 2664.8,
   minY: -2589.1,
@@ -141,7 +141,7 @@ function tryLootCrate(player: Player): void {
 
   const nextAmmo = account.ammo + take;
   if (!Number.isSafeInteger(nextAmmo)) {
-    player.sendClientMessage(Color.error, "你携带的子弹太多了。");
+    player.sendClientMessage(Color.error, "你携带的子弹太多了.");
     return;
   }
 
@@ -152,7 +152,7 @@ function tryLootCrate(player: Player): void {
 
   patchAccount(player, { ammo: nextAmmo });
   void saveUserInventory(account.id, account.drugs, nextAmmo, account.metal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
   refreshArmyAmmoStockLabel();
   player.sendClientMessage(Color.info, `+${take} 发子弹 (军队仓库).`);
@@ -164,7 +164,7 @@ function notifyEmpty(player: Player, id: number, now: number): void {
   }
 
   lastEmptyMsgAt.set(id, now);
-  player.sendClientMessage(Color.error, "箱子是空的: 军队仓库没有子弹。");
+  player.sendClientMessage(Color.error, "箱子是空的: 军队仓库没有子弹.");
 }
 
 function onDeathInArmyBase(player: Player): void {
@@ -198,11 +198,11 @@ function onDeathInArmyBase(player: Player): void {
 
   patchAccount(player, { ammo: nextAmmo });
   void saveUserInventory(account.id, account.drugs, nextAmmo, account.metal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
   player.sendClientMessage(
     Color.error,
-    `你在军事基地损失了 ${lost} 发子弹。`
+    `你在军事基地损失了 ${lost} 发子弹.`
   );
 }
 

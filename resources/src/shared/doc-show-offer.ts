@@ -32,15 +32,15 @@ const pendingByTarget = new Map<number, DocShowOffer>();
 const handlers = new Map<DocShowKind, ShowHandler>();
 let bound = false;
 
-/** 注册玩家按 Y 接受后展示证件的处理函数。 */
+/** 注册玩家按 Y 接受后展示证件的处理函数. */
 export function registerDocShowHandler(kind: DocShowKind, handler: ShowHandler): void {
   handlers.set(kind, handler);
   ensureBound();
 }
 
 /**
- * 提议展示证件。如果目标已有请求或玩家槽位无效，则返回 false。
- * 调用方负责检查距离和身份验证状态。
+ * 提议展示证件.如果目标已有请求或玩家槽位无效,则返回 false.
+ * 调用方负责检查距离和身份验证状态.
  */
 export function offerDocShow(
   from: Player,
@@ -55,7 +55,7 @@ export function offerDocShow(
   }
 
   if (!claimYnOffer(targetSlot, kind as YnOfferKind)) {
-    from.sendClientMessage(Color.error, "该玩家已有待处理的请求。");
+    from.sendClientMessage(Color.error, "该玩家已有待处理的请求.");
     return false;
   }
 
@@ -74,15 +74,15 @@ export function offerDocShow(
 
   from.sendClientMessage(
     Color.gray,
-    `你提议向 ${playerName(to)} 出示${label}。`
+    `你提议向 ${playerName(to)} 出示${label}.`
   );
   to.sendClientMessage(
     Color.white,
-    `${playerName(from)} 提议向你出示${label}。`
+    `${playerName(from)} 提议向你出示${label}.`
   );
   to.sendClientMessage(
     Color.white,
-    "按 {00CC00}Y {FFFFFF}查看，或按 {FF6600}N {FFFFFF}拒绝"
+    "按 {00CC00}Y {FFFFFF}查看,或按 {FF6600}N {FFFFFF}拒绝"
   );
   return true;
 }
@@ -150,7 +150,7 @@ function ensureBound(): void {
         clearOffer(targetSlot);
         const target = omp.players.at(targetSlot);
         if (target && isPlayerActive(target)) {
-          target.sendClientMessage(Color.error, "证件展示请求已取消。");
+          target.sendClientMessage(Color.error, "证件展示请求已取消.");
         }
       }
     }
@@ -162,20 +162,20 @@ function acceptOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): v
 
   const owner = omp.players.at(offer.fromSlot);
   if (!owner || !isPlayerActive(owner)) {
-    viewer.sendClientMessage(Color.error, "玩家已不在线。");
+    viewer.sendClientMessage(Color.error, "玩家已不在线.");
     return;
   }
 
   if (getAccount(owner)?.id !== offer.fromUserId) {
-    viewer.sendClientMessage(Color.error, "证件展示请求已失效。");
+    viewer.sendClientMessage(Color.error, "证件展示请求已失效.");
     return;
   }
 
   if (!arePlayersNearby(viewer, owner, WHISPER_RADIUS)) {
-    viewer.sendClientMessage(Color.error, "玩家距离太远。");
+    viewer.sendClientMessage(Color.error, "玩家距离太远.");
     owner.sendClientMessage(
       Color.error,
-      `${playerName(viewer)} 无法查看：距离太远。`
+      `${playerName(viewer)} 无法查看:距离太远.`
     );
     return;
   }
@@ -190,13 +190,13 @@ function acceptOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): v
 
 function refuseOffer(viewer: Player, targetSlot: number, offer: DocShowOffer): void {
   clearOffer(targetSlot);
-  viewer.sendClientMessage(Color.info, "你拒绝了查看。");
+  viewer.sendClientMessage(Color.info, "你拒绝了查看.");
 
   const owner = omp.players.at(offer.fromSlot);
   if (owner && isPlayerActive(owner) && getAccount(owner)?.id === offer.fromUserId) {
     owner.sendClientMessage(
       Color.info,
-      `${playerName(viewer)} 拒绝查看${DOC_LABEL[offer.kind]}。`
+      `${playerName(viewer)} 拒绝查看${DOC_LABEL[offer.kind]}.`
     );
   }
 }
@@ -211,12 +211,12 @@ function expireOffer(targetSlot: number): void {
 
   const target = omp.players.at(targetSlot);
   if (target && isPlayerActive(target)) {
-    target.sendClientMessage(Color.error, "证件展示请求已过期。");
+    target.sendClientMessage(Color.error, "证件展示请求已过期.");
   }
 
   const owner = omp.players.at(offer.fromSlot);
   if (owner && isPlayerActive(owner) && getAccount(owner)?.id === offer.fromUserId) {
-    owner.sendClientMessage(Color.error, "证件展示请求已过期。");
+    owner.sendClientMessage(Color.error, "证件展示请求已过期.");
   }
 }
 

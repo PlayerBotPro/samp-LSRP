@@ -34,10 +34,10 @@ function teleportToMapMark(player: Player, x: number, y: number, z: number): voi
     refreshStreamForPlayer(player);
     player.sendClientMessage(
       Color.white,
-      "你已成功传送到标记点！"
+      "你已成功传送到标记点!"
     );
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }
 

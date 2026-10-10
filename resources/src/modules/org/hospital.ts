@@ -62,6 +62,6 @@ export const HOSPITAL_GATES: OrgGateDef[] = [
     ry: 0,
     rz: 0,
     radius: 14,
-    denyMessage: "你不属于医院。",
+    denyMessage: "你不属于医院.",
   },
 ];

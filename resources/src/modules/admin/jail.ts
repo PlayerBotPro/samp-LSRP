@@ -60,7 +60,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -85,23 +85,23 @@ export function bindAdminJail(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (isJailed(target)) {
-        player.sendClientMessage(Color.error, "玩家已经在监狱里。");
+        player.sendClientMessage(Color.error, "玩家已经在监狱里.");
         return;
       }
 
       if (account.adminLevel >= 1) {
-        player.sendClientMessage(Color.error, "不能将管理员关进监狱。");
+        player.sendClientMessage(Color.error, "不能将管理员关进监狱.");
         return;
       }
 
@@ -127,18 +127,18 @@ export function bindAdminJail(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (!isJailed(target)) {
-        player.sendClientMessage(Color.error, "玩家不在监狱里。");
+        player.sendClientMessage(Color.error, "玩家不在监狱里.");
         return;
       }
 
@@ -156,22 +156,22 @@ async function applyAndAnnounce(
 ): Promise<void> {
   const ok = await applyJail(target, minutes);
   if (!ok) {
-    admin.sendClientMessage(Color.error, "无法将玩家关进监狱。");
+    admin.sendClientMessage(Color.error, "无法将玩家关进监狱.");
     return;
   }
 
   const adminTag = playerChatName(admin);
   const targetTag = playerChatName(target);
   const line = reason
-    ? `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟。原因：${reason}。`
-    : `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟。`;
+    ? `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟.原因:${reason}.`
+    : `管理员 ${adminTag} 将玩家 ${targetTag} 关入监狱 ${minutes} 分钟.`;
   broadcastAll(Color.error, line);
 }
 
 async function applyUnjailAndAnnounce(admin: Player, target: Player): Promise<void> {
   const ok = await applyUnjail(target);
   if (!ok) {
-    admin.sendClientMessage(Color.error, "无法释放玩家。");
+    admin.sendClientMessage(Color.error, "无法释放玩家.");
     return;
   }
 
@@ -179,6 +179,6 @@ async function applyUnjailAndAnnounce(admin: Player, target: Player): Promise<vo
   const targetTag = playerChatName(target);
   broadcastAll(
     Color.error,
-    `管理员 ${adminTag} 释放了玩家 ${targetTag}。`
+    `管理员 ${adminTag} 释放了玩家 ${targetTag}.`
   );
 }

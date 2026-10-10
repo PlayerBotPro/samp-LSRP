@@ -15,18 +15,18 @@ registerCommand("limit", "车辆速度限制器", (player, args) => {
   let vehicle;
   try {
     if (player.getState() !== PLAYER_STATE_DRIVER) {
-      player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+      player.sendClientMessage(Color.error, "你必须坐在驾驶位.");
       return;
     }
 
     vehicle = omp.vehicles.at(player.getVehicleID());
   } catch {
-    player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+    player.sendClientMessage(Color.error, "你必须坐在驾驶位.");
     return;
   }
 
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+    player.sendClientMessage(Color.error, "你必须坐在驾驶位.");
     return;
   }
 
@@ -53,7 +53,7 @@ registerCommand("limit", "车辆速度限制器", (player, args) => {
 
   if (kmh === 0) {
     clearVehicleLimit(vehicle);
-    player.sendClientMessage(Color.info, "限速已取消。");
+    player.sendClientMessage(Color.info, "限速已取消.");
     return;
   }
 
@@ -67,7 +67,7 @@ registerCommand("limit", "车辆速度限制器", (player, args) => {
 
   const applied = setVehicleLimit(vehicle, kmh);
   if (applied === null) {
-    player.sendClientMessage(Color.error, "无法设置限速。");
+    player.sendClientMessage(Color.error, "无法设置限速.");
     return;
   }
 

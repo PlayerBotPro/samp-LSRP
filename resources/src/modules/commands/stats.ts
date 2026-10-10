@@ -16,12 +16,12 @@ const TITLE = "{FFCC00}";
 const LABEL = "{FFFFFF}";
 const VALUE = "{33CCFF}";
 
-/** 统计：查看自己（通过 /mn）或其他玩家（管理员 /stats）。 */
+/** 统计:查看自己(通过 /mn)或其他玩家(管理员 /stats). */
 export function showStatsDialog(viewer: Player, target?: Player): void {
   const subject = target ?? viewer;
   const account = getAccount(subject);
   if (!account) {
-    viewer.sendClientMessage(Color.error, "请先登录账号。");
+    viewer.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -32,7 +32,7 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
       health = Math.round(live);
     }
   } catch {
-    // 世界统计数据不可用，将显示账号信息。
+    // 世界统计数据不可用,将显示账号信息.
   }
 
   const membership = getMembership(account);
@@ -77,7 +77,7 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "无法打开统计信息。");
+    viewer.sendClientMessage(Color.error, "无法打开统计信息.");
   }
 }
 

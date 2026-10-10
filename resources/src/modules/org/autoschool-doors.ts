@@ -157,7 +157,7 @@ function tickSchoolDoors(): void {
         }
       }
     } catch {
-      // 槽位为空，或玩家已经离开。
+      // 槽位为空,或玩家已经离开.
     }
   });
 }
@@ -165,7 +165,7 @@ function tickSchoolDoors(): void {
 function tryUse(player: Player, door: SchoolDoor): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -188,7 +188,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -210,7 +210,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 

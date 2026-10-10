@@ -15,7 +15,7 @@ import { registerCommand } from "./registry";
 const CHECKPOINT_RADIUS = 4;
 const ARRIVE_RADIUS = 8;
 const TICK_MS = 200;
-/** 与 GPS 共用同一槽位，因此同一时间只能有一个路线标记。 */
+/** 与 GPS 共用同一槽位,因此同一时间只能有一个路线标记. */
 const MAP_ICON_SLOT = 2;
 const MAP_ICON_TYPE = 0;
 const MAP_ICON_COLOR = 0xff0000ff;
@@ -75,7 +75,7 @@ function clearMark(player: Player, slot: number): void {
       Checkpoint.disable(player);
     }
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -85,7 +85,7 @@ function setMark(player: Player, mark: FindMark): void {
     return;
   }
 
-  // 与 GPS 共用图标和检查点槽位。
+  // 与 GPS 共用图标和检查点槽位.
   clearGpsRouteForPlayer(player);
 
   let pos;
@@ -104,7 +104,7 @@ function setMark(player: Player, mark: FindMark): void {
       Checkpoint.set(player, mark.x, mark.y, mark.z, CHECKPOINT_RADIUS);
     }
   } catch {
-    player.sendClientMessage(Color.error, "无法设置标记点。");
+    player.sendClientMessage(Color.error, "无法设置标记点.");
     return;
   }
 
@@ -125,7 +125,7 @@ function handleFind(
   usage: string
 ): void {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -143,7 +143,7 @@ function handleFind(
   const current = activeByPlayer.get(slot);
   if (current && current.kind === kind && current.entityId === entityId) {
     clearMark(player, slot);
-    player.sendClientMessage(Color.gray, "标记点已关闭。");
+    player.sendClientMessage(Color.gray, "标记点已关闭.");
     return;
   }
 
@@ -209,17 +209,17 @@ function tickFindMarks(): void {
         Checkpoint.set(player, mark.x, mark.y, mark.z, CHECKPOINT_RADIUS);
       }
     } catch {
-      // 玩家已离线。
+      // 玩家已离线.
     }
   });
 }
 
 registerCommand("findidhouse", "按 ID 标记房屋位置", (player, args) => {
-  handleFind(player, "house", args, "用法： /findidhouse [id]");
+  handleFind(player, "house", args, "用法: /findidhouse [id]");
 });
 
 registerCommand("findidbiz", "按 ID 标记企业位置", (player, args) => {
-  handleFind(player, "biz", args, "用法： /findidbiz [id]");
+  handleFind(player, "biz", args, "用法: /findidbiz [id]");
 });
 
 export function bindFindIdMarks(): void {

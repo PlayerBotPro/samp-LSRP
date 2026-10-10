@@ -12,7 +12,7 @@ import { getMembership } from "../org";
 import { registerCommand } from "./registry";
 
 const BUBBLE_MS = 3000;
-const BUBBLE_TEXT = "部门频道消息。";
+const BUBBLE_TEXT = "部门频道消息.";
 
 registerCommand("d", "部门无线电", (player, args) => {
   const account = getAccount(player);
@@ -20,7 +20,7 @@ registerCommand("d", "部门无线电", (player, args) => {
   if (!account || !membership || !membership.org.gov) {
     player.sendClientMessage(
       Color.error,
-      "你不属于政府组织。"
+      "你不属于政府组织."
     );
     return;
   }
@@ -57,13 +57,13 @@ registerCommand("d", "部门无线电", (player, args) => {
     try {
       other.sendClientMessage(Color.dept, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 
   try {
     player.setChatBubble(BUBBLE_TEXT, Color.dept, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // 聊天气泡不是必需的。
+    // 聊天气泡不是必需的.
   }
 });

@@ -7,7 +7,7 @@ import {
 import { getAccount } from "../auth/session";
 import { isJailed } from "../prison/sentence";
 
-/** 后缀 ` | AFK` 或 ` | AFK 12 分 05 秒`。 */
+/** 后缀 ` | AFK` 或 ` | AFK 12 分 05 秒`. */
 export function afkStatusSuffix(player: Player, withTime = false): string {
   if (!isPlayerAfk(player)) {
     return "";
@@ -25,7 +25,7 @@ export function afkStatusSuffix(player: Player, withTime = false): string {
   return ` | AFK ${formatAfkElapsed(ms)}`;
 }
 
-/** 后缀 ` | AFK | Jail | Mute`，仅显示当前生效的状态标记。 */
+/** 后缀 ` | AFK | Jail | Mute`,仅显示当前生效的状态标记. */
 export function memberStatusSuffix(player: Player): string {
   const parts: string[] = [];
   if (isPlayerAfk(player)) {
@@ -41,7 +41,7 @@ export function memberStatusSuffix(player: Player): string {
   return parts.length > 0 ? ` | ${parts.join(" | ")}` : "";
 }
 
-/** 不触发 expireMute 副作用，列表不应解除禁言。 */
+/** 不触发 expireMute 副作用,列表不应解除禁言. */
 function isMutedNow(player: Player): boolean {
   const until = getAccount(player)?.mutedUntil;
   if (until == null) {

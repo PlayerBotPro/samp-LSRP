@@ -17,7 +17,7 @@ import { setInsideBusiness } from "./session";
 import { isAmmuType } from "./types";
 import { businessVirtualWorld } from "./world";
 
-/** 左 ALT：慢走（KEY_WALK）。 */
+/** 左 ALT:慢走(KEY_WALK). */
 const KEY_WALK = 1024;
 const PLAYER_STATE_ONFOOT = 1;
 const PICKUP_RADIUS = 1.5;
@@ -131,7 +131,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "企业已关闭。");
+    player.sendClientMessage(Color.error, "企业已关闭.");
     return;
   }
 
@@ -142,7 +142,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   ) {
     player.sendClientMessage(
       Color.error,
-      "进入武器商店需要武器执照。"
+      "进入武器商店需要武器执照."
     );
     return;
   }
@@ -159,7 +159,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   if (fee > 0) {
     const cash = Math.max(0, Math.floor(account.money));
     if (cash < fee) {
-      player.sendClientMessage(Color.error, "进入费用现金不足。");
+      player.sendClientMessage(Color.error, "进入费用现金不足.");
       return;
     }
 
@@ -173,8 +173,8 @@ async function tryEnterBusiness(player: Player): Promise<void> {
       result = await payBusinessEntranceFee(business.id, account.id, fee);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 进入企业 ${business.id}（${account.name}）：${message}`);
-      player.sendClientMessage(Color.error, "无法支付入场费。");
+      omp.log(`[${SERVER_TAG}] 进入企业 ${business.id}(${account.name}):${message}`);
+      player.sendClientMessage(Color.error, "无法支付入场费.");
       return;
     } finally {
       entering.delete(account.id);
@@ -182,10 +182,10 @@ async function tryEnterBusiness(player: Player): Promise<void> {
 
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "进入费用现金不足。");
+        player.sendClientMessage(Color.error, "进入费用现金不足.");
         return;
       }
-      player.sendClientMessage(Color.error, "无法支付入场费。");
+      player.sendClientMessage(Color.error, "无法支付入场费.");
       return;
     }
 
@@ -210,7 +210,7 @@ async function tryEnterBusiness(player: Player): Promise<void> {
   nearEntrance.delete(slotId);
 
   if (!teleportToBusinessInterior(player, business)) {
-    player.sendClientMessage(Color.error, "无法进入企业。");
+    player.sendClientMessage(Color.error, "无法进入企业.");
   }
 }
 

@@ -104,13 +104,13 @@ export function bindAdminVeh(): void {
       }
 
       if (!canSpawn(player)) {
-        player.sendClientMessage(Color.error, "现在不能创建车辆。");
+        player.sendClientMessage(Color.error, "现在不能创建车辆.");
         return;
       }
 
       const spot = spawnInFront(player);
       if (!spot) {
-        player.sendClientMessage(Color.error, "无法创建车辆。");
+        player.sendClientMessage(Color.error, "无法创建车辆.");
         return;
       }
 
@@ -127,14 +127,14 @@ export function bindAdminVeh(): void {
       });
 
       if (!vehicle) {
-        player.sendClientMessage(Color.error, "无法创建车辆。");
+        player.sendClientMessage(Color.error, "无法创建车辆.");
         return;
       }
 
       try {
         vehicle.linkToInterior(spot.interior);
       } catch {
-        // 虚拟世界已在生成载具时设置。
+        // 虚拟世界已在生成载具时设置.
       }
 
       player.sendClientMessage(
@@ -156,18 +156,18 @@ export function bindAdminVeh(): void {
       let vehicle;
       try {
         if (!player.isInAnyVehicle()) {
-          player.sendClientMessage(Color.error, "你必须在车内。");
+          player.sendClientMessage(Color.error, "你必须在车内.");
           return;
         }
 
         vehicle = omp.vehicles.at(player.getVehicleID());
       } catch {
-        player.sendClientMessage(Color.error, "你必须在车内。");
+        player.sendClientMessage(Color.error, "你必须在车内.");
         return;
       }
 
       if (!vehicle) {
-        player.sendClientMessage(Color.error, "你必须在车内。");
+        player.sendClientMessage(Color.error, "你必须在车内.");
         return;
       }
 
@@ -177,11 +177,11 @@ export function bindAdminVeh(): void {
       try {
         vehicle.destroy();
       } catch {
-        player.sendClientMessage(Color.error, "无法删除车辆。");
+        player.sendClientMessage(Color.error, "无法删除车辆.");
         return;
       }
 
-      player.sendClientMessage(Color.info, "车辆已删除。");
+      player.sendClientMessage(Color.info, "车辆已删除.");
     },
     true
   );

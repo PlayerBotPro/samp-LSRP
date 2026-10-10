@@ -17,7 +17,7 @@ const MAX_ARMOR = 100;
 const WEAPON_NIGHTSTICK = 3;
 const WEAPON_DEAGLE = 24;
 const DEAGLE_AMMO = 50;
-const DENY = "你不属于市政厅。";
+const DENY = "你不属于市政厅.";
 
 const POINT = {
   x: -806.9103,
@@ -30,7 +30,7 @@ const inside = new Set<number>();
 export function bindMeriyaLocker(): void {
   new Pickup(PICKUP_MODEL, PICKUP_TYPE, POINT.x, POINT.y, POINT.z, MERIYA_WORLD);
   new TextLabel(
-    "市政厅仓库\n护甲、警棍、沙漠之鹰",
+    "市政厅仓库\n护甲,警棍,沙漠之鹰",
     Color.info,
     POINT.x,
     POINT.y,
@@ -88,7 +88,7 @@ function tickLocker(): void {
       inside.add(id);
       tryTake(player);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -100,7 +100,7 @@ function tryTake(player: Player): void {
   }
 
   if (account.hospitalized) {
-    tell(player, Color.error, "请先在医院接受治疗。");
+    tell(player, Color.error, "请先在医院接受治疗.");
     return;
   }
 
@@ -115,18 +115,18 @@ function tryTake(player: Player): void {
     grantWeapon(player, WEAPON_NIGHTSTICK, 1);
     grantWeapon(player, WEAPON_DEAGLE, DEAGLE_AMMO);
   } catch {
-    tell(player, Color.error, "无法发放装备。");
+    tell(player, Color.error, "无法发放装备.");
     return;
   }
 
-  tell(player, Color.info, "你领取了防弹衣、警棍和 Desert Eagle。");
+  tell(player, Color.info, "你领取了防弹衣,警棍和 Desert Eagle.");
 }
 
 function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

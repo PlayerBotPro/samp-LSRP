@@ -6,12 +6,12 @@ import { findOwnedHouseAtInterior } from "./interior";
 export function tryHealInHouse(player: Player): void {
   const house = findOwnedHouseAtInterior(player);
   if (!house) {
-    player.sendClientMessage(Color.error, "此命令只能在自己的房屋内使用。");
+    player.sendClientMessage(Color.error, "此命令只能在自己的房屋内使用.");
     return;
   }
 
   if (!house.hasMedkit) {
-    player.sendClientMessage(Color.error, "房屋里没有急救包。");
+    player.sendClientMessage(Color.error, "房屋里没有急救包.");
     return;
   }
 
@@ -22,5 +22,5 @@ export function tryHealInHouse(player: Player): void {
 
   patchAccount(player, { health: MAX_HEALTH });
   applyHealth(player, MAX_HEALTH);
-  player.sendClientMessage(Color.info, "你已恢复健康。");
+  player.sendClientMessage(Color.info, "你已恢复健康.");
 }

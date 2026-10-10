@@ -56,7 +56,7 @@ const openLabels = new Map<number, TrunkOpenLabel>();
 export function bindPersonalTrunk(): void {
   registerCommand(
     "trunk",
-    "个人车辆后备箱（存入 / 取出）",
+    "个人车辆后备箱(存入 / 取出)",
     (player) => {
       void openTrunkMenu(player);
     }
@@ -97,7 +97,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "附近没有你的载具。请靠近或上车。"
+      "附近没有你的载具.请靠近或上车."
     );
     return;
   }
@@ -114,7 +114,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
 
   const personal = getPersonalRuntime(runtimeId);
   if (!personal || personal.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "这不是你的载具。");
+    player.sendClientMessage(Color.error, "这不是你的载具.");
     return;
   }
 
@@ -139,7 +139,7 @@ async function openTrunkMenu(player: Player): Promise<void> {
     );
     showTrunkOpenLabel(player, account.gender);
   } catch {
-    player.sendClientMessage(Color.error, "无法打开后备箱。");
+    player.sendClientMessage(Color.error, "无法打开后备箱.");
   }
 }
 
@@ -162,7 +162,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "附近没有你的载具。请靠近或上车。"
+      "附近没有你的载具.请靠近或上车."
     );
     return;
   }
@@ -241,8 +241,8 @@ function showAmountDialog(
   const verb = action === "put" ? "存入后备箱" : "从后备箱取出";
   const available =
     action === "put"
-      ? `你有：${playerHave} 件\n后备箱：${trunkHave} / ${cap} 件`
-      : `后备箱：${trunkHave} / ${cap} 件\n你有：${playerHave} 件`;
+      ? `你有:${playerHave} 件\n后备箱:${trunkHave} / ${cap} 件`
+      : `后备箱:${trunkHave} / ${cap} 件\n你有:${playerHave} 件`;
 
   try {
     Dialog.show(
@@ -250,12 +250,12 @@ function showAmountDialog(
       TRUNK_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "后备箱",
-      `要${verb}多少${label}？\n${available}\n单次最多：${MAX_TRANSFER}`,
+      `要${verb}多少${label}?\n${available}\n单次最多:${MAX_TRANSFER}`,
       "确定",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
     clearPending(player);
   }
 }
@@ -278,7 +278,7 @@ async function onAmountResponse(
   const slotId = playerId(player);
   const pending = slotId !== null ? pendingByPlayer.get(slotId) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "操作中断。请重新打开后备箱。");
+    player.sendClientMessage(Color.error, "操作中断.请重新打开后备箱.");
     return;
   }
 
@@ -292,7 +292,7 @@ async function onAmountResponse(
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "附近没有你的载具。请靠近或上车。"
+      "附近没有你的载具.请靠近或上车."
     );
     clearPending(player);
     return;
@@ -317,14 +317,14 @@ async function onAmountResponse(
     personal.dbId !== pending.dbId ||
     runtimeId !== pending.runtimeId
   ) {
-    player.sendClientMessage(Color.error, "操作中断。请重新打开后备箱。");
+    player.sendClientMessage(Color.error, "操作中断.请重新打开后备箱.");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数.");
     showAmountDialog(player, pending.action, pending.item, personal);
     return;
   }
@@ -332,7 +332,7 @@ async function onAmountResponse(
   if (amount > MAX_TRANSFER) {
     player.sendClientMessage(
       Color.error,
-      `每次最多可存入 ${MAX_TRANSFER} 件。`
+      `每次最多可存入 ${MAX_TRANSFER} 件.`
     );
     showAmountDialog(player, pending.action, pending.item, personal);
     return;
@@ -369,7 +369,7 @@ async function applyPut(
   if (trunkHave + amount > cap) {
     player.sendClientMessage(
       Color.error,
-      `后备箱最多可装 ${cap} 件。剩余空间: ${Math.max(0, cap - trunkHave)}.`
+      `后备箱最多可装 ${cap} 件.剩余空间: ${Math.max(0, cap - trunkHave)}.`
     );
     showAmountDialog(player, "put", pending.item, personal);
     return;
@@ -403,13 +403,13 @@ async function applyPut(
   adjustPersonalTrunk(pending.runtimeId, pending.item, amount);
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `你放入后备箱: ${ITEM_LABEL[pending.item]} ${amount} 件。`
+    `你放入后备箱: ${ITEM_LABEL[pending.item]} ${amount} 件.`
   );
 }
 
@@ -444,7 +444,7 @@ async function applyTake(
     !Number.isSafeInteger(nextAmmo) ||
     !Number.isSafeInteger(nextMetal)
   ) {
-    player.sendClientMessage(Color.error, "数量过多。");
+    player.sendClientMessage(Color.error, "数量过多.");
     clearPending(player);
     return;
   }
@@ -468,13 +468,13 @@ async function applyTake(
   adjustPersonalTrunk(pending.runtimeId, pending.item, -amount);
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `你从后备箱取出: ${ITEM_LABEL[pending.item]} ${amount} 件。`
+    `你从后备箱取出: ${ITEM_LABEL[pending.item]} ${amount} 件.`
   );
 }
 
@@ -554,7 +554,7 @@ function showTrunkOpenLabel(
 
     openLabels.set(id, { label, timer });
   } catch {
-    // 槽位已失效。
+    // 槽位已失效.
   }
 }
 
@@ -577,6 +577,6 @@ function hideTrunkOpenLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // 已移除。
+    // 已移除.
   }
 }

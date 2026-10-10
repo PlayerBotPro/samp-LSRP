@@ -30,21 +30,21 @@ import { createServerVehicle } from "./spawn";
 export const HOSPITAL_MED_DELIVERY_DIALOG_ID = 62;
 
 const RESPAWN_SEC = 1800;
-const DENY = "你不属于医院。";
+const DENY = "你不属于医院.";
 const PLAYER_STATE_ONFOOT = 1;
 const PLAYER_STATE_DRIVER = 2;
 const DIALOG_STYLE_MSGBOX = 0;
 const CHECKPOINT_RADIUS = 4;
 const LABEL_DRAW_DISTANCE = 40;
 const LABEL_OFFSET_Z = 2.35;
-/** 供应商仓库自动装货所需时间。 */
+/** 供应商仓库自动装货所需时间. */
 const LOAD_SEC = 12;
 const LOAD_TICK_MS = 1000;
-/** 每趟运输装载的药品数量。 */
+/** 每趟运输装载的药品数量. */
 const LOAD_AMOUNT = 50;
-/** 卸货时每箱药品的数量。 */
+/** 卸货时每箱药品的数量. */
 const BOX_AMOUNT = 10;
-/** 每向仓库交付一箱药品的报酬。 */
+/** 每向仓库交付一箱药品的报酬. */
 const PAY_PER_BOX = 40;
 const PICK_RANGE = 6;
 const STOCK_RADIUS = 1.8;
@@ -67,22 +67,22 @@ const MED_VAN = {
   color2: 3,
 } as const;
 
-/** 供应商仓库：前往此处领取货物。 */
+/** 供应商仓库:前往此处领取货物. */
 const LOAD_POINT = {
   x: 1351.3651,
   y: 355.8297,
   z: 20.1462,
 } as const;
 
-/** 医院旁的货车停车点：装货后返回此处。 */
+/** 医院旁的货车停车点:装货后返回此处. */
 const RETURN_POINT = {
   x: MED_VAN.x,
   y: MED_VAN.y,
   z: MED_VAN.z,
 } as const;
-/** 货车位于停车点此半径内时视为在基地。 */
+/** 货车位于停车点此半径内时视为在基地. */
 const PARK_RANGE = 18;
-/** 装货或返程检查点的验证距离（避免使用他人的检查点）。 */
+/** 装货或返程检查点的验证距离(避免使用他人的检查点). */
 const CP_VERIFY_RANGE = 12;
 
 const HOSPITAL_VEHICLES: ReadonlyArray<{
@@ -114,11 +114,11 @@ type DeliveryJob = {
 
 let medVanId: number | null = null;
 let medVanLabel: TextLabel | null = null;
-/** 货车当前运载的药品数量。 */
+/** 货车当前运载的药品数量. */
 let vanMeds = 0;
 const offerPending = new Set<number>();
 const jobs = new Map<number, DeliveryJob>();
-/** 玩家手持药箱时，其中包含的药品数量。 */
+/** 玩家手持药箱时,其中包含的药品数量. */
 const carrying = new Map<number, number>();
 const atStock = new Set<number>();
 
@@ -190,7 +190,7 @@ function bindMedDelivery(): void {
       return;
     }
 
-    abortAllDeliveryJobs("药品运输货车已重生，本次运输已取消。");
+    abortAllDeliveryJobs("药品运输货车已重生,本次运输已取消.");
     vanMeds = 0;
     attachMedVanLabel(vehicle);
   });
@@ -201,7 +201,7 @@ function bindMedDelivery(): void {
       if (id !== null) {
         const job = jobs.get(id);
         if (job?.phase === "loading") {
-          cancelLoading(player, id, "装货已中断：你已离开货车。");
+          cancelLoading(player, id, "装货已中断:你已离开货车.");
         }
       }
       return;
@@ -209,7 +209,7 @@ function bindMedDelivery(): void {
 
     const id = playerId(player);
     if (id !== null && carrying.has(id)) {
-      returnCarriedToVan(player, id, "你已进入车辆，药箱已放回货车。");
+      returnCarriedToVan(player, id, "你已进入车辆,药箱已放回货车.");
     }
 
     tryOfferDelivery(player);
@@ -230,7 +230,7 @@ function bindMedDelivery(): void {
   omp.on("playerDeath", (player) => {
     const id = playerId(player);
     if (id !== null && carrying.has(id)) {
-      returnCarriedToVan(player, id, "你丢失了药箱，药品已放回货车。");
+      returnCarriedToVan(player, id, "你丢失了药箱,药品已放回货车.");
     }
   });
 
@@ -269,7 +269,7 @@ function destroyMedVanLabel(): void {
   try {
     medVanLabel.destroy();
   } catch {
-    // 已被销毁。
+    // 已被销毁.
   }
 
   medVanLabel = null;
@@ -289,14 +289,14 @@ function updateMedVanLabel(text: string): void {
 
 function medsLabelText(meds: number, loading = false): string {
   if (loading) {
-    return `${LABEL_TITLE}\n{FFAA00}装载中：${meds}/${LOAD_AMOUNT}`;
+    return `${LABEL_TITLE}\n{FFAA00}装载中:${meds}/${LOAD_AMOUNT}`;
   }
 
   if (meds <= 0) {
-    return `${LABEL_TITLE}\n{FFAA00}药品：0`;
+    return `${LABEL_TITLE}\n{FFAA00}药品:0`;
   }
 
-  return `${LABEL_TITLE}\n{33CC66}药品：${meds}`;
+  return `${LABEL_TITLE}\n{33CC66}药品:${meds}`;
 }
 
 function loadedAmountForTick(loadLeft: number): number {
@@ -314,7 +314,7 @@ function tryOfferDelivery(player: Player): void {
     return;
   }
 
-  // 每辆货车只允许一趟运输，否则第二名快递员的检查点会卡住。
+  // 每辆货车只允许一趟运输,否则第二名快递员的检查点会卡住.
   if (jobs.size > 0 || offerPending.size > 0) {
     return;
   }
@@ -338,8 +338,8 @@ function tryOfferDelivery(player: Player): void {
       HOSPITAL_MED_DELIVERY_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "药品配送",
-      `货车是空的。要在供应商处装载 ${LOAD_AMOUNT} 单位药品吗？\n` +
-        `返回后请按每箱 ${BOX_AMOUNT} 单位卸货（/pickmed）。`,
+      `货车是空的.要在供应商处装载 ${LOAD_AMOUNT} 单位药品吗?\n` +
+        `返回后请按每箱 ${BOX_AMOUNT} 单位卸货(/pickmed).`,
       "接受",
       "取消"
     );
@@ -362,20 +362,20 @@ function onOfferResponse(player: Player, accepted: boolean): void {
   }
 
   if (!isInMedVanAsDriver(player)) {
-    player.sendClientMessage(Color.error, "你必须驾驶送货面包车。");
+    player.sendClientMessage(Color.error, "你必须驾驶送货面包车.");
     return;
   }
 
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.error,
-      `面包车已经装载 (${vanMeds} 件)。请先卸货。`
+      `面包车已经装载 (${vanMeds} 件).请先卸货.`
     );
     return;
   }
 
   if (jobs.size > 0) {
-    player.sendClientMessage(Color.error, "面包车正在执行另一趟配送。");
+    player.sendClientMessage(Color.error, "面包车正在执行另一趟配送.");
     return;
   }
 
@@ -384,11 +384,11 @@ function onOfferResponse(player: Player, accepted: boolean): void {
     Checkpoint.set(player, LOAD_POINT.x, LOAD_POINT.y, LOAD_POINT.z, CHECKPOINT_RADIUS);
     player.sendClientMessage(
       Color.info,
-      `配送已开始。请从供应商处领取 ${LOAD_AMOUNT} 件药品。`
+      `配送已开始.请从供应商处领取 ${LOAD_AMOUNT} 件药品.`
     );
   } catch {
     jobs.delete(id);
-    player.sendClientMessage(Color.error, "无法设置检查点。");
+    player.sendClientMessage(Color.error, "无法设置检查点.");
   }
 }
 
@@ -421,7 +421,7 @@ function onDeliveryCheckpoint(player: Player): void {
 
 function startLoading(player: Player, id: number, job: DeliveryJob): void {
   if (!isInMedVanAsDriver(player)) {
-    player.sendClientMessage(Color.error, "只能使用送货面包车装货。");
+    player.sendClientMessage(Color.error, "只能使用送货面包车装货.");
     return;
   }
 
@@ -434,11 +434,11 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
     try {
       Checkpoint.disable(player);
     } catch {
-      // 已移除。
+      // 已移除.
     }
     player.sendClientMessage(
       Color.error,
-      "面包车已装载。你前往供应商的行程已取消。"
+      "面包车已装载.你前往供应商的行程已取消."
     );
     return;
   }
@@ -446,7 +446,7 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 已移除。
+    // 已移除.
   }
 
   vanMeds = 0;
@@ -457,13 +457,13 @@ function startLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     player.toggleControllable(false);
   } catch {
-    cancelLoading(player, id, "无法开始装货。");
+    cancelLoading(player, id, "无法开始装货.");
     return;
   }
 
   player.sendClientMessage(
     Color.info,
-    `正在装载 ${LOAD_AMOUNT} 件药品。请留在面包车内 (${LOAD_SEC} 秒)。`
+    `正在装载 ${LOAD_AMOUNT} 件药品.请留在面包车内 (${LOAD_SEC} 秒).`
   );
 
   if (job.loadTimer) {
@@ -487,7 +487,7 @@ function tickLoading(player: Player, expectedId: number): void {
   }
 
   if (!isPlayerActive(player) || !isInMedVanAsDriver(player)) {
-    cancelLoading(player, id, "装货已中断：你已离开货车。");
+    cancelLoading(player, id, "装货已中断:你已离开货车.");
     return;
   }
 
@@ -515,7 +515,7 @@ function finishLoading(player: Player, id: number, job: DeliveryJob): void {
   try {
     player.toggleControllable(true);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 
   if (!isPlayerActive(player)) {
@@ -533,10 +533,10 @@ function finishLoading(player: Player, id: number, job: DeliveryJob): void {
     );
     player.sendClientMessage(
       Color.info,
-      `已装载 ${vanMeds} 件药品。返回医院停车场。`
+      `已装载 ${vanMeds} 件药品.返回医院停车场.`
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法设置返回检查点。");
+    player.sendClientMessage(Color.error, "无法设置返回检查点.");
   }
 }
 
@@ -551,17 +551,17 @@ function finishReturn(player: Player, id: number): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 已移除。
+    // 已移除.
   }
 
   const boxes = Math.ceil(vanMeds / BOX_AMOUNT);
   player.sendClientMessage(
     Color.info,
-    `你已到达停车场。面包车内有 ${vanMeds} 件药品 — ${boxes} 箱，每箱 ${BOX_AMOUNT} 件。`
+    `你已到达停车场.面包车内有 ${vanMeds} 件药品 - ${boxes} 箱,每箱 ${BOX_AMOUNT} 件.`
   );
   player.sendClientMessage(
     Color.info,
-    "下车领取箱子: /pickmed，然后把它送到员工区仓库。"
+    "下车领取箱子: /pickmed,然后把它送到员工区仓库."
   );
 }
 
@@ -581,26 +581,26 @@ function onPickMed(player: Player): void {
   }
 
   if (carrying.has(id)) {
-    player.sendClientMessage(Color.error, "你已经有一个箱子。请把它送到仓库。");
+    player.sendClientMessage(Color.error, "你已经有一个箱子.请把它送到仓库.");
     return;
   }
 
   if (hasHospitalMedkitCase(player)) {
     player.sendClientMessage(
       Color.error,
-      "请先放下药品套装 (离开医院或用完药品)。"
+      "请先放下药品套装 (离开医院或用完药品)."
     );
     return;
   }
 
   if (vanMeds <= 0) {
-    player.sendClientMessage(Color.error, "面包车里没有药品。");
+    player.sendClientMessage(Color.error, "面包车里没有药品.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "下车后才能领取箱子。");
+      player.sendClientMessage(Color.error, "下车后才能领取箱子.");
       return;
     }
   } catch {
@@ -608,14 +608,14 @@ function onPickMed(player: Player): void {
   }
 
   if (!isNearMedVan(player)) {
-    player.sendClientMessage(Color.error, "请靠近送货面包车。");
+    player.sendClientMessage(Color.error, "请靠近送货面包车.");
     return;
   }
 
   if (!isMedVanAtHospitalParking()) {
     player.sendClientMessage(
       Color.error,
-      "只能在医院停车场卸货。请先把面包车开回基地。"
+      "只能在医院停车场卸货.请先把面包车开回基地."
     );
     return;
   }
@@ -629,19 +629,19 @@ function onPickMed(player: Player): void {
   } catch {
     vanMeds += take;
     updateMedVanLabel(medsLabelText(vanMeds));
-    player.sendClientMessage(Color.error, "无法领取箱子。");
+    player.sendClientMessage(Color.error, "无法领取箱子.");
     return;
   }
 
   carrying.set(id, take);
   player.sendClientMessage(
     Color.info,
-    `你领取了一个箱子 (${take} 件)。把它送到员工区的药品仓库。`
+    `你领取了一个箱子 (${take} 件).把它送到员工区的药品仓库.`
   );
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.gray,
-      `面包车里还剩 ${vanMeds} 件。交货后领取下一箱: /pickmed.`
+      `面包车里还剩 ${vanMeds} 件.交货后领取下一箱: /pickmed.`
     );
   }
 }
@@ -689,7 +689,7 @@ function tickUnload(): void {
       atStock.add(id);
       depositBox(player, id);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
   });
 }
@@ -722,18 +722,18 @@ function depositBox(player: Player, id: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `已交付 ${amount} 件药品。+$${pay}. 医院仓库库存: ${total}.`
+    `已交付 ${amount} 件药品.+$${pay}. 医院仓库库存: ${total}.`
   );
 
   if (vanMeds > 0) {
     player.sendClientMessage(
       Color.info,
-      `面包车里还剩 ${vanMeds} 件。返回领取箱子: /pickmed.`
+      `面包车里还剩 ${vanMeds} 件.返回领取箱子: /pickmed.`
     );
     return;
   }
 
-  player.sendClientMessage(Color.info, "面包车已空。药品配送完成。");
+  player.sendClientMessage(Color.info, "面包车已空.药品配送完成.");
 }
 
 function returnCarriedToVan(player: Player, id: number, message: string): void {
@@ -755,7 +755,7 @@ function returnCarriedToVan(player: Player, id: number, message: string): void {
 
 function giveBox(player: Player): void {
   clearBox(player);
-  // 保险起见，重置医生医疗箱标记（玩家槽位不同，但状态是共享的）。
+  // 保险起见,重置医生医疗箱标记(玩家槽位不同,但状态是共享的).
   clearMedkitCase(player);
   player.setAttachedObject(
     SLOT_BOX,
@@ -780,14 +780,14 @@ function clearBox(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_BOX);
   } catch {
-    // 槽位不存在。
+    // 槽位不存在.
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -810,7 +810,7 @@ function cancelLoading(player: Player, id: number, message: string): void {
     player.toggleControllable(true);
     Checkpoint.disable(player);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 
   if (isPlayerActive(player)) {
@@ -836,7 +836,7 @@ function abortAllDeliveryJobs(message: string): void {
       Checkpoint.disable(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
   }
 }
@@ -880,7 +880,7 @@ function clearPlayerDelivery(player: Player): void {
     player.toggleControllable(true);
     Checkpoint.disable(player);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -962,9 +962,9 @@ function isInMedVanAsDriver(player: Player): boolean {
 function ejectFromVehicle(player: Player): void {
   try {
     player.removeFromVehicle();
-    player.sendClientMessage(Color.gray, "你拒绝了配送。");
+    player.sendClientMessage(Color.gray, "你拒绝了配送.");
   } catch {
-    // 已不在车内。
+    // 已不在车内.
   }
 }
 

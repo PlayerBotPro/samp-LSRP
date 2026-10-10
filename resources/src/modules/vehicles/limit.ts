@@ -141,7 +141,7 @@ function capVehicle(vehicle: Vehicle, kmh: number): void {
     };
     motion.setVelocity(vx * scale, vy * scale, vz);
   } catch {
-    // 车辆已被销毁。
+    // 车辆已被销毁.
   }
 }
 

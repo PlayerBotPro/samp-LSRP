@@ -29,7 +29,7 @@ const BED_USE_RADIUS = 2;
 const TICK_MS = 200;
 const HEAL_MS = 4500;
 const HEAL_AMOUNT = 10;
-/** 治疗周期音效（PlayerPlaySound）。 */
+/** 治疗周期音效(PlayerPlaySound). */
 const HEAL_SOUND_ID = 17803;
 const HOSPITAL_MAP_ICON_SLOT = 0;
 const HOSPITAL_MAP_ICON_TYPE = 22;
@@ -77,7 +77,7 @@ const FROM_INTERIOR: SpawnPoint = {
   world: STREET_WORLD,
 };
 
-/** 接待大厅 → 医院内部区域（病房、手术室、管理办公室等）。 */
+/** 接待大厅 → 医院内部区域(病房,手术室,管理办公室等). */
 const HALL_TO_SERVICE_PICKUP = {
   x: 1165.1902,
   y: -1322.7876,
@@ -93,7 +93,7 @@ const TO_SERVICE_BLOCK: SpawnPoint = {
   world: HOSPITAL_WORLD,
 };
 
-/** 医院内部区域 → 接待大厅。 */
+/** 医院内部区域 → 接待大厅. */
 const SERVICE_TO_HALL_PICKUP = {
   x: 1151.0732,
   y: -1366.5275,
@@ -134,9 +134,9 @@ const BEDS: readonly SpawnPoint[] = [
 const lastTeleportAt = new Map<number, number>();
 const lastExitMsgAt = new Map<number, number>();
 const iconShown = new Set<number>();
-/** 玩家槽位 → 病床索引（玩家躺在床上时）。 */
+/** 玩家槽位 → 病床索引(玩家躺在床上时). */
 const bedByPlayer = new Map<number, number>();
-/** 通过 /hospital 开始治疗的玩家槽位；住院期间可以在室内走动。 */
+/** 通过 /hospital 开始治疗的玩家槽位;住院期间可以在室内走动. */
 const treatingPlayers = new Set<number>();
 const occupantByBed: Array<number | null> = BEDS.map(() => null);
 const bedLabels: BedLabelSet[] = [];
@@ -163,7 +163,7 @@ export const hospitalModule: GameModule = {
     );
 
     createPickupLabel(STREET_PICKUP, STREET_WORLD, "城市医院\n入口");
-    createPickupLabel(INTERIOR_PICKUP, HOSPITAL_WORLD, "出口（街道）");
+    createPickupLabel(INTERIOR_PICKUP, HOSPITAL_WORLD, "出口(街道)");
 
     new Pickup(
       PICKUP_MODEL,
@@ -204,7 +204,7 @@ export const hospitalModule: GameModule = {
       clearHospitalSlot(player);
     });
 
-    // 死亡会重置病床会话，重生后需要再次使用 /hospital。
+    // 死亡会重置病床会话,重生后需要再次使用 /hospital.
     omp.on("playerDeath", (player) => {
       clearHospitalSlot(player);
     });
@@ -212,8 +212,8 @@ export const hospitalModule: GameModule = {
 };
 
 /**
- * 通过外部方式完全治愈后（例如 /medhelp）清除住院状态。
- * 否则生命值已满的患者仍会被困在医院内部。
+ * 通过外部方式完全治愈后(例如 /medhelp)清除住院状态.
+ * 否则生命值已满的患者仍会被困在医院内部.
  */
 export function dischargeHospitalPatient(player: Player): void {
   const id = playerId(player);
@@ -244,14 +244,14 @@ export function tryOccupyHospitalBed(player: Player): void {
 
   const account = getAccount(player);
   if (!account?.hospitalized) {
-    player.sendClientMessage(Color.error, "你不需要治疗。");
+    player.sendClientMessage(Color.error, "你不需要治疗.");
     return;
   }
 
   if (treatingPlayers.has(id)) {
     player.sendClientMessage(
       Color.gray,
-      "治疗正在进行中。你可以在医院内走动；痊愈后才能外出。"
+      "治疗正在进行中.你可以在医院内走动;痊愈后才能外出."
     );
     return;
   }
@@ -266,7 +266,7 @@ export function tryOccupyHospitalBed(player: Player): void {
   }
 
   if (world !== HOSPITAL_WORLD) {
-    player.sendClientMessage(Color.error, "只能在医院使用病床。");
+    player.sendClientMessage(Color.error, "只能在医院使用病床.");
     return;
   }
 
@@ -308,7 +308,7 @@ export function tryOccupyHospitalBed(player: Player): void {
     return;
   }
 
-  player.sendClientMessage(Color.error, "请靠近空病床。");
+  player.sendClientMessage(Color.error, "请靠近空病床.");
 }
 
 function occupyBed(player: Player, playerSlot: number, bedIndex: number): void {
@@ -332,11 +332,11 @@ function occupyBed(player: Player, playerSlot: number, bedIndex: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `你占用了 №${bedIndex + 1} 号病床。治疗已开始。`
+    `你占用了 №${bedIndex + 1} 号病床.治疗已开始.`
   );
   player.sendClientMessage(
     Color.gray,
-    "你可以在医院内走动。痊愈后才能外出。"
+    "你可以在医院内走动.痊愈后才能外出."
   );
 }
 
@@ -365,7 +365,7 @@ function finishTreatment(player: Player, playerSlot: number): void {
     queueSave(player);
   }
 
-  player.sendClientMessage(Color.info, "治疗已完成。你可以外出。");
+  player.sendClientMessage(Color.info, "治疗已完成.你可以外出.");
 }
 
 function clearHospitalSlot(player: Player): void {
@@ -437,14 +437,14 @@ function updateBedLabel(index: number): void {
 
   try {
     if (name) {
-      labels.status.updateText(Color.error, `占用：${name}`);
+      labels.status.updateText(Color.error, `占用:${name}`);
       labels.hint.updateText(Color.gray, " ");
     } else {
       labels.status.updateText(Color.tryOk, "空闲");
       labels.hint.updateText(Color.gray, "/hospital");
     }
   } catch {
-    // 标签已经销毁。
+    // 标签已经销毁.
   }
 }
 
@@ -540,7 +540,7 @@ function tickHospital(): void {
         teleport(player, TO_RECEPTION_HALL);
       }
     } catch {
-      // 玩家槽位为空，或玩家已经离开。
+      // 玩家槽位为空,或玩家已经离开.
     }
   });
 }
@@ -567,7 +567,7 @@ function healTreatingPatients(): void {
 
     try {
       if (player.getVirtualWorld() !== HOSPITAL_WORLD) {
-        // 玩家离开虚拟世界但没有前往街道（例如管理员操作）：释放病床并暂停治疗。
+        // 玩家离开虚拟世界但没有前往街道(例如管理员操作):释放病床并暂停治疗.
         releaseBed(id);
         continue;
       }
@@ -577,7 +577,7 @@ function healTreatingPatients(): void {
       if (bed) {
         const pos = player.getPos();
         if (distance3d(pos.x, pos.y, pos.z, bed.x, bed.y, bed.z) > BED_USE_RADIUS) {
-          // 玩家离开病床后可以在室内走动，治疗继续进行。
+          // 玩家离开病床后可以在室内走动,治疗继续进行.
           releaseBed(id);
         }
       }
@@ -589,7 +589,7 @@ function healTreatingPatients(): void {
     try {
       live = player.getHealth();
     } catch {
-      // 从账号数据中读取。
+      // 从账号数据中读取.
     }
 
     const next = Math.min(MAX_HEALTH, live + HEAL_AMOUNT);
@@ -605,7 +605,7 @@ function healTreatingPatients(): void {
     try {
       player.playGameSound(HEAL_SOUND_ID, 0, 0, 0);
     } catch {
-      // 玩家槽位为空。
+      // 玩家槽位为空.
     }
 
     if (next >= MAX_HEALTH) {
@@ -632,8 +632,8 @@ function tryLeaveHospital(player: Player): void {
     player.sendClientMessage(
       Color.error,
       treatingPlayers.has(id)
-        ? "治疗尚未结束。痊愈后才能外出。"
-        : "你需要治疗。请使用病床: /hospital."
+        ? "治疗尚未结束.痊愈后才能外出."
+        : "你需要治疗.请使用病床: /hospital."
     );
     return;
   }
@@ -673,7 +673,7 @@ function updateHospitalIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已经离开。
+      // 玩家已经离开.
     }
     return;
   }
@@ -685,7 +685,7 @@ function updateHospitalIcon(
   try {
     player.removeMapIcon(HOSPITAL_MAP_ICON_SLOT);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
   iconShown.delete(id);
 }
@@ -723,6 +723,6 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }

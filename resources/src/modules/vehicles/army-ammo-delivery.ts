@@ -33,7 +33,7 @@ import { addWarehouseAmmo, takeWarehouseAmmo } from "../warehouse";
 
 const TRUCK_MODEL = 433;
 const MAX_CRATES = 5;
-/** 每箱弹药数量（取出时从军队仓库扣除）。 */
+/** 每箱弹药数量(取出时从军队仓库扣除). */
 const AMMO_PER_CRATE = 100;
 const PAY_PER_CRATE = 75;
 
@@ -56,7 +56,7 @@ const SLOT_CRATE = 1;
 
 const LABEL_DRAW_DISTANCE = 40;
 const LABEL_OFFSET_Z = 2.5;
-/** 货物标签使用浅黄橙色文字。 */
+/** 货物标签使用浅黄橙色文字. */
 const LABEL_COLOR = 0xffaa33ff;
 
 const STOCK_POINT = {
@@ -102,12 +102,12 @@ type TruckCargo = {
   label: TextLabel | null;
 };
 
-/** 手持弹药箱的来源：基地仓库或卡车 ID。 */
+/** 手持弹药箱的来源:基地仓库或卡车 ID. */
 type CarrySource = "stock" | number;
 
 type CarryState = {
   source: CarrySource;
-  /** 附近卸货点对应的活动检查点（orgId）。 */
+  /** 附近卸货点对应的活动检查点(orgId). */
   dropOrgId: number | null;
 };
 
@@ -123,7 +123,7 @@ export function isArmyAmmoCarrying(player: Player): boolean {
   return id !== null && carrying.has(id);
 }
 
-/** 将 Barracks（433）接入箱子系统。 */
+/** 将 Barracks(433)接入箱子系统. */
 export function bindArmyAmmoTruck(vehicle: Vehicle): void {
   const id = liveVehicleId(vehicle);
   if (id === null) {
@@ -186,12 +186,12 @@ export function bindArmyAmmoDelivery(): void {
       newState === PLAYER_STATE_DRIVER ||
       newState === PLAYER_STATE_PASSENGER
     ) {
-      returnCarried(player, "你已进入车辆，弹药已退回仓库。");
+      returnCarried(player, "你已进入车辆,弹药已退回仓库.");
     }
   });
 
   omp.on("playerDeath", (player) => {
-    returnCarried(player, "你丢失了弹药箱，弹药已退回仓库。");
+    returnCarried(player, "你丢失了弹药箱,弹药已退回仓库.");
   });
 
   omp.on("playerDisconnect", (player) => {
@@ -200,7 +200,7 @@ export function bindArmyAmmoDelivery(): void {
   });
 
   omp.on("playerConnect", (player) => {
-    // 崩溃后未触发 disconnect 时槽位可能残留状态，先将弹药退回仓库。
+    // 崩溃后未触发 disconnect 时槽位可能残留状态,先将弹药退回仓库.
     returnCarried(player, null);
     clearPlayer(player);
   });
@@ -236,7 +236,7 @@ function tickDelivery(): void {
       tickStockPickup(player, id);
       tickDropProximity(player, id);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -268,7 +268,7 @@ function tickStockPickup(player: Player, id: number): void {
 
 function tryTakeFromStock(player: Player, id: number): void {
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "只有军队可以领取箱子。");
+    player.sendClientMessage(Color.error, "只有军队可以领取箱子.");
     return;
   }
 
@@ -277,11 +277,11 @@ function tryTakeFromStock(player: Player, id: number): void {
   }
 
   if (!takeWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE)) {
-    // 清除拾取点的卡住状态，以便仓库补货后可以再次取用。
+    // 清除拾取点的卡住状态,以便仓库补货后可以再次取用.
     atStock.delete(id);
     player.sendClientMessage(
       Color.error,
-      `军队仓库中的子弹不足 (需要 ${AMMO_PER_CRATE} 发)。`
+      `军队仓库中的子弹不足 (需要 ${AMMO_PER_CRATE} 发).`
     );
     return;
   }
@@ -290,7 +290,7 @@ function tryTakeFromStock(player: Player, id: number): void {
     addWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE);
     refreshArmyAmmoStockLabel();
     atStock.delete(id);
-    player.sendClientMessage(Color.error, "无法领取箱子。请重试。");
+    player.sendClientMessage(Color.error, "无法领取箱子.请重试.");
     return;
   }
 
@@ -298,7 +298,7 @@ function tryTakeFromStock(player: Player, id: number): void {
   carrying.set(id, { source: "stock", dropOrgId: null });
   player.sendClientMessage(
     Color.info,
-    `你拿着箱子 (+${AMMO_PER_CRATE} 发子弹)。靠近 Barracks 并输入 /putammo.`
+    `你拿着箱子 (+${AMMO_PER_CRATE} 发子弹).靠近 Barracks 并输入 /putammo.`
   );
 }
 
@@ -326,7 +326,7 @@ function tickDropProximity(player: Player, id: number): void {
       atDrop.add(id);
       player.sendClientMessage(
         Color.info,
-        `卸货点: ${near.name}. 请站上检查点。`
+        `卸货点: ${near.name}. 请站上检查点.`
       );
     }
   } catch {
@@ -351,7 +351,7 @@ function clearDropCheckpoint(player: Player, id: number): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 已关闭。
+    // 已关闭.
   }
 }
 
@@ -376,7 +376,7 @@ function onDropCheckpoint(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "只有军队可以卸货。");
+    player.sendClientMessage(Color.error, "只有军队可以卸货.");
     return;
   }
 
@@ -386,7 +386,7 @@ function onDropCheckpoint(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 正常。
+    // 正常.
   }
 
   const total = addWarehouseAmmo(drop.orgId, AMMO_PER_CRATE);
@@ -410,19 +410,19 @@ function onPutAmmo(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "此命令仅限军队使用。");
+    player.sendClientMessage(Color.error, "此命令仅限军队使用.");
     return;
   }
 
   const carry = carrying.get(id);
   if (!carry) {
-    player.sendClientMessage(Color.error, "你手上没有箱子。");
+    player.sendClientMessage(Color.error, "你手上没有箱子.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "请步行靠近卡车。");
+      player.sendClientMessage(Color.error, "请步行靠近卡车.");
       return;
     }
   } catch {
@@ -462,7 +462,7 @@ function onPutAmmo(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `箱子已装载。车厢内: ${cargo.crates}/${MAX_CRATES}.`
+    `箱子已装载.车厢内: ${cargo.crates}/${MAX_CRATES}.`
   );
 }
 
@@ -477,18 +477,18 @@ function onTakeAmmo(player: Player): void {
   }
 
   if (!isArmyMember(player)) {
-    player.sendClientMessage(Color.error, "此命令仅限军队使用。");
+    player.sendClientMessage(Color.error, "此命令仅限军队使用.");
     return;
   }
 
   if (carrying.has(id)) {
-    player.sendClientMessage(Color.error, "你手上已经有箱子。");
+    player.sendClientMessage(Color.error, "你手上已经有箱子.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "请步行靠近卡车。");
+      player.sendClientMessage(Color.error, "请步行靠近卡车.");
       return;
     }
   } catch {
@@ -509,7 +509,7 @@ function onTakeAmmo(player: Player): void {
   ensureTruck(truckId, truck);
   const cargo = trucks.get(truckId);
   if (!cargo || cargo.crates <= 0) {
-    player.sendClientMessage(Color.error, "卡车里没有箱子。");
+    player.sendClientMessage(Color.error, "卡车里没有箱子.");
     return;
   }
 
@@ -519,7 +519,7 @@ function onTakeAmmo(player: Player): void {
   if (!giveCrate(player)) {
     cargo.crates += 1;
     updateTruckLabel(truckId, cargo);
-    player.sendClientMessage(Color.error, "无法领取箱子。请重试。");
+    player.sendClientMessage(Color.error, "无法领取箱子.请重试.");
     return;
   }
 
@@ -527,7 +527,7 @@ function onTakeAmmo(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `你拿着箱子。车厢内剩余: ${cargo.crates}/${MAX_CRATES}.`
+    `你拿着箱子.车厢内剩余: ${cargo.crates}/${MAX_CRATES}.`
   );
 }
 
@@ -548,10 +548,10 @@ function returnCarried(player: Player, message: string | null): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 正常。
+    // 正常.
   }
 
-  // 死亡、退出或上车时，弹药始终退回军队仓库。
+  // 死亡,退出或上车时,弹药始终退回军队仓库.
   addWarehouseAmmo(ORG_ARMY_ID, AMMO_PER_CRATE);
   refreshArmyAmmoStockLabel();
 
@@ -654,7 +654,7 @@ function updateTruckLabel(truckId: number, cargo: TruckCargo): void {
 }
 
 function cratesLabelText(crates: number): string {
-  return `已装载箱数：${crates}`;
+  return `已装载箱数:${crates}`;
 }
 
 function destroyLabel(label: TextLabel | null): void {
@@ -665,7 +665,7 @@ function destroyLabel(label: TextLabel | null): void {
   try {
     label.destroy();
   } catch {
-    // 已被销毁。
+    // 已被销毁.
   }
 }
 
@@ -699,14 +699,14 @@ function clearCrate(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_CRATE);
   } catch {
-    // 槽位不存在。
+    // 槽位不存在.
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -736,7 +736,7 @@ function nearestArmyTruck(player: Player, range: number): Vehicle | null {
         best = vehicle;
       }
     } catch {
-      // 已被销毁。
+      // 已被销毁.
     }
   }
 

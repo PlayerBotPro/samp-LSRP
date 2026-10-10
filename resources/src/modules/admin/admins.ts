@@ -59,7 +59,7 @@ export function bindAdminsList(): void {
 
       player.sendClientMessage(Color.info, "游戏中的管理员:");
       if (list.length === 0) {
-        player.sendClientMessage(Color.white, "没有人。");
+        player.sendClientMessage(Color.white, "没有人.");
         return;
       }
 

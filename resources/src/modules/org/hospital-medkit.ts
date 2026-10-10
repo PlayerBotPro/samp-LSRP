@@ -20,24 +20,24 @@ const TICK_MS = 200;
 const STOCK_RADIUS = 1.8;
 const PLAYER_STATE_ONFOOT = 1;
 const DENY_COOLDOWN_MS = 2500;
-/** 每次从仓库领取的药品数量。 */
+/** 每次从仓库领取的药品数量. */
 export const MEDKIT_TAKE_AMOUNT = 20;
 /**
- * 医疗箱的 Attach 索引。槽位 1 被配送箱占用 (`vehicles/hospital` SLOT_BOX).
+ * 医疗箱的 Attach 索引.槽位 1 被配送箱占用 (`vehicles/hospital` SLOT_BOX).
  */
 const SLOT_MEDKIT = 2;
 const MEDKIT_MODEL = 11738;
-/** 右手。 */
+/** 右手. */
 const BONE_RIGHT_HAND = 6;
 
-/** 槽位 → 医生持有的药品数量（当前会话). */
+/** 槽位 → 医生持有的药品数量(当前会话). */
 const carriedMeds = new Map<number, number>();
-/** 槽位 → 是否显示手提医疗箱。 */
+/** 槽位 → 是否显示手提医疗箱. */
 const hasCase = new Set<number>();
 const standingOnStock = new Set<number>();
 const denyAt = new Map<number, number>();
 
-/** 领取锁定（箱子配送）由 `vehicles/hospital`. */
+/** 领取锁定(箱子配送)由 `vehicles/hospital`. */
 let stockBlocked: ((player: Player) => boolean) | null = null;
 
 export function setHospitalMedkitStockBlocked(
@@ -59,7 +59,7 @@ export function hasHospitalMedkitCase(player: Player): boolean {
   return id !== null && hasCase.has(id);
 }
 
-/** 成功执行 /medhelp 后扣除 1 件药品。 */
+/** 成功执行 /medhelp 后扣除 1 件药品. */
 export function consumeHospitalMed(player: Player): boolean {
   const id = playerId(player);
   if (id === null) {
@@ -90,11 +90,11 @@ export function clearMedkitCase(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_MEDKIT);
   } catch {
-    // 槽位不存在。
+    // 槽位不存在.
   }
 }
 
-/** 将药品退回仓库（断开连接 / 解雇). */
+/** 将药品退回仓库(断开连接 / 解雇). */
 export function returnHospitalMedsToStock(player: Player): number {
   const id = playerId(player);
   if (id === null) {
@@ -119,7 +119,7 @@ export function bindHospitalMedkit(): void {
   setInterval(tickHospitalMedkit, TICK_MS);
 
   omp.on("playerDeath", (player) => {
-    // 移除医疗箱，保留药品。
+    // 移除医疗箱,保留药品.
     clearMedkitCase(player);
     const id = playerId(player);
     if (id !== null) {
@@ -144,19 +144,19 @@ function tickHospitalMedkit(): void {
       return;
     }
 
-    // 从医院解雇时，将药品退回仓库。
+    // 从医院解雇时,将药品退回仓库.
     if ((carriedMeds.get(id) ?? 0) > 0 && !isHospitalMember(player)) {
       const back = returnHospitalMedsToStock(player);
       if (back > 0) {
         player.sendClientMessage(
           Color.info,
-          `药品 (${back} 件) 已归还医院仓库。`
+          `药品 (${back} 件) 已归还医院仓库.`
         );
       }
       return;
     }
 
-    // 入狱 / 离开医院室内时，仅移除医疗箱。
+    // 入狱 / 离开医院室内时,仅移除医疗箱.
     if (hasCase.has(id)) {
       try {
         if (isJailed(player) || player.getVirtualWorld() !== HOSPITAL_WORLD) {
@@ -218,7 +218,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   if (hasCase.has(id)) {
     standingOnStock.add(id);
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "你已经有一套药品。");
+      player.sendClientMessage(Color.error, "你已经有一套药品.");
     }
     return;
   }
@@ -227,23 +227,23 @@ function takeMedkitFromStock(player: Player, id: number): void {
   if (have > 0) {
     if (!attachMedkitCase(player)) {
       if (canDeny(id)) {
-        player.sendClientMessage(Color.error, "无法领取药箱。");
+        player.sendClientMessage(Color.error, "无法领取药箱.");
       }
       return;
     }
     standingOnStock.add(id);
     player.sendClientMessage(
       Color.info,
-      `你已装备药箱。药品: ${have}. 治疗: /medhelp [id] [金额].`
+      `你已装备药箱.药品: ${have}. 治疗: /medhelp [id] [金额].`
     );
     return;
   }
 
   const stock = getWarehouse(ORG_HOSPITAL_ID)?.meds ?? 0;
   if (stock < 1) {
-    // 不保持锁定；仓库补货后可在原地领取。
+    // 不保持锁定;仓库补货后可在原地领取.
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "仓库里没有药品。");
+      player.sendClientMessage(Color.error, "仓库里没有药品.");
     }
     return;
   }
@@ -251,7 +251,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   const take = Math.min(MEDKIT_TAKE_AMOUNT, stock);
   if (!takeWarehouseMeds(ORG_HOSPITAL_ID, take)) {
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "无法从仓库领取药品。");
+      player.sendClientMessage(Color.error, "无法从仓库领取药品.");
     }
     return;
   }
@@ -262,7 +262,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
     addWarehouseMeds(ORG_HOSPITAL_ID, take);
     refreshHospitalMedsStockLabel();
     if (canDeny(id)) {
-      player.sendClientMessage(Color.error, "无法领取药箱。");
+      player.sendClientMessage(Color.error, "无法领取药箱.");
     }
     return;
   }
@@ -271,7 +271,7 @@ function takeMedkitFromStock(player: Player, id: number): void {
   standingOnStock.add(id);
   player.sendClientMessage(
     Color.info,
-    `你领取了药品套装: ${take} 件。治疗: /medhelp [id] [金额].`
+    `你领取了药品套装: ${take} 件.治疗: /medhelp [id] [金额].`
   );
 }
 

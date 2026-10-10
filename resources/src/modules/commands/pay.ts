@@ -9,7 +9,7 @@ import { registerCommand } from "./registry";
 
 const MIN_AMOUNT = 1;
 const MAX_AMOUNT = 5000;
-/** 现金上限与管理员命令 `/givemoney` 相同。 */
+/** 现金上限与管理员命令 `/givemoney` 相同. */
 const MAX_CASH = 2_147_483_647;
 const LABEL_MS = 3500;
 const LABEL_OFFSET_Z = 1.1;
@@ -42,7 +42,7 @@ export function bindPayLabels(): void {
 async function handlePay(player: Player, args: string): Promise<void> {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -61,23 +61,23 @@ async function handlePay(player: Player, args: string): Promise<void> {
   }
 
   if (parsed.slot === senderId) {
-    player.sendClientMessage(Color.error, "不能给自己转账。");
+    player.sendClientMessage(Color.error, "不能给自己转账.");
     return;
   }
 
   const target = findPlayer(parsed.slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
@@ -87,7 +87,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
   }
 
   if (busy.has(senderId) || busy.has(targetId)) {
-    player.sendClientMessage(Color.error, "请稍候，操作仍在进行中。");
+    player.sendClientMessage(Color.error, "请稍候,操作仍在进行中.");
     return;
   }
 
@@ -98,12 +98,12 @@ async function handlePay(player: Player, args: string): Promise<void> {
     const senderLive = getAccount(player);
     const targetLive = getAccount(target);
     if (!senderLive || !targetLive) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-      player.sendClientMessage(Color.error, "玩家距离太远。");
+      player.sendClientMessage(Color.error, "玩家距离太远.");
       return;
     }
 
@@ -111,12 +111,12 @@ async function handlePay(player: Player, args: string): Promise<void> {
     const senderCash = Math.max(0, Math.floor(senderLive.money));
     const targetCash = Math.max(0, Math.floor(targetLive.money));
     if (senderCash < amount) {
-      player.sendClientMessage(Color.error, "现金不足。");
+      player.sendClientMessage(Color.error, "现金不足.");
       return;
     }
 
     if (targetCash > MAX_CASH - amount) {
-      player.sendClientMessage(Color.error, "该玩家现金过多。");
+      player.sendClientMessage(Color.error, "该玩家现金过多.");
       return;
     }
 
@@ -127,24 +127,24 @@ async function handlePay(player: Player, args: string): Promise<void> {
       try {
         player.sendClientMessage(
           Color.error,
-          "无法转账。请稍后重试。"
+          "无法转账.请稍后重试."
         );
       } catch {
-        // 发送者已离线。
+        // 发送者已离线.
       }
       return;
     }
 
     if (!ok) {
       try {
-        player.sendClientMessage(Color.error, "现金不足。");
+        player.sendClientMessage(Color.error, "现金不足.");
       } catch {
-        // 发送者已离线。
+        // 发送者已离线.
       }
       return;
     }
 
-    // 仅在数据库操作成功后更新内存：以当前快照计算差额（处理竞态）。
+    // 仅在数据库操作成功后更新内存:以当前快照计算差额(处理竞态).
     applyCashDelta(player, -amount);
     applyCashDelta(target, amount);
 
@@ -161,7 +161,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
         );
         showPayLabel(player, `-${pretty}`, COLOR_PAY_OUT);
       } catch {
-        // 槽位已为空。
+        // 槽位已为空.
       }
     }
 
@@ -176,7 +176,7 @@ async function handlePay(player: Player, args: string): Promise<void> {
         );
         showPayLabel(target, `+${pretty}`, COLOR_PAY_IN);
       } catch {
-        // 槽位已为空。
+        // 槽位已为空.
       }
     }
   } finally {
@@ -267,7 +267,7 @@ function showPayLabel(player: Player, text: string, color: number): void {
 
     labels.set(id, { label, timer });
   } catch {
-    // 槽位已失效。
+    // 槽位已失效.
   }
 }
 
@@ -291,6 +291,6 @@ function hidePayLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // 已解除。
+    // 已解除.
   }
 }

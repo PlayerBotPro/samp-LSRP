@@ -201,7 +201,7 @@ ON DUPLICATE KEY UPDATE
   max_x = VALUES(max_x),
   max_y = VALUES(max_y);
 
--- 玩家家族（不要与编号为 14–16 的黑手党组织混淆）。
+-- 玩家家族(不要与编号为 14-16 的黑手党组织混淆).
 CREATE TABLE IF NOT EXISTS families (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(24) NOT NULL,
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS families (
   KEY idx_families_owner (owner_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 仓库：org_id 为组织编号；0 表示矿场仓库（不属于玩家组织）。
+-- 仓库:org_id 为组织编号;0 表示矿场仓库(不属于玩家组织).
 CREATE TABLE IF NOT EXISTS warehouses (
   org_id SMALLINT UNSIGNED NOT NULL,
   ammo INT UNSIGNED NOT NULL DEFAULT 0,
@@ -247,10 +247,10 @@ INSERT IGNORE INTO warehouses (org_id, ammo, meds, metal, drugs, is_locked) VALU
 (15, 0, 0, 0, 0, 1),
 (16, 0, 0, 0, 0, 1);
 
--- 商家：type_id 为 TINYINT（类型映射在代码中定义，而非 MySQL ENUM）。
+-- 商家:type_id 为 TINYINT(类型映射在代码中定义,而非 MySQL ENUM).
 -- 1=24/7 2=Ammu 3=Car elite 4=Car economy 5=Moto 6=Gas 7=Fastfood 8=Gym
 -- 9=Clothes 10=Bar 11=Club 12=Workshop 13=Street food 14=Vehicle rent 15=Casino
--- 完整种子数据：sql/businesses_seed.sql
+-- 完整种子数据:sql/businesses_seed.sql
 CREATE TABLE IF NOT EXISTS businesses (
   id SMALLINT UNSIGNED NOT NULL,
   name VARCHAR(64) NOT NULL,
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS businesses (
   CONSTRAINT fk_businesses_owner FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 玩家私人车辆（生成坐标取自车主的 houses.vehicle_* 字段）。
+-- 玩家私人车辆(生成坐标取自车主的 houses.vehicle_* 字段).
 CREATE TABLE IF NOT EXISTS player_vehicles (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   model_id SMALLINT UNSIGNED NOT NULL,

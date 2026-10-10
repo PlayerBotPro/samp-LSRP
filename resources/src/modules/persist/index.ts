@@ -30,12 +30,12 @@ const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
 const HUNGER_WARN_TEXT: Record<(typeof HUNGER_WARN_LEVELS)[number], string> = {
-  40: "你开始饿了。",
-  30: "你已经很饿了。",
-  20: "你饿极了。快去找些食物。",
+  40: "你开始饿了.",
+  30: "你已经很饿了.",
+  20: "你饿极了.快去找些食物.",
 };
 
-/** 已向玩家显示过哪些饥饿阈值（避免重复刷屏）。 */
+/** 已向玩家显示过哪些饥饿阈值(避免重复刷屏). */
 const hungerWarned = new Map<number, Set<number>>();
 
 function isInWorld(player: Player): boolean {
@@ -63,7 +63,7 @@ function readLiveHealth(player: Player, fallback: number): number {
       return Math.min(MAX_HEALTH, health);
     }
   } catch {
-    // 观战、死亡或退出时，使用账户中最后保存的状态。
+    // 观战,死亡或退出时,使用账户中最后保存的状态.
   }
 
   return fallback;
@@ -72,7 +72,7 @@ function readLiveHealth(player: Player, fallback: number): number {
 function persistJailSeconds(userId: number, seconds: number, name: string): void {
   void saveUserJailedSeconds(userId, seconds).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存 ${name} 的刑期：${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${name} 的刑期:${message}`);
   });
 }
 
@@ -91,10 +91,10 @@ export function queueSave(player: Player): void {
     patchAccount(player, { health, hunger });
     void saveUserHealth(account.id, health).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的生命值：${message}`);
+      omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的生命值:${message}`);
     });
     void saveUserHunger(account.id, hunger).catch(() => {
-      // 定期保存会处理此状态。
+      // 定期保存会处理此状态.
     });
     return;
   }
@@ -108,7 +108,7 @@ export function queueSave(player: Player): void {
 
   void saveUserVitals(account.id, health, money, bank, hunger).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存角色 ${account.name}：${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存角色 ${account.name}:${message}`);
   });
 }
 
@@ -147,7 +147,7 @@ function warnHungerIfNeeded(player: Player, prev: number, next: number): void {
     }
   }
 
-  // 进食后，下次饥饿值下降时可以再次提醒。
+  // 进食后,下次饥饿值下降时可以再次提醒.
   for (const level of HUNGER_WARN_LEVELS) {
     if (next > level) {
       shown.delete(level);
@@ -155,7 +155,7 @@ function warnHungerIfNeeded(player: Player, prev: number, next: number): void {
   }
 }
 
-/** 进食或恢复后重置饥饿提醒。 */
+/** 进食或恢复后重置饥饿提醒. */
 export function notifyHungerRestored(player: Player, hunger: number): void {
   const slotId = playerId(player);
   if (slotId === null) {
@@ -175,7 +175,7 @@ export function notifyHungerRestored(player: Player, hunger: number): void {
   }
 }
 
-/** 饥饿值始终会下降；只有饥饿值为 0 时才会扣除生命值。 */
+/** 饥饿值始终会下降;只有饥饿值为 0 时才会扣除生命值. */
 function decayVitals(player: Player): void {
   if (!isPlayerActive(player) || !isAuthenticated(player)) {
     return;
@@ -206,7 +206,7 @@ function decayVitals(player: Player): void {
       if (nextHunger > 0) {
         return;
       }
-      // 本次刚降到 0；暂不扣除生命值，从下一次开始。
+      // 本次刚降到 0;暂不扣除生命值,从下一次开始.
       return;
     }
 
@@ -221,7 +221,7 @@ function decayVitals(player: Player): void {
     patchAccount(player, { health: next });
     queueSave(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -243,7 +243,7 @@ export const persistModule: GameModule = {
             patchAccount(player, { health: after });
           }
         } catch {
-          // 槽位已失效。
+          // 槽位已失效.
         }
       }
 
@@ -257,7 +257,7 @@ export const persistModule: GameModule = {
       if (slotId !== null) {
         hungerWarned.delete(slotId);
       }
-      // 必须先于 queueSave 执行，否则数据库会写入 jail_seconds=0，退出惩罚就会丢失。
+      // 必须先于 queueSave 执行,否则数据库会写入 jail_seconds=0,退出惩罚就会丢失.
       applyCuffDisconnectJail(player);
       queueSave(player);
     });

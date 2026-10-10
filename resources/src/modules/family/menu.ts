@@ -46,7 +46,7 @@ registerCommand("family", "家族菜单", (player) => {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "你不属于任何家族。");
+    tell(player, Color.error, "你不属于任何家族.");
     return;
   }
 
@@ -145,7 +145,7 @@ function showMainMenu(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "你不属于任何家族。");
+    tell(player, Color.error, "你不属于任何家族.");
     return;
   }
 
@@ -156,13 +156,13 @@ function showMainMenu(player: Player): void {
       player,
       FAMILY_MENU_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `家族：${membership.family.name}`,
+      `家族:${membership.family.name}`,
       lines.join("\n"),
       "选择",
       "关闭"
     );
   } catch {
-    tell(player, Color.error, "无法打开菜单。");
+    tell(player, Color.error, "无法打开菜单.");
   }
 }
 
@@ -170,7 +170,7 @@ function onMainPick(player: Player, listItem: number): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "你不属于任何家族。");
+    tell(player, Color.error, "你不属于任何家族.");
     return;
   }
 
@@ -181,7 +181,7 @@ function onMainPick(player: Player, listItem: number): void {
 
   if (listItem === 1) {
     if (membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-      tell(player, Color.error, "达到 9 级后可使用管理功能。");
+      tell(player, Color.error, "达到 9 级后可使用管理功能.");
       showMainMenu(player);
       return;
     }
@@ -198,23 +198,23 @@ async function showInfo(player: Player): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    tell(player, Color.error, "你不属于任何家族。");
+    tell(player, Color.error, "你不属于任何家族.");
     return;
   }
 
   const family = membership.family;
-  const ownerName = (await findUserNameById(family.ownerId)) ?? "—";
+  const ownerName = (await findUserNameById(family.ownerId)) ?? "-";
   const members = await countFamilyMembers(family.id);
-  const desc = family.description.trim() || "—";
+  const desc = family.description.trim() || "-";
 
   const body =
-    `名称： ${family.name}\n` +
-    `描述： ${desc}\n` +
-    `等级： ${family.level}\n` +
-    `经验： ${family.exp}\n` +
-    `所有者： ${ownerName}\n` +
-    `成员数： ${members}\n` +
-    `你的等级： ${membership.rank.title} (${membership.rank.id})`;
+    `名称: ${family.name}\n` +
+    `描述: ${desc}\n` +
+    `等级: ${family.level}\n` +
+    `经验: ${family.exp}\n` +
+    `所有者: ${ownerName}\n` +
+    `成员数: ${members}\n` +
+    `你的等级: ${membership.rank.title} (${membership.rank.id})`;
 
   try {
     Dialog.show(
@@ -227,7 +227,7 @@ async function showInfo(player: Player): Promise<void> {
       "关闭"
     );
   } catch {
-    tell(player, Color.error, "无法打开家族信息。");
+    tell(player, Color.error, "无法打开家族信息.");
   }
 }
 
@@ -235,7 +235,7 @@ function showManageMenu(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "达到 9 级后可使用管理功能。");
+    tell(player, Color.error, "达到 9 级后可使用管理功能.");
     return;
   }
 
@@ -257,7 +257,7 @@ function showManageMenu(player: Player): void {
       "返回"
     );
   } catch {
-    tell(player, Color.error, "无法打开管理菜单。");
+    tell(player, Color.error, "无法打开管理菜单.");
   }
 }
 
@@ -265,7 +265,7 @@ function onManagePick(player: Player, listItem: number): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "达到 9 级后可使用管理功能。");
+    tell(player, Color.error, "达到 9 级后可使用管理功能.");
     return;
   }
 
@@ -281,7 +281,7 @@ function onManagePick(player: Player, listItem: number): void {
 
   if (listItem === 2) {
     if (!isFamilyOwner(account)) {
-      tell(player, Color.error, "只有所有者才能转让所有权。");
+      tell(player, Color.error, "只有所有者才能转让所有权.");
       showManageMenu(player);
       return;
     }
@@ -291,7 +291,7 @@ function onManagePick(player: Player, listItem: number): void {
 
   if (listItem === 3) {
     if (!isFamilyOwner(account)) {
-      tell(player, Color.error, "只有所有者才能删除家族。");
+      tell(player, Color.error, "只有所有者才能删除家族.");
       showManageMenu(player);
       return;
     }
@@ -308,12 +308,12 @@ function showLeaveConfirm(player: Player): void {
 
   const isOwner = membership.family.ownerId === account.id;
   const body = isOwner
-    ? `你是家族“${membership.family.name}”的所有者。\n` +
-      `如果你是唯一成员，家族将被解散。\n` +
-      `如果还有其他成员，请先转让所有权：\n` +
-      `/family → 家族管理 → 转让家族所有权。\n\n` +
-      `离开家族？`
-    : `离开家族“${membership.family.name}”？`;
+    ? `你是家族"${membership.family.name}"的所有者.\n` +
+      `如果你是唯一成员,家族将被解散.\n` +
+      `如果还有其他成员,请先转让所有权:\n` +
+      `/family → 家族管理 → 转让家族所有权.\n\n` +
+      `离开家族?`
+    : `离开家族"${membership.family.name}"?`;
 
   try {
     Dialog.show(
@@ -326,7 +326,7 @@ function showLeaveConfirm(player: Player): void {
       "否"
     );
   } catch {
-    tell(player, Color.error, "无法打开确认窗口。");
+    tell(player, Color.error, "无法打开确认窗口.");
   }
 }
 
@@ -344,15 +344,15 @@ function showRenameDialog(player: Player): void {
       FAMILY_RENAME_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "家族名称",
-      `当前： ${membership.family.name}\n` +
-        `只能使用英文字母和空格。\n` +
-        `长度：${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}。\n` +
-        `示例：Woozie Family`,
+      `当前: ${membership.family.name}\n` +
+        `只能使用英文字母和空格.\n` +
+        `长度:${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}.\n` +
+        `示例:Woozie Family`,
       "保存",
       "返回"
     );
   } catch {
-    tell(player, Color.error, "无法打开对话框。");
+    tell(player, Color.error, "无法打开对话框.");
   }
 }
 
@@ -364,19 +364,19 @@ function showRedescDialog(player: Player): void {
     return;
   }
 
-  const current = membership.family.description.trim() || "—";
+  const current = membership.family.description.trim() || "-";
   try {
     Dialog.show(
       player,
       FAMILY_REDESC_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "家族描述",
-      `当前：${current}\n最多 ${FAMILY_DESC_MAX} 个字符。`,
+      `当前:${current}\n最多 ${FAMILY_DESC_MAX} 个字符.`,
       "保存",
       "返回"
     );
   } catch {
-    tell(player, Color.error, "无法打开对话框。");
+    tell(player, Color.error, "无法打开对话框.");
   }
 }
 
@@ -392,13 +392,13 @@ function showTransferDialog(player: Player): void {
       FAMILY_TRANSFER_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "转让家族所有权",
-      "输入玩家 ID（该玩家必须在线且属于你的家族）。\n" +
-        "你将成为副手（9 级）。",
+      "输入玩家 ID(该玩家必须在线且属于你的家族).\n" +
+        "你将成为副手(9 级).",
       "转让",
       "返回"
     );
   } catch {
-    tell(player, Color.error, "无法打开对话框。");
+    tell(player, Color.error, "无法打开对话框.");
   }
 }
 
@@ -415,14 +415,14 @@ function showDeleteConfirm(player: Player): void {
       FAMILY_DELETE_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "删除家族",
-      `家族「${membership.family.name}」将被删除。\n` +
-        `所有成员都将被移出。\n\n` +
-        `确认删除吗？`,
+      `家族[${membership.family.name}]将被删除.\n` +
+        `所有成员都将被移出.\n\n` +
+        `确认删除吗?`,
       "删除",
       "取消"
     );
   } catch {
-    tell(player, Color.error, "无法打开确认窗口。");
+    tell(player, Color.error, "无法打开确认窗口.");
   }
 }
 
@@ -430,32 +430,32 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || !isFamilyOwner(account)) {
-    tell(player, Color.error, "只有所有者才能转让所有权。");
+    tell(player, Color.error, "只有所有者才能转让所有权.");
     return;
   }
 
   const slot = Math.floor(Number(String(rawId).trim()));
   if (!Number.isInteger(slot) || slot < 0) {
-    tell(player, Color.error, "请输入有效的玩家 ID。");
+    tell(player, Color.error, "请输入有效的玩家 ID.");
     showTransferDialog(player);
     return;
   }
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    tell(player, Color.error, "该玩家不在线。");
+    tell(player, Color.error, "该玩家不在线.");
     showTransferDialog(player);
     return;
   }
 
   try {
     if (target.isNPC()) {
-      tell(player, Color.error, "未找到该玩家。");
+      tell(player, Color.error, "未找到该玩家.");
       showTransferDialog(player);
       return;
     }
   } catch {
-    tell(player, Color.error, "未找到该玩家。");
+    tell(player, Color.error, "未找到该玩家.");
     showTransferDialog(player);
     return;
   }
@@ -463,7 +463,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const selfId = playerId(player);
   const targetId = playerId(target);
   if (selfId !== null && selfId === targetId) {
-    tell(player, Color.error, "不能将所有权转让给自己。");
+    tell(player, Color.error, "不能将所有权转让给自己.");
     showTransferDialog(player);
     return;
   }
@@ -475,7 +475,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
     !targetFamily ||
     targetFamily.family.id !== membership.family.id
   ) {
-    tell(player, Color.error, "该玩家必须在线且属于你的家族。");
+    tell(player, Color.error, "该玩家必须在线且属于你的家族.");
     showTransferDialog(player);
     return;
   }
@@ -490,7 +490,7 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
     MAX_FAMILY_RANK
   );
   if (!transferred) {
-    tell(player, Color.error, "无法转让所有权。");
+    tell(player, Color.error, "无法转让所有权.");
     showManageMenu(player);
     return;
   }
@@ -508,9 +508,9 @@ async function transferFamilyRights(player: Player, rawId: string): Promise<void
   const familyName = getFamily(familyId)?.name ?? membership.family.name;
   const targetTag = playerChatName(target);
 
-  tell(player, Color.info, `你已将家族“${familyName}”的所有权转让给玩家 ${targetTag}。`);
-  tell(player, Color.info, "你的新等级：副手（9）。");
-  tell(target, Color.info, `你已成为家族“${familyName}”的所有者。`);
+  tell(player, Color.info, `你已将家族"${familyName}"的所有权转让给玩家 ${targetTag}.`);
+  tell(player, Color.info, "你的新等级:副手(9).");
+  tell(target, Color.info, `你已成为家族"${familyName}"的所有者.`);
 
   broadcastFamilyNotice(
     familyId,
@@ -529,7 +529,7 @@ function broadcastFamilyNotice(
 ): void {
   const membership = getAccount(actor) ? getFamilyMembership(getAccount(actor)!) : null;
   const rankId = membership?.rank.id ?? 0;
-  const rankTitle = membership?.rank.title ?? "—";
+  const rankTitle = membership?.rank.title ?? "-";
 
   const line = clipClientMessage(
     `[家族] [${familyName}] [${rankId}] ${rankTitle} ${playerChatName(actor)}${chatColorTag(Color.white)}: ${message}`
@@ -548,7 +548,7 @@ function broadcastFamilyNotice(
     try {
       other.sendClientMessage(Color.familyChat, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -557,7 +557,7 @@ async function renameFamily(player: Player, raw: string): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "达到 9 级后可使用管理功能。");
+    tell(player, Color.error, "达到 9 级后可使用管理功能.");
     return;
   }
 
@@ -566,34 +566,34 @@ async function renameFamily(player: Player, raw: string): Promise<void> {
     tell(
       player,
       Color.error,
-      `名称无效。只能使用英文字母和空格（${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}）。`
+      `名称无效.只能使用英文字母和空格(${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
     );
     showRenameDialog(player);
     return;
   }
 
   if (name.toLowerCase() === membership.family.name.toLowerCase()) {
-    tell(player, Color.info, "名称未更改。");
+    tell(player, Color.info, "名称未更改.");
     showManageMenu(player);
     return;
   }
 
   const exists = await findFamilyByName(name);
   if (exists && exists.id !== membership.family.id) {
-    tell(player, Color.error, "该家族名称已被使用。");
+    tell(player, Color.error, "该家族名称已被使用.");
     showRenameDialog(player);
     return;
   }
 
   const ok = await updateFamilyName(membership.family.id, name);
   if (!ok) {
-    tell(player, Color.error, "无法保存名称。");
+    tell(player, Color.error, "无法保存名称.");
     showManageMenu(player);
     return;
   }
 
   refreshFamilyTags(membership.family.id);
-  tell(player, Color.info, `家族名称已更改为“${name}”。`);
+  tell(player, Color.info, `家族名称已更改为"${name}".`);
   showManageMenu(player);
 }
 
@@ -601,25 +601,25 @@ async function redesFamily(player: Player, raw: string): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || membership.rank.id < FAMILY_STAFF_MIN_RANK) {
-    tell(player, Color.error, "达到 9 级后可使用管理功能。");
+    tell(player, Color.error, "达到 9 级后可使用管理功能.");
     return;
   }
 
   const description = sanitizeChatText(raw.trim()).slice(0, FAMILY_DESC_MAX);
   if (!description) {
-    tell(player, Color.error, `请输入描述（最多 ${FAMILY_DESC_MAX} 个字符）。`);
+    tell(player, Color.error, `请输入描述(最多 ${FAMILY_DESC_MAX} 个字符).`);
     showRedescDialog(player);
     return;
   }
 
   const ok = await updateFamilyDescription(membership.family.id, description);
   if (!ok) {
-    tell(player, Color.error, "无法保存描述。");
+    tell(player, Color.error, "无法保存描述.");
     showManageMenu(player);
     return;
   }
 
-  tell(player, Color.info, "家族描述已更新。");
+  tell(player, Color.info, "家族描述已更新.");
   showManageMenu(player);
 }
 
@@ -627,7 +627,7 @@ async function leaveFamily(player: Player): Promise<void> {
   const live = getAccount(player);
   const liveMembership = live ? getFamilyMembership(live) : null;
   if (!live || !liveMembership) {
-    tell(player, Color.error, "你不属于任何家族。");
+    tell(player, Color.error, "你不属于任何家族.");
     return;
   }
 
@@ -640,7 +640,7 @@ async function leaveFamily(player: Player): Promise<void> {
       tell(
         player,
         Color.error,
-        "请先转让所有权：/family → 家族管理 → 转让家族所有权。"
+        "请先转让所有权:/family → 家族管理 → 转让家族所有权."
       );
       return;
     }
@@ -649,7 +649,7 @@ async function leaveFamily(player: Player): Promise<void> {
     if (isPlayerActive(player) && getAccount(player)?.id === live.id) {
       patchAccount(player, { familyId: FAMILY_NONE, familyRank: 0 });
       clearFamilyTag(player);
-      tell(player, Color.info, "家族已解散。");
+      tell(player, Color.info, "家族已解散.");
     }
     return;
   }
@@ -657,7 +657,7 @@ async function leaveFamily(player: Player): Promise<void> {
   try {
     await saveUserFamily(live.id, FAMILY_NONE, 0);
   } catch {
-    tell(player, Color.error, "无法保存到数据库。");
+    tell(player, Color.error, "无法保存到数据库.");
     return;
   }
 
@@ -667,14 +667,14 @@ async function leaveFamily(player: Player): Promise<void> {
 
   patchAccount(player, { familyId: FAMILY_NONE, familyRank: 0 });
   clearFamilyTag(player);
-  tell(player, Color.info, `你已离开家族 ${liveMembership.family.name}。`);
+  tell(player, Color.info, `你已离开家族 ${liveMembership.family.name}.`);
 }
 
 async function dissolveFamily(player: Player): Promise<void> {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || !isFamilyOwner(account)) {
-    tell(player, Color.error, "只有所有者才能删除家族。");
+    tell(player, Color.error, "只有所有者才能删除家族.");
     return;
   }
 
@@ -684,7 +684,7 @@ async function dissolveFamily(player: Player): Promise<void> {
   try {
     await deleteFamily(familyId);
   } catch {
-    tell(player, Color.error, "无法删除家族。");
+    tell(player, Color.error, "无法删除家族.");
     return;
   }
 
@@ -694,7 +694,7 @@ async function dissolveFamily(player: Player): Promise<void> {
     clearFamilyTag(player);
   }
 
-  tell(player, Color.info, `家族“${familyName}”已删除。`);
+  tell(player, Color.info, `家族"${familyName}"已删除.`);
 }
 
 function clearOnlineFamilyMembers(familyId: number): void {
@@ -710,7 +710,7 @@ function clearOnlineFamilyMembers(familyId: number): void {
 
     patchAccount(other, { familyId: FAMILY_NONE, familyRank: 0 });
     clearFamilyTag(other);
-    tell(other, Color.info, "你的家族已解散。");
+    tell(other, Color.info, "你的家族已解散.");
   });
 }
 
@@ -720,6 +720,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }

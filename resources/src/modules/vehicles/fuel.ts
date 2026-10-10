@@ -13,7 +13,7 @@ export const MAX_VEHICLE_FUEL = DEFAULT_VEHICLE_FUEL;
 
 type EngineExtraBlocker = (player: Player, vehicle: Vehicle) => string | null;
 
-/** 额外的启动限制（如加油站），避免循环导入。 */
+/** 额外的启动限制(如加油站),避免循环导入. */
 let extraEngineBlocker: EngineExtraBlocker | null = null;
 
 export function setExtraEngineBlocker(blocker: EngineExtraBlocker | null): void {
@@ -21,10 +21,10 @@ export function setExtraEngineBlocker(blocker: EngineExtraBlocker | null): void 
 }
 
 /**
- * 满油箱：
- * — 约可行驶 45 分钟；
- * — 约可怠速 90 分钟（发动机开启且驾驶员在车内）；
- * 发动机关闭时不消耗燃油。
+ * 满油箱:
+ * - 约可行驶 45 分钟;
+ * - 约可怠速 90 分钟(发动机开启且驾驶员在车内);
+ * 发动机关闭时不消耗燃油.
  */
 const DRAIN_MOVING_PER_SEC = MAX_VEHICLE_FUEL / (45 * 60);
 const DRAIN_IDLE_PER_SEC = MAX_VEHICLE_FUEL / (90 * 60);
@@ -42,7 +42,7 @@ const AIRCRAFT = new Set([
 ]);
 const BICYCLES = new Set([481, 509, 510]);
 
-/** runtime vehicle ID → 燃油量（可为小数）。 */
+/** runtime vehicle ID → 燃油量(可为小数). */
 const fuelByRuntime = new Map<number, number>();
 
 export function vehicleUsesFuel(model: number): boolean {
@@ -119,7 +119,7 @@ export function startFuelSystem(): void {
     }
 
     if (getVehicleFuel(vehicle) <= 0) {
-      return "油箱已空。请前往加油站，在加油泵旁按 H 加油。";
+      return "油箱已空.请前往加油站,在加油泵旁按 H 加油.";
     }
 
     return null;
@@ -200,10 +200,10 @@ function tickFuel(): void {
     try {
       player.sendClientMessage(
         Color.error,
-        "汽油耗尽。引擎已关闭。"
+        "汽油耗尽.引擎已关闭."
       );
     } catch {
-      // 已退出。
+      // 已退出.
     }
   });
 }

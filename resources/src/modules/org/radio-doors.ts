@@ -23,7 +23,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY_ROOF = "只有广播中心员工可以上屋顶。";
+const DENY_ROOF = "只有广播中心员工可以上屋顶.";
 
 type DoorKind = "street" | "interior" | "roof";
 
@@ -130,7 +130,7 @@ const onPickup = new Map<number, DoorKind>();
 const pending = new Map<number, DoorKind>();
 
 export function bindRadioDoors(): void {
-  // radio.txt 中的对象使用 interior 18，玩家进入 interior 0，因此将其重置为 -1。
+  // radio.txt 中的对象使用 interior 18,玩家进入 interior 0,因此将其重置为 -1.
   assignStreamWorld(RADIO_WORLD, isRadioInteriorObject, -1);
 
   for (const door of DOORS) {
@@ -231,7 +231,7 @@ function tickRadioDoors(): void {
 
       onPickup.delete(id);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -239,7 +239,7 @@ function tickRadioDoors(): void {
 function openMenu(player: Player, door: RadioDoor): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -261,14 +261,14 @@ function openMenu(player: Player, door: RadioDoor): void {
     );
   } catch {
     pending.delete(id);
-    deny(player, "无法打开菜单。");
+    deny(player, "无法打开菜单.");
   }
 }
 
 function tryUse(player: Player, destKey: "office" | "street" | "roof"): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -316,7 +316,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -338,7 +338,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

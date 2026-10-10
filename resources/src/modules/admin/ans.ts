@@ -39,7 +39,7 @@ function sendAnswer(line: string, target: Player): void {
     try {
       player.sendClientMessage(Color.adminChat, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   };
 
@@ -62,7 +62,7 @@ function playAnswerSound(player: Player): void {
     try {
       player.playGameSound(ANSWER_SOUND_ID, 0, 0, 0);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   }
 }
@@ -97,13 +97,13 @@ export function bindAdminAns(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const verb = byGender(getGender(player), "回复了", "回复了");
       const line = clipClientMessage(
-        `[A] 管理员 ${playerChatName(player)} 回复玩家 ${playerChatName(target)}：${text}`
+        `[A] 管理员 ${playerChatName(player)} 回复玩家 ${playerChatName(target)}:${text}`
       );
       sendAnswer(line, target);
     },

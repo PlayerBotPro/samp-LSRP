@@ -37,11 +37,11 @@ function clearPending(player: Player): void {
 function targetBlocked(target: Player): string | null {
   const account = getAccount(target);
   if (!account) {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   if (!account.passport) {
-    return "该玩家没有身份证。";
+    return "该玩家没有身份证.";
   }
 
   return null;
@@ -85,7 +85,7 @@ function showOrgList(player: Player): boolean {
     );
     return true;
   } catch {
-    player.sendClientMessage(Color.error, "无法打开列表。");
+    player.sendClientMessage(Color.error, "无法打开列表.");
     return false;
   }
 }
@@ -131,7 +131,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -150,12 +150,12 @@ async function applyLeader(
   try {
     await saveUserOrg(account.id, orgId, orgRank);
   } catch {
-    admin.sendClientMessage(Color.error, "无法保存到数据库。");
+    admin.sendClientMessage(Color.error, "无法保存到数据库.");
     return;
   }
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
-    admin.sendClientMessage(Color.error, "未找到玩家。");
+    admin.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -166,26 +166,26 @@ async function applyLeader(
 
   const tag = playerChatName(target);
   if (orgId === ORG_NONE) {
-    admin.sendClientMessage(Color.info, `你已撤销 ${tag} 的领导职务。`);
+    admin.sendClientMessage(Color.info, `你已撤销 ${tag} 的领导职务.`);
     if (isPlayerActive(target)) {
-      target.sendClientMessage(Color.info, "你的领导职务已被撤销。");
+      target.sendClientMessage(Color.info, "你的领导职务已被撤销.");
     }
     broadcastAdmins(
-      `[A] 管理员 ${playerChatName(admin)} 撤销了 ${tag} 的领袖职务。`
+      `[A] 管理员 ${playerChatName(admin)} 撤销了 ${tag} 的领袖职务.`
     );
     return;
   }
 
   const orgName = getOrganization(orgId)?.name ?? "组织";
-  admin.sendClientMessage(Color.info, `你已任命 ${tag} 为组织 ${orgName} 的领导。`);
+  admin.sendClientMessage(Color.info, `你已任命 ${tag} 为组织 ${orgName} 的领导.`);
   if (isPlayerActive(target)) {
     target.sendClientMessage(
       Color.info,
-      `你已被任命为组织 ${orgName} 的领导。`
+      `你已被任命为组织 ${orgName} 的领导.`
     );
   }
   broadcastAdmins(
-    `[A] 管理员 ${playerChatName(admin)} 任命 ${tag} 为组织 ${orgName} 的领袖。`
+    `[A] 管理员 ${playerChatName(admin)} 任命 ${tag} 为组织 ${orgName} 的领袖.`
   );
 }
 
@@ -207,7 +207,7 @@ export function bindAdminMakeleader(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
@@ -254,7 +254,7 @@ export function bindAdminMakeleader(): void {
     const target = findTarget(pending.slot);
     const targetAccount = target ? getAccount(target) : null;
     if (!target || !targetAccount || targetAccount.id !== pending.accountId) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 

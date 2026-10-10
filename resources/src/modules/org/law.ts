@@ -28,7 +28,7 @@ export function isFbiOfficer(player: Player): boolean {
 }
 
 /**
- * FBI 可针对任何人；警察（LSPD / 州警察）仅可针对非执法人员（“普通”玩家).
+ * FBI 可针对任何人;警察(LSPD / 州警察)仅可针对非执法人员("普通"玩家).
  */
 export function canLawSearchTarget(officer: Player, target: Player): boolean {
   if (!isLawOfficer(officer)) {
@@ -42,14 +42,14 @@ export function canLawSearchTarget(officer: Player, target: Player): boolean {
   return !isLawOfficer(target);
 }
 
-/** “FBI”或“警察”（LSPD / 州警察). */
+/** "FBI"或"警察"(LSPD / 州警察). */
 export function lawOfficerLabel(player: Player): string {
   const account = getAccount(player);
   const orgId = account ? getMembership(account)?.org.id : undefined;
   return orgId === ORG_FBI_ID ? "FBI" : "警察";
 }
 
-/** 向所有在线的 LSPD / 州警察 / FBI 成员发送消息。 */
+/** 向所有在线的 LSPD / 州警察 / FBI 成员发送消息. */
 export function notifyLawStaff(line: string, color: number = Color.dept): void {
   const text = clipClientMessage(line);
   omp.players.forEach((officer) => {
@@ -62,7 +62,7 @@ export function notifyLawStaff(line: string, color: number = Color.dept): void {
       }
       officer.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

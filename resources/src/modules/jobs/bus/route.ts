@@ -13,7 +13,7 @@ export type BusRoute = {
   points: readonly BusRoutePoint[];
 };
 
-/** 城市公交线路（LS）。 */
+/** 城市公交线路(LS). */
 export const BUS_ROUTE_CITY: BusRoute = {
   id: 1,
   name: "城市线路",

@@ -15,7 +15,7 @@ registerCommand("w", "向附近的人耳语", (player, args) => {
     player,
     WHISPER_RADIUS,
     Color.whisper,
-    `${playerChatName(player)} 低声说道：${text}`
+    `${playerChatName(player)} 低声说道:${text}`
   );
   playLocalSpeech(player, text, { radius: WHISPER_RADIUS, color: Color.whisper });
 });

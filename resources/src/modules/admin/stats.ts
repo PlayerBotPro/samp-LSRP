@@ -31,20 +31,20 @@ export function bindAdminStats(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const targetAccount = getAccount(target);
       if (!targetAccount) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (targetAccount.adminLevel >= 1) {
         player.sendClientMessage(
           Color.error,
-          "不能查看管理员的统计数据。"
+          "不能查看管理员的统计数据."
         );
         return;
       }

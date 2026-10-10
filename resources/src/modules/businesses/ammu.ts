@@ -28,7 +28,7 @@ const TICK_MS = 200;
 const PLAYER_STATE_ONFOOT = 1;
 const DIALOG_STYLE_LIST = 2;
 const MAX_ARMOR = 100;
-/** 营业收入计入企业账户的比例。 */
+/** 营业收入计入企业账户的比例. */
 const BIZ_SHARE = 0.8;
 
 type AmmuItem =
@@ -73,7 +73,7 @@ export function startAmmuShops(): void {
   const count = listBusinesses().filter(
     (b) => isAmmuType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 军用品店：销售点数量 ${count}`);
+  omp.log(`[${SERVER_TAG}] 军用品店:销售点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -171,12 +171,12 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (!account.licenses.gun) {
-    player.sendClientMessage(Color.error, "购买需要武器执照。");
+    player.sendClientMessage(Color.error, "购买需要武器执照.");
     return;
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     return;
   }
 
@@ -186,7 +186,7 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
     if (item.kind === "armor") {
       return `${item.name}\t${formatMoney(item.price)}`;
     }
-    return `${item.name}\t${formatMoney(item.price)}（${item.ammo} 发子弹）`;
+    return `${item.name}\t${formatMoney(item.price)}(${item.ammo} 发子弹)`;
   });
 
   try {
@@ -202,7 +202,7 @@ function openAmmuMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开商品展示柜。");
+    player.sendClientMessage(Color.error, "无法打开商品展示柜.");
   }
 }
 
@@ -228,7 +228,7 @@ async function onMenuResponse(
   }
 
   await buyAmmuItem(player, businessId, item);
-  // 保留 standingOn 状态以便离开；再次购买前需离开拾取点再回来。
+  // 保留 standingOn 状态以便离开;再次购买前需离开拾取点再回来.
 }
 
 async function buyAmmuItem(
@@ -247,18 +247,18 @@ async function buyAmmuItem(
   }
 
   if (!account.licenses.gun) {
-    player.sendClientMessage(Color.error, "购买需要武器执照。");
+    player.sendClientMessage(Color.error, "购买需要武器执照.");
     return;
   }
 
   const business = getBusiness(businessId);
   if (!business || !isAmmuType(business.typeId)) {
-    player.sendClientMessage(Color.error, "商店暂不可用。");
+    player.sendClientMessage(Color.error, "商店暂不可用.");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     return;
   }
 
@@ -276,7 +276,7 @@ async function buyAmmuItem(
       slotId
     );
     if (!near || near.id !== businessId) {
-      player.sendClientMessage(Color.error, "请靠近商店展示柜。");
+      player.sendClientMessage(Color.error, "请靠近商店展示柜.");
       return;
     }
   } catch {
@@ -286,7 +286,7 @@ async function buyAmmuItem(
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(item.price)}.`
+      `现金不足.需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -301,8 +301,8 @@ async function buyAmmuItem(
     result = await payBusinessCashShare(businessId, account.id, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 军用品店 企业=${businessId}（${account.name}）：${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 军用品店 企业=${businessId}(${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   } finally {
     buying.delete(account.id);
@@ -312,11 +312,11 @@ async function buyAmmuItem(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(item.price)}.`
+        `现金不足.需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -336,7 +336,7 @@ async function buyAmmuItem(
     grantArmour(player, MAX_ARMOR);
     player.sendClientMessage(
       Color.tryOk,
-      `你已购买防弹衣，花费 ${formatMoney(item.price)}.`
+      `你已购买防弹衣,花费 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -344,6 +344,6 @@ async function buyAmmuItem(
   grantWeapon(player, item.weaponId, item.ammo);
   player.sendClientMessage(
     Color.tryOk,
-    `你已购买 ${item.name} (${item.ammo} 发子弹)，花费 ${formatMoney(item.price)}.`
+    `你已购买 ${item.name} (${item.ammo} 发子弹),花费 ${formatMoney(item.price)}.`
   );
 }

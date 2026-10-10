@@ -9,7 +9,7 @@ import { registerCommand } from "../commands/registry";
 import { hasAdminAccess } from "./session";
 
 const MIN_LEVEL = 1;
-/** SPECTATE_MODE_NORMAL — 第三人称视角。 */
+/** SPECTATE_MODE_NORMAL - 第三人称视角. */
 const SPECTATE_MODE_NORMAL = 1;
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
@@ -24,12 +24,12 @@ type SpecSession = {
   lastVehicleId: number;
 };
 
-/** adminSlot → 观察会话。 */
+/** adminSlot → 观察会话. */
 const sessions = new Map<number, SpecSession>();
-/** toggleSpectating(false) 后，在 playerSpawn 中返回原位置。 */
+/** toggleSpectating(false) 后,在 playerSpawn 中返回原位置. */
 const pendingReturn = new Map<number, SpawnPoint>();
 
-/** 被观察目标的槽位，或 null。 */
+/** 被观察目标的槽位,或 null. */
 export function getAdminSpectateTarget(player: Player): number | null {
   const id = playerId(player);
   if (id === null) {
@@ -65,7 +65,7 @@ export function bindAdminSpectate(): void {
   });
 
   omp.on("playerDeath", (player) => {
-    // 观察期间死亡时不返回旧位置（由重生/医院流程处理）。
+    // 观察期间死亡时不返回旧位置(由重生/医院流程处理).
     clearSpectateState(player, false);
   });
 
@@ -84,7 +84,7 @@ export function bindAdminSpectate(): void {
 
       const admin = omp.players.at(adminSlot);
       if (admin && isPlayerActive(admin)) {
-        stopSpectate(admin, "玩家已离开游戏，观察已结束。");
+        stopSpectate(admin, "玩家已离开游戏,观察已结束.");
       } else {
         sessions.delete(adminSlot);
         pendingReturn.delete(adminSlot);
@@ -111,7 +111,7 @@ function tryStartSpectate(player: Player, raw: string): void {
 
   const target = findTarget(targetSlot);
   if (!target || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -121,27 +121,27 @@ function tryStartSpectate(player: Player, raw: string): void {
   }
 
   if (adminSlot === targetSlot) {
-    player.sendClientMessage(Color.error, "不能观察自己。");
+    player.sendClientMessage(Color.error, "不能观察自己.");
     return;
   }
 
   if (isAdminTarget(target)) {
-    player.sendClientMessage(Color.error, "不能观察管理员。");
+    player.sendClientMessage(Color.error, "不能观察管理员.");
     return;
   }
 
   if (!canBeSpectated(target)) {
-    player.sendClientMessage(Color.error, "现在不能观察该玩家。");
+    player.sendClientMessage(Color.error, "现在不能观察该玩家.");
     return;
   }
 
   const existing = sessions.get(adminSlot);
   if (existing?.targetSlot === targetSlot) {
-    player.sendClientMessage(Color.gray, "你已经在观察该玩家。");
+    player.sendClientMessage(Color.gray, "你已经在观察该玩家.");
     return;
   }
 
-  // 没有本地会话但已处于观察状态（故障/F4），否则 returnPoint 会是无效值。
+  // 没有本地会话但已处于观察状态(故障/F4),否则 returnPoint 会是无效值.
   if (!existing && isPlayerSpectating(player)) {
     player.sendClientMessage(
       Color.error,
@@ -151,31 +151,31 @@ function tryStartSpectate(player: Player, raw: string): void {
   }
 
   if (!existing && !canAdminStartSpectate(player)) {
-    player.sendClientMessage(Color.error, "现在不能开始观察。");
+    player.sendClientMessage(Color.error, "现在不能开始观察.");
     return;
   }
 
   const returnPoint = existing?.returnPoint ?? readPoint(player);
   if (!returnPoint) {
-    player.sendClientMessage(Color.error, "无法保存位置。");
+    player.sendClientMessage(Color.error, "无法保存位置.");
     return;
   }
 
   leaveVehicle(player);
 
   if (!attachSpectate(player, target)) {
-    player.sendClientMessage(Color.error, "无法开始观察。");
+    player.sendClientMessage(Color.error, "无法开始观察.");
     if (existing) {
-      // 切换观察目标失败，将镜头恢复到原目标。
+      // 切换观察目标失败,将镜头恢复到原目标.
       const prev = findTarget(existing.targetSlot);
       if (!prev || !attachSpectate(player, prev)) {
-        stopSpectate(player, "观察已结束。");
+        stopSpectate(player, "观察已结束.");
       }
     } else {
       try {
         player.toggleSpectating(false);
       } catch {
-        // 已退出观察模式。
+        // 已退出观察模式.
       }
       markSpectating(player, false);
     }
@@ -192,7 +192,7 @@ function tryStartSpectate(player: Player, raw: string): void {
       vehicleId = target.getVehicleID();
     }
   } catch {
-    // 默认值。
+    // 默认值.
   }
 
   sessions.set(adminSlot, {
@@ -210,32 +210,32 @@ function tryStartSpectate(player: Player, raw: string): void {
     `你开始观察 ${playerChatName(target)}.`
   );
   broadcastAdmins(
-    `[A] 管理员 ${playerChatName(player)} 开始观察 ${playerChatName(target)}。`
+    `[A] 管理员 ${playerChatName(player)} 开始观察 ${playerChatName(target)}.`
   );
 }
 
 function tryStopSpectate(player: Player): void {
   const id = playerId(player);
-  // 即使未 alogin 也允许退出观察，否则可能卡在观察模式。
+  // 即使未 alogin 也允许退出观察,否则可能卡在观察模式.
   if (id !== null && sessions.has(id)) {
-    stopSpectate(player, "你已退出观察模式。");
+    stopSpectate(player, "你已退出观察模式.");
     return;
   }
 
-  // 会话已结束，但客户端仍处于 SPECTATING 状态（故障），强制退出。
+  // 会话已结束,但客户端仍处于 SPECTATING 状态(故障),强制退出.
   if (isPlayerSpectating(player)) {
     markSpectating(player, false);
     try {
       player.toggleSpectating(false);
     } catch {
-      // 已退出观察模式。
+      // 已退出观察模式.
     }
-    player.sendClientMessage(Color.info, "你已退出观察模式。");
+    player.sendClientMessage(Color.info, "你已退出观察模式.");
     return;
   }
 
   if (hasAdminAccess(player, MIN_LEVEL)) {
-    player.sendClientMessage(Color.error, "你当前不在观察模式。");
+    player.sendClientMessage(Color.error, "你当前不在观察模式.");
   }
 }
 
@@ -261,8 +261,8 @@ function stopSpectate(player: Player, message: string): void {
     return;
   }
 
-  // toggleSpectating(false) 会触发 playerSpawn，并在那里调用 applyPendingReturn。
-  // 如果重生流程已完成或事件未触发，则使用备用处理。
+  // toggleSpectating(false) 会触发 playerSpawn,并在那里调用 applyPendingReturn.
+  // 如果重生流程已完成或事件未触发,则使用备用处理.
   setTimeout(() => {
     if (pendingReturn.has(id) && isPlayerActive(player)) {
       applyPendingReturn(player);
@@ -272,7 +272,7 @@ function stopSpectate(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.info, message);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -294,7 +294,7 @@ function applyPendingReturn(player: Player): void {
     refreshStreamForPlayer(player);
     player.setCameraBehind();
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 
   markSpectating(player, false);
@@ -307,7 +307,7 @@ function clearSpectateState(player: Player, restore: boolean): void {
   }
 
   if (restore && sessions.has(id)) {
-    stopSpectate(player, "观察已结束。");
+    stopSpectate(player, "观察已结束.");
     return;
   }
 
@@ -320,7 +320,7 @@ function clearSpectateState(player: Player, restore: boolean): void {
       player.toggleSpectating(false);
     }
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -333,7 +333,7 @@ function syncSpectateSessions(): void {
     const admin = omp.players.at(adminSlot);
     if (!admin || !isPlayerActive(admin) || !hasAdminAccess(admin, MIN_LEVEL)) {
       if (admin && isPlayerActive(admin)) {
-        stopSpectate(admin, "观察已结束。");
+        stopSpectate(admin, "观察已结束.");
       } else {
         sessions.delete(adminSlot);
         pendingReturn.delete(adminSlot);
@@ -348,7 +348,7 @@ function syncSpectateSessions(): void {
       isAdminTarget(target) ||
       !canBeSpectated(target)
     ) {
-      stopSpectate(admin, "玩家不可用，观察已结束。");
+      stopSpectate(admin, "玩家不可用,观察已结束.");
       continue;
     }
 
@@ -360,7 +360,7 @@ function syncSpectateSessions(): void {
       world = target.getVirtualWorld();
       vehicleId = target.isInAnyVehicle() ? target.getVehicleID() : -1;
     } catch {
-      stopSpectate(admin, "玩家不可用，观察已结束。");
+      stopSpectate(admin, "玩家不可用,观察已结束.");
       continue;
     }
 
@@ -373,7 +373,7 @@ function syncSpectateSessions(): void {
     }
 
     if (!attachSpectate(admin, target)) {
-      stopSpectate(admin, "无法更新观察状态。");
+      stopSpectate(admin, "无法更新观察状态.");
       continue;
     }
 
@@ -390,7 +390,7 @@ function attachSpectate(admin: Player, target: Player): boolean {
     admin.setInterior(interior);
     admin.setVirtualWorld(world);
 
-    // 顺序很重要：先设置 spectating，再设置目标。
+    // 顺序很重要:先设置 spectating,再设置目标.
     admin.toggleSpectating(true);
 
     if (target.isInAnyVehicle()) {
@@ -408,7 +408,7 @@ function attachSpectate(admin: Player, target: Player): boolean {
   }
 }
 
-/** omp-node 对 SpectateVehicle 的类型声明错误地要求 Player；Vehicle 也有 getPtr。 */
+/** omp-node 对 SpectateVehicle 的类型声明错误地要求 Player;Vehicle 也有 getPtr. */
 function spectateVehicle(admin: Player, vehicle: Vehicle): void {
   (
     admin as Player & {
@@ -495,7 +495,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // 已经下车。
+    // 已经下车.
   }
 }
 
@@ -508,7 +508,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

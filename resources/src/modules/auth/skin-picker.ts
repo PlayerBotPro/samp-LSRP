@@ -14,7 +14,7 @@ const PICKER_WORLD_BASE = 10_000;
 const HOVER_COLOR = 0xccccccff;
 const ANIM_SYNC_ALL = 1;
 const ARROW_SOUND_ID = 1083;
-/** 注册时的外观选择位置（室内场景 3，虚拟世界 = 10000 + 槽位）。 */
+/** 注册时的外观选择位置(室内场景 3,虚拟世界 = 10000 + 槽位). */
 const AUTH_STAND: SpawnPoint = {
   x: 214.6442,
   y: -137.5518,
@@ -31,9 +31,9 @@ export type SkinPickerOpenOptions = {
   gender: Gender;
   skinId?: number;
   mode?: SkinPickerMode;
-  /** 外观目录；默认使用注册目录。 */
+  /** 外观目录;默认使用注册目录. */
   catalog?: SkinOption[];
-  /** 预览位置（虚拟世界会自动设置）。 */
+  /** 预览位置(虚拟世界会自动设置). */
   stand?: SpawnPoint;
   camera?: { x: number; y: number; z: number };
   businessId?: number;
@@ -49,7 +49,7 @@ type PickerSession = {
   businessId?: number;
 };
 
-/** 按角度将镜头放在玩家前方（GTA SA：0 为北方 +Y，90 为西方 −X）。 */
+/** 按角度将镜头放在玩家前方(GTA SA:0 为北方 +Y,90 为西方 −X). */
 export function cameraInFront(
   stand: { x: number; y: number; z: number; angle: number },
   dist: number
@@ -87,7 +87,7 @@ function startFacingLock(player: Player, id: number): void {
       try {
         player.setFacingAngle(pickerPoint(player).angle);
       } catch {
-        // 玩家已离线。
+        // 玩家已离线.
       }
     }, 100)
   );
@@ -111,7 +111,7 @@ function playPickerSound(player: Player, soundId: number): void {
     try {
       player.playGameSound(soundId, 0, 0, 0);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   }
 }
@@ -326,7 +326,7 @@ function createDraws(): PickerDraws | null {
       try {
         draw?.destroy();
       } catch {
-        // 尚未创建。
+        // 尚未创建.
       }
     }
     return null;
@@ -347,14 +347,14 @@ function showDraws(player: Player): void {
     try {
       draw.showForPlayer(player);
     } catch {
-      // 玩家已离线。
+      // 玩家已离线.
     }
   }
 
   try {
     player.selectTextDraw(HOVER_COLOR);
   } catch {
-    // 首次尝试时光标不一定可用。
+    // 首次尝试时光标不一定可用.
   }
 }
 
@@ -369,7 +369,7 @@ function hideDraws(player: Player): void {
       try {
         draw.hideForPlayer(player);
       } catch {
-        // 玩家已离线。
+        // 玩家已离线.
       }
     }
   }
@@ -377,7 +377,7 @@ function hideDraws(player: Player): void {
   try {
     player.cancelSelectTextDraw();
   } catch {
-    // 光标已隐藏。
+    // 光标已隐藏.
   }
 
   if (id !== null) {
@@ -394,7 +394,7 @@ function applyCamera(player: Player): void {
     player.setCameraPos(camera.x, camera.y, camera.z);
     player.setCameraLookAt(point.x, point.y, point.z + 0.62, 2);
   } catch {
-    // 槽位尚未就绪。
+    // 槽位尚未就绪.
   }
 }
 
@@ -404,7 +404,7 @@ function preloadPickerAnims(player: Player): void {
     player.applyAnimation("DEALER", "DEALER_IDLE", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 下次尝试时会加载库。
+    // 下次尝试时会加载库.
   }
 }
 
@@ -419,7 +419,7 @@ function lockFacing(player: Player): void {
     try {
       player.setFacingAngle(angle);
     } catch {
-      // 槽位尚未就绪。
+      // 槽位尚未就绪.
     }
   }
 }
@@ -437,7 +437,7 @@ function applyPreview(player: Player, skinId: number): void {
     applyCamera(player);
     lockFacing(player);
   } catch {
-    // 槽位尚未就绪。
+    // 槽位尚未就绪.
   }
 }
 
@@ -451,7 +451,7 @@ function holdPreview(player: Player): void {
     applyCamera(player);
     lockFacing(player);
   } catch {
-    // 槽位尚未就绪。
+    // 槽位尚未就绪.
   }
 }
 
@@ -471,7 +471,7 @@ function leaveSpectate(player: Player, skinId: number): void {
     try {
       player.toggleSpectating(false);
     } catch {
-      // 出生点尚不可用。
+      // 出生点尚不可用.
     }
   }
 }
@@ -592,7 +592,7 @@ export function closeSkinPicker(player: Player): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 动画已重置。
+    // 动画已重置.
   }
 }
 
@@ -644,7 +644,7 @@ function isCancelClick(clicked: unknown): boolean {
       return true;
     }
   } catch {
-    // 点击的对象无效。
+    // 点击的对象无效.
   }
 
   const numeric = Number(clicked);
@@ -665,7 +665,7 @@ export function bindSkinPicker(onAction: SkinPickerActionHandler): void {
   ensurePickerEvents();
 }
 
-/** 服装店处理器（mode = clothes）。 */
+/** 服装店处理器(mode = clothes). */
 export function bindClothesSkinPicker(onAction: SkinPickerActionHandler): void {
   clothesActionHandler = onAction;
   ensurePickerEvents();

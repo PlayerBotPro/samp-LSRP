@@ -96,15 +96,15 @@ export function bindOrgWarehouseInteract(): void {
 }
 
 /**
- * 仓库定时检查：玩家离开标记点范围后重置访问状态
- * （再次打开菜单需要先离开再进入标记点）。
+ * 仓库定时检查:玩家离开标记点范围后重置访问状态
+ * (再次打开菜单需要先离开再进入标记点).
  */
 export function notifyOrgStockStanding(player: Player, inside: boolean): void {
   if (inside) {
     return;
   }
 
-  // 对话框打开时不要重置 pending（否则输入的数量会无声丢失）。
+  // 对话框打开时不要重置 pending(否则输入的数量会无声丢失).
   if (isOrgStockDialogBusy(player)) {
     return;
   }
@@ -151,7 +151,7 @@ function tryOpenStockMenu(player: Player): void {
 
 function showMenu(player: Player, orgId: number): void {
   const wh = getWarehouse(orgId);
-  // 已关闭 →“打开仓库”，已打开 →“关闭仓库”。
+  // 已关闭 →"打开仓库",已打开 →"关闭仓库".
   const lockLabel =
     wh && !wh.isLocked ? "关闭仓库" : "打开仓库";
   const body = [
@@ -176,7 +176,7 @@ function showMenu(player: Player, orgId: number): void {
     );
     setOrgStockDialogBusy(player, true);
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -192,7 +192,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const stock = findStockAtPlayer(player);
   if (!stock) {
-    player.sendClientMessage(Color.error, "请靠近仓库。");
+    player.sendClientMessage(Color.error, "请靠近仓库.");
     return;
   }
 
@@ -205,7 +205,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   if (listItem === 6) {
     toggleLock(player, stock.orgId);
-    // 立即显示状态最新的“打开/关闭”菜单。
+    // 立即显示状态最新的"打开/关闭"菜单.
     showMenu(player, stock.orgId);
     return;
   }
@@ -217,7 +217,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const wh = getWarehouse(stock.orgId);
   if (mapped.action === "take" && wh?.isLocked) {
-    player.sendClientMessage(Color.error, "仓库已关闭。");
+    player.sendClientMessage(Color.error, "仓库已关闭.");
     return;
   }
 
@@ -274,8 +274,8 @@ function showAmountDialog(
   const verb = action === "put" ? "存入仓库" : "从仓库取出";
   const available =
     action === "put"
-      ? `你拥有：${playerHave} 个\n仓库库存：${stockHave} 个`
-      : `仓库库存：${stockHave} 个\n你拥有：${playerHave} 个`;
+      ? `你拥有:${playerHave} 个\n仓库库存:${stockHave} 个`
+      : `仓库库存:${stockHave} 个\n你拥有:${playerHave} 个`;
 
   try {
     Dialog.show(
@@ -283,13 +283,13 @@ function showAmountDialog(
       ORG_WAREHOUSE_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "组织仓库",
-      `要${verb}多少${label}？\n${available}\n单次最多：${MAX_TRANSFER}`,
+      `要${verb}多少${label}?\n${available}\n单次最多:${MAX_TRANSFER}`,
       "确定",
       "取消"
     );
     setOrgStockDialogBusy(player, true);
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
     clearPending(player);
   }
 }
@@ -308,13 +308,13 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
   const id = playerId(player);
   const pending = id !== null ? pendingByPlayer.get(id) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "操作中断。请重新进入仓库。");
+    player.sendClientMessage(Color.error, "操作中断.请重新进入仓库.");
     return;
   }
 
   const stock = findStockAtPlayer(player);
   if (!stock || stock.orgId !== pending.orgId) {
-    player.sendClientMessage(Color.error, "请靠近仓库。");
+    player.sendClientMessage(Color.error, "请靠近仓库.");
     clearPending(player);
     return;
   }
@@ -329,14 +329,14 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
 
   const wh = getWarehouse(pending.orgId);
   if (pending.action === "take" && (!wh || wh.isLocked)) {
-    player.sendClientMessage(Color.error, "仓库已关闭。");
+    player.sendClientMessage(Color.error, "仓库已关闭.");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数.");
     showAmountDialog(player, pending.action, pending.item, pending.orgId);
     return;
   }
@@ -344,7 +344,7 @@ function onAmountResponse(player: Player, accepted: boolean, rawInput: string): 
   if (amount > MAX_TRANSFER) {
     player.sendClientMessage(
       Color.error,
-      `每次最多可转移 ${MAX_TRANSFER} 件。`
+      `每次最多可转移 ${MAX_TRANSFER} 件.`
     );
     showAmountDialog(player, pending.action, pending.item, pending.orgId);
     return;
@@ -392,18 +392,18 @@ function applyPut(player: Player, orgId: number, item: StockItem, amount: number
   }
 
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   refreshStockLabels(orgId);
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `你存入仓库: ${ITEM_LABEL[item]} ${amount} 件。`
+    `你存入仓库: ${ITEM_LABEL[item]} ${amount} 件.`
   );
   broadcastStock(
     orgId,
-    `[仓库] ${membership.rank.title} ${playerChatName(player)}存入：${ITEM_LABEL[item]} ${amount} 个`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}存入:${ITEM_LABEL[item]} ${amount} 个`
   );
 }
 
@@ -437,7 +437,7 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
     !Number.isSafeInteger(nextAmmo) ||
     !Number.isSafeInteger(nextMetal)
   ) {
-    // 通过反向添加回滚缓存/数据库中的仓库数据。
+    // 通过反向添加回滚缓存/数据库中的仓库数据.
     if (item === "ammo") {
       addWarehouseAmmo(orgId, amount);
     } else if (item === "metal") {
@@ -445,25 +445,25 @@ function applyTake(player: Player, orgId: number, item: StockItem, amount: numbe
     } else {
       addWarehouseDrugs(orgId, amount);
     }
-    player.sendClientMessage(Color.error, "数量过多。");
+    player.sendClientMessage(Color.error, "数量过多.");
     clearPending(player);
     return;
   }
 
   patchAccount(player, { drugs: nextDrugs, ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   refreshStockLabels(orgId);
   clearPending(player);
   player.sendClientMessage(
     Color.info,
-    `你从仓库取出: ${ITEM_LABEL[item]} ${amount} 件。`
+    `你从仓库取出: ${ITEM_LABEL[item]} ${amount} 件.`
   );
   broadcastStock(
     orgId,
-    `[仓库] ${membership.rank.title} ${playerChatName(player)}取出：${ITEM_LABEL[item]} ${amount} 个`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}取出:${ITEM_LABEL[item]} ${amount} 个`
   );
 }
 
@@ -477,7 +477,7 @@ function toggleLock(player: Player, orgId: number): void {
   if (membership.rank.id < LOCK_MIN_RANK) {
     player.sendClientMessage(
       Color.error,
-      "只有 7 级及以上成员才能打开或关闭仓库。"
+      "只有 7 级及以上成员才能打开或关闭仓库."
     );
     return;
   }
@@ -488,7 +488,7 @@ function toggleLock(player: Player, orgId: number): void {
 
   const wh = getWarehouse(orgId);
   const currentlyOpen = Boolean(wh && !wh.isLocked);
-  // 已打开 → 关闭；已关闭 → 打开。
+  // 已打开 → 关闭;已关闭 → 打开.
   const nextLocked = currentlyOpen;
   setWarehouseLocked(orgId, nextLocked);
   refreshStockLabels(orgId);
@@ -496,11 +496,11 @@ function toggleLock(player: Player, orgId: number): void {
   const verb = nextLocked ? "关闭了仓库" : "打开了仓库";
   player.sendClientMessage(
     Color.info,
-    nextLocked ? "仓库已关闭。" : "仓库已开启。"
+    nextLocked ? "仓库已关闭." : "仓库已开启."
   );
   broadcastStock(
     orgId,
-    `[仓库] ${membership.rank.title} ${playerChatName(player)}${verb}。`
+    `[仓库] ${membership.rank.title} ${playerChatName(player)}${verb}.`
   );
 }
 
@@ -519,7 +519,7 @@ function denyOutsider(player: Player, orgId: number): void {
   lastDenyAt.set(id, now);
   const org = getOrganization(orgId);
   const name = org?.name ?? "组织";
-  player.sendClientMessage(Color.error, `仅 ${name} 可以进入仓库。`);
+  player.sendClientMessage(Color.error, `仅 ${name} 可以进入仓库.`);
 }
 
 function broadcastStock(orgId: number, rawLine: string): void {
@@ -546,7 +546,7 @@ function broadcastStock(orgId: number, rawLine: string): void {
     try {
       other.sendClientMessage(Color.info, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

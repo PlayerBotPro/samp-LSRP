@@ -70,7 +70,7 @@ export function startClothesShops(): void {
   const count = listBusinesses().filter(
     (b) => isClothesType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 服装店：试衣点数量 ${count}`);
+  omp.log(`[${SERVER_TAG}] 服装店:试衣点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -82,7 +82,7 @@ function hasBuyPickup(business: BusinessRecord): boolean {
   );
 }
 
-/** 返回企业室内的购买拾取点。 */
+/** 返回企业室内的购买拾取点. */
 function clothesReturnPoint(business: BusinessRecord): SpawnPoint | null {
   if (!hasBuyPickup(business) || business.interiorId === null) {
     return null;
@@ -204,23 +204,23 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
   }
 
   if (business.isLocked) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     return;
   }
 
   if (!hasBuyPickup(business)) {
-    player.sendClientMessage(Color.error, "该商店暂不提供试穿服务。");
+    player.sendClientMessage(Color.error, "该商店暂不提供试穿服务.");
     return;
   }
 
   const gender = account.gender;
   const catalog = clothesCatalog(gender);
   if (catalog.length === 0) {
-    player.sendClientMessage(Color.error, "没有可用皮肤。");
+    player.sendClientMessage(Color.error, "没有可用皮肤.");
     return;
   }
 
-  // 使用与注册时相同的位置和镜头；拾取器会自动设置对应的虚拟世界。
+  // 使用与注册时相同的位置和镜头;拾取器会自动设置对应的虚拟世界.
   const skin = openSkinPicker(player, {
     gender,
     mode: "clothes",
@@ -231,7 +231,7 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
 
   if (!skin) {
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开试穿界面。");
+    player.sendClientMessage(Color.error, "无法打开试穿界面.");
     return;
   }
 
@@ -241,23 +241,23 @@ function beginClothesTryOn(player: Player, business: BusinessRecord): void {
 function clothesBuyDeny(player: Player): string | null {
   const account = getAccount(player);
   if (!account) {
-    return "请先登录账号。";
+    return "请先登录账号.";
   }
 
   if (isJailed(player)) {
-    return "在监狱中不能购买服装。";
+    return "在监狱中不能购买服装.";
   }
 
   if (account.hospitalized) {
-    return "请先在医院完成治疗。";
+    return "请先在医院完成治疗.";
   }
 
   if (isMinerOnShift(player)) {
-    return "请先结束矿工的工作班次。";
+    return "请先结束矿工的工作班次.";
   }
 
   if (isLoaderOnShift(player)) {
-    return "请先结束搬运工的工作班次。";
+    return "请先结束搬运工的工作班次.";
   }
 
   return null;
@@ -273,7 +273,7 @@ async function handleClothesPickerAction(
 
   const account = getAccount(player);
   if (account && buying.has(account.id)) {
-    // 购买请求正在处理中：禁止取消或翻页，避免与 await 产生竞态。
+    // 购买请求正在处理中:禁止取消或翻页,避免与 await 产生竞态.
     return;
   }
 
@@ -314,11 +314,11 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
     return;
   }
 
-  // 价格和目录以服务器数据为准，不完全信任会话对象。
+  // 价格和目录以服务器数据为准,不完全信任会话对象.
   const skin =
     clothesCatalog(account.gender).find((item) => item.id === picked.id) ?? null;
   if (!skin || skin.price !== asClothesSkin(picked)?.price) {
-    player.sendClientMessage(Color.error, "该皮肤不可用。");
+    player.sendClientMessage(Color.error, "该皮肤不可用.");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
@@ -331,32 +331,32 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
   }
 
   if (buying.has(account.id)) {
-    player.sendClientMessage(Color.error, "请等待购买完成。");
+    player.sendClientMessage(Color.error, "请等待购买完成.");
     return;
   }
 
   const business = getBusiness(businessId);
   if (!business || !isClothesType(business.typeId)) {
-    player.sendClientMessage(Color.error, "商店暂不可用。");
+    player.sendClientMessage(Color.error, "商店暂不可用.");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
 
   if (business.isLocked) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     exitClothesTryOn(player, { restoreShop: true });
     return;
   }
 
   if (account.skin === skin.id) {
-    player.sendClientMessage(Color.error, "你已经拥有这个皮肤。");
+    player.sendClientMessage(Color.error, "你已经拥有这个皮肤.");
     return;
   }
 
   if (account.money < skin.price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(skin.price)}.`
+      `现金不足.需要 ${formatMoney(skin.price)}.`
     );
     return;
   }
@@ -378,9 +378,9 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
     );
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "现金不足。");
+        player.sendClientMessage(Color.error, "现金不足.");
       } else {
-        player.sendClientMessage(Color.error, "无法购买皮肤。");
+        player.sendClientMessage(Color.error, "无法购买皮肤.");
       }
       return;
     }
@@ -398,17 +398,17 @@ async function purchaseClothesSkin(player: Player): Promise<void> {
 
     player.sendClientMessage(
       Color.info,
-      `你已购买皮肤 «${skin.label}»，花费 ${formatMoney(skin.price)}.`
+      `你已购买皮肤 "${skin.label}",花费 ${formatMoney(skin.price)}.`
     );
 
     if (stillInClothesPicker()) {
       exitClothesTryOn(player, { restoreShop: true });
     } else {
-      // 玩家已退出（ESC）或死亡：只更新显示和钱包，不传送到商店。
+      // 玩家已退出(ESC)或死亡:只更新显示和钱包,不传送到商店.
       try {
         applyOrgVisuals(player);
       } catch {
-        // 槽位为空。
+        // 槽位为空.
       }
     }
   } finally {
@@ -437,7 +437,7 @@ function exitClothesTryOn(
     player.toggleControllable(true);
     player.setCameraBehind();
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 
   const slotId = playerId(player);
@@ -448,7 +448,7 @@ function exitClothesTryOn(
     try {
       applyOrgVisuals(player);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
     return;
   }
@@ -462,7 +462,7 @@ function exitClothesTryOn(
     try {
       applyOrgVisuals(player);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
     return;
   }
@@ -472,11 +472,11 @@ function exitClothesTryOn(
     refreshStreamForPlayer(player);
     applyOrgVisuals(player);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 
   if (slotId !== null) {
-    // 等玩家离开拾取点后再允许重新打开试衣界面。
+    // 等玩家离开拾取点后再允许重新打开试衣界面.
     standingOn.set(slotId, businessId);
   }
 }

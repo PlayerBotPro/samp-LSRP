@@ -17,7 +17,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -61,17 +61,17 @@ export function bindAdminSethp(): void {
 
       const target = omp.players.at(parsed.slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "未找到玩家。");
+          player.sendClientMessage(Color.error, "未找到玩家.");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
@@ -79,7 +79,7 @@ export function bindAdminSethp(): void {
       if (!samePlayer && isAdminLoggedIn(target)) {
         player.sendClientMessage(
           Color.error,
-          "禁止管理员更改生命值。"
+          "禁止管理员更改生命值."
         );
         return;
       }
@@ -95,7 +95,7 @@ export function bindAdminSethp(): void {
         `玩家 ${playerChatName(target)} 的 HP 已设置为: ${parsed.hp}`
       );
       broadcastAdmins(
-        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 的生命值设为：${parsed.hp}。`
+        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 的生命值设为:${parsed.hp}.`
       );
     },
     true

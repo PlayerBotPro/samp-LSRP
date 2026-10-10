@@ -7,7 +7,7 @@ import { nowMs } from "../math";
 import { reportCheat } from "../punish";
 import { getPlayerState } from "../state";
 
-/** HP/护甲浮点数容差（这是数据包噪声，不是“免费治疗”）。 */
+/** HP/护甲浮点数容差(这是数据包噪声,不是"免费治疗"). */
 const VITALS_EPS = 1;
 
 export function checkVitals(player: Player): void {
@@ -26,8 +26,8 @@ export function checkVitals(player: Player): void {
     return;
   }
 
-  // 宽限期：等待服务器 SetHealth/伤害生效期间不踢出玩家。
-  // 此时不会根据客户端数据提高镜像值，只依据 trust/onTakeDamage 更新。
+  // 宽限期:等待服务器 SetHealth/伤害生效期间不踢出玩家.
+  // 此时不会根据客户端数据提高镜像值,只依据 trust/onTakeDamage 更新.
   if (now >= state.healthTrustedUntil && isCodeEnabled(AcCode.HealthFoot)) {
     if (health > state.health + VITALS_EPS && health <= 255) {
       reportCheat(
@@ -56,7 +56,7 @@ export function checkMoney(player: Player): void {
   const state = getPlayerState(id);
   if (!state || !state.spawned) return;
   if (!isCodeEnabled(AcCode.Money)) return;
-  // 宽限期只会延迟踢出；金钱镜像以 account 为准，客户端不能提高预期值。
+  // 宽限期只会延迟踢出;金钱镜像以 account 为准,客户端不能提高预期值.
   if (nowMs() < state.moneyTrustedUntil) return;
 
   const account = getAccount(player);

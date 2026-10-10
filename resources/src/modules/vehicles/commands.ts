@@ -94,7 +94,7 @@ async function openCarMenu(player: Player): Promise<void> {
 
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "你没有私人载具。");
+    player.sendClientMessage(Color.error, "你没有私人载具.");
     return;
   }
 
@@ -111,7 +111,7 @@ async function openCarMenu(player: Player): Promise<void> {
     );
   } catch {
     pendingMenu.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开载具菜单。");
+    player.sendClientMessage(Color.error, "无法打开载具菜单.");
   }
 }
 
@@ -127,7 +127,7 @@ async function handleCarMenuChoice(player: Player, listItem: number): Promise<vo
 
   const vehicle = await findOwnedPlayerVehicle(account.id);
   if (!vehicle) {
-    player.sendClientMessage(Color.error, "你没有私人载具。");
+    player.sendClientMessage(Color.error, "你没有私人载具.");
     return;
   }
 
@@ -148,7 +148,7 @@ async function handleCarMenuChoice(player: Player, listItem: number): Promise<vo
           fuel = getVehicleFuel(live);
         }
       } catch {
-        // 车辆已不在游戏世界中。
+        // 车辆已不在游戏世界中.
       }
     }
     showCarInfo(
@@ -192,11 +192,11 @@ function showCarInfo(
 
   pendingMenu.add(slotId);
   const body = [
-    `车辆 ID：\t${id}`,
-    `燃油：\t${Math.round(fuel)}`,
-    `耐久度：\t${Math.round(health)}`,
-    `状态：\t${locked ? "已锁定" : "已解锁"}`,
-    `购买价格：\t${formatMoney(purchasePrice)}`,
+    `车辆 ID:\t${id}`,
+    `燃油:\t${Math.round(fuel)}`,
+    `耐久度:\t${Math.round(health)}`,
+    `状态:\t${locked ? "已锁定" : "已解锁"}`,
+    `购买价格:\t${formatMoney(purchasePrice)}`,
   ].join("\n");
 
   try {
@@ -211,7 +211,7 @@ function showCarInfo(
     );
   } catch {
     pendingMenu.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开信息。");
+    player.sendClientMessage(Color.error, "无法打开信息.");
   }
 }
 
@@ -228,7 +228,7 @@ async function parkAtHouse(
   if (!house) {
     player.sendClientMessage(
       Color.error,
-      "你没有房屋。只能把载具停在自己的房屋旁。"
+      "你没有房屋.只能把载具停在自己的房屋旁."
     );
     return;
   }
@@ -243,12 +243,12 @@ async function parkAtHouse(
   );
 
   if (!spawned) {
-    player.sendClientMessage(Color.error, "无法停放载具。");
+    player.sendClientMessage(Color.error, "无法停放载具.");
     return;
   }
 
   player.sendClientMessage(
     Color.tryOk,
-    "载具已停在你的房屋旁。如有乘客，他们已下车。"
+    "载具已停在你的房屋旁.如有乘客,他们已下车."
   );
 }

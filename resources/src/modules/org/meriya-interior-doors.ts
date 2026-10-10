@@ -6,7 +6,7 @@ import { ORG_FBI_ID } from "./fbi";
 import { MERIYA_CUSTOM_INTERIOR, MERIYA_WORLD, ORG_MERIYA_ID } from "./meriya";
 import { getMembership } from "./membership";
 
-/** 左 Alt（KEY_WALK). */
+/** 左 Alt(KEY_WALK). */
 const KEY_WALK = 1024;
 const HOLD_OPEN_MS = 5000;
 const TRAVEL_MS = 1200;
@@ -14,7 +14,7 @@ const DRAW_DISTANCE = 120;
 const DENY_COOLDOWN_MS = 2500;
 const PLAYER_STATE_ONFOOT = 1;
 const DOOR_MODEL = 19859;
-const DENY = "市政厅和 FBI 员工可以打开。";
+const DENY = "市政厅和 FBI 员工可以打开.";
 
 const ALLOWED_ORGS: ReadonlySet<number> = new Set([ORG_MERIYA_ID, ORG_FBI_ID]);
 
@@ -35,7 +35,7 @@ type LiveDoor = {
   closeTimer: ReturnType<typeof setTimeout> | null;
 };
 
-/** 入口处的员工门（沿 Y 轴偏移). */
+/** 入口处的员工门(沿 Y 轴偏移). */
 const DOORS: readonly DoorDef[] = [
   {
     x: -804.356018,
@@ -67,7 +67,7 @@ function moveDoor(door: LiveDoor, open: boolean): void {
     }
     object.move(def.x, y, def.z, travelSpeed(def), def.rx, def.ry, def.rz);
   } catch {
-    // 对象尚未就绪。
+    // 对象尚未就绪.
   }
 }
 
@@ -125,7 +125,7 @@ function denyOpen(player: Player): void {
   try {
     player.sendClientMessage(Color.error, DENY);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -176,7 +176,7 @@ export function bindMeriyaInteriorDoors(): void {
       );
       doors.push({ def, object, closeTimer: null });
     } catch {
-      // 对象数量已达上限。
+      // 对象数量已达上限.
     }
   }
 

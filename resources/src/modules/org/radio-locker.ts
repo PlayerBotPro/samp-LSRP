@@ -15,7 +15,7 @@ const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const WEAPON_CAMERA = 43;
 const CAMERA_AMMO = 36;
-const DENY = "你不属于广播中心。";
+const DENY = "你不属于广播中心.";
 
 const POINT = {
   x: 1411.8359,
@@ -86,7 +86,7 @@ function tickLocker(): void {
       inside.add(id);
       tryTake(player);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -98,7 +98,7 @@ function tryTake(player: Player): void {
   }
 
   if (account.hospitalized) {
-    tell(player, Color.error, "请先在医院接受治疗。");
+    tell(player, Color.error, "请先在医院接受治疗.");
     return;
   }
 
@@ -111,18 +111,18 @@ function tryTake(player: Player): void {
   try {
     grantWeapon(player, WEAPON_CAMERA, CAMERA_AMMO);
   } catch {
-    tell(player, Color.error, "无法发放相机。");
+    tell(player, Color.error, "无法发放相机.");
     return;
   }
 
-  tell(player, Color.info, "你领取了相机。");
+  tell(player, Color.info, "你领取了相机.");
 }
 
 function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

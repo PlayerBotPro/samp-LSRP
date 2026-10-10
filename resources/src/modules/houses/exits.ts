@@ -17,7 +17,7 @@ const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const TELEPORT_COOLDOWN_MS = 1500;
 const TICK_MS = 200;
-/** 左 ALT — 慢走（KEY_WALK）。 */
+/** 左 ALT - 慢走(KEY_WALK). */
 const KEY_WALK = 1024;
 
 const nearExit = new Map<number, number>();
@@ -161,7 +161,7 @@ function tryExitHouse(player: Player): void {
     placeAt(player, exit);
     refreshStreamForPlayer(player);
   } catch {
-    player.sendClientMessage(Color.error, "无法离开房屋。");
+    player.sendClientMessage(Color.error, "无法离开房屋.");
   }
 }
 

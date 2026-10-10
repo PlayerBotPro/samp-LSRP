@@ -38,7 +38,7 @@ export function isPlayerAfk(player: Player): boolean {
   return tracks.get(id)?.afkSince != null;
 }
 
-/** 玩家处于 AFK 状态的毫秒数；如果不在 AFK 状态则返回 `null`。 */
+/** 玩家处于 AFK 状态的毫秒数;如果不在 AFK 状态则返回 `null`. */
 export function getAfkElapsedMs(player: Player): number | null {
   const id = playerId(player);
   if (id === null) {
@@ -53,7 +53,7 @@ export function getAfkElapsedMs(player: Player): number | null {
   return Math.max(0, Date.now() - since);
 }
 
-/** 简短显示 AFK 时长，例如：`45秒`、`12分 05秒`、`1小时 02分`。 */
+/** 简短显示 AFK 时长,例如:`45秒`,`12分 05秒`,`1小时 02分`. */
 export function formatAfkElapsed(ms: number): string {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
   const hours = Math.floor(totalSec / 3600);

@@ -86,7 +86,7 @@ function refreshMetalStockLabel(): void {
   try {
     metalStockLabel.updateText(Color.info, metalStockLabelText());
   } catch {
-    // 标签已销毁。
+    // 标签已销毁.
   }
 }
 
@@ -272,7 +272,7 @@ function updateMineIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已经离开。
+      // 玩家已经离开.
     }
     return;
   }
@@ -289,7 +289,7 @@ function hideMineIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -363,7 +363,7 @@ function tickMiner(): void {
         showMetalBuyDialog(player);
       }
     } catch {
-      // 玩家槽位已清空。
+      // 玩家槽位已清空.
     }
   });
 }
@@ -378,17 +378,17 @@ function showInfoDialog(player: Player): void {
       [
         "矿工工作",
         "",
-        "普通矿石：6–16 千克，每千克 $15",
-        "稀有矿石：低概率获得，3–8 千克，每千克 $90",
+        "普通矿石:6-16 千克,每千克 $15",
+        "稀有矿石:低概率获得,3-8 千克,每千克 $90",
         "",
-        "工资会在班次期间累积，只有在",
-        "结束工作时才会发放。",
+        "工资会在班次期间累积,只有在",
+        "结束工作时才会发放.",
       ].join("\n"),
       "关闭",
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -399,12 +399,12 @@ function showMetalBuyDialog(player: Player): void {
       MINER_METAL_BUY_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "购买金属",
-      "要购买多少公斤金属？\n每公斤价格：15$",
+      "要购买多少公斤金属?\n每公斤价格:15$",
       "购买",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -419,13 +419,13 @@ function buyMetal(player: Player, rawInput: string): void {
   }
 
   if (!isOnFootAt(player, METAL_SELL_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近金属销售点。");
+    player.sendClientMessage(Color.error, "请靠近金属销售点.");
     return;
   }
 
   const kg = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(kg) || kg <= 0 || !Number.isSafeInteger(kg)) {
-    player.sendClientMessage(Color.error, "请输入大于 0 的整数公斤数。");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数公斤数.");
     showMetalBuyDialog(player);
     return;
   }
@@ -435,8 +435,8 @@ function buyMetal(player: Player, rawInput: string): void {
     player.sendClientMessage(
       Color.error,
       stock <= 0
-        ? "仓库里没有金属。"
-        : `仓库里只有 ${stock} 公斤金属。`
+        ? "仓库里没有金属."
+        : `仓库里只有 ${stock} 公斤金属.`
     );
     showMetalBuyDialog(player);
     return;
@@ -444,19 +444,19 @@ function buyMetal(player: Player, rawInput: string): void {
 
   const total = kg * METAL_PRICE_PER_KG;
   if (!Number.isSafeInteger(total) || total <= 0) {
-    player.sendClientMessage(Color.error, "数量过多。");
+    player.sendClientMessage(Color.error, "数量过多.");
     showMetalBuyDialog(player);
     return;
   }
 
   if (account.money < total) {
-    player.sendClientMessage(Color.error, `资金不足。需要 $${total}.`);
+    player.sendClientMessage(Color.error, `资金不足.需要 $${total}.`);
     showMetalBuyDialog(player);
     return;
   }
 
   if (!takeMineMetal(kg)) {
-    player.sendClientMessage(Color.error, "仓库里的金属不足。");
+    player.sendClientMessage(Color.error, "仓库里的金属不足.");
     showMetalBuyDialog(player);
     return;
   }
@@ -474,12 +474,12 @@ function buyMetal(player: Player, rawInput: string): void {
     saveUserMoney(account.id, nextMoney, account.bank),
     saveUserInventory(account.id, account.drugs, account.ammo, nextMetal),
   ]).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   player.sendClientMessage(
     Color.info,
-    `你以 $${total} 购买了 ${kg} 公斤金属。`
+    `你以 $${total} 购买了 ${kg} 公斤金属.`
   );
 }
 
@@ -490,12 +490,12 @@ function showHireDialog(player: Player): void {
       MINER_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "矿场",
-      "要应聘矿工吗？",
+      "要应聘矿工吗?",
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -506,12 +506,12 @@ function showQuitDialog(player: Player, job: Job): void {
       MINER_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "矿场",
-      `要结束工作并领取报酬吗？\n当前：${job.kg} 公斤，$${job.salary}`,
+      `要结束工作并领取报酬吗?\n当前:${job.kg} 公斤,$${job.salary}`,
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -527,22 +527,22 @@ function hire(player: Player): void {
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "请先完成治疗。");
+    player.sendClientMessage(Color.error, "请先完成治疗.");
     return;
   }
 
   if (isLoaderOnShift(player)) {
-    player.sendClientMessage(Color.error, "请先结束搬运工班次。");
+    player.sendClientMessage(Color.error, "请先结束搬运工班次.");
     return;
   }
 
   if (isArmyFactoryOnShift(player)) {
-    player.sendClientMessage(Color.error, "请先结束弹药车间班次。");
+    player.sendClientMessage(Color.error, "请先结束弹药车间班次.");
     return;
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近工作地点。");
+    player.sendClientMessage(Color.error, "请靠近工作地点.");
     return;
   }
 
@@ -570,7 +570,7 @@ function hire(player: Player): void {
 
   givePickaxe(player);
   setMineCheckpoint(player, job);
-  player.sendClientMessage(Color.info, "你已成为矿工。前往标记点开采矿石。");
+  player.sendClientMessage(Color.info, "你已成为矿工.前往标记点开采矿石.");
 }
 
 function finishShift(player: Player): void {
@@ -582,7 +582,7 @@ function finishShift(player: Player): void {
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近工作地点。");
+    player.sendClientMessage(Color.error, "请靠近工作地点.");
     return;
   }
 
@@ -602,7 +602,7 @@ function finishShift(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `班次结束。你开采了 ${kg} kg 矿石并获得 $${salary}.`
+    `班次结束.你开采了 ${kg} kg 矿石并获得 $${salary}.`
   );
 }
 
@@ -623,7 +623,7 @@ function abortShift(player: Player, notify: boolean): void {
   if (notify && isPlayerActive(player)) {
     player.sendClientMessage(
       Color.error,
-      "班次中断。矿石和工资均已作废。"
+      "班次中断.矿石和工资均已作废."
     );
   }
 }
@@ -647,7 +647,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -733,7 +733,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("CARRY", "crry_prtial", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 首次采矿时会加载动画库。
+    // 首次采矿时会加载动画库.
   }
 }
 
@@ -756,7 +756,7 @@ function resetStance(player: Player): void {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -810,7 +810,7 @@ function finishPickup(player: Player, expectedId: number): void {
     return;
   }
 
-  player.sendClientMessage(Color.info, "矿石在推车里。把它运到仓库。");
+  player.sendClientMessage(Color.info, "矿石在推车里.把它运到仓库.");
 }
 
 function deliver(player: Player, job: Job): void {
@@ -839,7 +839,7 @@ function deliver(player: Player, job: Job): void {
   const kind = special ? "稀有" : "普通";
   player.sendClientMessage(
     Color.info,
-    `已交付: ${kind} 矿石，${kg} kg. +$${pay}`
+    `已交付: ${kind} 矿石,${kg} kg. +$${pay}`
   );
   player.sendClientMessage(Color.white, `本班工资: $${job.salary}`);
 }
@@ -861,7 +861,7 @@ function loseLoad(player: Player): void {
   setMineCheckpoint(player, job);
   player.sendClientMessage(
     Color.error,
-    "你弄坏了手推车。矿石丢失，请重新开采。"
+    "你弄坏了手推车.矿石丢失,请重新开采."
   );
 }
 
@@ -870,7 +870,7 @@ function setMineCheckpoint(player: Player, job: Job): void {
   try {
     Checkpoint.set(player, point.x, point.y, point.z, CHECKPOINT_RADIUS);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -895,7 +895,7 @@ function givePickaxe(player: Player): void {
       0
     );
   } catch {
-    // 玩家槽位尚未就绪。
+    // 玩家槽位尚未就绪.
   }
 }
 
@@ -972,7 +972,7 @@ function giveCart(player: Player): void {
     );
     player.setSpecialAction(SPECIAL_ACTION_NONE);
   } catch {
-    // 玩家槽位尚未就绪。
+    // 玩家槽位尚未就绪.
   }
 }
 
@@ -981,7 +981,7 @@ function clearJobObjects(player: Player): void {
     try {
       player.removeAttachedObject(slot);
     } catch {
-      // 玩家槽位不存在。
+      // 玩家槽位不存在.
     }
   }
 }

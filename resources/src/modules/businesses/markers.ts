@@ -30,17 +30,17 @@ const C_PRICE = "{FFFFFF}";
 export function businessLabelText(business: BusinessRecord): string {
   const lines = [
     `${C_NAME}${business.name} (#${business.id})`,
-    `${C_LABEL}售价：${C_PRICE}${formatMoney(business.price)}`,
+    `${C_LABEL}售价:${C_PRICE}${formatMoney(business.price)}`,
   ];
   if (business.ownerName !== null) {
-    lines.push(`${C_LABEL}业主：${C_OWNER}${business.ownerName}`);
+    lines.push(`${C_LABEL}业主:${C_OWNER}${business.ownerName}`);
   } else {
-    lines.push(`${C_FREE}购买商店：/buybiz`);
+    lines.push(`${C_FREE}购买商店:/buybiz`);
   }
   if (businessHasInterior(business)) {
     lines.push(
       business.entranceFee > 0
-        ? `${C_LABEL}入场费：${C_PRICE}${formatMoney(business.entranceFee)}`
+        ? `${C_LABEL}入场费:${C_PRICE}${formatMoney(business.entranceFee)}`
         : `${C_FREE}免费入场`
     );
   }
@@ -69,7 +69,7 @@ export function refreshBusinessLabel(businessId: number): void {
   try {
     marker.label.updateText(Color.info, businessLabelText(business));
   } catch {
-    // 标签已销毁。
+    // 标签已销毁.
   }
 }
 

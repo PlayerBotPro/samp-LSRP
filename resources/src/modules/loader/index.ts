@@ -123,13 +123,13 @@ export const loaderModule: GameModule = {
     omp.on("playerKeyStateChange", (player, newKeys, oldKeys) => {
       const pressed = newKeys & ~oldKeys;
       if ((pressed & KEY_JUMP) !== 0 || (pressed & KEY_FIRE) !== 0) {
-        dropBag(player, "你把袋子掉了！");
+        dropBag(player, "你把袋子掉了!");
       }
     });
 
     omp.on("playerStateChange", (player, newState) => {
       if (newState === PLAYER_STATE_DRIVER || newState === PLAYER_STATE_PASSENGER) {
-        dropBag(player, "你把袋子掉了！");
+        dropBag(player, "你把袋子掉了!");
       }
     });
 
@@ -194,7 +194,7 @@ function tickLoader(): void {
         showHireDialog(player);
       }
     } catch {
-      // 玩家槽位已清空。
+      // 玩家槽位已清空.
     }
   });
 }
@@ -233,7 +233,7 @@ function updateLoaderIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已经离开。
+      // 玩家已经离开.
     }
     return;
   }
@@ -250,7 +250,7 @@ function hideLoaderIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -261,12 +261,12 @@ function showHireDialog(player: Player): void {
       LOADER_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "仓库",
-      "要应聘搬运工吗？",
+      "要应聘搬运工吗?",
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -277,12 +277,12 @@ function showQuitDialog(player: Player, job: Job): void {
       LOADER_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "仓库",
-      `要结束工作并领取工资吗？\n已搬运袋数：${job.bags}，工资：$${job.salary}`,
+      `要结束工作并领取工资吗?\n已搬运袋数:${job.bags},工资:$${job.salary}`,
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -298,32 +298,32 @@ function hire(player: Player): void {
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "请先完成治疗。");
+    player.sendClientMessage(Color.error, "请先完成治疗.");
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "不能在监狱里工作。");
+    player.sendClientMessage(Color.error, "不能在监狱里工作.");
     return;
   }
 
   if (isMinerOnShift(player)) {
-    player.sendClientMessage(Color.error, "请先结束矿工班次。");
+    player.sendClientMessage(Color.error, "请先结束矿工班次.");
     return;
   }
 
   if (isArmyFactoryOnShift(player)) {
-    player.sendClientMessage(Color.error, "请先结束弹药车间班次。");
+    player.sendClientMessage(Color.error, "请先结束弹药车间班次.");
     return;
   }
 
   if (getExam(player)) {
-    player.sendClientMessage(Color.error, "请先完成驾校考试。");
+    player.sendClientMessage(Color.error, "请先完成驾校考试.");
     return;
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近工作地点。");
+    player.sendClientMessage(Color.error, "请靠近工作地点.");
     return;
   }
 
@@ -350,7 +350,7 @@ function hire(player: Player): void {
   setPickupCheckpoint(player);
   player.sendClientMessage(
     Color.info,
-    "工作日已开始。把装载区的麻袋送到仓库 — 标记点已显示在雷达上。"
+    "工作日已开始.把装载区的麻袋送到仓库 - 标记点已显示在雷达上."
   );
 }
 
@@ -363,7 +363,7 @@ function finishShift(player: Player): void {
   }
 
   if (!isOnFootAt(player, HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近工作地点。");
+    player.sendClientMessage(Color.error, "请靠近工作地点.");
     return;
   }
 
@@ -383,7 +383,7 @@ function finishShift(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    `班次结束。麻袋: ${bags}. 工资: $${salary}.`
+    `班次结束.麻袋: ${bags}. 工资: $${salary}.`
   );
 }
 
@@ -400,7 +400,7 @@ function abortShift(player: Player, notify: boolean): void {
   if (notify && isPlayerActive(player)) {
     player.sendClientMessage(
       Color.error,
-      "班次中断。未发放的工资已作废。"
+      "班次中断.未发放的工资已作废."
     );
   }
 }
@@ -413,7 +413,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -453,12 +453,12 @@ function takeBag(player: Player, job: Job): void {
   } catch {
     clearBag(player);
     setPickupCheckpoint(player);
-    player.sendClientMessage(Color.error, "无法拿起麻袋。请重试。");
+    player.sendClientMessage(Color.error, "无法拿起麻袋.请重试.");
     return;
   }
 
   job.phase = "carry";
-  player.sendClientMessage(Color.info, "你拿着麻袋。把它送到卸货点。");
+  player.sendClientMessage(Color.info, "你拿着麻袋.把它送到卸货点.");
 }
 
 function deliverBag(player: Player, job: Job): void {
@@ -508,7 +508,7 @@ function dropBag(player: Player, message: string): void {
     playTiredAnim(player);
     setPickupCheckpoint(player);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 
   player.sendClientMessage(Color.error, message);
@@ -518,7 +518,7 @@ function setPickupCheckpoint(player: Player): void {
   try {
     Checkpoint.set(player, PICKUP_POINT.x, PICKUP_POINT.y, PICKUP_POINT.z, CHECKPOINT_RADIUS);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -547,14 +547,14 @@ function clearBag(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_BAG);
   } catch {
-    // 玩家槽位不存在。
+    // 玩家槽位不存在.
   }
 
   try {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -572,7 +572,7 @@ function playTiredAnim(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // 稍后会加载动画库。
+    // 稍后会加载动画库.
   }
 }
 
@@ -581,7 +581,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("PED", "IDLE_tired", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 首次卸货时会加载动画库。
+    // 首次卸货时会加载动画库.
   }
 }
 

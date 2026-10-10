@@ -48,19 +48,19 @@ export function notifyHouseRentReminder(player: Player): void {
     if (daysLeft === 0) {
       player.sendClientMessage(
         Color.error,
-        "今天是缴纳房屋费用的最后一天。否则政府明天会收回房屋。"
+        "今天是缴纳房屋费用的最后一天.否则政府明天会收回房屋."
       );
-      player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用。");
+      player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用.");
       return;
     }
 
     player.sendClientMessage(
       Color.tryOk,
-      `房屋 №${house.id} 还有 ${daysLeft} ${rentDaysLeftLabel(daysLeft)} 到期。`
+      `房屋 №${house.id} 还有 ${daysLeft} ${rentDaysLeftLabel(daysLeft)} 到期.`
     );
-    player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用。");
+    player.sendClientMessage(Color.gray, "请在银行缴纳房屋费用.");
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -119,15 +119,15 @@ type VacateHouseMessages = {
 
 export function applyForfeitedHouse(houseId: number): void {
   applyHouseVacated(houseId, {
-    insideMessage: `房屋编号 ${houseId} 因未付款被政府收回。`,
-    ownerMessage: `房屋编号 ${houseId} 因未付款被政府收回，不予赔偿。`,
+    insideMessage: `房屋编号 ${houseId} 因未付款被政府收回.`,
+    ownerMessage: `房屋编号 ${houseId} 因未付款被政府收回,不予赔偿.`,
   });
 }
 
 export function applyAdminVacatedHouse(houseId: number): void {
   applyHouseVacated(houseId, {
-    insideMessage: `房屋编号 ${houseId} 已由管理员清空。`,
-    ownerMessage: `您的房屋编号 ${houseId} 已由管理员出售给政府。`,
+    insideMessage: `房屋编号 ${houseId} 已由管理员清空.`,
+    ownerMessage: `您的房屋编号 ${houseId} 已由管理员出售给政府.`,
   });
 }
 
@@ -192,7 +192,7 @@ function evictPlayersFromHouse(
       refreshStreamForPlayer(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
   });
 }
@@ -216,7 +216,7 @@ function notifyHouseOwner(ownerId: number, houseId: number, message: string): vo
     try {
       player.sendClientMessage(Color.error, message);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
   });
 }

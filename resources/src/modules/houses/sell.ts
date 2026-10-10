@@ -40,18 +40,18 @@ export function bindHouseSellDialog(): void {
 export function showSellHouseDialog(player: Player): void {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
   const house = findOwnedHouse(account.id);
   if (!house) {
-    player.sendClientMessage(Color.error, "你没有房屋。");
+    player.sendClientMessage(Color.error, "你没有房屋.");
     return;
   }
 
   if (!isNearOwnHouse(player, house.id)) {
-    player.sendClientMessage(Color.error, "请靠近自己的房屋。");
+    player.sendClientMessage(Color.error, "请靠近自己的房屋.");
     return;
   }
 
@@ -61,12 +61,12 @@ export function showSellHouseDialog(player: Player): void {
       HOUSE_SELL_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "出售房屋",
-      `确定要以 ${formatMoney(house.price)} 的价格将房屋（编号 ${house.id}）出售给政府吗？`,
+      `确定要以 ${formatMoney(house.price)} 的价格将房屋(编号 ${house.id})出售给政府吗?`,
       "出售",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开出售窗口。");
+    player.sendClientMessage(Color.error, "无法打开出售窗口.");
   }
 }
 
@@ -79,12 +79,12 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   const house = findOwnedHouse(account.id);
   if (!house) {
-    player.sendClientMessage(Color.error, "你没有房屋。");
+    player.sendClientMessage(Color.error, "你没有房屋.");
     return;
   }
 
   if (!isNearOwnHouse(player, house.id)) {
-    player.sendClientMessage(Color.error, "请靠近自己的房屋。");
+    player.sendClientMessage(Color.error, "请靠近自己的房屋.");
     return;
   }
 
@@ -100,21 +100,21 @@ async function confirmSellHouse(player: Player): Promise<void> {
     selling.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 出售房屋 ${house.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "出售失败。请重试。");
+    player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
   selling.delete(account.id);
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "你没有房屋。");
+      player.sendClientMessage(Color.error, "你没有房屋.");
       return;
     }
-    player.sendClientMessage(Color.error, "出售失败。请重试。");
+    player.sendClientMessage(Color.error, "出售失败.请重试.");
     return;
   }
 
-  // 数据库已出售房屋，始终清理缓存/标签/储物柜（即使玩家已离开）。
+  // 数据库已出售房屋,始终清理缓存/标签/储物柜(即使玩家已离开).
   const cleared = clearHouseForSale(house.id);
   updateEntrancePickup(house.id);
   refreshAllHouseMapIcons();
@@ -122,7 +122,7 @@ async function confirmSellHouse(player: Player): Promise<void> {
 
   if (!cleared) {
     if (isPlayerActive(player) && getAccount(player)?.id === account.id) {
-      player.sendClientMessage(Color.error, "出售失败。请重试。");
+      player.sendClientMessage(Color.error, "出售失败.请重试.");
     }
     return;
   }
@@ -152,6 +152,6 @@ async function confirmSellHouse(player: Player): Promise<void> {
   const sold = getHouse(house.id);
   player.sendClientMessage(
     Color.info,
-    `你已将房屋 №${house.id} 以 ${formatMoney(sold?.price ?? result.price)} 的价格卖给政府。`
+    `你已将房屋 №${house.id} 以 ${formatMoney(sold?.price ?? result.price)} 的价格卖给政府.`
   );
 }

@@ -60,13 +60,13 @@ function showPasswordDialog(
 ): void {
   setMode(player, mode);
   const prefix = error ? `${error}\n\n` : "";
-  const title = mode === "login" ? "管理员面板：登录" : "管理员面板：密码";
+  const title = mode === "login" ? "管理员面板:登录" : "管理员面板:密码";
   const body =
     mode === "login"
-      ? `${prefix}请输入管理员面板密码：`
+      ? `${prefix}请输入管理员面板密码:`
       : mode === "set"
-        ? `${prefix}尚未设置管理员面板密码。\n请设置密码（至少 6 个字符）：`
-        : `${prefix}请再次输入管理员面板密码：`;
+        ? `${prefix}尚未设置管理员面板密码.\n请设置密码(至少 6 个字符):`
+        : `${prefix}请再次输入管理员面板密码:`;
 
   try {
     Dialog.show(
@@ -79,7 +79,7 @@ function showPasswordDialog(
       "取消"
     );
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }
 
@@ -90,7 +90,7 @@ export function promptAdminPasswordSetup(player: Player): void {
 function kickAfterFails(player: Player): void {
   player.sendClientMessage(
     Color.error,
-    "管理员登录连续输错三次。踢出。"
+    "管理员登录连续输错三次.踢出."
   );
   kickSamePlayer(player);
 }
@@ -98,12 +98,12 @@ function kickAfterFails(player: Player): void {
 async function startAlogin(player: Player): Promise<void> {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
   if (isAdminLoggedIn(player)) {
-    player.sendClientMessage(Color.info, "你已经登录管理员面板。");
+    player.sendClientMessage(Color.info, "你已经登录管理员面板.");
     return;
   }
 
@@ -111,7 +111,7 @@ async function startAlogin(player: Player): Promise<void> {
   try {
     creds = await findAdminCredentials(account.id);
   } catch {
-    player.sendClientMessage(Color.error, "无法检查管理员面板。");
+    player.sendClientMessage(Color.error, "无法检查管理员面板.");
     return;
   }
 
@@ -143,14 +143,14 @@ async function finishSetPassword(
     const hash = await hashPassword(password);
     await saveAdminPassword(account.id, hash);
   } catch {
-    player.sendClientMessage(Color.error, "无法保存管理员密码。");
+    player.sendClientMessage(Color.error, "无法保存管理员密码.");
     return;
   }
 
   markAdminLoggedIn(player);
   player.sendClientMessage(
     Color.info,
-    `管理员密码已保存。登录成功 (lvl ${account.adminLevel}).`
+    `管理员密码已保存.登录成功 (lvl ${account.adminLevel}).`
   );
 }
 
@@ -164,7 +164,7 @@ async function tryLogin(player: Player, password: string): Promise<void> {
   try {
     creds = await findAdminCredentials(account.id);
   } catch {
-    player.sendClientMessage(Color.error, "无法验证密码。");
+    player.sendClientMessage(Color.error, "无法验证密码.");
     return;
   }
 
@@ -193,7 +193,7 @@ async function tryLogin(player: Player, password: string): Promise<void> {
   showPasswordDialog(
     player,
     "login",
-    `密码错误。剩余尝试次数：${left}`
+    `密码错误.剩余尝试次数:${left}`
   );
 }
 
@@ -235,12 +235,12 @@ async function handleAloginDialog(
   if (mode === "confirm") {
     const pending = takePendingAdminPassword(player);
     if (!pending) {
-      showPasswordDialog(player, "set", "请先输入密码。");
+      showPasswordDialog(player, "set", "请先输入密码.");
       return;
     }
 
     if (input !== pending) {
-      showPasswordDialog(player, "set", "两次输入的密码不一致。");
+      showPasswordDialog(player, "set", "两次输入的密码不一致.");
       return;
     }
 
@@ -249,7 +249,7 @@ async function handleAloginDialog(
   }
 
   if (!input) {
-    showPasswordDialog(player, "login", "请输入管理员密码。");
+    showPasswordDialog(player, "login", "请输入管理员密码.");
     return;
   }
 

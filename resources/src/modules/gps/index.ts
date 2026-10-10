@@ -22,9 +22,9 @@ const MAPICON_GLOBAL = 1;
 const ARRIVE_RADIUS = 8;
 const CHECKPOINT_RADIUS = 4;
 const TICK_MS = 200;
-/** 主菜单中的分类。 */
+/** 主菜单中的分类. */
 const C_CAT = "{FFFFFF}";
-/** “寻找最近的……”选项。 */
+/** "寻找最近的......"选项. */
 const C_NEAR = "{33CCFF}";
 
 type GpsTarget = {
@@ -65,7 +65,7 @@ const TARGETS = {
   },
   loader: {
     key: "loader",
-    label: "仓库（搬运工）",
+    label: "仓库(搬运工)",
     x: 2236.532,
     y: -2212.7854,
     z: 13.5469,
@@ -224,7 +224,7 @@ const CATEGORIES: readonly GpsCategory[] = [
   },
 ];
 
-/** 仅包含系统中实际存在的商店类型。 */
+/** 仅包含系统中实际存在的商店类型. */
 const NEAREST_BIZ: readonly NearestBizItem[] = [
   {
     key: "nearest_gas",
@@ -260,7 +260,7 @@ type MenuState =
 const activeByPlayer = new Map<number, GpsTarget>();
 const menuState = new Map<number, MenuState>();
 
-/** 设置 GPS 时清除 `/findid*` 标记（避免循环导入）。 */
+/** 设置 GPS 时清除 `/findid*` 标记(避免循环导入). */
 let clearFindIdMark: ((player: Player) => void) | null = null;
 
 export function setFindIdMarkClearer(
@@ -269,7 +269,7 @@ export function setFindIdMarkClearer(
   clearFindIdMark = clearer;
 }
 
-/** 清除 GPS 路线（用于 `/findidhouse` / `/findidbiz`）。 */
+/** 清除 GPS 路线(用于 `/findidhouse` / `/findidbiz`). */
 export function clearGpsRouteForPlayer(player: Player): void {
   const id = playerId(player);
   if (id === null || !activeByPlayer.has(id)) {
@@ -298,7 +298,7 @@ export function showGpsMenu(player: Player): void {
   const id = playerId(player);
   if (id !== null && activeByPlayer.has(id)) {
     clearRoute(player, id);
-    player.sendClientMessage(Color.gray, "你已关闭 GPS。");
+    player.sendClientMessage(Color.gray, "你已关闭 GPS.");
     return;
   }
 
@@ -361,7 +361,7 @@ function showMainMenu(player: Player): void {
     );
   } catch {
     menuState.delete(id);
-    player.sendClientMessage(Color.error, "无法打开 GPS。");
+    player.sendClientMessage(Color.error, "无法打开 GPS.");
   }
 }
 
@@ -389,7 +389,7 @@ function showCategoryMenu(player: Player, category: GpsCategory): void {
     );
   } catch {
     menuState.delete(id);
-    player.sendClientMessage(Color.error, "无法打开 GPS。");
+    player.sendClientMessage(Color.error, "无法打开 GPS.");
   }
 }
 
@@ -410,7 +410,7 @@ function onGpsListPick(player: Player, listItem: number): void {
 
     const target = category.targets[listItem];
     if (!target) {
-      player.sendClientMessage(Color.error, "无法选择 GPS 目的地。");
+      player.sendClientMessage(Color.error, "无法选择 GPS 目的地.");
       showCategoryMenu(player, category);
       return;
     }
@@ -446,7 +446,7 @@ function onGpsListPick(player: Player, listItem: number): void {
     return;
   }
 
-  player.sendClientMessage(Color.error, "无法选择 GPS 目的地。");
+  player.sendClientMessage(Color.error, "无法选择 GPS 目的地.");
   showMainMenu(player);
 }
 
@@ -455,7 +455,7 @@ function nearestBusinessTarget(player: Player, item: NearestBizItem): GpsTarget 
   try {
     pos = player.getPos();
   } catch {
-    player.sendClientMessage(Color.error, "无法确定你的位置。");
+    player.sendClientMessage(Color.error, "无法确定你的位置.");
     return null;
   }
 
@@ -489,7 +489,7 @@ function nearestBusinessTarget(player: Player, item: NearestBizItem): GpsTarget 
   }
 
   if (bestId === null) {
-    player.sendClientMessage(Color.error, `${item.label}: 未找到任何内容。`);
+    player.sendClientMessage(Color.error, `${item.label}: 未找到任何内容.`);
     return null;
   }
 
@@ -511,7 +511,7 @@ function setRoute(player: Player, target: GpsTarget): void {
   try {
     clearFindIdMark?.(player);
   } catch {
-    // findid 标记为可选项。
+    // findid 标记为可选项.
   }
 
   let pos;
@@ -537,7 +537,7 @@ function setRoute(player: Player, target: GpsTarget): void {
       Checkpoint.set(player, target.x, target.y, target.z, CHECKPOINT_RADIUS);
     }
   } catch {
-    player.sendClientMessage(Color.error, "无法设置标记点。");
+    player.sendClientMessage(Color.error, "无法设置标记点.");
     return;
   }
 
@@ -584,7 +584,7 @@ function tickGps(): void {
         Checkpoint.set(player, target.x, target.y, target.z, CHECKPOINT_RADIUS);
       }
     } catch {
-      // 玩家已经离开。
+      // 玩家已经离开.
     }
   });
 }
@@ -621,6 +621,6 @@ function clearRoute(player: Player, id: number): void {
       Checkpoint.disable(player);
     }
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }

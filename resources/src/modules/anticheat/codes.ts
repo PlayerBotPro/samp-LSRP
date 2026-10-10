@@ -1,4 +1,4 @@
-/** 反作弊检测代码（服务器端检查）。 */
+/** 反作弊检测代码(服务器端检查). */
 export enum AcCode {
   AirBreakFoot = 0,
   AirBreakVeh = 1,
@@ -93,7 +93,7 @@ export const SPECIAL_ACTION = {
   jetpack: 2,
 } as const;
 
-/** 根据 ID 获取武器槽（GTA SA）。 */
+/** 根据 ID 获取武器槽(GTA SA). */
 export function weaponSlot(weaponId: number): number {
   if (weaponId <= 0) return -1;
   if (weaponId === 1) return 0;

@@ -18,12 +18,12 @@ const PASSENGER_SEATS = [1, 2, 3] as const;
 
 registerCommand(
   "putpl",
-  "将玩家带上自己的车辆（警察 / FBI）",
+  "将玩家带上自己的车辆(警察 / FBI)",
   (player, args) => {
     const resolved = resolveLawNearbyTarget(
       player,
       args,
-      "用法： /putpl [id]"
+      "用法: /putpl [id]"
     );
     if (!resolved.ok) {
       return;
@@ -32,7 +32,7 @@ registerCommand(
     const { officer, target } = resolved;
 
     if (isJailed(target)) {
-      officer.sendClientMessage(Color.error, "玩家已经在监狱里。");
+      officer.sendClientMessage(Color.error, "玩家已经在监狱里.");
       return;
     }
 
@@ -40,45 +40,45 @@ registerCommand(
     let vehicleId = -1;
     try {
       if (!officer.isInAnyVehicle() || officer.getState() !== PLAYER_STATE_DRIVER) {
-        officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+        officer.sendClientMessage(Color.error, "你必须坐在驾驶位.");
         return;
       }
 
       vehicleId = officer.getVehicleID();
       if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
-        officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+        officer.sendClientMessage(Color.error, "你必须坐在驾驶位.");
         return;
       }
 
       vehicle = omp.vehicles.at(vehicleId) ?? null;
     } catch {
-      officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+      officer.sendClientMessage(Color.error, "你必须坐在驾驶位.");
       return;
     }
 
     if (!vehicle) {
-      officer.sendClientMessage(Color.error, "你必须坐在驾驶位。");
+      officer.sendClientMessage(Color.error, "你必须坐在驾驶位.");
       return;
     }
 
     try {
       if (target.isInAnyVehicle() && target.getVehicleID() === vehicleId) {
-        officer.sendClientMessage(Color.error, "该玩家已经在你的载具里。");
+        officer.sendClientMessage(Color.error, "该玩家已经在你的载具里.");
         return;
       }
     } catch {
-      officer.sendClientMessage(Color.error, "未找到玩家。");
+      officer.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-      officer.sendClientMessage(Color.error, "玩家距离太远。");
+      officer.sendClientMessage(Color.error, "玩家距离太远.");
       return;
     }
 
     const seat = findFreePassengerSeat(vehicleId);
     if (seat === null) {
-      officer.sendClientMessage(Color.error, "载具内没有空位。");
+      officer.sendClientMessage(Color.error, "载具内没有空位.");
       return;
     }
 
@@ -98,7 +98,7 @@ registerCommand(
       if (wasCuffed) {
         scheduleCuffRefreeze(target, 0);
       }
-      officer.sendClientMessage(Color.error, "无法将玩家放入载具。");
+      officer.sendClientMessage(Color.error, "无法将玩家放入载具.");
       return;
     }
 
@@ -118,14 +118,14 @@ registerCommand(
       officer,
       CHAT_RADIUS,
       Color.action,
-      `${officerName} 将 ${targetName} 带上了车辆。`
+      `${officerName} 将 ${targetName} 带上了车辆.`
     );
 
-    officer.sendClientMessage(Color.info, `你将 ${targetName} 带上了载具。`);
+    officer.sendClientMessage(Color.info, `你将 ${targetName} 带上了载具.`);
     try {
-      target.sendClientMessage(Color.info, `${officerName} ${verb}你上了载具。`);
+      target.sendClientMessage(Color.info, `${officerName} ${verb}你上了载具.`);
     } catch {
-      // 已离线。
+      // 已离线.
     }
   }
 );
@@ -148,7 +148,7 @@ function findFreePassengerSeat(vehicleId: number): number | null {
         taken.add(seat);
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 

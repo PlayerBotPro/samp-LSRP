@@ -14,7 +14,7 @@ function sendAdminChat(text: string): void {
     try {
       other.sendClientMessage(Color.adminChat, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

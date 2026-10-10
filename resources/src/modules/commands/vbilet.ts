@@ -20,7 +20,7 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("vbilet", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account?.militaryId) {
-    viewer.sendClientMessage(Color.error, "该玩家没有军人证。");
+    viewer.sendClientMessage(Color.error, "该玩家没有军人证.");
     return;
   }
 
@@ -32,19 +32,19 @@ registerDocShowHandler("vbilet", (viewer, owner) => {
   );
   viewer.sendClientMessage(
     Color.gray,
-    `${account.name} ${verb}了你的军人证。`
+    `${account.name} ${verb}了你的军人证.`
   );
 });
 
 registerCommand("vbilet", "查看军人证或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
   if (!account.militaryId) {
-    player.sendClientMessage(Color.error, "你没有军人证。");
+    player.sendClientMessage(Color.error, "你没有军人证.");
     return;
   }
 
@@ -62,7 +62,7 @@ registerCommand("vbilet", "查看军人证或按 ID 向他人出示", (player, a
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -72,7 +72,7 @@ registerCommand("vbilet", "查看军人证或按 ID 向他人出示", (player, a
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
@@ -81,7 +81,7 @@ registerCommand("vbilet", "查看军人证或按 ID 向他人出示", (player, a
 
 registerCommand(
   "givevbilet",
-  "签发军人证（军队，等级 8+）",
+  "签发军人证(军队,等级 8+)",
   (player, args) => {
     const account = getAccount(player);
     const membership = account ? getMembership(account) : null;
@@ -93,7 +93,7 @@ registerCommand(
     ) {
       player.sendClientMessage(
         Color.error,
-        "只有军队 8 级及以上员工才能发放军人证。"
+        "只有军队 8 级及以上员工才能发放军人证."
       );
       return;
     }
@@ -106,38 +106,38 @@ registerCommand(
 
     const target = omp.players.at(slot);
     if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (playerId(target) === playerId(player)) {
-      player.sendClientMessage(Color.error, "不能给自己发放军人证。");
+      player.sendClientMessage(Color.error, "不能给自己发放军人证.");
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (targetAccount.militaryId) {
-      player.sendClientMessage(Color.error, "该玩家已经有军人证。");
+      player.sendClientMessage(Color.error, "该玩家已经有军人证.");
       return;
     }
 
     patchAccount(target, { militaryId: true });
     void saveUserMilitaryId(targetAccount.id, true).catch(() => {
-      // 缓存已更新。
+      // 缓存已更新.
     });
 
     player.sendClientMessage(
       Color.info,
-      `你已向玩家 ${playerName(target)} 发放军人证。`
+      `你已向玩家 ${playerName(target)} 发放军人证.`
     );
     target.sendClientMessage(
       Color.info,
-      `${playerName(player)} 给了你军人证。查看: /vbilet`
+      `${playerName(player)} 给了你军人证.查看: /vbilet`
     );
   }
 );
@@ -161,7 +161,7 @@ function showMilitaryId(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "无法打开军人证。");
+    viewer.sendClientMessage(Color.error, "无法打开军人证.");
   }
 }
 

@@ -1,6 +1,6 @@
 import { ObjectMp, omp, type Vehicle } from "@omp-node/core";
 
-/** 安装在车顶的警灯（Washington 415 在 0,0,0 处的校准值）。 */
+/** 安装在车顶的警灯(Washington 415 在 0,0,0 处的校准值). */
 const LIGHT_BAR_MODEL = 19419;
 const DRAW_DISTANCE = 300;
 const OFFSET_X = 0;
@@ -28,7 +28,7 @@ function destroyBar(vehicleIdValue: number): void {
   try {
     object.destroy();
   } catch {
-    // 已被销毁。
+    // 已被销毁.
   }
 
   barsByVehicle.delete(vehicleIdValue);

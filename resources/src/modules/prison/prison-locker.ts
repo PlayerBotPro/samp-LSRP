@@ -18,7 +18,7 @@ const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const MAX_ARMOR = 100;
-const DENY = "只有 LSPD、州警和 FBI 警员可以开启。";
+const DENY = "只有 LSPD,州警和 FBI 警员可以开启.";
 
 const POINT = {
   x: -100.0232,
@@ -116,7 +116,7 @@ function tickLocker(): void {
       inside.add(id);
       tryOpen(player);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -137,7 +137,7 @@ function canUseLocker(player: Player, tellDeny = false): boolean {
 
   if (account.hospitalized) {
     if (tellDeny) {
-      tell(player, Color.error, "请先在医院接受治疗。");
+      tell(player, Color.error, "请先在医院接受治疗.");
     }
     return false;
   }
@@ -166,7 +166,7 @@ function showLocker(player: Player): void {
       "关闭"
     );
   } catch {
-    tell(player, Color.error, "无法打开装备库。");
+    tell(player, Color.error, "无法打开装备库.");
   }
 }
 
@@ -184,14 +184,14 @@ function giveItem(player: Player, item: LockerItem): void {
   try {
     if (item.kind === "armor") {
       grantArmour(player, MAX_ARMOR);
-      tell(player, Color.info, "你穿上了防弹衣。");
+      tell(player, Color.info, "你穿上了防弹衣.");
       return;
     }
 
     grantWeapon(player, item.id, item.ammo ?? 1);
-    tell(player, Color.info, `你领取了：${item.label}。`);
+    tell(player, Color.info, `你领取了:${item.label}.`);
   } catch {
-    tell(player, Color.error, "无法发放装备。");
+    tell(player, Color.error, "无法发放装备.");
   }
 }
 
@@ -199,7 +199,7 @@ function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

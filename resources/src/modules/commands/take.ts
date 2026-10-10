@@ -32,14 +32,14 @@ type PendingTake = {
 };
 
 const pending = new Map<number, PendingTake>();
-/** 每位警官只执行一次 apply，否则并行的 saveUserInventory 会互相覆盖。 */
+/** 每位警官只执行一次 apply,否则并行的 saveUserInventory 会互相覆盖. */
 const busy = new Set<number>();
 
-registerCommand("take", "没收玩家物品（警察 / FBI）", (player, args) => {
+registerCommand("take", "没收玩家物品(警察 / FBI)", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "用法： /take [id]"
+    "用法: /take [id]"
   );
   if (!resolved.ok) {
     return;
@@ -47,19 +47,19 @@ registerCommand("take", "没收玩家物品（警察 / FBI）", (player, args) =
 
   const { officer, target, officerId, targetId } = resolved;
   if (busy.has(officerId)) {
-    officer.sendClientMessage(Color.error, "请等待上一次没收操作完成。");
+    officer.sendClientMessage(Color.error, "请等待上一次没收操作完成.");
     return;
   }
 
   const account = getAccount(target);
   if (!account) {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   const items = buildTakeItems(account);
   if (items.length === 0) {
-    officer.sendClientMessage(Color.error, "该玩家没有可没收的物品。");
+    officer.sendClientMessage(Color.error, "该玩家没有可没收的物品.");
     return;
   }
 
@@ -76,14 +76,14 @@ registerCommand("take", "没收玩家物品（警察 / FBI）", (player, args) =
       officer,
       TAKE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `{FFCC00}没收物品：${account.name}`,
+      `{FFCC00}没收物品:${account.name}`,
       lines.join("\n"),
       "没收",
       "取消"
     );
   } catch {
     pending.delete(officerId);
-    officer.sendClientMessage(Color.error, "无法打开没收列表。");
+    officer.sendClientMessage(Color.error, "无法打开没收列表.");
   }
 });
 
@@ -109,12 +109,12 @@ export function bindTakeDialogs(): void {
     }
 
     if (isJailed(player)) {
-      player.sendClientMessage(Color.error, "在监狱里无法使用此命令。");
+      player.sendClientMessage(Color.error, "在监狱里无法使用此命令.");
       return;
     }
 
     if (busy.has(officerId)) {
-      player.sendClientMessage(Color.error, "请等待上一次没收操作完成。");
+      player.sendClientMessage(Color.error, "请等待上一次没收操作完成.");
       return;
     }
 
@@ -150,29 +150,29 @@ async function applyTake(
     !isAuthenticated(target) ||
     getAccount(target)?.id !== session.targetAccountId
   ) {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      officer.sendClientMessage(Color.error, "玩家不在线。");
+      officer.sendClientMessage(Color.error, "玩家不在线.");
       return;
     }
   } catch {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "玩家距离太远。");
+    officer.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
   if (!canLawSearchTarget(officer, target)) {
     officer.sendClientMessage(
       Color.error,
-      "警察只能对平民使用此命令。FBI 可以对任何人使用。"
+      "警察只能对平民使用此命令.FBI 可以对任何人使用."
     );
     return;
   }
@@ -186,7 +186,7 @@ async function applyTake(
 
   if (item.kind === "drugs") {
     if (account.drugs <= 0) {
-      officer.sendClientMessage(Color.error, "该玩家没有毒品。");
+      officer.sendClientMessage(Color.error, "该玩家没有毒品.");
       return;
     }
 
@@ -201,7 +201,7 @@ async function applyTake(
       await saveUserInventory(live.id, live.drugs, live.ammo, live.metal);
     } catch {
       patchAccount(target, { drugs: amount });
-      officer.sendClientMessage(Color.error, "无法保存没收记录。");
+      officer.sendClientMessage(Color.error, "无法保存没收记录.");
       return;
     }
 
@@ -211,7 +211,7 @@ async function applyTake(
 
   if (item.kind === "ammo") {
     if (account.ammo <= 0) {
-      officer.sendClientMessage(Color.error, "该玩家没有子弹。");
+      officer.sendClientMessage(Color.error, "该玩家没有子弹.");
       return;
     }
 
@@ -226,7 +226,7 @@ async function applyTake(
       await saveUserInventory(live.id, live.drugs, live.ammo, live.metal);
     } catch {
       patchAccount(target, { ammo: amount });
-      officer.sendClientMessage(Color.error, "无法保存没收记录。");
+      officer.sendClientMessage(Color.error, "无法保存没收记录.");
       return;
     }
 
@@ -235,7 +235,7 @@ async function applyTake(
   }
 
   if (!account.licenses[item.key]) {
-    officer.sendClientMessage(Color.error, "该玩家没有此执照。");
+    officer.sendClientMessage(Color.error, "该玩家没有此执照.");
     return;
   }
 
@@ -247,7 +247,7 @@ async function applyTake(
     await saveUserLicenses(account.id, nextLicenses);
   } catch {
     patchAccount(target, { licenses: prevLicenses });
-    officer.sendClientMessage(Color.error, "无法保存没收记录。");
+    officer.sendClientMessage(Color.error, "无法保存没收记录.");
     return;
   }
 
@@ -255,7 +255,7 @@ async function applyTake(
     officer,
     target,
     took,
-    `许可证（${item.label.replace(/^Лицензия:\s*/, "")}）`
+    `许可证(${item.label.replace(/^Лицензия:\s*/, "")})`
   );
 }
 
@@ -269,7 +269,7 @@ function roleplayTake(
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(officer)} ${verb} ${what}（目标：${playerName(target)}）。`
+    `${playerName(officer)} ${verb} ${what}(目标:${playerName(target)}).`
   );
 
   try {
@@ -278,7 +278,7 @@ function roleplayTake(
       `${playerName(officer)} ${verb}了你的${what}.`
     );
   } catch {
-    // 已离线。
+    // 已离线.
   }
 
   officer.sendClientMessage(Color.info, `你没收了${what}.`);
@@ -301,7 +301,7 @@ function buildTakeItems(account: {
       items.push({
         kind: "license",
         key: row.key,
-        label: `许可证： ${row.label.toLowerCase()}`,
+        label: `许可证: ${row.label.toLowerCase()}`,
       });
     }
   }

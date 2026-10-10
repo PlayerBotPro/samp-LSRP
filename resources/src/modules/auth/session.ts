@@ -13,14 +13,14 @@ export const HOSPITAL_HEALTH = MIN_HEALTH;
 export const STARTING_HEALTH = 100;
 export const MAX_HUNGER = 100;
 export const STARTING_HUNGER = 100;
-/** 电话号码长度（6 位数字）。null 表示没有电话。 */
+/** 电话号码长度(6 位数字).null 表示没有电话. */
 export const PHONE_DIGITS = 6;
 export const HEALTH_DECAY_AMOUNT = 1;
-/** 饥饿度为 0 时更新饥饿度和生命值的间隔（沿用原生命值更新间隔）。 */
+/** 饥饿度为 0 时更新饥饿度和生命值的间隔(沿用原生命值更新间隔). */
 export const HEALTH_DECAY_MS = 15 * 60 * 1000;
-/** 每次更新扣除的饥饿度（约 5 小时从 100 降到 0）。 */
+/** 每次更新扣除的饥饿度(约 5 小时从 100 降到 0). */
 export const HUNGER_DECAY_AMOUNT = 5;
-/** 饥饿提醒阈值（从高到低）。 */
+/** 饥饿提醒阈值(从高到低). */
 export const HUNGER_WARN_LEVELS = [40, 30, 20] as const;
 export const VITALS_SAVE_MS = 3 * 60 * 1000;
 
@@ -42,7 +42,7 @@ export function normalizeHunger(value: unknown): number {
   return Math.min(MAX_HUNGER, Math.max(0, hunger));
 }
 
-/** 规范化的电话号码（6 位数字）；没有电话或号码无效时为 null。 */
+/** 规范化的电话号码(6 位数字);没有电话或号码无效时为 null. */
 export function normalizePhone(value: unknown): string | null {
   if (value === null || value === undefined) {
     return null;
@@ -84,22 +84,22 @@ export type Account = {
   metal: number;
   passport: boolean;
   hospitalized: boolean;
-  /** 通缉等级 0–6（游戏星级）。 */
+  /** 通缉等级 0-6(游戏星级). */
   wantedLevel: number;
-  /** 军人证。 */
+  /** 军人证. */
   militaryId: boolean;
-  /** 医疗卡。 */
+  /** 医疗卡. */
   medcard: boolean;
-  /** 饥饿度 0–100（100 表示饱腹）。 */
+  /** 饥饿度 0-100(100 表示饱腹). */
   hunger: number;
-  /** 电话号码（6 位数字）；没有电话时为 null。 */
+  /** 电话号码(6 位数字);没有电话时为 null. */
   phone: string | null;
   invitedBy: string | null;
   birthDate: string;
   adminLevel: number;
   orgId: number;
   orgRank: number;
-  /** 普通职业（0 表示无业）。 */
+  /** 普通职业(0 表示无业). */
   jobId: number;
   familyId: number;
   familyRank: number;
@@ -153,7 +153,7 @@ export function applyWallet(player: Player, account: Account): void {
       player.giveMoney(account.money);
     }
   } catch {
-    // 槽位尚未进入游戏。
+    // 槽位尚未进入游戏.
   }
   trustMoney(player, account.money);
 }
@@ -162,7 +162,7 @@ export function applyHealth(player: Player, health: number): void {
   try {
     player.setHealth(health);
   } catch {
-    // 槽位尚未进入游戏。
+    // 槽位尚未进入游戏.
   }
   trustHealth(player, health);
 }
@@ -171,17 +171,17 @@ export function applyScore(player: Player, level: number): void {
   try {
     player.setScore(Math.max(0, Math.floor(level)));
   } catch {
-    // 槽位尚未进入游戏。
+    // 槽位尚未进入游戏.
   }
 }
 
-/** GTA SA 通缉星级（0–6）。 */
+/** GTA SA 通缉星级(0-6). */
 export function applyWantedLevel(player: Player, level: number): void {
   const wanted = normalizeWantedLevel(level);
   try {
     player.setWantedLevel(wanted);
   } catch {
-    // 槽位尚未进入游戏。
+    // 槽位尚未进入游戏.
   }
 }
 

@@ -28,7 +28,7 @@ export function showAuthDialog(
   try {
     Dialog.show(player, AUTH_DIALOG_ID, style, title, body, button1, button2);
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }
 
@@ -51,7 +51,7 @@ export function refreshAuthViewSoon(player: Player): void {
       try {
         prepareAuthView(player);
       } catch {
-        // 槽位尚未就绪。
+        // 槽位尚未就绪.
       }
     }, delay);
   }
@@ -77,11 +77,11 @@ export function showLoginDialog(player: Player, name: string, error?: string): v
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
     prefix + `欢迎来到 ${SERVER_NAME}`,
-    "此角色名已注册。",
+    "此角色名已注册.",
     "",
-    `账号：{33FF33}${name}{FFFFFF}`,
+    `账号:{33FF33}${name}{FFFFFF}`,
     "",
-    "请输入密码：",
+    "请输入密码:",
   ].join("\n");
 
   showAuthDialog(
@@ -100,7 +100,7 @@ export function showEmailDialog(player: Player, name: string, error?: string): v
     player,
     DialogStyle.input,
     "注册",
-    `${prefix}角色名 {33FF33}${name}{FFFFFF} 可以使用。\n请输入电子邮箱：`,
+    `${prefix}角色名 {33FF33}${name}{FFFFFF} 可以使用.\n请输入电子邮箱:`,
     "下一步",
     "返回"
   );
@@ -110,12 +110,12 @@ export function showPasswordDialog(player: Player, error?: string): void {
   const prefix = error ? `{FF6347}${error}{FFFFFF}\n\n` : "";
   const body = [
     prefix + `欢迎来到 ${SERVER_NAME}`,
-    "创建账号后即可开始游戏。",
+    "创建账号后即可开始游戏.",
     "",
-    "请为账号设置密码。",
-    "每次登录服务器都需要输入此密码。",
+    "请为账号设置密码.",
+    "每次登录服务器都需要输入此密码.",
     "",
-    "{33FF33}密码要求：",
+    "{33FF33}密码要求:",
     "- 可使用西里尔字母和拉丁字母",
     "- 区分大小写",
     "- 不得包含空格",
@@ -138,7 +138,7 @@ export function showPasswordConfirmDialog(player: Player, error?: string): void 
     player,
     DialogStyle.password,
     "注册",
-    `${prefix}请再次输入密码：`,
+    `${prefix}请再次输入密码:`,
     "下一步",
     "返回"
   );
@@ -150,7 +150,7 @@ export function showBirthDateDialog(player: Player, error?: string): void {
     player,
     DialogStyle.input,
     "注册",
-    `${prefix}出生日期（日.月.年）：\n例如：15.04.1998`,
+    `${prefix}出生日期(日.月.年):\n例如:15.04.1998`,
     "下一步",
     "返回"
   );

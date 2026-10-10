@@ -4,8 +4,8 @@ import { isJailedAccount, pickJailCell } from "../prison/sentence";
 import { DEFAULT_SPAWN, pickHospitalSpawn, type SpawnPoint } from "./point";
 
 /**
- * 玩家出生位置：监狱 → 医院 → 组织 → 默认出生点。
- * 与登录后的逻辑相同。
+ * 玩家出生位置:监狱 → 医院 → 组织 → 默认出生点.
+ * 与登录后的逻辑相同.
  */
 export function resolveAccountSpawn(
   account: Account | null | undefined

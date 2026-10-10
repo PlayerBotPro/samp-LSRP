@@ -36,7 +36,7 @@ import { getInsideBusiness } from "./session";
 import { isWorkshopType } from "./types";
 import { businessIdFromVirtualWorld, businessVirtualWorld } from "./world";
 
-/** 不要与 family 115–123 重叠。 */
+/** 不要与 family 115-123 重叠. */
 export const WORKSHOP_MENU_DIALOG_ID = 144;
 export const WORKSHOP_COLOR1_DIALOG_ID = 145;
 export const WORKSHOP_COLOR2_DIALOG_ID = 146;
@@ -51,12 +51,12 @@ const NITRO_COMPONENT = 1010;
 const PRICE_REPAIR = 800;
 const PRICE_COLOR = 1_500;
 const PRICE_NITRO = 5_000;
-/** 每缺少一升燃油的价格（与加油站相同）。 */
+/** 每缺少一升燃油的价格(与加油站相同). */
 const PRICE_FUEL_UNIT = 10;
 
 type PaintColor = { id: number; name: string };
 
-/** GTA SA 喷漆使用的常见颜色。 */
+/** GTA SA 喷漆使用的常见颜色. */
 const PAINT_COLORS: readonly PaintColor[] = [
   { id: 0, name: "黑色" },
   { id: 1, name: "白色" },
@@ -110,7 +110,7 @@ export function startWorkshopShops(): void {
   const count = listBusinesses().filter(
     (b) => isWorkshopType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 汽车维修店：服务点数量 ${count}`);
+  omp.log(`[${SERVER_TAG}] 汽车维修店:服务点数量 ${count}`);
 }
 
 function clearPlayerWorkshop(player: Player): void {
@@ -227,7 +227,7 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
 
   if (business.isLocked && business.ownerId !== account.id) {
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "修理厂已关闭。");
+    player.sendClientMessage(Color.error, "修理厂已关闭.");
     return;
   }
 
@@ -263,14 +263,14 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
     `喷漆\t${formatMoney(PRICE_COLOR)}\t可用`,
     repairNeed
       ? `维修\t${formatMoney(PRICE_REPAIR)}\tHP ${Math.round(health)}`
-      : `维修\t—\t车辆状况良好`,
+      : `维修\t-\t车辆状况良好`,
     fuelOk
       ? fuelNeed
         ? `加油\t${formatMoney(fuelPrice)}\t${Math.round(fuel)}%`
-        : `加油\t—\t油箱已满`
-      : `加油\t—\t无需加油`,
+        : `加油\t-\t油箱已满`
+      : `加油\t-\t无需加油`,
     hasNitro
-      ? `氮气\t—\t已安装`
+      ? `氮气\t-\t已安装`
       : `氮气\t${formatMoney(PRICE_NITRO)}\t未安装`,
   ];
 
@@ -282,7 +282,7 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
       player,
       WORKSHOP_MENU_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `${business.name} — 维修服务`,
+      `${business.name} - 维修服务`,
       rows.join("\n"),
       "选择",
       "关闭"
@@ -290,7 +290,7 @@ function openWorkshopMenu(player: Player, business: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开维修菜单。");
+    player.sendClientMessage(Color.error, "无法打开维修菜单.");
   }
 }
 
@@ -306,7 +306,7 @@ function resolveServiceVehicle(
   if (!vehicle) {
     player.sendClientMessage(
       Color.error,
-      "请先呼叫你的私人车辆 (/car)，然后进入维修站。"
+      "请先呼叫你的私人车辆 (/car),然后进入维修站."
     );
     return null;
   }
@@ -321,7 +321,7 @@ function resolveServiceVehicle(
     if (!personal || personal.ownerId !== account.id) {
       player.sendClientMessage(
         Color.error,
-        "维修服务仅适用于你的私人车辆。"
+        "维修服务仅适用于你的私人车辆."
       );
       return null;
     }
@@ -365,7 +365,7 @@ async function onMainMenuResponse(
   }
 
   await runWorkshopService(player, business, kind);
-  // 保留 standingOn 状态以便离开；再次使用服务前需离开拾取点再回来。
+  // 保留 standingOn 状态以便离开;再次使用服务前需离开拾取点再回来.
 }
 
 function showColorPicker(player: Player, businessId: number, step: 1 | 2): void {
@@ -384,7 +384,7 @@ function showColorPicker(player: Player, businessId: number, step: 1 | 2): void 
       player,
       step === 1 ? WORKSHOP_COLOR1_DIALOG_ID : WORKSHOP_COLOR2_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      step === 1 ? "喷漆 — 主颜色" : "喷漆 — 副颜色",
+      step === 1 ? "喷漆 - 主颜色" : "喷漆 - 副颜色",
       rows.join("\n"),
       step === 1 ? "下一步" : "完成",
       "取消"
@@ -395,7 +395,7 @@ function showColorPicker(player: Player, businessId: number, step: 1 | 2): void 
   } catch {
     pendingMenu.delete(slotId);
     pendingPaint.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开颜色选择页面。");
+    player.sendClientMessage(Color.error, "无法打开颜色选择页面.");
   }
 }
 
@@ -461,7 +461,7 @@ async function onColor2Response(
     color2: paint.id,
     expectedRuntimeId: pending.vehicleRuntimeId,
   });
-  // sticky 状态会保留；再次使用服务前需离开拾取点再回来。
+  // sticky 状态会保留;再次使用服务前需离开拾取点再回来.
 }
 
 async function runWorkshopService(
@@ -476,12 +476,12 @@ async function runWorkshopService(
   }
 
   if (busy.has(account.id)) {
-    player.sendClientMessage(Color.error, "请等待操作完成。");
+    player.sendClientMessage(Color.error, "请等待操作完成.");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "修理厂已关闭。");
+    player.sendClientMessage(Color.error, "修理厂已关闭.");
     return;
   }
 
@@ -496,7 +496,7 @@ async function runWorkshopService(
     paint &&
     paint.expectedRuntimeId !== runtimeId
   ) {
-    player.sendClientMessage(Color.error, "车辆信息已变更。请重新打开维修站。");
+    player.sendClientMessage(Color.error, "车辆信息已变更.请重新打开维修站.");
     return;
   }
 
@@ -515,7 +515,7 @@ async function runWorkshopService(
       slotId
     );
     if (!near || near.id !== business.id) {
-      player.sendClientMessage(Color.error, "请靠近维修站。");
+      player.sendClientMessage(Color.error, "请靠近维修站.");
       return;
     }
   } catch {
@@ -533,29 +533,29 @@ async function runWorkshopService(
     fuel = getVehicleFuel(vehicle);
     hasNitro = vehicle.getComponentInSlot(5) === NITRO_COMPONENT;
   } catch {
-    player.sendClientMessage(Color.error, "车辆不可用。");
+    player.sendClientMessage(Color.error, "车辆不可用.");
     return;
   }
 
   if (kind === "repair") {
     if (health >= 999.5) {
-      player.sendClientMessage(Color.error, "车辆已经修好。");
+      player.sendClientMessage(Color.error, "车辆已经修好.");
       return;
     }
     price = PRICE_REPAIR;
   } else if (kind === "fuel") {
     if (!vehicleUsesFuel(model)) {
-      player.sendClientMessage(Color.error, "这辆车无需加油。");
+      player.sendClientMessage(Color.error, "这辆车无需加油.");
       return;
     }
     if (fuel >= MAX_VEHICLE_FUEL - 0.05) {
-      player.sendClientMessage(Color.error, "油箱已经加满。");
+      player.sendClientMessage(Color.error, "油箱已经加满.");
       return;
     }
     price = Math.max(1, Math.ceil(MAX_VEHICLE_FUEL - fuel)) * PRICE_FUEL_UNIT;
   } else if (kind === "nitro") {
     if (hasNitro) {
-      player.sendClientMessage(Color.error, "已经安装了氮气。");
+      player.sendClientMessage(Color.error, "已经安装了氮气.");
       return;
     }
     price = PRICE_NITRO;
@@ -571,7 +571,7 @@ async function runWorkshopService(
   if (account.money < price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(price)}.`
+      `现金不足.需要 ${formatMoney(price)}.`
     );
     return;
   }
@@ -586,9 +586,9 @@ async function runWorkshopService(
     );
     if (!result.ok) {
       if (result.reason === "funds") {
-        player.sendClientMessage(Color.error, "现金不足。");
+        player.sendClientMessage(Color.error, "现金不足.");
       } else {
-        player.sendClientMessage(Color.error, "付款失败。");
+        player.sendClientMessage(Color.error, "付款失败.");
       }
       return;
     }
@@ -597,7 +597,7 @@ async function runWorkshopService(
       isPlayerActive(player) && getAccount(player)?.id === account.id;
 
     if (stillHere) {
-      // await 期间玩家可能已离开拾取点；服务仍然生效（费用已支付）。
+      // await 期间玩家可能已离开拾取点;服务仍然生效(费用已支付).
       patchAccount(player, { money: result.cashLeft });
       setBusinessBalance(business.id, result.balance);
       const live = getAccount(player);
@@ -614,7 +614,7 @@ async function runWorkshopService(
       if (stillHere) {
         player.sendClientMessage(
           Color.info,
-          "付款已完成并保存。请通过 /car 更新车辆。"
+          "付款已完成并保存.请通过 /car 更新车辆."
         );
       }
       return;
@@ -640,7 +640,7 @@ async function runWorkshopService(
       if (stillHere) {
         player.sendClientMessage(
           Color.info,
-          "付款已完成并保存。请通过 /car 更新车辆。"
+          "付款已完成并保存.请通过 /car 更新车辆."
         );
       }
       return;
@@ -658,7 +658,7 @@ async function runWorkshopService(
     };
     player.sendClientMessage(
       Color.info,
-      `${labels[kind]}，花费 ${formatMoney(price)}. 已保存至车库。`
+      `${labels[kind]},花费 ${formatMoney(price)}. 已保存至车库.`
     );
   } finally {
     busy.delete(account.id);
@@ -681,6 +681,6 @@ async function persistWorkshopUpgrade(
       await updatePlayerVehicleColors(dbId, paint.color1, paint.color2);
     }
   } catch {
-    // 下次使用 /car 时会加载数据；玩家已支付费用。
+    // 下次使用 /car 时会加载数据;玩家已支付费用.
   }
 }

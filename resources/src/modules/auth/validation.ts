@@ -13,7 +13,7 @@ export function normalizeEmail(raw: string): string {
 
 export function emailError(email: string): string | null {
   if (email.length < 6 || email.length > 255 || !EMAIL_RE.test(email)) {
-    return "请输入有效的电子邮箱，例如 name@example.com";
+    return "请输入有效的电子邮箱,例如 name@example.com";
   }
 
   return null;
@@ -34,7 +34,7 @@ export function passwordError(password: string): string | null {
 export function parseBirthDate(raw: string): { iso: string } | { error: string } {
   const match = raw.trim().match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (!match) {
-    return { error: "出生日期请使用 日.月.年 格式，例如 15.04.1998" };
+    return { error: "出生日期请使用 日.月.年 格式,例如 15.04.1998" };
   }
 
   const day = Number(match[1]);

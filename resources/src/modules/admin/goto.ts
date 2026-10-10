@@ -60,7 +60,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // 已经下车。
+    // 已经下车.
   }
 }
 
@@ -107,7 +107,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -129,23 +129,23 @@ export function bindAdminGoto(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (isSamePlayer(player, target)) {
-        player.sendClientMessage(Color.error, "不能传送到自己那里。");
+        player.sendClientMessage(Color.error, "不能传送到自己那里.");
         return;
       }
 
       if (!canTeleport(player)) {
-        player.sendClientMessage(Color.error, "现在不能传送。");
+        player.sendClientMessage(Color.error, "现在不能传送.");
         return;
       }
 
       const point = readPoint(target);
       if (!point || !teleportPlayer(player, point)) {
-        player.sendClientMessage(Color.error, "无法传送。");
+        player.sendClientMessage(Color.error, "无法传送.");
         return;
       }
 
@@ -154,7 +154,7 @@ export function bindAdminGoto(): void {
         `你已传送到 ${playerChatName(target)}.`
       );
       broadcastAdmins(
-        `[A] 管理员 ${playerChatName(player)} 传送到了 ${playerChatName(target)} 身边。`
+        `[A] 管理员 ${playerChatName(player)} 传送到了 ${playerChatName(target)} 身边.`
       );
     },
     true
@@ -176,41 +176,41 @@ export function bindAdminGoto(): void {
 
       const target = findTarget(slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (isSamePlayer(player, target)) {
-        player.sendClientMessage(Color.error, "不能传送自己。");
+        player.sendClientMessage(Color.error, "不能传送自己.");
         return;
       }
 
       if (!canTeleport(target)) {
-        player.sendClientMessage(Color.error, "现在不能传送玩家。");
+        player.sendClientMessage(Color.error, "现在不能传送玩家.");
         return;
       }
 
       const point = readPoint(player);
       if (!point || !teleportPlayer(target, point)) {
-        player.sendClientMessage(Color.error, "无法传送玩家。");
+        player.sendClientMessage(Color.error, "无法传送玩家.");
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `你已将 ${playerChatName(target)} 传送到自己这里。`
+        `你已将 ${playerChatName(target)} 传送到自己这里.`
       );
       try {
         target.sendClientMessage(
           Color.info,
-          `管理员 ${playerChatName(player)} 已将你传送走。`
+          `管理员 ${playerChatName(player)} 已将你传送走.`
         );
       } catch {
-        // 玩家已离线。
+        // 玩家已离线.
       }
 
       broadcastAdmins(
-        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 传送到了自己身边。`
+        `[A] 管理员 ${playerChatName(player)} 将玩家 ${playerChatName(target)} 传送到了自己身边.`
       );
     },
     true

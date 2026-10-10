@@ -42,7 +42,7 @@ registerCommand("leaders", "在线领导者列表", (player) => {
       return;
     }
 
-    const phone = account.phone ? ` | 电话：${account.phone}` : "";
+    const phone = account.phone ? ` | 电话:${account.phone}` : "";
     const afk = afkStatusSuffix(other);
     list.push({
       orgName: membership.org.name,
@@ -54,12 +54,12 @@ registerCommand("leaders", "在线领导者列表", (player) => {
   list.sort((a, b) => a.orgName.localeCompare(b.orgName) || a.slot - b.slot);
 
   if (list.length === 0) {
-    player.sendClientMessage(Color.white, "目前没有组织领导在线。");
+    player.sendClientMessage(Color.white, "目前没有组织领导在线.");
     return;
   }
 
   const lines = list.map((row) => row.line);
-  const body = `在线人数：${list.length}\n\n${lines.join("\n")}`;
+  const body = `在线人数:${list.length}\n\n${lines.join("\n")}`;
 
   try {
     Dialog.show(

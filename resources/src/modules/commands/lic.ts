@@ -18,20 +18,20 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("lic", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account) {
-    viewer.sendClientMessage(Color.error, "玩家已不在线。");
+    viewer.sendClientMessage(Color.error, "玩家已不在线.");
     return;
   }
 
   showLicenses(viewer, account);
   const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(Color.gray, `你${verb}了证件: ${playerName(viewer)}.`);
-  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的证件。`);
+  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的证件.`);
 });
 
 registerCommand("lic", "查看许可证或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -49,7 +49,7 @@ registerCommand("lic", "查看许可证或按 ID 向他人出示", (player, args
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -59,12 +59,12 @@ registerCommand("lic", "查看许可证或按 ID 向他人出示", (player, args
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
@@ -91,6 +91,6 @@ function showLicenses(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "无法打开证件。");
+    viewer.sendClientMessage(Color.error, "无法打开证件.");
   }
 }

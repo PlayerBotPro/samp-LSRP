@@ -55,27 +55,27 @@ export function showHouseRentMenu(player: Player): void {
         BANK_HOUSE_RENT_EMPTY_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
         "房屋付款",
-        "您没有房屋。",
+        "您没有房屋.",
         "返回",
         ""
       );
     } catch {
-      player.sendClientMessage(Color.error, "你没有房屋。");
+      player.sendClientMessage(Color.error, "你没有房屋.");
     }
     return;
   }
 
   const daily = dailyHouseRent(house.price);
   const lines = [
-    `房屋编号 ${house.id}（${houseClassLabel(house.classId)}）`,
-    `已付款至：${formatRentDate(house.rentPaidUntil)}`,
-    `每日费用：${formatMoney(daily)}`,
+    `房屋编号 ${house.id}(${houseClassLabel(house.classId)})`,
+    `已付款至:${formatRentDate(house.rentPaidUntil)}`,
+    `每日费用:${formatMoney(daily)}`,
   ];
 
   if (isRentLastDay(house)) {
     lines.push("");
-    lines.push("今天是已付款的最后一天。");
-    lines.push("若未付款，房屋将于明日 00:00 被收回。");
+    lines.push("今天是已付款的最后一天.");
+    lines.push("若未付款,房屋将于明日 00:00 被收回.");
   }
 
   try {
@@ -89,7 +89,7 @@ export function showHouseRentMenu(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开房屋付款页面。");
+    player.sendClientMessage(Color.error, "无法打开房屋付款页面.");
   }
 }
 
@@ -101,7 +101,7 @@ function showDaysInputDialog(player: Player): void {
 
   const house = findOwnedHouse(account.id);
   if (!house) {
-    player.sendClientMessage(Color.error, "你没有房屋。");
+    player.sendClientMessage(Color.error, "你没有房屋.");
     return;
   }
 
@@ -109,10 +109,10 @@ function showDaysInputDialog(player: Player): void {
   const bank = Math.max(0, Math.floor(account.bank));
   const body = [
     `房屋编号 ${house.id}`,
-    `每日费用：${formatMoney(daily)}`,
-    `银行账户：${formatMoney(bank)}`,
+    `每日费用:${formatMoney(daily)}`,
+    `银行账户:${formatMoney(bank)}`,
     "",
-    "请输入天数：",
+    "请输入天数:",
   ].join("\n");
 
   try {
@@ -126,7 +126,7 @@ function showDaysInputDialog(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开天数输入页面。");
+    player.sendClientMessage(Color.error, "无法打开天数输入页面.");
   }
 }
 
@@ -175,13 +175,13 @@ export function handleHouseRentDialog(
 
     const house = findOwnedHouse(account.id);
     if (!house) {
-      player.sendClientMessage(Color.error, "你没有房屋。");
+      player.sendClientMessage(Color.error, "你没有房屋.");
       return true;
     }
 
     const days = parseRentDays(inputText);
     if (days === null) {
-      player.sendClientMessage(Color.error, "请输入 1 到 999 之间的整数天数。");
+      player.sendClientMessage(Color.error, "请输入 1 到 999 之间的整数天数.");
       showDaysInputDialog(player);
       return true;
     }
@@ -189,7 +189,7 @@ export function handleHouseRentDialog(
     const amount = rentAmountForDays(house.price, days);
     const bank = Math.max(0, Math.floor(account.bank));
     if (amount > bank) {
-      player.sendClientMessage(Color.error, "银行账户余额不足。");
+      player.sendClientMessage(Color.error, "银行账户余额不足.");
       showDaysInputDialog(player);
       return true;
     }
@@ -210,17 +210,17 @@ export function handleHouseRentDialog(
         "确认",
         [
           `房屋编号 ${house.id}`,
-          `付款： ${days} ${dayLabel(days)} — ${formatMoney(amount)}`,
-          `新的付款日期：${formatRentDate(paidUntil)}`,
+          `付款: ${days} ${dayLabel(days)} - ${formatMoney(amount)}`,
+          `新的付款日期:${formatRentDate(paidUntil)}`,
           "",
-          "将从银行账户扣款。",
+          "将从银行账户扣款.",
         ].join("\n"),
         "付款",
         "返回"
       );
     } catch {
       clearHouseRentPending(player);
-      player.sendClientMessage(Color.error, "无法打开确认对话框。");
+      player.sendClientMessage(Color.error, "无法打开确认对话框.");
     }
     return true;
   }
@@ -251,7 +251,7 @@ async function confirmHouseRent(player: Player): Promise<void> {
   const house = findOwnedHouse(account.id);
   if (!house || house.id !== pending.houseId) {
     clearHouseRentPending(player);
-    player.sendClientMessage(Color.error, "你没有房屋。");
+    player.sendClientMessage(Color.error, "你没有房屋.");
     return;
   }
 
@@ -267,7 +267,7 @@ async function confirmHouseRent(player: Player): Promise<void> {
     payingRent.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 房屋付款 ${house.id} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "付款失败。请重试。");
+    player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;
   }
   payingRent.delete(account.id);
@@ -275,15 +275,15 @@ async function confirmHouseRent(player: Player): Promise<void> {
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "你没有房屋。");
+      player.sendClientMessage(Color.error, "你没有房屋.");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "银行账户余额不足。");
+      player.sendClientMessage(Color.error, "银行账户余额不足.");
       showDaysInputDialog(player);
       return;
     }
-    player.sendClientMessage(Color.error, "付款失败。请重试。");
+    player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;
   }
 
@@ -306,7 +306,7 @@ async function confirmHouseRent(player: Player): Promise<void> {
 
   player.sendClientMessage(
     Color.tryOk,
-    `房屋 №${house.id} 已支付 ${pending.days} ${dayLabel(pending.days)}。已付至: ${formatRentDate(result.paidUntil)}.`
+    `房屋 №${house.id} 已支付 ${pending.days} ${dayLabel(pending.days)}.已付至: ${formatRentDate(result.paidUntil)}.`
   );
   player.sendClientMessage(
     Color.info,

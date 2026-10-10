@@ -63,7 +63,7 @@ export function clearBusinessTaxPending(player: Player): void {
   }
 }
 
-/** 银行入口：“企业”选项。 */
+/** 银行入口:"企业"选项. */
 export function showBusinessBankMenu(player: Player): void {
   const account = getAccount(player);
   if (!account) {
@@ -78,12 +78,12 @@ export function showBusinessBankMenu(player: Player): void {
         BANK_BIZ_EMPTY_DIALOG_ID,
         DIALOG_STYLE_MSGBOX,
         "企业",
-        "你没有企业。",
+        "你没有企业.",
         "返回",
         ""
       );
     } catch {
-      player.sendClientMessage(Color.error, "你没有企业。");
+      player.sendClientMessage(Color.error, "你没有企业.");
     }
     return;
   }
@@ -99,7 +99,7 @@ export function showBusinessBankMenu(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开企业菜单。");
+    player.sendClientMessage(Color.error, "无法打开企业菜单.");
   }
 }
 
@@ -118,14 +118,14 @@ export function showBusinessTaxMenu(player: Player): void {
   const daily = dailyBusinessTax(business.price);
   const lines = [
     `${business.name} (#${business.id})`,
-    `已缴费至：${formatRentDate(business.taxPaidUntil)}`,
-    `每日税款：${formatMoney(daily)}`,
+    `已缴费至:${formatRentDate(business.taxPaidUntil)}`,
+    `每日税款:${formatMoney(daily)}`,
   ];
 
   if (isTaxLastDay(business)) {
     lines.push("");
-    lines.push("今天是最后一个已缴费日。");
-    lines.push("若未缴费，企业将于明日 00:00 被收回。");
+    lines.push("今天是最后一个已缴费日.");
+    lines.push("若未缴费,企业将于明日 00:00 被收回.");
   }
 
   try {
@@ -139,7 +139,7 @@ export function showBusinessTaxMenu(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开企业付款页面。");
+    player.sendClientMessage(Color.error, "无法打开企业付款页面.");
   }
 }
 
@@ -151,7 +151,7 @@ function showDaysInputDialog(player: Player): void {
 
   const business = findOwnedBusiness(account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "你没有企业。");
+    player.sendClientMessage(Color.error, "你没有企业.");
     return;
   }
 
@@ -159,10 +159,10 @@ function showDaysInputDialog(player: Player): void {
   const bank = Math.max(0, Math.floor(account.bank));
   const body = [
     `${business.name} (#${business.id})`,
-    `每日税款：${formatMoney(daily)}`,
-    `银行账户：${formatMoney(bank)}`,
+    `每日税款:${formatMoney(daily)}`,
+    `银行账户:${formatMoney(bank)}`,
     "",
-    "请输入缴费天数：",
+    "请输入缴费天数:",
   ].join("\n");
 
   try {
@@ -176,7 +176,7 @@ function showDaysInputDialog(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开天数输入页面。");
+    player.sendClientMessage(Color.error, "无法打开天数输入页面.");
   }
 }
 
@@ -188,15 +188,15 @@ function showWithdrawInputDialog(player: Player): void {
 
   const business = findOwnedBusiness(account.id);
   if (!business) {
-    player.sendClientMessage(Color.error, "你没有企业。");
+    player.sendClientMessage(Color.error, "你没有企业.");
     return;
   }
 
   const body = [
     `${business.name} (#${business.id})`,
-    `账户余额：${formatMoney(business.balance)}`,
+    `账户余额:${formatMoney(business.balance)}`,
     "",
-    "请输入提取金额：",
+    "请输入提取金额:",
   ].join("\n");
 
   try {
@@ -210,7 +210,7 @@ function showWithdrawInputDialog(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开提款页面。");
+    player.sendClientMessage(Color.error, "无法打开提款页面.");
   }
 }
 
@@ -283,13 +283,13 @@ export function handleBusinessTaxDialog(
 
     const business = findOwnedBusiness(account.id);
     if (!business) {
-      player.sendClientMessage(Color.error, "你没有企业。");
+      player.sendClientMessage(Color.error, "你没有企业.");
       return true;
     }
 
     const days = parseTaxDays(inputText);
     if (days === null) {
-      player.sendClientMessage(Color.error, "请输入 1 到 999 之间的整数天数。");
+      player.sendClientMessage(Color.error, "请输入 1 到 999 之间的整数天数.");
       showDaysInputDialog(player);
       return true;
     }
@@ -297,7 +297,7 @@ export function handleBusinessTaxDialog(
     const amount = taxAmountForDays(business.price, days);
     const bank = Math.max(0, Math.floor(account.bank));
     if (amount > bank) {
-      player.sendClientMessage(Color.error, "银行账户余额不足。");
+      player.sendClientMessage(Color.error, "银行账户余额不足.");
       showDaysInputDialog(player);
       return true;
     }
@@ -318,17 +318,17 @@ export function handleBusinessTaxDialog(
         "确认",
         [
           `${business.name} (#${business.id})`,
-          `缴费：${days}天 — ${formatMoney(amount)}`,
-          `新的缴费日期：${formatRentDate(paidUntil)}`,
+          `缴费:${days}天 - ${formatMoney(amount)}`,
+          `新的缴费日期:${formatRentDate(paidUntil)}`,
           "",
-          "费用将从银行账户扣除。",
+          "费用将从银行账户扣除.",
         ].join("\n"),
         "缴费",
         "返回"
       );
     } catch {
       clearBusinessTaxPending(player);
-      player.sendClientMessage(Color.error, "无法打开确认对话框。");
+      player.sendClientMessage(Color.error, "无法打开确认对话框.");
     }
     return true;
   }
@@ -353,26 +353,26 @@ export function handleBusinessTaxDialog(
 
     const business = findOwnedBusiness(account.id);
     if (!business) {
-      player.sendClientMessage(Color.error, "你没有企业。");
+      player.sendClientMessage(Color.error, "你没有企业.");
       return true;
     }
 
     const amount = parseAmount(inputText);
     if (amount === null) {
-      player.sendClientMessage(Color.error, "请输入大于 0 的整数金额。");
+      player.sendClientMessage(Color.error, "请输入大于 0 的整数金额.");
       showWithdrawInputDialog(player);
       return true;
     }
 
     if (amount > business.balance) {
-      player.sendClientMessage(Color.error, "企业账户资金不足。");
+      player.sendClientMessage(Color.error, "企业账户资金不足.");
       showWithdrawInputDialog(player);
       return true;
     }
 
     const cash = Math.max(0, Math.floor(account.money));
     if (cash > MAX_MONEY - amount) {
-      player.sendClientMessage(Color.error, "不能携带这么多现金。");
+      player.sendClientMessage(Color.error, "不能携带这么多现金.");
       showWithdrawInputDialog(player);
       return true;
     }
@@ -387,17 +387,17 @@ export function handleBusinessTaxDialog(
         "确认",
         [
           `${business.name} (#${business.id})`,
-          `提取：${formatMoney(amount)}`,
-          `提取后余额：${formatMoney(business.balance - amount)}`,
+          `提取:${formatMoney(amount)}`,
+          `提取后余额:${formatMoney(business.balance - amount)}`,
           "",
-          "资金将以现金形式发放。",
+          "资金将以现金形式发放.",
         ].join("\n"),
         "提取",
         "返回"
       );
     } catch {
       pendingWithdraw.delete(slotId);
-      player.sendClientMessage(Color.error, "无法打开确认对话框。");
+      player.sendClientMessage(Color.error, "无法打开确认对话框.");
     }
     return true;
   }
@@ -432,7 +432,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
   const business = findOwnedBusiness(account.id);
   if (!business || business.id !== pending.businessId) {
     clearBusinessTaxPending(player);
-    player.sendClientMessage(Color.error, "你没有企业。");
+    player.sendClientMessage(Color.error, "你没有企业.");
     return;
   }
 
@@ -447,8 +447,8 @@ async function confirmBusinessTax(player: Player): Promise<void> {
   } catch (error: unknown) {
     payingTax.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 缴纳企业税款 ${business.id}（${account.name}）：${message}`);
-    player.sendClientMessage(Color.error, "付款失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 缴纳企业税款 ${business.id}(${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;
   }
   payingTax.delete(account.id);
@@ -456,19 +456,19 @@ async function confirmBusinessTax(player: Player): Promise<void> {
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "你没有企业。");
+      player.sendClientMessage(Color.error, "你没有企业.");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "银行账户余额不足。");
+      player.sendClientMessage(Color.error, "银行账户余额不足.");
       showDaysInputDialog(player);
       return;
     }
-    player.sendClientMessage(Color.error, "付款失败。请重试。");
+    player.sendClientMessage(Color.error, "付款失败.请重试.");
     return;
   }
 
-  // 数据库已在事务中更新，因此同步缓存。
+  // 数据库已在事务中更新,因此同步缓存.
   setBusinessTaxPaidUntil(business.id, result.paidUntil);
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {
@@ -483,7 +483,7 @@ async function confirmBusinessTax(player: Player): Promise<void> {
 
   player.sendClientMessage(
     Color.tryOk,
-    `企业 #${business.id} 已支付 ${pending.days} ${dayLabel(pending.days)}。已付至: ${formatRentDate(result.paidUntil)}.`
+    `企业 #${business.id} 已支付 ${pending.days} ${dayLabel(pending.days)}.已付至: ${formatRentDate(result.paidUntil)}.`
   );
   player.sendClientMessage(
     Color.info,
@@ -507,7 +507,7 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
   const business = findOwnedBusiness(account.id);
   if (!business || business.id !== pending.businessId) {
     pendingWithdraw.delete(slotId);
-    player.sendClientMessage(Color.error, "你没有企业。");
+    player.sendClientMessage(Color.error, "你没有企业.");
     return;
   }
 
@@ -522,8 +522,8 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
   } catch (error: unknown) {
     withdrawing.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 提取企业资金 ${business.id}（${account.name}）：${message}`);
-    player.sendClientMessage(Color.error, "提款失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 提取企业资金 ${business.id}(${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "提款失败.请重试.");
     return;
   }
   withdrawing.delete(account.id);
@@ -531,19 +531,19 @@ async function confirmBusinessWithdraw(player: Player): Promise<void> {
 
   if (!result.ok) {
     if (result.reason === "owner") {
-      player.sendClientMessage(Color.error, "你没有企业。");
+      player.sendClientMessage(Color.error, "你没有企业.");
       return;
     }
     if (result.reason === "funds") {
-      player.sendClientMessage(Color.error, "企业账户资金不足。");
+      player.sendClientMessage(Color.error, "企业账户资金不足.");
       showWithdrawInputDialog(player);
       return;
     }
-    player.sendClientMessage(Color.error, "提款失败。请重试。");
+    player.sendClientMessage(Color.error, "提款失败.请重试.");
     return;
   }
 
-  // 数据库已在事务中更新，因此同步缓存。
+  // 数据库已在事务中更新,因此同步缓存.
   setBusinessBalance(business.id, result.balanceLeft);
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {

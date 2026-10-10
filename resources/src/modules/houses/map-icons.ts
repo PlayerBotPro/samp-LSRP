@@ -5,7 +5,7 @@ import { STREET_WORLD } from "../spawn/point";
 import type { HouseRecord } from "./repository";
 import { listHouses } from "./repository";
 
-/** 位置 50–99 已由商店标记占用。 */
+/** 位置 50-99 已由商店标记占用. */
 const MAP_ICON_SLOT_MIN = 11;
 const MAP_ICON_SLOT_MAX = 49;
 const ICON_FOR_SALE = 31;
@@ -78,7 +78,7 @@ export function refreshHouseMapIcons(player: Player): void {
     const interior = player.getInterior();
     updatePlayerIcons(player, id, pos.x, pos.y, world, interior);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -104,7 +104,7 @@ function tickHouseIcons(): void {
       const interior = player.getInterior();
       updatePlayerIcons(player, id, pos.x, pos.y, world, interior, houses);
     } catch {
-      // 位置为空或玩家已离开。
+      // 位置为空或玩家已离开.
     }
   });
 }
@@ -206,7 +206,7 @@ function showHouseIcon(
       MAPICON_LOCAL
     );
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -219,7 +219,7 @@ function hideHouseIcon(
   try {
     player.removeMapIcon(slot);
   } catch {
-    // 图标不存在。
+    // 图标不存在.
   }
 
   state.active.delete(houseId);

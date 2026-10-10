@@ -16,7 +16,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "LSPD、州警察和 FBI 员工可以打开。";
+const DENY = "LSPD,州警察和 FBI 员工可以打开.";
 
 type LspdDoor = {
   pickup: { x: number; y: number; z: number; interior: number };
@@ -143,7 +143,7 @@ function tickLspdDoors(): void {
         }
       }
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -152,7 +152,7 @@ function tryUse(player: Player, door: LspdDoor): void {
   if (door.staffOnly) {
     const account = getAccount(player);
     if (account?.hospitalized) {
-      deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+      deny(player, "你需要治疗.请使用 /hospital 占用病床.");
       return;
     }
 
@@ -183,7 +183,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -205,7 +205,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

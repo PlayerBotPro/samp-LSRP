@@ -8,7 +8,7 @@ import { ORG_FBI_ID } from "./fbi";
 import { ORG_HOSPITAL_ID } from "./hospital";
 import { getMembership } from "./membership";
 
-/** 左 Alt（KEY_WALK). */
+/** 左 Alt(KEY_WALK). */
 const KEY_WALK = 1024;
 const PICKUP_MODEL = 19132;
 const PICKUP_TYPE = 1;
@@ -18,7 +18,7 @@ const DENY_COOLDOWN_MS = 2500;
 const PICKUP_RADIUS = 1.5;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "仅医院和 FBI 员工可以进入。";
+const DENY = "仅医院和 FBI 员工可以进入.";
 
 const ALLOWED_ORGS: ReadonlySet<number> = new Set([ORG_HOSPITAL_ID, ORG_FBI_ID]);
 
@@ -28,7 +28,7 @@ type ArchiveDoor = {
   label: string;
 };
 
-/** 大厅 → 档案室 / 档案室 → 大厅（医院 VW，室内 0). */
+/** 大厅 → 档案室 / 档案室 → 大厅(医院 VW,室内 0). */
 const DOORS: readonly ArchiveDoor[] = [
   {
     pickup: { x: 1163.472, y: -1330.9196, z: 4001.1001 },
@@ -137,7 +137,7 @@ function tryUse(player: Player): void {
 
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -166,7 +166,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -188,7 +188,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point, { settleMs: false });
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

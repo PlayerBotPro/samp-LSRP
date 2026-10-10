@@ -14,7 +14,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -36,7 +36,7 @@ export function bindAdminAo(): void {
 
       broadcastAll(
         Color.info,
-        `管理员 ${playerChatName(player)}：${text}`
+        `管理员 ${playerChatName(player)}:${text}`
       );
     },
     true

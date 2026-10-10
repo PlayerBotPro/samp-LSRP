@@ -25,6 +25,6 @@ registerCommand("todo", "通过 * 描述台词和动作", (player, args) => {
     player,
     CHAT_RADIUS,
     Color.chat,
-    `«${speech}», — ${said} ${playerName(player)}, ${action}.`
+    `"${speech}", - ${said} ${playerName(player)}, ${action}.`
   );
 });

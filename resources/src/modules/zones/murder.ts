@@ -12,7 +12,7 @@ import { isCaptureCombatKill, isCaptureParticipantOnTurf } from "./capture";
 import { districtNameAt } from "./district";
 
 const ALERT_SOUND_ID = 21001;
-/** 与 /arrest 和自首相同：1★ = 10 分钟。 */
+/** 与 /arrest 和自首相同:1★ = 10 分钟. */
 const MINUTES_PER_WANTED = 10;
 
 function isPlayable(player: Player): boolean {
@@ -45,7 +45,7 @@ function playAlertForLaw(): void {
       const pos = officer.getPos();
       officer.playGameSound(ALERT_SOUND_ID, pos.x, pos.y, pos.z);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -59,13 +59,13 @@ function onPlayerMurder(victim: Player, killer: Player | null | undefined): void
     return;
   }
 
-  // 警察 / LSPD / FBI：击毙通缉犯（不算警员犯罪）。
+  // 警察 / LSPD / FBI:击毙通缉犯(不算警员犯罪).
   if (isLawOfficer(killer)) {
     void tryLawNeutralize(victim, killer);
     return;
   }
 
-  // 帮派争夺战中的击杀不算刑事谋杀。
+  // 帮派争夺战中的击杀不算刑事谋杀.
   if (isCaptureCombatKill(victim, killer)) {
     return;
   }
@@ -83,12 +83,12 @@ function onPlayerMurder(victim: Player, killer: Player | null | undefined): void
 }
 
 async function tryLawNeutralize(victim: Player, killer: Player): Promise<void> {
-  // 不统计己方或其他执法机构成员。
+  // 不统计己方或其他执法机构成员.
   if (isLawOfficer(victim)) {
     return;
   }
 
-  // 正在参与帮派争夺战的帮派成员不计入，即使其被通缉。
+  // 正在参与帮派争夺战的帮派成员不计入,即使其被通缉.
   if (isCaptureParticipantOnTurf(victim)) {
     return;
   }
@@ -125,7 +125,7 @@ async function tryLawNeutralize(victim: Player, killer: Player): Promise<void> {
   );
 
   notifyLawStaff(
-    `${rankTitle} ${playerChatName(killer)}在${district}击毙了罪犯。`
+    `${rankTitle} ${playerChatName(killer)}在${district}击毙了罪犯.`
   );
 }
 

@@ -29,7 +29,7 @@ const MENU_ITEMS: Record<MenuKey, string> = {
   invite: "邀请人",
 };
 
-registerCommand("mn", "菜单：统计、命令、规则", (player) => {
+registerCommand("mn", "菜单:统计,命令,规则", (player) => {
   showMenu(player);
 });
 
@@ -107,7 +107,7 @@ function showMenu(player: Player): void {
       "关闭"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开菜单。");
+    player.sendClientMessage(Color.error, "无法打开菜单.");
   }
 }
 
@@ -123,7 +123,7 @@ function showRulesDialog(player: Player): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开规则。");
+    player.sendClientMessage(Color.error, "无法打开规则.");
   }
 }
 
@@ -140,12 +140,12 @@ function showInviteDialog(player: Player, error?: string): void {
       INVITE_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "邀请人",
-      `${prefix}请输入邀请你的玩家昵称。\n格式：Name_Surname`,
+      `${prefix}请输入邀请你的玩家昵称.\n格式:Name_Surname`,
       "保存",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开表格。");
+    player.sendClientMessage(Color.error, "无法打开表格.");
   }
 }
 
@@ -169,23 +169,23 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
   }
 
   if (account.invitedBy) {
-    player.sendClientMessage(Color.gray, "邀请人已经填写。");
+    player.sendClientMessage(Color.gray, "邀请人已经填写.");
     return;
   }
 
   const nick = raw.trim();
   if (!nick) {
-    showInviteDialog(player, "请输入昵称。");
+    showInviteDialog(player, "请输入昵称.");
     return;
   }
 
   if (!isRoleplayName(nick)) {
-    showInviteDialog(player, "昵称格式应为 Name_Surname。");
+    showInviteDialog(player, "昵称格式应为 Name_Surname.");
     return;
   }
 
   if (nick.toLowerCase() === account.name.toLowerCase()) {
-    showInviteDialog(player, "不能填写自己。");
+    showInviteDialog(player, "不能填写自己.");
     return;
   }
 
@@ -201,7 +201,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     }
 
     if (!row) {
-      showInviteDialog(player, "该昵称未注册。");
+      showInviteDialog(player, "该昵称未注册.");
       return;
     }
 
@@ -211,7 +211,7 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     }
 
     if (!saved) {
-      player.sendClientMessage(Color.gray, "邀请人已经填写。");
+      player.sendClientMessage(Color.gray, "邀请人已经填写.");
       return;
     }
 
@@ -222,11 +222,11 @@ async function submitInvite(player: Player, raw: string): Promise<void> {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 推荐系统错误 ${account.name}：${message}`);
+    omp.log(`[${SERVER_TAG}] 推荐系统错误 ${account.name}:${message}`);
     if (isPlayerActive(player)) {
       player.sendClientMessage(
         Color.error,
-        "无法保存。请稍后重试。"
+        "无法保存.请稍后重试."
       );
     }
   }

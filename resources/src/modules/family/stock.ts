@@ -90,7 +90,7 @@ export function bindFamilyWarehouseInteract(): void {
           );
         } finally {
           const slot = playerId(player);
-          // 如果再次打开金额输入界面，则继续保持 busy 状态。
+          // 如果再次打开金额输入界面,则继续保持 busy 状态.
           if (slot === null || !pendingByPlayer.has(slot)) {
             setDialogBusy(player, false);
           }
@@ -111,7 +111,7 @@ export function bindFamilyWarehouseInteract(): void {
   });
 }
 
-/** 玩家踏上拾取点时仅打开一次菜单。 */
+/** 玩家踏上拾取点时仅打开一次菜单. */
 function tickFamilyStockStanding(): void {
   omp.players.forEach((player) => {
     const id = playerId(player);
@@ -168,7 +168,7 @@ function tryOpenStockMenu(player: Player): void {
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership) {
-    player.sendClientMessage(Color.error, "你不属于任何家族。");
+    player.sendClientMessage(Color.error, "你不属于任何家族.");
     return;
   }
 
@@ -219,7 +219,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
   const account = getAccount(player);
   const membership = account ? getFamilyMembership(account) : null;
   if (!account || !membership || !findFamilyStockAtPlayer(player)) {
-    player.sendClientMessage(Color.error, "请靠近仓库。");
+    player.sendClientMessage(Color.error, "请靠近仓库.");
     return;
   }
 
@@ -237,7 +237,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const family = getFamily(familyId);
   if (choice.action === "take" && family?.isLocked) {
-    player.sendClientMessage(Color.error, "仓库已关闭。");
+    player.sendClientMessage(Color.error, "仓库已关闭.");
     return;
   }
 
@@ -337,12 +337,12 @@ async function onAmountResponse(
   const id = playerId(player);
   const pending = id !== null ? pendingByPlayer.get(id) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "操作中断。请重新进入仓库。");
+    player.sendClientMessage(Color.error, "操作中断.请重新进入仓库.");
     return;
   }
 
   if (!findFamilyStockAtPlayer(player)) {
-    player.sendClientMessage(Color.error, "请靠近仓库。");
+    player.sendClientMessage(Color.error, "请靠近仓库.");
     clearPending(player);
     return;
   }
@@ -356,14 +356,14 @@ async function onAmountResponse(
 
   const family = getFamily(pending.familyId);
   if (pending.action === "take" && (!family || family.isLocked)) {
-    player.sendClientMessage(Color.error, "仓库已关闭。");
+    player.sendClientMessage(Color.error, "仓库已关闭.");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数.");
     showAmountDialog(player, pending.action, pending.item, pending.familyId);
     return;
   }
@@ -375,7 +375,7 @@ async function onAmountResponse(
       Color.error,
       pending.item === "money"
         ? `每次最多可存入 ${formatMoney(maxTransfer)}.`
-        : `每次最多可存入 ${maxTransfer} 件。`
+        : `每次最多可存入 ${maxTransfer} 件.`
     );
     showAmountDialog(player, pending.action, pending.item, pending.familyId);
     return;
@@ -403,14 +403,14 @@ async function applyPut(
 
   if (item === "money") {
     if (account.money < amount) {
-      player.sendClientMessage(Color.error, "资金不足。");
+      player.sendClientMessage(Color.error, "资金不足.");
       showAmountDialog(player, "put", item, familyId);
       return;
     }
 
     const nextMoney = account.money - amount;
     if (!Number.isSafeInteger(nextMoney) || nextMoney < 0) {
-      player.sendClientMessage(Color.error, "资金不足。");
+      player.sendClientMessage(Color.error, "资金不足.");
       showAmountDialog(player, "put", item, familyId);
       return;
     }
@@ -418,7 +418,7 @@ async function applyPut(
     try {
       await saveUserMoney(account.id, nextMoney, account.bank);
     } catch {
-      player.sendClientMessage(Color.error, "无法保存到数据库。");
+      player.sendClientMessage(Color.error, "无法保存到数据库.");
       clearPending(player);
       return;
     }
@@ -430,7 +430,7 @@ async function applyPut(
         patchAccount(player, { money: account.money });
         applyWallet(player, { ...getAccount(player)!, money: account.money });
       }
-      player.sendClientMessage(Color.error, "无法将资金存入仓库。");
+      player.sendClientMessage(Color.error, "无法将资金存入仓库.");
       clearPending(player);
       return;
     }
@@ -450,7 +450,7 @@ async function applyPut(
     }
     broadcastFamilyStock(
       familyId,
-      `[家族] ${membership.rank.title} ${playerChatName(player)} 存入：${formatMoney(amount)}。`
+      `[家族] ${membership.rank.title} ${playerChatName(player)} 存入:${formatMoney(amount)}.`
     );
     return;
   }
@@ -475,7 +475,7 @@ async function applyPut(
   try {
     await saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal);
   } catch {
-    player.sendClientMessage(Color.error, "无法保存到数据库。");
+    player.sendClientMessage(Color.error, "无法保存到数据库.");
     clearPending(player);
     return;
   }
@@ -497,12 +497,12 @@ async function applyPut(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你向家族仓库存入了 ${ITEM_LABEL[item]} ${amount} 件。`
+      `你向家族仓库存入了 ${ITEM_LABEL[item]} ${amount} 件.`
     );
   }
   broadcastFamilyStock(
     familyId,
-    `[家族] ${membership.rank.title} ${playerChatName(player)} 存入： ${ITEM_LABEL[item]} ${amount} 件`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} 存入: ${ITEM_LABEL[item]} ${amount} 件`
   );
 }
 
@@ -522,13 +522,13 @@ async function applyTake(
   if (item === "money") {
     const nextMoney = account.money + amount;
     if (!Number.isSafeInteger(nextMoney)) {
-      player.sendClientMessage(Color.error, "数量过多。");
+      player.sendClientMessage(Color.error, "数量过多.");
       clearPending(player);
       return;
     }
 
     if (!(await takeFamilyMoneyAwaited(familyId, amount))) {
-      player.sendClientMessage(Color.error, "仓库资金不足。");
+      player.sendClientMessage(Color.error, "仓库资金不足.");
       showAmountDialog(player, "take", item, familyId);
       return;
     }
@@ -537,7 +537,7 @@ async function applyTake(
       await saveUserMoney(account.id, nextMoney, account.bank);
     } catch {
       await addFamilyMoneyAwaited(familyId, amount);
-      player.sendClientMessage(Color.error, "无法保存到数据库。");
+      player.sendClientMessage(Color.error, "无法保存到数据库.");
       clearPending(player);
       refreshFamilyWarehouseLabel(familyId);
       return;
@@ -558,7 +558,7 @@ async function applyTake(
     }
     broadcastFamilyStock(
       familyId,
-      `[家族] ${membership.rank.title} ${playerChatName(player)} 取出：${formatMoney(amount)}。`
+      `[家族] ${membership.rank.title} ${playerChatName(player)} 取出:${formatMoney(amount)}.`
     );
     return;
   }
@@ -592,7 +592,7 @@ async function applyTake(
     } else {
       addFamilyDrugs(familyId, amount);
     }
-    player.sendClientMessage(Color.error, "数量过多。");
+    player.sendClientMessage(Color.error, "数量过多.");
     clearPending(player);
     return;
   }
@@ -607,7 +607,7 @@ async function applyTake(
     } else {
       addFamilyDrugs(familyId, amount);
     }
-    player.sendClientMessage(Color.error, "无法保存到数据库。");
+    player.sendClientMessage(Color.error, "无法保存到数据库.");
     clearPending(player);
     refreshFamilyWarehouseLabel(familyId);
     return;
@@ -622,12 +622,12 @@ async function applyTake(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你从家族仓库取出了 ${ITEM_LABEL[item]} ${amount} 件。`
+      `你从家族仓库取出了 ${ITEM_LABEL[item]} ${amount} 件.`
     );
   }
   broadcastFamilyStock(
     familyId,
-    `[家族] ${membership.rank.title} ${playerChatName(player)} 取出： ${ITEM_LABEL[item]} ${amount} 件`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} 取出: ${ITEM_LABEL[item]} ${amount} 件`
   );
 }
 
@@ -639,22 +639,22 @@ function toggleLock(player: Player, familyId: number): void {
   }
 
   if (membership.rank.id < LOCK_MIN_RANK) {
-    player.sendClientMessage(Color.error, "只有 7 级及以上成员才能关闭仓库。");
+    player.sendClientMessage(Color.error, "只有 7 级及以上成员才能关闭仓库.");
     return;
   }
 
   const next = !membership.family.isLocked;
   if (!setFamilyLocked(familyId, next)) {
-    player.sendClientMessage(Color.error, "无法更改仓库状态。");
+    player.sendClientMessage(Color.error, "无法更改仓库状态.");
     return;
   }
 
   refreshFamilyWarehouseLabel(familyId);
   const verb = next ? "关闭了" : "打开了";
-  player.sendClientMessage(Color.info, next ? "家族仓库已关闭。" : "家族仓库已开启。");
+  player.sendClientMessage(Color.info, next ? "家族仓库已关闭." : "家族仓库已开启.");
   broadcastFamilyStock(
     familyId,
-    `[家族] ${membership.rank.title} ${playerChatName(player)} ${verb}仓库。`
+    `[家族] ${membership.rank.title} ${playerChatName(player)} ${verb}仓库.`
   );
 }
 
@@ -673,7 +673,7 @@ function broadcastFamilyStock(familyId: number, text: string): void {
     try {
       other.sendClientMessage(Color.info, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

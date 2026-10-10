@@ -7,37 +7,37 @@ import { isLawOfficer, lawOfficerLabel, notifyLawStaff } from "../org/law";
 import { registerCommand } from "./registry";
 
 /**
- * 解除目标通缉（/clear 逻辑）。
- * @returns 错误文本；成功时返回 `null`。
+ * 解除目标通缉(/clear 逻辑).
+ * @returns 错误文本;成功时返回 `null`.
  */
 export function clearWantedByOfficer(officer: Player, target: Player): string | null {
   if (!isAuthenticated(officer) || !isLawOfficer(officer)) {
-    return "仅警察和 FBI 成员可使用此命令。";
+    return "仅警察和 FBI 成员可使用此命令.";
   }
 
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   try {
     if (target.isNPC()) {
-      return "未找到玩家。";
+      return "未找到玩家.";
     }
   } catch {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   if (playerId(target) === playerId(officer)) {
-    return "不能解除自己的通缉。";
+    return "不能解除自己的通缉.";
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount) {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    return "该玩家未被通缉。";
+    return "该玩家未被通缉.";
   }
 
   setPlayerWantedLevel(target, 0);
@@ -47,19 +47,19 @@ export function clearWantedByOfficer(officer: Player, target: Player): string | 
   );
 
   try {
-    target.sendClientMessage(Color.info, "你的通缉已被解除。");
+    target.sendClientMessage(Color.info, "你的通缉已被解除.");
   } catch {
-    // 已离线。
+    // 已离线.
   }
 
   return null;
 }
 
-registerCommand("clear", "解除玩家通缉（警察 / FBI）", (player, args) => {
+registerCommand("clear", "解除玩家通缉(警察 / FBI)", (player, args) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(
       Color.error,
-      "此命令仅供警察和 FBI 员工使用。"
+      "此命令仅供警察和 FBI 员工使用."
     );
     return;
   }
@@ -78,7 +78,7 @@ registerCommand("clear", "解除玩家通缉（警察 / FBI）", (player, args) 
 
   const target = omp.players.at(slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 

@@ -50,9 +50,9 @@ export function notifyBusinessTaxReminder(player: Player): void {
     if (daysLeft === 0) {
       player.sendClientMessage(
         Color.error,
-        `今天是企业 #${business.id} 缴费的最后一天。否则政府明天会收回企业。`
+        `今天是企业 #${business.id} 缴费的最后一天.否则政府明天会收回企业.`
       );
-      player.sendClientMessage(Color.gray, "请在银行缴纳企业费用。");
+      player.sendClientMessage(Color.gray, "请在银行缴纳企业费用.");
       return;
     }
 
@@ -60,9 +60,9 @@ export function notifyBusinessTaxReminder(player: Player): void {
       Color.tryOk,
       `距离企业 #${business.id} 缴费还剩 ${daysLeft} ${rentDaysLeftLabel(daysLeft)}.`
     );
-    player.sendClientMessage(Color.gray, "请在银行缴纳企业费用。");
+    player.sendClientMessage(Color.gray, "请在银行缴纳企业费用.");
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -99,7 +99,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     businessIds = await forfeitExpiredBusinesses();
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 企业税款（${source}）：${message}`);
+    omp.log(`[${SERVER_TAG}] 企业税款(${source}):${message}`);
     return;
   }
 
@@ -107,7 +107,7 @@ async function runTaxForfeiture(source: "startup" | "midnight"): Promise<void> {
     return;
   }
 
-  omp.log(`[${SERVER_TAG}] 企业税款（${source}）：已收回 ${businessIds.length} 家`);
+  omp.log(`[${SERVER_TAG}] 企业税款(${source}):已收回 ${businessIds.length} 家`);
 
   for (const businessId of businessIds) {
     applyForfeitedBusiness(businessId);
@@ -128,12 +128,12 @@ export function applyForfeitedBusiness(businessId: number): void {
     evictPlayersFromBusiness(
       businessId,
       business,
-      `企业 #${businessId} 因未缴税款已被政府收回。`
+      `企业 #${businessId} 因未缴税款已被政府收回.`
     );
     notifyBusinessOwner(
       ownerId,
       businessId,
-      `企业 #${businessId} 因未缴税款已被政府收回，不予补偿。`
+      `企业 #${businessId} 因未缴税款已被政府收回,不予补偿.`
     );
   }
 }
@@ -180,7 +180,7 @@ function evictPlayersFromBusiness(
       refreshStreamForPlayer(player);
       player.sendClientMessage(Color.error, message);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
   });
 }
@@ -204,7 +204,7 @@ function notifyBusinessOwner(ownerId: number, businessId: number, message: strin
     try {
       player.sendClientMessage(Color.error, message);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
   });
 }

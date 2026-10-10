@@ -29,7 +29,7 @@ import { STREET_WORLD } from "../spawn/point";
 import { resolveLawNearbyTarget } from "./law-target";
 import { registerCommand } from "./registry";
 
-/** 与自首规则相同：1★ = 10 分钟。 */
+/** 与自首规则相同:1★ = 10 分钟. */
 const MINUTES_PER_WANTED = 10;
 const REWARD_PER_STAR = 500;
 const STATION_RADIUS = 10;
@@ -45,7 +45,7 @@ type ArrestStation = {
   z: number;
 };
 
-/** 警局车库附近的自首点。 */
+/** 警局车库附近的自首点. */
 const STATIONS: readonly ArrestStation[] = [
   {
     key: "police",
@@ -75,12 +75,12 @@ const busy = new Set<number>();
 
 registerCommand(
   "arrest",
-  "在警局逮捕玩家（警察 / FBI）",
+  "在警局逮捕玩家(警察 / FBI)",
   (player, args) => {
     const resolved = resolveLawNearbyTarget(
       player,
       args,
-      "用法： /arrest [id]"
+      "用法: /arrest [id]"
     );
     if (!resolved.ok) {
       return;
@@ -91,7 +91,7 @@ registerCommand(
     if (!station) {
       officer.sendClientMessage(
         Color.error,
-        "只能在 LSPD 或州警局附近逮捕玩家。"
+        "只能在 LSPD 或州警局附近逮捕玩家."
       );
       return;
     }
@@ -99,41 +99,41 @@ registerCommand(
     if (isLawOfficer(target)) {
       officer.sendClientMessage(
         Color.error,
-        "不能逮捕警察或 FBI 员工。"
+        "不能逮捕警察或 FBI 员工."
       );
       return;
     }
 
     if (isJailed(target)) {
-      officer.sendClientMessage(Color.error, "玩家已经在监狱里。");
+      officer.sendClientMessage(Color.error, "玩家已经在监狱里.");
       return;
     }
 
     if (!isCuffed(target)) {
-      officer.sendClientMessage(Color.error, "玩家必须戴着手铐。");
+      officer.sendClientMessage(Color.error, "玩家必须戴着手铐.");
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount || targetAccount.wantedLevel <= 0) {
-      officer.sendClientMessage(Color.error, "该玩家没有通缉等级。");
+      officer.sendClientMessage(Color.error, "该玩家没有通缉等级.");
       return;
     }
 
     if (isTargetPending(targetId, targetAccount.id)) {
       officer.sendClientMessage(
         Color.error,
-        "该玩家已经被押送去逮捕。"
+        "该玩家已经被押送去逮捕."
       );
       return;
     }
 
     if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-      officer.sendClientMessage(Color.error, "玩家距离太远。");
+      officer.sendClientMessage(Color.error, "玩家距离太远.");
       return;
     }
 
-    // 清除上次逮捕状态和检查点（否则 set 失败时会残留其他人的标记）。
+    // 清除上次逮捕状态和检查点(否则 set 失败时会残留其他人的标记).
     clearPending(officerId, true);
 
     try {
@@ -145,7 +145,7 @@ registerCommand(
         CHECKPOINT_RADIUS
       );
     } catch {
-      officer.sendClientMessage(Color.error, "无法设置检查点。");
+      officer.sendClientMessage(Color.error, "无法设置检查点.");
       return;
     }
 
@@ -168,12 +168,12 @@ registerCommand(
       officer,
       CHAT_RADIUS,
       Color.action,
-      `${officerName} ${verb} ${targetName} 前往警局（${station.name}）。`
+      `${officerName} ${verb} ${targetName} 前往警局(${station.name}).`
     );
 
     officer.sendClientMessage(
       Color.info,
-      `已逮捕: ${targetName}. 驾车前往 ${station.name} 附近的检查点以完成逮捕。`
+      `已逮捕: ${targetName}. 驾车前往 ${station.name} 附近的检查点以完成逮捕.`
     );
     try {
       target.sendClientMessage(
@@ -181,10 +181,10 @@ registerCommand(
         `${officerName} 正押送你前往警局 (${station.name}).`
       );
     } catch {
-      // 已离线。
+      // 已离线.
     }
 
-    // 如果已经载着被捕者在检查点范围内驾驶，可能不会再次触发 enter。
+    // 如果已经载着被捕者在检查点范围内驾驶,可能不会再次触发 enter.
     void onArrestCheckpoint(officer, true);
   }
 );
@@ -229,7 +229,7 @@ async function onArrestCheckpoint(
 
   if (Date.now() > state.expiresAt) {
     clearPending(officerId, true);
-    tell(player, Color.error, "逮捕时间已到，请重新开始：/arrest。");
+    tell(player, Color.error, "逮捕时间已到,请重新开始:/arrest.");
     return;
   }
 
@@ -241,21 +241,21 @@ async function onArrestCheckpoint(
   try {
     if (!player.isInAnyVehicle() || player.getState() !== PLAYER_STATE_DRIVER) {
       if (!silentIfNotReady) {
-        tell(player, Color.error, "只能在驾驶时完成逮捕。");
+        tell(player, Color.error, "只能在驾驶时完成逮捕.");
       }
       return;
     }
     vehicleId = player.getVehicleID();
   } catch {
     if (!silentIfNotReady) {
-      tell(player, Color.error, "只能在驾驶时完成逮捕。");
+      tell(player, Color.error, "只能在驾驶时完成逮捕.");
     }
     return;
   }
 
   if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
     if (!silentIfNotReady) {
-      tell(player, Color.error, "只能在驾驶时完成逮捕。");
+      tell(player, Color.error, "只能在驾驶时完成逮捕.");
     }
     return;
   }
@@ -274,25 +274,25 @@ async function onArrestCheckpoint(
     targetAccount.id !== state.targetAccountId
   ) {
     clearPending(officerId, true);
-    tell(player, Color.error, "被捕者已离线，逮捕已取消。");
+    tell(player, Color.error, "被捕者已离线,逮捕已取消.");
     return;
   }
 
   if (isLawOfficer(target) || isJailed(target)) {
     clearPending(officerId, true);
-    tell(player, Color.error, "逮捕已无法继续。");
+    tell(player, Color.error, "逮捕已无法继续.");
     return;
   }
 
   if (!isCuffed(target)) {
     clearPending(officerId, true);
-    tell(player, Color.error, "被捕者的手铐已解开，逮捕已取消。");
+    tell(player, Color.error, "被捕者的手铐已解开,逮捕已取消.");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
     clearPending(officerId, true);
-    tell(player, Color.error, "被捕者不再被通缉，逮捕已取消。");
+    tell(player, Color.error, "被捕者不再被通缉,逮捕已取消.");
     return;
   }
 
@@ -302,14 +302,14 @@ async function onArrestCheckpoint(
         tell(
           player,
           Color.error,
-          "被捕者必须在你的车辆中（/putpl）。"
+          "被捕者必须在你的车辆中(/putpl)."
         );
       }
       return;
     }
   } catch {
     clearPending(officerId, true);
-    tell(player, Color.error, "被捕者已离线，逮捕已取消。");
+    tell(player, Color.error, "被捕者已离线,逮捕已取消.");
     return;
   }
 
@@ -321,7 +321,7 @@ async function onArrestCheckpoint(
   try {
     const ok = await applyJail(target, minutes);
     if (!ok) {
-      tell(player, Color.error, "无法将玩家送入监狱，请重试。");
+      tell(player, Color.error, "无法将玩家送入监狱,请重试.");
       return;
     }
 
@@ -342,29 +342,29 @@ async function onArrestCheckpoint(
     );
 
     notifyLawStaff(
-      `调度：${rankTitle} ${officerLabel} ${verb} ${targetLabel} 入狱（${state.station.name}）。`
+      `调度:${rankTitle} ${officerLabel} ${verb} ${targetLabel} 入狱(${state.station.name}).`
     );
 
     sendNearby(
       player,
       CHAT_RADIUS,
       Color.action,
-      `${playerName(player)} ${verb} ${playerName(target)} 入狱。`
+      `${playerName(player)} ${verb} ${playerName(target)} 入狱.`
     );
 
     tell(
       player,
       Color.info,
-      `你已将 ${playerName(target)} 送入监狱。刑期：${minutes} 分钟。奖励：${formatMoney(reward)}。`
+      `你已将 ${playerName(target)} 送入监狱.刑期:${minutes} 分钟.奖励:${formatMoney(reward)}.`
     );
 
     try {
       target.sendClientMessage(
         Color.error,
-        `你被 ${playerName(player)} 逮捕了。通缉已解除。`
+        `你被 ${playerName(player)} 逮捕了.通缉已解除.`
       );
     } catch {
-      // 已在监狱中 / 已离开。
+      // 已在监狱中 / 已离开.
     }
   } finally {
     busy.delete(officerId);
@@ -447,7 +447,7 @@ function clearPending(officerId: number, disableCp: boolean): void {
   try {
     Checkpoint.disable(officer);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -460,7 +460,7 @@ function clearPendingByTarget(targetSlot: number): void {
     clearPending(officerId, true);
     const officer = omp.players.at(officerId);
     if (officer && isPlayerActive(officer)) {
-      tell(officer, Color.error, "被捕者已离开，逮捕已取消。");
+      tell(officer, Color.error, "被捕者已离开,逮捕已取消.");
     }
   }
 }
@@ -491,6 +491,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }

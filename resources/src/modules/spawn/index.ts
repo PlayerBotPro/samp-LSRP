@@ -87,7 +87,7 @@ export const spawnModule: GameModule = {
         try {
           writeSpawnInfo(player, skin, pickJailCell());
         } catch {
-          // 玩家已离开。
+          // 玩家已离开.
         }
         patchAccount(player, { health: MAX_HEALTH });
         return;
@@ -99,7 +99,7 @@ export const spawnModule: GameModule = {
       try {
         writeSpawnInfo(player, skin, hospital);
       } catch {
-        // 玩家已离开。
+        // 玩家已离开.
       }
 
       patchAccount(player, { health: HOSPITAL_HEALTH, hospitalized: true });
@@ -126,7 +126,7 @@ export const spawnModule: GameModule = {
         }
         player.setCameraBehind();
       } catch {
-        // 玩家已离开。
+        // 玩家已离开.
       }
 
       if (account && isJailedAccount(account)) {
@@ -140,14 +140,14 @@ export const spawnModule: GameModule = {
           placeInJail(player);
           applyHealth(player, account.health);
         } catch {
-          // 玩家已离开。
+          // 玩家已离开.
         }
 
         if (firstSpawn) {
           applyWallet(player, account);
         }
 
-        player.sendClientMessage(Color.error, "你正在服刑。");
+        player.sendClientMessage(Color.error, "你正在服刑.");
         return;
       }
 
@@ -157,7 +157,7 @@ export const spawnModule: GameModule = {
           applyHealth(player, HOSPITAL_HEALTH);
           refreshStreamForPlayer(player);
         } catch {
-          // 玩家已离开。
+          // 玩家已离开.
         }
 
         patchAccount(player, { health: HOSPITAL_HEALTH });
@@ -171,7 +171,7 @@ export const spawnModule: GameModule = {
         player.sendClientMessage(Color.info, "你失去了意识...");
         player.sendClientMessage(
           Color.gray,
-          "医生将你送到了圣徒全体医院。"
+          "医生将你送到了圣徒全体医院."
         );
         player.sendClientMessage(Color.gray, "请占用一张病床: /hospital.");
         return;
@@ -184,7 +184,7 @@ export const spawnModule: GameModule = {
           applyHealth(player, account.health);
           refreshStreamForPlayer(player);
         } catch {
-          // 玩家已离开。
+          // 玩家已离开.
         }
 
         const id = playerId(player);
@@ -199,7 +199,7 @@ export const spawnModule: GameModule = {
 
         player.sendClientMessage(
           Color.gray,
-          "治疗尚未完成。请占用一张病床: /hospital."
+          "治疗尚未完成.请占用一张病床: /hospital."
         );
         return;
       }
@@ -223,7 +223,7 @@ export const spawnModule: GameModule = {
               placeAt(player, orgSpawn);
               refreshStreamForPlayer(player);
             } catch {
-              // 玩家已离开。
+              // 玩家已离开.
             }
           }
         }
@@ -256,7 +256,7 @@ function takePendingHospital(player: Player): SpawnPoint | null {
   return hospital;
 }
 
-/** 重置死亡后延迟前往医院的出生流程（管理员使用 `/spawn` 等命令时）。 */
+/** 重置死亡后延迟前往医院的出生流程(管理员使用 `/spawn` 等命令时). */
 export function clearPendingHospitalSpawn(player: Player): void {
   const id = playerId(player);
   if (id !== null) {

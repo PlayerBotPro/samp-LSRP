@@ -58,7 +58,7 @@ function applyBuildingRemovals(player: Player): void {
     }
     removalsApplied.add(id);
   } catch {
-    // 玩家槽位尚未就绪，第二个定时器会重试。
+    // 玩家槽位尚未就绪,第二个定时器会重试.
   }
 }
 
@@ -112,7 +112,7 @@ export function refreshStreamForPlayer(player: Player): void {
         try {
           current.destroy();
         } catch {
-          // 已销毁。
+          // 已销毁.
         }
         bag.delete(i);
       }
@@ -135,7 +135,7 @@ export function refreshStreamForPlayer(player: Player): void {
       try {
         current.destroy();
       } catch {
-        // 已销毁。
+        // 已销毁.
       }
       bag.delete(i);
     }
@@ -166,7 +166,7 @@ function spawnForPlayer(player: Player, def: MapObjectDef): PlayerObject | null 
           material.color
         );
       } catch {
-        // 引擎未接受材质槽位。
+        // 引擎未接受材质槽位.
       }
     }
 
@@ -184,7 +184,7 @@ function spawnForPlayer(player: Player, def: MapObjectDef): PlayerObject | null 
           text.alignment
         );
       } catch {
-        // 引擎未接受对象上的文本。
+        // 引擎未接受对象上的文本.
       }
     }
 
@@ -195,8 +195,8 @@ function spawnForPlayer(player: Player, def: MapObjectDef): PlayerObject | null 
 }
 
 /**
- * 将对象绑定到虚拟世界。可选设置 interior
- *（例如地图错误地指定了其他 interior 时设为 `-1`）。
+ * 将对象绑定到虚拟世界.可选设置 interior
+ *(例如地图错误地指定了其他 interior 时设为 `-1`).
  */
 export function assignStreamWorld(
   world: number,
@@ -236,7 +236,7 @@ function clearPlayerObjects(player: Player): void {
     try {
       object.destroy();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
   }
 

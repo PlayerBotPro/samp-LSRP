@@ -5,7 +5,7 @@ import { byGender } from "../auth/gender";
 import { getGender } from "../auth/session";
 import { registerCommand } from "./registry";
 
-registerCommand("try", "随机尝试：成功或失败", (player, args) => {
+registerCommand("try", "随机尝试:成功或失败", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
     player.sendClientMessage(Color.error, "用法: /try [动作]");

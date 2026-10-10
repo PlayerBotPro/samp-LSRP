@@ -14,7 +14,7 @@ registerCommand("members", "在线组织成员列表", (player) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership) {
-    player.sendClientMessage(Color.error, "你不属于该组织。");
+    player.sendClientMessage(Color.error, "你不属于该组织.");
     return;
   }
 
@@ -60,18 +60,18 @@ registerCommand("members", "在线组织成员列表", (player) => {
   rows.sort((a, b) => b.rankId - a.rankId || a.name.localeCompare(b.name));
 
   if (rows.length === 0) {
-    player.sendClientMessage(Color.error, "当前没有组织员工在线。");
+    player.sendClientMessage(Color.error, "当前没有组织员工在线.");
     return;
   }
 
   const lines = rows.map((row) => {
-    const phone = row.phone ? ` | 电话：${row.phone}` : "";
+    const phone = row.phone ? ` | 电话:${row.phone}` : "";
     return `[${row.rankId}] ${row.rankTitle} ${row.name}${phone}${row.status}`;
   });
 
   const body =
     `组织: ${membership.org.name}\n` +
-    `在线人数：${rows.length}\n\n` +
+    `在线人数:${rows.length}\n\n` +
     lines.join("\n");
 
   try {

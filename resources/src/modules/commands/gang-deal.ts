@@ -22,52 +22,52 @@ export const GANG_DEAL_KEY_NO = 131072;
 const PLAYER_STATE_ONFOOT = 1;
 const PLAYER_STATE_WASTED = 7;
 
-/** 检查帮派卖家是否位于己方帮派地盘。null 表示通过。 */
+/** 检查帮派卖家是否位于己方帮派地盘.null 表示通过. */
 export function gangSellerGate(player: Player): string | null {
   if (!isAuthenticated(player)) {
-    return "请先登录账号。";
+    return "请先登录账号.";
   }
 
   const account = getAccount(player);
   if (!account) {
-    return "请先登录账号。";
+    return "请先登录账号.";
   }
 
   if (account.hospitalized) {
-    return "请先在医院接受治疗。";
+    return "请先在医院接受治疗.";
   }
 
   if (isJailed(player)) {
-    return "在监狱中无法使用此命令。";
+    return "在监狱中无法使用此命令.";
   }
 
   const membership = getMembership(account);
   if (!membership || !isGangOrgId(membership.org.id)) {
-    return "仅帮派成员可使用此命令。";
+    return "仅帮派成员可使用此命令.";
   }
 
   try {
     if (player.getState() === PLAYER_STATE_WASTED) {
-      return "你不在游戏中。";
+      return "你不在游戏中.";
     }
 
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      return "必须徒步站立。";
+      return "必须徒步站立.";
     }
 
     if (
       player.getVirtualWorld() !== STREET_WORLD ||
       player.getInterior() !== 0
     ) {
-      return "只能在室外进行交易。";
+      return "只能在室外进行交易.";
     }
   } catch {
-    return "无法检查位置。";
+    return "无法检查位置.";
   }
 
   const turf = findTurfAtPlayer(player);
   if (!turf || turf.orgId !== membership.org.id) {
-    return "只能在自己帮派的地盘出售。";
+    return "只能在自己帮派的地盘出售.";
   }
 
   return null;
@@ -102,31 +102,31 @@ export function dealPairReady(seller: Player, buyer: Player): string | null {
 
   const buyerAccount = getAccount(buyer);
   if (!buyerAccount || !isAuthenticated(buyer)) {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   if (buyerAccount.hospitalized) {
-    return "买家需要治疗。";
+    return "买家需要治疗.";
   }
 
   if (isJailed(buyer)) {
-    return "买家正在监狱中。";
+    return "买家正在监狱中.";
   }
 
   try {
     if (buyer.getState() === PLAYER_STATE_WASTED) {
-      return "玩家不在线。";
+      return "玩家不在线.";
     }
 
     if (buyer.getState() !== PLAYER_STATE_ONFOOT) {
-      return "买家必须徒步站立。";
+      return "买家必须徒步站立.";
     }
   } catch {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 
   if (!arePlayersNearby(seller, buyer, WHISPER_RADIUS)) {
-    return "玩家距离太远。";
+    return "玩家距离太远.";
   }
 
   return null;
@@ -138,7 +138,7 @@ export function tellDeal(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -172,7 +172,7 @@ export function parseDealOfferArgs(
   return { slot, amount, price };
 }
 
-/** transferUserCash 成功后更新现金差额（与 /pay 相同）。 */
+/** transferUserCash 成功后更新现金差额(与 /pay 相同). */
 export function applyDealCashDelta(player: Player, delta: number): void {
   if (!isPlayerActive(player)) {
     return;
@@ -194,7 +194,7 @@ export function applyDealCashDelta(player: Player, delta: number): void {
   }
 }
 
-/** /sellgun 与 /selldrug 共用忙碌状态（使用相同槽位）。 */
+/** /sellgun 与 /selldrug 共用忙碌状态(使用相同槽位). */
 const dealBusy = new Set<number>();
 
 export function isDealBusy(...slots: number[]): boolean {

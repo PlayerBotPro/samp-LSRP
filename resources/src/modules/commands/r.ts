@@ -12,13 +12,13 @@ import { getMembership } from "../org";
 import { registerCommand } from "./registry";
 
 const BUBBLE_MS = 3000;
-const BUBBLE_TEXT = "无线电频道消息。";
+const BUBBLE_TEXT = "无线电频道消息.";
 
 registerCommand("r", "组织无线电", (player, args) => {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (!account || !membership) {
-    player.sendClientMessage(Color.error, "你不属于该组织。");
+    player.sendClientMessage(Color.error, "你不属于该组织.");
     return;
   }
 
@@ -59,13 +59,13 @@ registerCommand("r", "组织无线电", (player, args) => {
     try {
       other.sendClientMessage(Color.radio, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 
   try {
     player.setChatBubble(BUBBLE_TEXT, Color.radio, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // 聊天气泡不是必需的。
+    // 聊天气泡不是必需的.
   }
 });

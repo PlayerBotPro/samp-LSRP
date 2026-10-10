@@ -97,13 +97,13 @@ export function bindAdminSetskin(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
@@ -122,12 +122,12 @@ async function applySkin(admin: Player, target: Player, skin: number): Promise<v
   try {
     await saveUserSkin(account.id, skin);
   } catch {
-    admin.sendClientMessage(Color.error, "无法保存皮肤。");
+    admin.sendClientMessage(Color.error, "无法保存皮肤.");
     return;
   }
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
-    admin.sendClientMessage(Color.error, "未找到玩家。");
+    admin.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 

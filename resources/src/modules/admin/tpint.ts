@@ -86,7 +86,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     pageByPlayer.delete(id);
-    player.sendClientMessage(Color.error, "无法打开室内列表。");
+    player.sendClientMessage(Color.error, "无法打开室内列表.");
   }
 }
 
@@ -127,7 +127,7 @@ function teleportToInterior(player: Player, spot: AdminInterior): boolean {
       player.removeFromVehicle();
     }
   } catch {
-    // 已经下车。
+    // 已经下车.
   }
 
   try {
@@ -148,12 +148,12 @@ function teleportToInterior(player: Player, spot: AdminInterior): boolean {
 
 function goToSpot(player: Player, spot: AdminInterior): void {
   if (!canTeleport(player)) {
-    player.sendClientMessage(Color.error, "现在不能传送。");
+    player.sendClientMessage(Color.error, "现在不能传送.");
     return;
   }
 
   if (!teleportToInterior(player, spot)) {
-    player.sendClientMessage(Color.error, "无法传送。");
+    player.sendClientMessage(Color.error, "无法传送.");
     return;
   }
 

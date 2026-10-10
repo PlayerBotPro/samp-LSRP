@@ -77,7 +77,7 @@ function tickHealthPickup(): void {
 
       tryHeal(player);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -89,12 +89,12 @@ function tryHeal(player: Player): void {
   }
 
   if (account.hospitalized) {
-    tell(player, Color.error, "请先在医院接受治疗。");
+    tell(player, Color.error, "请先在医院接受治疗.");
     return;
   }
 
   if (account.level > MAX_FREE_LEVEL) {
-    tell(player, Color.error, "此项帮助仅对 5 级及以下玩家开放。");
+    tell(player, Color.error, "此项帮助仅对 5 级及以下玩家开放.");
     return;
   }
 
@@ -105,7 +105,7 @@ function tryHeal(player: Player): void {
       current = live;
     }
   } catch {
-    // 从账户读取生命值。
+    // 从账户读取生命值.
   }
 
   if (current >= MAX_HEALTH) {
@@ -114,7 +114,7 @@ function tryHeal(player: Player): void {
 
   applyHealth(player, MAX_HEALTH);
   patchAccount(player, { health: MAX_HEALTH });
-  tell(player, Color.info, "生命值已恢复。");
+  tell(player, Color.info, "生命值已恢复.");
 }
 
 function tell(player: Player, color: number, text: string): void {
@@ -133,7 +133,7 @@ function tell(player: Player, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

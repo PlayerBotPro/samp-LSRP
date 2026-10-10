@@ -219,7 +219,7 @@ function tickGangDoors(): void {
 
       standingOn.delete(id);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -227,7 +227,7 @@ function tickGangDoors(): void {
 function tryUse(player: Player, dest: SpawnPoint): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -250,7 +250,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -273,7 +273,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     refreshStreamForPlayer(player);
     markStandingPickup(id, point);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

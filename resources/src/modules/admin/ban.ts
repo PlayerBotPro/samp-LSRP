@@ -25,7 +25,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -39,7 +39,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -95,7 +95,7 @@ async function applyBan(
 ): Promise<void> {
   const account = getAccount(target);
   if (!account) {
-    admin.sendClientMessage(Color.error, "玩家尚未登录。");
+    admin.sendClientMessage(Color.error, "玩家尚未登录.");
     return;
   }
 
@@ -104,7 +104,7 @@ async function applyBan(
   try {
     await saveUserBan(account.id, untilUnix, reason);
   } catch {
-    admin.sendClientMessage(Color.error, "无法保存封禁记录。");
+    admin.sendClientMessage(Color.error, "无法保存封禁记录.");
     return;
   }
 
@@ -112,7 +112,7 @@ async function applyBan(
   const targetTag = playerChatName(target);
   broadcastAll(
     Color.error,
-    `管理员 ${adminTag} 封禁了玩家 ${targetTag}，时长 ${days} 天。原因：${reason}。`
+    `管理员 ${adminTag} 封禁了玩家 ${targetTag},时长 ${days} 天.原因:${reason}.`
   );
 
   if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
@@ -133,29 +133,29 @@ async function applyUnban(admin: Player, rawName: string): Promise<void> {
   try {
     row = await findUserByName(name);
   } catch {
-    admin.sendClientMessage(Color.error, "无法检查封禁状态。");
+    admin.sendClientMessage(Color.error, "无法检查封禁状态.");
     return;
   }
 
   if (!row) {
-    admin.sendClientMessage(Color.error, "未找到玩家。");
+    admin.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   const until = parseBannedUntil(row.banned_until);
   if (!isBanActive(until)) {
-    admin.sendClientMessage(Color.error, "该玩家未被封禁。");
+    admin.sendClientMessage(Color.error, "该玩家未被封禁.");
     return;
   }
 
   try {
     await clearUserBan(row.id);
   } catch {
-    admin.sendClientMessage(Color.error, "无法解除封禁。");
+    admin.sendClientMessage(Color.error, "无法解除封禁.");
     return;
   }
 
-  broadcastAdmins(`管理员 ${playerChatName(admin)} 解封了玩家 ${row.name}。`);
+  broadcastAdmins(`管理员 ${playerChatName(admin)} 解封了玩家 ${row.name}.`);
 }
 
 export function bindAdminBan(): void {
@@ -178,12 +178,12 @@ export function bindAdminBan(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "玩家尚未登录。");
+        player.sendClientMessage(Color.error, "玩家尚未登录.");
         return;
       }
 

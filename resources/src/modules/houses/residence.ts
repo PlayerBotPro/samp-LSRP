@@ -6,5 +6,5 @@ export function residenceLabel(userId: number): string {
     return "无家可归";
   }
 
-  return `房屋（编号 ${house.id}）`;
+  return `房屋(编号 ${house.id})`;
 }

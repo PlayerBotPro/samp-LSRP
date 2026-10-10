@@ -22,14 +22,14 @@ export const DROP_POINT = {
   z: 73.9931,
 } as const;
 
-/** 仓库金属库存标签的位置。 */
+/** 仓库金属库存标签的位置. */
 export const METAL_STOCK_LABEL_POINT = {
   x: 1040.8379,
   y: -312.8458,
   z: 73.9931,
 } as const;
 
-/** 金属出售点的拾取物位置。 */
+/** 金属出售点的拾取物位置. */
 export const METAL_SELL_POINT = {
   x: 1050.2295,
   y: -314.1089,

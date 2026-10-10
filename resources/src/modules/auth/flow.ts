@@ -126,25 +126,25 @@ export function spawnIntoWorld(player: Player, skin: number): void {
   try {
     writeSpawnInfo(player, useSkin, spawnPoint);
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 
   try {
     player.setCameraBehind();
   } catch {
-    // 生成角色时会设置镜头。
+    // 生成角色时会设置镜头.
   }
 
   try {
     player.toggleSpectating(false);
   } catch {
-    // 旁观模式已关闭。
+    // 旁观模式已关闭.
   }
 
   try {
     player.toggleControllable(true);
   } catch {
-    // 角色生成时会启用控制。
+    // 角色生成时会启用控制.
   }
 
   closeSkinPicker(player);
@@ -163,7 +163,7 @@ export function spawnIntoWorld(player: Player, skin: number): void {
       refreshStreamForPlayer(player);
       player.setCameraBehind();
     } catch {
-      // 退出旁观模式时角色已经生成。
+      // 退出旁观模式时角色已经生成.
     }
   }, 80);
 }
@@ -197,7 +197,7 @@ export function holdAtAuth(player: Player): void {
     try {
       player.toggleSpectating(true);
     } catch {
-      // 槽位尚未就绪。
+      // 槽位尚未就绪.
     }
   }
 
@@ -224,7 +224,7 @@ export function holdAtAuth(player: Player): void {
 function welcome(player: Player, name: string): void {
   player.sendClientMessage(
     Color.info,
-    `欢迎来到 ${SERVER_NAME}，${name}。`
+    `欢迎来到 ${SERVER_NAME},${name}.`
   );
 }
 
@@ -245,7 +245,7 @@ function newRegister(name: string): Extract<Pending, { kind: "register" }> {
 export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   if (playerId(player) === null) {
     if (attempt >= 4) {
-      kickLater(player, "无法开始登录，请重新连接。");
+      kickLater(player, "无法开始登录,请重新连接.");
       return;
     }
 
@@ -263,14 +263,14 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     try {
       player.toggleSpectating(true);
     } catch {
-      // 槽位尚未就绪。
+      // 槽位尚未就绪.
     }
   }
 
   refreshAuthViewSoon(player);
 
   if (!isDatabaseReady()) {
-    kickLater(player, "数据库暂时无法连接，请稍后再试。");
+    kickLater(player, "数据库暂时无法连接,请稍后再试.");
     return;
   }
 
@@ -283,7 +283,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
   if (!isRoleplayName(name)) {
     kickLater(
       player,
-      "角色名须使用 Name_Surname 格式，例如 John_Doe。"
+      "角色名须使用 Name_Surname 格式,例如 John_Doe."
     );
     return;
   }
@@ -306,7 +306,7 @@ export async function beginAuth(player: Player, attempt = 0): Promise<void> {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 登录错误 ${name}: ${message}`);
     if (isPlayerActive(player)) {
-      kickLater(player, "无法查询账号，请稍后再试。");
+      kickLater(player, "无法查询账号,请稍后再试.");
     }
   }
 }
@@ -409,7 +409,7 @@ function showRegisterStep(player: Player, state: Extract<Pending, { kind: "regis
     case "confirm":
       showRegisterConfirmDialog(
         player,
-        `角色名：${state.name}\n邮箱：${state.email}\n性别：${state.gender ? genderLabel(state.gender) : "-"}\n出生日期：${formatBirthDate(state.birthDate)}\n角色外观：${state.skinLabel} (${state.skin})\n\n确认创建此角色吗？`
+        `角色名:${state.name}\n邮箱:${state.email}\n性别:${state.gender ? genderLabel(state.gender) : "-"}\n出生日期:${formatBirthDate(state.birthDate)}\n角色外观:${state.skinLabel} (${state.skin})\n\n确认创建此角色吗?`
       );
       break;
   }
@@ -431,8 +431,8 @@ function goBack(player: Player, state: Extract<Pending, { kind: "register" }>): 
     kickLater(
       player,
       state.step === "rules"
-        ? "你未接受服务器规则。"
-        : "注册已取消。"
+        ? "你未接受服务器规则."
+        : "注册已取消."
     );
     clearPending(player);
     return;
@@ -446,7 +446,7 @@ function goBack(player: Player, state: Extract<Pending, { kind: "register" }>): 
     try {
       prepareAuthView(player);
     } catch {
-      // 登录镜头不是必需的。
+      // 登录镜头不是必需的.
     }
   }
   showRegisterStep(player, state);
@@ -528,11 +528,11 @@ async function finishRegister(
     try {
       prepareAuthView(player);
     } catch {
-      // 登录镜头不是必需的。
+      // 登录镜头不是必需的.
     }
     state.step = "email";
     setPending(player, state);
-    showEmailDialog(player, state.name, "此电子邮箱已被使用。");
+    showEmailDialog(player, state.name, "此电子邮箱已被使用.");
     return;
   }
 
@@ -545,7 +545,7 @@ async function finishRegister(
     try {
       prepareAuthView(player);
     } catch {
-      // 登录镜头不是必需的。
+      // 登录镜头不是必需的.
     }
     state.step = "gender";
     setPending(player, state);
@@ -589,7 +589,7 @@ async function finishRegister(
   welcome(player, account.name);
   player.sendClientMessage(
     Color.gray,
-    "角色创建成功。输入 /mn 可打开菜单，查看状态和命令。"
+    "角色创建成功.输入 /mn 可打开菜单,查看状态和命令."
   );
   omp.log(`[${SERVER_TAG}] ${account.name} 已注册`);
 }
@@ -601,13 +601,13 @@ async function handleLogin(
   input: string
 ): Promise<void> {
   if (!ok) {
-    kickLater(player, "登录已取消。");
+    kickLater(player, "登录已取消.");
     clearPending(player);
     return;
   }
 
   if (!input) {
-    showLoginDialog(player, state.name, "请输入密码。");
+    showLoginDialog(player, state.name, "请输入密码.");
     return;
   }
 
@@ -621,7 +621,7 @@ async function handleLogin(
     if (error instanceof Error && error.message === "bad-password") {
       state.attempts += 1;
       if (state.attempts >= LOGIN_ATTEMPTS) {
-        kickLater(player, "尝试次数过多，请重新连接。");
+        kickLater(player, "尝试次数过多,请重新连接.");
         clearPending(player);
         return;
       }
@@ -630,14 +630,14 @@ async function handleLogin(
       showLoginDialog(
         player,
         state.name,
-        `密码错误。剩余尝试次数：${LOGIN_ATTEMPTS - state.attempts}。`
+        `密码错误.剩余尝试次数:${LOGIN_ATTEMPTS - state.attempts}.`
       );
       return;
     }
 
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 登录验证错误 ${state.name}: ${message}`);
-    kickLater(player, "登录失败，请稍后再试。");
+    kickLater(player, "登录失败,请稍后再试.");
     clearPending(player);
   }
 }
@@ -680,13 +680,13 @@ async function handleRegister(
           if (!isSamePlayer(player, id, state.name)) {
             return;
           }
-          showEmailDialog(player, state.name, "此电子邮箱已被使用。");
+          showEmailDialog(player, state.name, "此电子邮箱已被使用.");
           return;
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        omp.log(`[${SERVER_TAG}] 邮箱验证错误：${message}`);
-        kickLater(player, "无法验证电子邮箱，请稍后再试。");
+        omp.log(`[${SERVER_TAG}] 邮箱验证错误:${message}`);
+        kickLater(player, "无法验证电子邮箱,请稍后再试.");
         clearPending(player);
         return;
       }
@@ -718,7 +718,7 @@ async function handleRegister(
 
     case "passwordConfirm": {
       if (input !== state.password) {
-        showPasswordConfirmDialog(player, "两次输入的密码不一致。");
+        showPasswordConfirmDialog(player, "两次输入的密码不一致.");
         return;
       }
 
@@ -797,17 +797,17 @@ async function handleRegister(
           try {
             prepareAuthView(player);
           } catch {
-            // 登录镜头不是必需的。
+            // 登录镜头不是必需的.
           }
           state.step = "email";
           setPending(player, state);
-          showEmailDialog(player, state.name, "此电子邮箱或角色名已被使用。");
+          showEmailDialog(player, state.name, "此电子邮箱或角色名已被使用.");
           return;
         }
 
         const message = error instanceof Error ? error.message : String(error);
         omp.log(`[${SERVER_TAG}] 注册错误 ${state.name}: ${message}`);
-        kickLater(player, "无法创建角色，请稍后再试。");
+        kickLater(player, "无法创建角色,请稍后再试.");
         clearPending(player);
       }
     }

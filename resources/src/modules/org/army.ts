@@ -10,7 +10,7 @@ export const ORG_ARMY_ID = 1;
 const ARMY_COLOR = 0x9c7a4bff;
 const ARMY_GATE_ORG_IDS = [ORG_ARMY_ID, ORG_POLICE_ID, ORG_LSPD_ID, ORG_FBI_ID] as const;
 const ARMY_GATE_DENY =
-  "军队、州警察、LSPD 和 FBI 员工可以打开。";
+  "军队,州警察,LSPD 和 FBI 员工可以打开.";
 
 function armyRanks(): OrgRankDef[] {
   const rows: Array<{ title: string; male: number; female: number; pay: number }> = [

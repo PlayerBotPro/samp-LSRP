@@ -98,12 +98,12 @@ export function bindAdminGivemoney(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (!getAccount(target)) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
@@ -125,7 +125,7 @@ async function applyGive(
   }
 
   if (pending.has(account.id)) {
-    admin.sendClientMessage(Color.error, "正在向该玩家发放资金。请稍候。");
+    admin.sendClientMessage(Color.error, "正在向该玩家发放资金.请稍候.");
     return;
   }
 
@@ -136,7 +136,7 @@ async function applyGive(
   if (credited <= 0) {
     admin.sendClientMessage(
       Color.error,
-      toBank ? "银行账户已满。" : "现金已满。"
+      toBank ? "银行账户已满." : "现金已满."
     );
     return;
   }
@@ -164,7 +164,7 @@ async function applyGive(
     if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
       admin.sendClientMessage(
         Color.info,
-        `你已发放 $${credited}. 玩家已离线，金额已保存。`
+        `你已发放 $${credited}. 玩家已离线,金额已保存.`
       );
       return;
     }
@@ -198,7 +198,7 @@ async function applyGive(
         applyWallet(target, fresh);
       }
     }
-    admin.sendClientMessage(Color.error, "无法保存资金。");
+    admin.sendClientMessage(Color.error, "无法保存资金.");
   } finally {
     pending.delete(account.id);
   }

@@ -5,7 +5,7 @@ import { createServerVehicle } from "./spawn";
 import type { Vehicle } from "@omp-node/core";
 
 const RESPAWN_SEC = 1800;
-const DENY = "你不是驾校员工。";
+const DENY = "你不是驾校员工.";
 
 const AUTOSCHOOL_VEHICLES: ReadonlyArray<{
   model: number;
@@ -64,7 +64,7 @@ function rememberFleet(vehicle: Vehicle, retried = false): void {
 
     fleetIds.add(Number(id));
   } catch {
-    // 车辆已经销毁。
+    // 车辆已经销毁.
   }
 }
 

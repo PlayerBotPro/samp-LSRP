@@ -19,12 +19,12 @@ export const JOB_HIRE_DIALOG_ID = 150;
 const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const PLAYER_STATE_ONFOOT = 1;
 const CHECKPOINT_RADIUS = 1.6;
-/** 显示招聘中心红色检查点的区域。 */
+/** 显示招聘中心红色检查点的区域. */
 const SHOW_RADIUS = 14;
 const TICK_MS = 400;
 const LABEL_HEIGHT = 0.9;
 const LABEL_DRAW_DISTANCE = 18;
-/** 市政厅室内招聘中心的红色检查点。 */
+/** 市政厅室内招聘中心的红色检查点. */
 const JOB_POINT = {
   x: -808.3898,
   y: -672.9396,
@@ -32,13 +32,13 @@ const JOB_POINT = {
 } as const;
 
 const busy = new Set<number>();
-/** 此玩家的检查点由招聘中心设置（不是其他 GPS 或班次的检查点）。 */
+/** 此玩家的检查点由招聘中心设置(不是其他 GPS 或班次的检查点). */
 const hireCpOn = new Set<number>();
-/** 对话框已打开，不要重复触发 EnterCheckpoint。 */
+/** 对话框已打开,不要重复触发 EnterCheckpoint. */
 const dialogOpen = new Set<number>();
 /**
- * 对话框关闭后，玩家离开检查点前不能再次打开。
- * 否则在标记处执行 disable→set 会导致窗口反复弹出。
+ * 对话框关闭后,玩家离开检查点前不能再次打开.
+ * 否则在标记处执行 disable→set 会导致窗口反复弹出.
  */
 const mustLeaveCp = new Set<number>();
 
@@ -78,7 +78,7 @@ export function bindJobHire(): void {
     const id = playerId(player);
     if (id !== null) {
       dialogOpen.delete(id);
-      // 不要在这里重建检查点，否则会立即触发 EnterCheckpoint。
+      // 不要在这里重建检查点,否则会立即触发 EnterCheckpoint.
       mustLeaveCp.add(id);
     }
 
@@ -141,7 +141,7 @@ function tickHirePoint(): void {
       return;
     }
 
-    // 玩家离开红色标记后，再次进入检查点时即可重新打开招聘中心。
+    // 玩家离开红色标记后,再次进入检查点时即可重新打开招聘中心.
     if (mustLeaveCp.has(id) && !onCp) {
       mustLeaveCp.delete(id);
     }
@@ -175,7 +175,7 @@ function clearHireCheckpoint(player: Player, id: number): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -226,7 +226,7 @@ function openHireDialog(player: Player): void {
     dialogOpen.add(id);
   } catch {
     dialogOpen.delete(id);
-    tell(player, Color.error, "无法打开招聘中心。");
+    tell(player, Color.error, "无法打开招聘中心.");
   }
 }
 
@@ -242,12 +242,12 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
   }
 
   if (!isAtJobPoint(player)) {
-    tell(player, Color.error, "你必须在招聘中心附近。");
+    tell(player, Color.error, "你必须在招聘中心附近.");
     return;
   }
 
   if (busy.has(slot)) {
-    tell(player, Color.error, "请等待上一个操作完成。");
+    tell(player, Color.error, "请等待上一个操作完成.");
     return;
   }
 
@@ -257,7 +257,7 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
   }
 
   if (isBusDriverOnShift(player)) {
-    tell(player, Color.error, "请先完成或中止当前班次。");
+    tell(player, Color.error, "请先完成或中止当前班次.");
     return;
   }
 
@@ -265,7 +265,7 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
 
   if (jobId === JOB_NONE) {
     if (currentJobId === JOB_NONE) {
-      tell(player, Color.error, "你目前没有工作。");
+      tell(player, Color.error, "你目前没有工作.");
       return;
     }
 
@@ -277,9 +277,9 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
       }
       patchAccount(player, { jobId: JOB_NONE });
       syncOrgVehicleAccess(player);
-      tell(player, Color.info, "你已辞职。");
+      tell(player, Color.info, "你已辞职.");
     } catch {
-      tell(player, Color.error, "无法保存到数据库。");
+      tell(player, Color.error, "无法保存到数据库.");
     } finally {
       busy.delete(slot);
     }
@@ -292,7 +292,7 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
   }
 
   if (currentJobId === jobId) {
-    tell(player, Color.error, `你已经在担任：${job.title}。`);
+    tell(player, Color.error, `你已经在担任:${job.title}.`);
     return;
   }
 
@@ -300,7 +300,7 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
     tell(
       player,
       Color.error,
-      "请先辞去当前工作，再申请新工作。"
+      "请先辞去当前工作,再申请新工作."
     );
     return;
   }
@@ -310,7 +310,7 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
     tell(
       player,
       Color.error,
-      `申请「${job.title}」需要达到 ${job.minLevel} 级（你目前是 ${level} 级）。`
+      `申请[${job.title}]需要达到 ${job.minLevel} 级(你目前是 ${level} 级).`
     );
     return;
   }
@@ -323,9 +323,9 @@ async function handleHireChoice(player: Player, listItem: number): Promise<void>
     }
     patchAccount(player, { jobId });
     syncOrgVehicleAccess(player);
-    tell(player, Color.info, `你已入职：${job.title}。`);
+    tell(player, Color.info, `你已入职:${job.title}.`);
   } catch {
-    tell(player, Color.error, "无法保存到数据库。");
+    tell(player, Color.error, "无法保存到数据库.");
   } finally {
     busy.delete(slot);
   }
@@ -338,6 +338,6 @@ function tell(player: Player, color: number, text: string): void {
     }
     player.sendClientMessage(color, text);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }

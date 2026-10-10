@@ -11,7 +11,7 @@ registerCommand(
   "按 ID 或昵称片段搜索在线玩家",
   (player, args) => {
     if (!isAuthenticated(player)) {
-      player.sendClientMessage(Color.error, "请先登录账号。");
+      player.sendClientMessage(Color.error, "请先登录账号.");
       return;
     }
 
@@ -80,7 +80,7 @@ registerCommand(
     if (count === 0) {
       player.sendClientMessage(
         Color.error,
-        "没有找到符合这些信息的玩家。"
+        "没有找到符合这些信息的玩家."
       );
     }
   }

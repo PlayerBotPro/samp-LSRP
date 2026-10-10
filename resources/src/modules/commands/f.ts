@@ -30,7 +30,7 @@ registerCommand("f", "帮派或黑手党聊天", (player, args) => {
     `[F] ${membership.rank.title} ${playerChatName(player)}: ${text}`
   );
   const orgId = membership.org.id;
-  const bubble = membership.org.mafia ? "黑手党频道消息。" : "帮派频道消息。";
+  const bubble = membership.org.mafia ? "黑手党频道消息." : "帮派频道消息.";
 
   omp.players.forEach((other) => {
     if (!isPlayerActive(other)) {
@@ -54,13 +54,13 @@ registerCommand("f", "帮派或黑手党聊天", (player, args) => {
     try {
       other.sendClientMessage(Color.radio, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 
   try {
     player.setChatBubble(bubble, Color.radio, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // 聊天气泡不是必需的。
+    // 聊天气泡不是必需的.
   }
 });

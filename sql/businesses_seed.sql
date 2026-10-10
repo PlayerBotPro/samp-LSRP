@@ -1,8 +1,8 @@
--- 商家（种子数据）。type_id 为 TINYINT（类型映射在代码中定义）：
+-- 商家(种子数据).type_id 为 TINYINT(类型映射在代码中定义):
 --   1  SHOP_247  2 AMMU  3 CAR_ELITE  4 CAR_ECONOMY  5 MOTO
 --   6  GAS  7 FASTFOOD  8 GYM  9 CLOTHES  10 BAR  11 CLUB
 --  12  WORKSHOP  13 STREET_FOOD  14 VEHICLE_RENT  15 CASINO
--- CREATE TABLE 定义位于 schema.sql / repository。每日税费为代码中的常量。
+-- CREATE TABLE 定义位于 schema.sql / repository.每日税费为代码中的常量.
 
 INSERT INTO businesses (
   id,

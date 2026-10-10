@@ -5,7 +5,7 @@ import { registerCommand } from "./registry";
 
 registerCommand("anim", "动作列表或 /anim [1-74]", (player, args) => {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 

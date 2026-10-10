@@ -96,12 +96,12 @@ export function remainingBanDays(untilUnix: number, nowMs = Date.now()): number 
 export function kickBannedPlayer(player: Player, untilUnix: number, reason: string): void {
   const days = remainingBanDays(untilUnix);
   const reasonText = reason.trim() || "未注明";
-  const chat = `你的账号已被封禁 ${days} 天。原因：${reasonText}。`;
+  const chat = `你的账号已被封禁 ${days} 天.原因:${reasonText}.`;
 
   try {
     player.sendClientMessage(Color.error, chat);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 
   try {
@@ -110,12 +110,12 @@ export function kickBannedPlayer(player: Player, untilUnix: number, reason: stri
       BAN_NOTICE_DIALOG_ID,
       DialogStyle.msgbox,
       "账号已封禁",
-      `你已被禁止进入服务器。\n封禁时长：${days} 天。\n原因：${reasonText}`,
+      `你已被禁止进入服务器.\n封禁时长:${days} 天.\n原因:${reasonText}`,
       "确定",
       ""
     );
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 
   kickSamePlayer(player, BAN_KICK_DELAY_MS);

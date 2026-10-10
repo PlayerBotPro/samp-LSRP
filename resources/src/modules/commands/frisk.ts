@@ -14,11 +14,11 @@ const LABEL = "{FFFFFF}";
 const VALUE = "{33CCFF}";
 const EMPTY = "{AAAAAA}";
 
-registerCommand("frisk", "搜查玩家（警察 / FBI）", (player, args) => {
+registerCommand("frisk", "搜查玩家(警察 / FBI)", (player, args) => {
   const resolved = resolveLawNearbyTarget(
     player,
     args,
-    "用法： /frisk [id]"
+    "用法: /frisk [id]"
   );
   if (!resolved.ok) {
     return;
@@ -27,7 +27,7 @@ registerCommand("frisk", "搜查玩家（警察 / FBI）", (player, args) => {
   const { officer, target } = resolved;
   const account = getAccount(target);
   if (!account) {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -44,13 +44,13 @@ registerCommand("frisk", "搜查玩家（警察 / FBI）", (player, args) => {
     officer,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(officer)} 仔细搜查了 ${playerName(target)}。`
+    `${playerName(officer)} 仔细搜查了 ${playerName(target)}.`
   );
 
   try {
-    target.sendClientMessage(Color.gray, `${playerName(officer)} 正在搜查你。`);
+    target.sendClientMessage(Color.gray, `${playerName(officer)} 正在搜查你.`);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 });
 
@@ -76,14 +76,14 @@ function showFriskResult(
       viewer,
       FRISK_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `{FFCC00}搜查：${ownerName}`,
+      `{FFCC00}搜查:${ownerName}`,
       body,
       "关闭",
       ""
     );
     return true;
   } catch {
-    viewer.sendClientMessage(Color.error, "无法打开搜查结果。");
+    viewer.sendClientMessage(Color.error, "无法打开搜查结果.");
     return false;
   }
 }

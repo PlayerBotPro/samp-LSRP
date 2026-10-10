@@ -48,7 +48,7 @@ type PageSnap = {
 };
 
 const pageByPlayer = new Map<number, number>();
-/** 列表页快照——listItem 仅从该快照中读取。 */
+/** 列表页快照--listItem 仅从该快照中读取. */
 const pageSnapByPlayer = new Map<number, PageSnap>();
 const selectedFamily = new Map<number, number>();
 
@@ -206,7 +206,7 @@ function showList(player: Player, page: number): void {
 
   const all = familiesSorted();
   if (all.length === 0) {
-    player.sendClientMessage(Color.error, "暂时还没有家族。");
+    player.sendClientMessage(Color.error, "暂时还没有家族.");
     clearState(player);
     return;
   }
@@ -228,7 +228,7 @@ function showList(player: Player, page: number): void {
     );
   } catch {
     clearState(player);
-    player.sendClientMessage(Color.error, "无法打开家族列表。");
+    player.sendClientMessage(Color.error, "无法打开家族列表.");
   }
 }
 
@@ -321,7 +321,7 @@ function requireSelected(player: Player): FamilyRecord | null {
   const family = getFamily(familyId);
   if (!family) {
     selectedFamily.delete(slot);
-    player.sendClientMessage(Color.error, "家族已不存在。");
+    player.sendClientMessage(Color.error, "家族已不存在.");
     showList(player, pageByPlayer.get(slot) ?? 0);
     return null;
   }
@@ -346,7 +346,7 @@ function showHub(player: Player): void {
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开家族菜单。");
+    player.sendClientMessage(Color.error, "无法打开家族菜单.");
   }
 }
 
@@ -372,7 +372,7 @@ async function showInfo(player: Player): Promise<void> {
   }
 
   const familyId = family.id;
-  const ownerName = (await findUserNameById(family.ownerId)) ?? "—";
+  const ownerName = (await findUserNameById(family.ownerId)) ?? "-";
   const members = await countFamilyMembers(familyId);
 
   if (!hasAdminAccess(player, MIN_LEVEL)) {
@@ -384,36 +384,36 @@ async function showInfo(player: Player): Promise<void> {
     return;
   }
 
-  const desc = sanitizeChatText(live.description.trim()) || "—";
+  const desc = sanitizeChatText(live.description.trim()) || "-";
   const stockStatus = live.isLocked ? "已关闭" : "已开启";
   const body =
     `ID: ${live.id}\n` +
-    `名称：${live.name}\n` +
-    `描述：${desc}\n` +
-    `等级：${live.level}\n` +
-    `经验：${live.exp}\n` +
-    `所有者：${ownerName}（账号 #${live.ownerId}）\n` +
-    `成员数：${members}\n` +
-    `创建时间：${live.createdAt}\n\n` +
-    `家族仓库：\n` +
-    `弹药：${live.ammo}\n` +
-    `金属：${live.metal}\n` +
-    `毒品：${live.drugs}\n` +
-    `资金：${formatMoney(live.money)}\n` +
-    `状态：${stockStatus}`;
+    `名称:${live.name}\n` +
+    `描述:${desc}\n` +
+    `等级:${live.level}\n` +
+    `经验:${live.exp}\n` +
+    `所有者:${ownerName}(账号 #${live.ownerId})\n` +
+    `成员数:${members}\n` +
+    `创建时间:${live.createdAt}\n\n` +
+    `家族仓库:\n` +
+    `弹药:${live.ammo}\n` +
+    `金属:${live.metal}\n` +
+    `毒品:${live.drugs}\n` +
+    `资金:${formatMoney(live.money)}\n` +
+    `状态:${stockStatus}`;
 
   try {
     Dialog.show(
       player,
       AFAMILY_INFO_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      `家族：${live.name}`,
+      `家族:${live.name}`,
       body,
       "返回",
       "关闭"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开信息。");
+    player.sendClientMessage(Color.error, "无法打开信息.");
   }
 }
 
@@ -428,13 +428,13 @@ function showManage(player: Player): void {
       player,
       AFAMILY_MANAGE_DIALOG_ID,
       DIALOG_STYLE_LIST,
-      `管理：${family.name}`,
+      `管理:${family.name}`,
       "1. 修改名称\n2. 修改描述\n3. 删除家族",
       "选择",
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开管理菜单。");
+    player.sendClientMessage(Color.error, "无法打开管理菜单.");
   }
 }
 
@@ -470,14 +470,14 @@ function showRename(player: Player): void {
       AFAMILY_RENAME_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "家族名称",
-      `当前名称：${family.name}\n` +
-        `仅允许英文字母和空格。\n` +
-        `长度：${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}。`,
+      `当前名称:${family.name}\n` +
+        `仅允许英文字母和空格.\n` +
+        `长度:${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}.`,
       "保存",
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -487,19 +487,19 @@ function showRedesc(player: Player): void {
     return;
   }
 
-  const current = family.description.trim() || "—";
+  const current = family.description.trim() || "-";
   try {
     Dialog.show(
       player,
       AFAMILY_REDESC_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "家族描述",
-      `当前描述：${current}\n最多 ${FAMILY_DESC_MAX} 个字符。`,
+      `当前描述:${current}\n最多 ${FAMILY_DESC_MAX} 个字符.`,
       "保存",
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -515,13 +515,13 @@ function showDeleteConfirm(player: Player): void {
       AFAMILY_DELETE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "删除家族",
-      `确定要删除家族「${family.name}」（ID ${family.id}）吗？\n` +
-        `所有成员都将被移出，家族仓库和房屋将被重置。`,
+      `确定要删除家族[${family.name}](ID ${family.id})吗?\n` +
+        `所有成员都将被移出,家族仓库和房屋将被重置.`,
       "删除",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开确认对话框。");
+    player.sendClientMessage(Color.error, "无法打开确认对话框.");
   }
 }
 
@@ -535,14 +535,14 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   if (!name) {
     player.sendClientMessage(
       Color.error,
-      `名称无效。仅允许 A-Z, a-z 和空格 (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
+      `名称无效.仅允许 A-Z, a-z 和空格 (${FAMILY_NAME_MIN}-${FAMILY_NAME_MAX}).`
     );
     showRename(player);
     return;
   }
 
   if (name.toLowerCase() === family.name.toLowerCase()) {
-    player.sendClientMessage(Color.info, "名称未更改。");
+    player.sendClientMessage(Color.info, "名称未更改.");
     showManage(player);
     return;
   }
@@ -553,13 +553,13 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (exists && exists.id !== family.id) {
-    player.sendClientMessage(Color.error, "已有同名家族。");
+    player.sendClientMessage(Color.error, "已有同名家族.");
     showRename(player);
     return;
   }
 
   if (!getFamily(family.id)) {
-    player.sendClientMessage(Color.error, "家族已不存在。");
+    player.sendClientMessage(Color.error, "家族已不存在.");
     const slot = playerId(player);
     if (slot !== null) {
       selectedFamily.delete(slot);
@@ -574,13 +574,13 @@ async function renameSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (!ok) {
-    player.sendClientMessage(Color.error, "无法保存名称。");
+    player.sendClientMessage(Color.error, "无法保存名称.");
     showManage(player);
     return;
   }
 
   refreshFamilyTags(family.id);
-  player.sendClientMessage(Color.info, `家族名称已更改为 «${name}».`);
+  player.sendClientMessage(Color.info, `家族名称已更改为 "${name}".`);
   showManage(player);
 }
 
@@ -594,7 +594,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
   if (!description) {
     player.sendClientMessage(
       Color.error,
-      `请输入描述（最多 ${FAMILY_DESC_MAX} 个字符）。`
+      `请输入描述(最多 ${FAMILY_DESC_MAX} 个字符).`
     );
     showRedesc(player);
     return;
@@ -606,7 +606,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
   }
 
   if (!ok || !getFamily(family.id)) {
-    player.sendClientMessage(Color.error, "无法保存描述。");
+    player.sendClientMessage(Color.error, "无法保存描述.");
     const slot = playerId(player);
     if (slot !== null && !getFamily(family.id)) {
       selectedFamily.delete(slot);
@@ -617,7 +617,7 @@ async function redescSelected(player: Player, raw: string): Promise<void> {
     return;
   }
 
-  player.sendClientMessage(Color.info, "家族描述已更新。");
+  player.sendClientMessage(Color.info, "家族描述已更新.");
   showManage(player);
 }
 
@@ -635,7 +635,7 @@ async function deleteSelected(player: Player): Promise<void> {
   try {
     await deleteFamily(familyId);
   } catch {
-    player.sendClientMessage(Color.error, "无法删除家族。");
+    player.sendClientMessage(Color.error, "无法删除家族.");
     showManage(player);
     return;
   }
@@ -650,7 +650,7 @@ async function deleteSelected(player: Player): Promise<void> {
     selectedFamily.delete(slot);
   }
 
-  player.sendClientMessage(Color.info, `家族 «${familyName}» 已删除。`);
+  player.sendClientMessage(Color.info, `家族 "${familyName}" 已删除.`);
   showList(player, page);
 }
 
@@ -670,10 +670,10 @@ function clearOnlineFamilyMembers(familyId: number): void {
     try {
       other.sendClientMessage(
         Color.info,
-        "你的家族已被管理员解散。"
+        "你的家族已被管理员解散."
       );
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

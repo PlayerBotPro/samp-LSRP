@@ -16,7 +16,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const PLAYER_STATE_WASTED = 7;
 const CHECKPOINT_RADIUS = 3;
 const PURSUIT_TICK_MS = 5000;
-const DENY = "仅警察和 FBI 成员可使用此命令。";
+const DENY = "仅警察和 FBI 成员可使用此命令.";
 
 type WantedRow = {
   slot: number;
@@ -49,7 +49,7 @@ registerCommand("wanted", "通缉玩家列表", (player) => {
 
   const rows = collectWantedOnline();
   if (rows.length === 0) {
-    player.sendClientMessage(Color.info, "当前没有被通缉的玩家在线。");
+    player.sendClientMessage(Color.info, "当前没有被通缉的玩家在线.");
     return;
   }
 
@@ -72,14 +72,14 @@ registerCommand("wanted", "通缉玩家列表", (player) => {
       player,
       WANTED_LIST_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `通缉人数：${rows.length}`,
+      `通缉人数:${rows.length}`,
       body,
       "选择",
       "关闭"
     );
   } catch {
     wantedLists.delete(officerId);
-    player.sendClientMessage(Color.error, "无法打开列表。");
+    player.sendClientMessage(Color.error, "无法打开列表.");
   }
 });
 
@@ -91,11 +91,11 @@ registerCommand("pursuit", "停止追踪通缉犯", (player) => {
 
   const officerId = playerId(player);
   if (officerId === null || !pursuits.has(officerId)) {
-    player.sendClientMessage(Color.error, "你没有跟踪任何人。");
+    player.sendClientMessage(Color.error, "你没有跟踪任何人.");
     return;
   }
 
-  stopPursuit(player, officerId, "追踪已停止。");
+  stopPursuit(player, officerId, "追踪已停止.");
 });
 
 export function bindWantedDialogs(): void {
@@ -138,7 +138,7 @@ export function bindWantedDialogs(): void {
       if (!target) {
         player.sendClientMessage(
           Color.error,
-          "未找到玩家或该玩家已不再被通缉。"
+          "未找到玩家或该玩家已不再被通缉."
         );
         return;
       }
@@ -156,7 +156,7 @@ export function bindWantedDialogs(): void {
         );
       } catch {
         pendingTarget.delete(officerId);
-        player.sendClientMessage(Color.error, "无法打开菜单。");
+        player.sendClientMessage(Color.error, "无法打开菜单.");
       }
       return;
     }
@@ -171,7 +171,7 @@ export function bindWantedDialogs(): void {
     if (!target) {
       player.sendClientMessage(
         Color.error,
-        "未找到玩家或该玩家已不再被通缉。"
+        "未找到玩家或该玩家已不再被通缉."
       );
       return;
     }
@@ -190,22 +190,22 @@ export function bindWantedDialogs(): void {
       }
       player.sendClientMessage(
         Color.info,
-        `你已解除对玩家 ${playerChatName(target)} 的通缉。`
+        `你已解除对玩家 ${playerChatName(target)} 的通缉.`
       );
     }
   });
 
   omp.on("playerDisconnect", (player) => {
     onOfficerGone(player);
-    onTargetGone(player, "目标已离线，追踪已停止。");
+    onTargetGone(player, "目标已离线,追踪已停止.");
   });
 
   omp.on("playerDeath", (player) => {
-    onTargetGone(player, "目标已死亡，追踪已停止。");
+    onTargetGone(player, "目标已死亡,追踪已停止.");
   });
 }
 
-/** 目标解除通缉后，停止所有警员对其进行的追踪。 */
+/** 目标解除通缉后,停止所有警员对其进行的追踪. */
 function stopPursuitsOfTarget(
   accountId: number | undefined,
   slot: number | null
@@ -220,7 +220,7 @@ function stopPursuitsOfTarget(
 
     const officer = findPlayer(officerId);
     if (officer) {
-      stopPursuit(officer, officerId, "目标已解除通缉，追踪已停止。");
+      stopPursuit(officer, officerId, "目标已解除通缉,追踪已停止.");
     } else {
       clearPursuitById(officerId);
     }
@@ -271,17 +271,17 @@ function startPursuit(officer: Player, target: Player): void {
   const targetSlot = playerId(target);
   const targetAccount = getAccount(target);
   if (officerId === null || targetSlot === null || !targetAccount) {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (targetSlot === officerId) {
-    officer.sendClientMessage(Color.error, "不能跟踪自己。");
+    officer.sendClientMessage(Color.error, "不能跟踪自己.");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    officer.sendClientMessage(Color.error, "该玩家没有被通缉。");
+    officer.sendClientMessage(Color.error, "该玩家没有被通缉.");
     return;
   }
 
@@ -304,7 +304,7 @@ function startPursuit(officer: Player, target: Player): void {
   });
 
   if (!updatePursuitCheckpoint(officer, target)) {
-    stopPursuit(officer, officerId, "无法开始追踪。");
+    stopPursuit(officer, officerId, "无法开始追踪.");
     return;
   }
 
@@ -333,48 +333,48 @@ function tickPursuit(officerId: number): void {
   const target = findPlayer(pursuit.targetSlot);
   const targetAccount = target ? getAccount(target) : null;
   if (!target || !targetAccount || targetAccount.id !== pursuit.targetAccountId) {
-    stopPursuit(officer, officerId, "目标已离线，追踪已停止。");
+    stopPursuit(officer, officerId, "目标已离线,追踪已停止.");
     return;
   }
 
   if (targetAccount.wantedLevel <= 0) {
-    stopPursuit(officer, officerId, "目标已解除通缉，追踪已停止。");
+    stopPursuit(officer, officerId, "目标已解除通缉,追踪已停止.");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      stopPursuit(officer, officerId, "目标已死亡，追踪已停止。");
+      stopPursuit(officer, officerId, "目标已死亡,追踪已停止.");
       return;
     }
   } catch {
-    stopPursuit(officer, officerId, "目标已离线，追踪已停止。");
+    stopPursuit(officer, officerId, "目标已离线,追踪已停止.");
     return;
   }
 
   const hidden = trackBlockReason(target);
   if (hidden) {
-    stopPursuit(officer, officerId, "目标已逃脱，追踪已停止。");
+    stopPursuit(officer, officerId, "目标已逃脱,追踪已停止.");
     return;
   }
 
   updatePursuitCheckpoint(officer, target);
 }
 
-/** `null` 表示可以追踪（室外，VW 0）。 */
+/** `null` 表示可以追踪(室外,VW 0). */
 function trackBlockReason(target: Player): string | null {
   try {
     if (target.getInterior() > 0) {
-      return "无法追踪位于室内的玩家。";
+      return "无法追踪位于室内的玩家.";
     }
 
     if (target.getVirtualWorld() !== STREET_WORLD) {
-      return "无法追踪位于虚拟世界中的玩家。";
+      return "无法追踪位于虚拟世界中的玩家.";
     }
 
     return null;
   } catch {
-    return "未找到玩家。";
+    return "未找到玩家.";
   }
 }
 
@@ -397,7 +397,7 @@ function stopPursuit(
   try {
     Checkpoint.disable(officer);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 
   if (message) {
@@ -406,7 +406,7 @@ function stopPursuit(
         officer.sendClientMessage(Color.info, message);
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   }
 }

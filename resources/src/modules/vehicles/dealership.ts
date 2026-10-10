@@ -110,7 +110,7 @@ export function startDealerships(): void {
   });
 
   const count = listBusinesses().filter((b) => DEALERSHIP_TYPES.has(b.typeId)).length;
-  omp.log(`[${SERVER_TAG}] 汽车经销店：${count} 个地点`);
+  omp.log(`[${SERVER_TAG}] 汽车经销店:${count} 个地点`);
 }
 
 function catalogForType(typeId: number): readonly CatalogItem[] | null {
@@ -211,7 +211,7 @@ function openDealership(player: Player, shop: BusinessRecord): void {
   }
 
   if (!account.passport) {
-    player.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
+    player.sendClientMessage(Color.error, "需要护照.请在市政厅办理.");
     return;
   }
 
@@ -220,8 +220,8 @@ function openDealership(player: Player, shop: BusinessRecord): void {
     player.sendClientMessage(
       Color.error,
       need === "moto"
-        ? "你没有摩托车执照。"
-        : "你没有汽车执照。"
+        ? "你没有摩托车执照."
+        : "你没有汽车执照."
     );
     return;
   }
@@ -229,7 +229,7 @@ function openDealership(player: Player, shop: BusinessRecord): void {
   if (!findOwnedHouse(account.id)) {
     player.sendClientMessage(
       Color.error,
-      "购买载具需要房屋 — 车辆会出现在房屋旁的停车位。"
+      "购买载具需要房屋 - 车辆会出现在房屋旁的停车位."
     );
     return;
   }
@@ -263,7 +263,7 @@ function openDealership(player: Player, shop: BusinessRecord): void {
     );
   } catch {
     pendingList.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开目录。");
+    player.sendClientMessage(Color.error, "无法打开目录.");
   }
 }
 
@@ -293,19 +293,19 @@ function handleListResponse(player: Player, ok: boolean, listItem: number): void
       DIALOG_STYLE_MSGBOX,
       "购买车辆",
       [
-        `要购买 ${item.name} 吗？`,
+        `要购买 ${item.name} 吗?`,
         "",
-        `价格：${formatMoney(item.price)}`,
-        "现金支付。",
-        "颜色：白色。",
-        "车辆将出现在你家附近的停车场。",
+        `价格:${formatMoney(item.price)}`,
+        "现金支付.",
+        "颜色:白色.",
+        "车辆将出现在你家附近的停车场.",
       ].join("\n"),
       "购买",
       "取消"
     );
   } catch {
     pendingBuy.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开确认对话框。");
+    player.sendClientMessage(Color.error, "无法打开确认对话框.");
   }
 }
 
@@ -331,13 +331,13 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   }
 
   if (!account.passport) {
-    player.sendClientMessage(Color.error, "需要护照。请在市政厅办理。");
+    player.sendClientMessage(Color.error, "需要护照.请在市政厅办理.");
     return;
   }
 
   const shop = listBusinesses().find((b) => b.id === pending.businessId);
   if (!shop || !DEALERSHIP_TYPES.has(shop.typeId)) {
-    player.sendClientMessage(Color.error, "汽车经销店暂不可用。");
+    player.sendClientMessage(Color.error, "汽车经销店暂不可用.");
     return;
   }
 
@@ -346,8 +346,8 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
     player.sendClientMessage(
       Color.error,
       need === "moto"
-        ? "你没有摩托车执照。"
-        : "你没有汽车执照。"
+        ? "你没有摩托车执照."
+        : "你没有汽车执照."
     );
     return;
   }
@@ -356,7 +356,7 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   if (!house) {
     player.sendClientMessage(
       Color.error,
-      "购买载具需要房屋 — 车辆会出现在房屋旁的停车位。"
+      "购买载具需要房屋 - 车辆会出现在房屋旁的停车位."
     );
     return;
   }
@@ -364,7 +364,7 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   if (Math.max(0, Math.floor(account.money)) < pending.item.price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(pending.item.price)}.`
+      `现金不足.需要 ${formatMoney(pending.item.price)}.`
     );
     return;
   }
@@ -387,8 +387,8 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
   } catch (error: unknown) {
     buying.delete(account.id);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 购买车辆 ${pending.item.modelId} (${account.name})：${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 购买车辆 ${pending.item.modelId} (${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
   buying.delete(account.id);
@@ -397,18 +397,18 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
     if (result.reason === "owned") {
       player.sendClientMessage(
         Color.error,
-        "你已经有载具。一次只能拥有一辆车。"
+        "你已经有载具.一次只能拥有一辆车."
       );
       return;
     }
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(pending.item.price)}.`
+        `现金不足.需要 ${formatMoney(pending.item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -444,11 +444,11 @@ async function handleConfirmResponse(player: Player, ok: boolean): Promise<void>
     `你以 ${formatMoney(result.amount)} 购买了 ${pending.item.name}.`
   );
   if (spawned) {
-    player.sendClientMessage(Color.info, "载具停在你的房屋旁。");
+    player.sendClientMessage(Color.info, "载具停在你的房屋旁.");
   } else {
     player.sendClientMessage(
       Color.error,
-      "购买已保存，但无法将车辆停在房屋旁。请联系管理员。"
+      "购买已保存,但无法将车辆停在房屋旁.请联系管理员."
     );
   }
 }

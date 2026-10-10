@@ -19,7 +19,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -48,7 +48,7 @@ function occupiedVehicleIds(): Set<number> {
         ids.add(id);
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
   return ids;
@@ -73,7 +73,7 @@ function respawnEmptyVehicles(): void {
 
       vehicle.setToRespawn();
     } catch {
-      // 载具已被摧毁。
+      // 载具已被摧毁.
     }
   }
 }
@@ -90,7 +90,7 @@ export function bindAdminRespcar(): void {
       if (pending) {
         player.sendClientMessage(
           Color.error,
-          "载具重生计时器已经启动。"
+          "载具重生计时器已经启动."
         );
         return;
       }
@@ -98,7 +98,7 @@ export function bindAdminRespcar(): void {
       const tag = playerChatName(player);
       broadcastAll(
         Color.info,
-        `管理员 ${tag} 已启动载具重置。无人乘坐的车辆将在 30 秒后返回原位。`
+        `管理员 ${tag} 已启动载具重置.无人乘坐的车辆将在 30 秒后返回原位.`
       );
 
       pending = setTimeout(() => {
@@ -106,7 +106,7 @@ export function bindAdminRespcar(): void {
         respawnEmptyVehicles();
         broadcastAll(
           Color.info,
-          `管理员 ${tag} 已重置服务器上所有无人乘坐的载具。`
+          `管理员 ${tag} 已重置服务器上所有无人乘坐的载具.`
         );
       }, DELAY_MS);
     },

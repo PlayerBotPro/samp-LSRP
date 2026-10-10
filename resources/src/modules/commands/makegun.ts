@@ -12,7 +12,7 @@ import { findTurfAtPlayer, isGangOrgId } from "../zones/turf";
 import { registerCommand } from "./registry";
 
 const USAGE_LINES = [
-  "用法： /makegun [1-7] [弹药 1-500]",
+  "用法: /makegun [1-7] [弹药 1-500]",
   "1 Deagle, 2 AK-47, 3 M4, 4 Shotgun, 5 SD Pistol, 6 MP5, 7 Sniper",
 ] as const;
 
@@ -25,11 +25,11 @@ const MAX_AMMO = 500;
 type GunRecipe = {
   label: string;
   weaponId: number;
-  /** 每发枪膛弹药消耗的金属数量。 */
+  /** 每发枪膛弹药消耗的金属数量. */
   metalPerRound: number;
 };
 
-/** 命令中的 ID 对应制造配方。玩家弹药按 1:1 扣除。 */
+/** 命令中的 ID 对应制造配方.玩家弹药按 1:1 扣除. */
 const RECIPES: ReadonlyMap<number, GunRecipe> = new Map([
   [1, { label: "Desert Eagle", weaponId: 24, metalPerRound: 2 }],
   [2, { label: "AK-47", weaponId: 30, metalPerRound: 3 }],
@@ -40,13 +40,13 @@ const RECIPES: ReadonlyMap<number, GunRecipe> = new Map([
   [7, { label: "Sniper Rifle", weaponId: 34, metalPerRound: 10 }],
 ]);
 
-/** 槽位映射到当前制造任务 ID（防止死亡后开始新的 /makegun 时发生竞态）。 */
+/** 槽位映射到当前制造任务 ID(防止死亡后开始新的 /makegun 时发生竞态). */
 const craftSession = new Map<number, number>();
 let nextCraftSession = 1;
 
 registerCommand(
   "makegun",
-  "在帮派地盘制造武器（弹药 + 金属）",
+  "在帮派地盘制造武器(弹药 + 金属)",
   (player, args) => {
     void handleMakeGun(player, args);
   }
@@ -54,7 +54,7 @@ registerCommand(
 
 async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -65,32 +65,32 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   }
 
   if (craftSession.has(slot)) {
-    player.sendClientMessage(Color.error, "你已经在组装武器。");
+    player.sendClientMessage(Color.error, "你已经在组装武器.");
     return;
   }
 
   if (account.hospitalized) {
     player.sendClientMessage(
       Color.error,
-      "请先在医院完成治疗。"
+      "请先在医院完成治疗."
     );
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "在监狱里不能组装武器。");
+    player.sendClientMessage(Color.error, "在监狱里不能组装武器.");
     return;
   }
 
   const membership = getMembership(account);
   if (!membership || !isGangOrgId(membership.org.id)) {
-    player.sendClientMessage(Color.error, "此命令仅限帮派使用。");
+    player.sendClientMessage(Color.error, "此命令仅限帮派使用.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "只能步行组装武器。");
+      player.sendClientMessage(Color.error, "只能步行组装武器.");
       return;
     }
 
@@ -100,7 +100,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     ) {
       player.sendClientMessage(
         Color.error,
-        "只能在室外组装武器。"
+        "只能在室外组装武器."
       );
       return;
     }
@@ -112,7 +112,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (!turf || turf.orgId !== membership.org.id) {
     player.sendClientMessage(
       Color.error,
-      "只能在自己帮派的地盘上组装武器。"
+      "只能在自己帮派的地盘上组装武器."
     );
     return;
   }
@@ -135,7 +135,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (account.ammo < ammoCost) {
     player.sendClientMessage(
       Color.error,
-      `子弹不足。需要: ${ammoCost} (当前 ${account.ammo}).`
+      `子弹不足.需要: ${ammoCost} (当前 ${account.ammo}).`
     );
     return;
   }
@@ -143,7 +143,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   if (account.metal < metalCost) {
     player.sendClientMessage(
       Color.error,
-      `金属不足。需要: ${metalCost} (当前 ${account.metal}).`
+      `金属不足.需要: ${metalCost} (当前 ${account.metal}).`
     );
     return;
   }
@@ -176,7 +176,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
 
   if (live.hospitalized || isJailed(player)) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "组装已取消。");
+    player.sendClientMessage(Color.error, "组装已取消.");
     return;
   }
 
@@ -187,14 +187,14 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     liveMembership.org.id !== membership.org.id
   ) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "组装已取消。");
+    player.sendClientMessage(Color.error, "组装已取消.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
       finishCraft(player, slot, session);
-      player.sendClientMessage(Color.error, "组装已取消。");
+      player.sendClientMessage(Color.error, "组装已取消.");
       return;
     }
   } catch {
@@ -207,14 +207,14 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
     finishCraft(player, slot, session);
     player.sendClientMessage(
       Color.error,
-      "组装已取消: 你已离开地盘。"
+      "组装已取消: 你已离开地盘."
     );
     return;
   }
 
   if (live.ammo < ammoCost || live.metal < metalCost) {
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "组装材料不足。");
+    player.sendClientMessage(Color.error, "组装材料不足.");
     return;
   }
 
@@ -225,7 +225,7 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
   const nextMetal = prevMetal - metalCost;
   patchAccount(player, { ammo: nextAmmo, metal: nextMetal });
   void saveUserInventory(live.id, prevDrugs, nextAmmo, nextMetal).catch(() => {
-    // 缓存已更新。
+    // 缓存已更新.
   });
 
   if (!grantWeapon(player, recipe.weaponId, ammoCost)) {
@@ -234,20 +234,20 @@ async function handleMakeGun(player: Player, args: string): Promise<void> {
       () => {}
     );
     finishCraft(player, slot, session);
-    player.sendClientMessage(Color.error, "无法交付武器。");
+    player.sendClientMessage(Color.error, "无法交付武器.");
     return;
   }
 
   finishCraft(player, slot, session);
   player.sendClientMessage(
     Color.info,
-    `你已组装 ${recipe.label} (${ammoCost} 发)。-${ammoCost} 发子弹，-${metalCost} 金属。`
+    `你已组装 ${recipe.label} (${ammoCost} 发).-${ammoCost} 发子弹,-${metalCost} 金属.`
   );
   sendNearby(
     player,
     CHAT_RADIUS,
     Color.action,
-    `${playerName(player)} 取出零件并组装了武器。`
+    `${playerName(player)} 取出零件并组装了武器.`
   );
 }
 
@@ -290,7 +290,7 @@ function finishCraft(player: Player, slot: number, session: number): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -312,7 +312,7 @@ function playCraftAnim(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // 动画为可选项。
+    // 动画为可选项.
   }
 }
 
@@ -320,7 +320,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 

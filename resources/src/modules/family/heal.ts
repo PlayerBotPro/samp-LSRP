@@ -24,7 +24,7 @@ const LABEL_DRAW_DISTANCE = 12;
 const TICK_MS = 200;
 const MSG_COOLDOWN_MS = 3000;
 
-/** 家族住宅公共室内的治疗拾取点（每个家族有自己的 VW）。 */
+/** 家族住宅公共室内的治疗拾取点(每个家族有自己的 VW). */
 const HEAL_POINT = {
   x: 197.4698,
   y: 13.3281,
@@ -96,13 +96,13 @@ export function removeFamilyHealPickup(familyId: number): void {
   try {
     props.pickup.destroy();
   } catch {
-    // 已销毁。
+    // 已销毁.
   }
 
   try {
     props.label.destroy();
   } catch {
-    // 已销毁。
+    // 已销毁.
   }
 
   healByFamily.delete(familyId);
@@ -176,7 +176,7 @@ function tryHeal(player: Player): void {
   }
 
   if (account.hospitalized) {
-    tell(player, Color.error, "请先在医院接受治疗。");
+    tell(player, Color.error, "请先在医院接受治疗.");
     return;
   }
 
@@ -187,17 +187,17 @@ function tryHeal(player: Player): void {
       current = live;
     }
   } catch {
-    // 从账号数据读取生命值（HP）。
+    // 从账号数据读取生命值(HP).
   }
 
   if (current >= MAX_HEALTH) {
-    tell(player, Color.info, "你的生命值已满。");
+    tell(player, Color.info, "你的生命值已满.");
     return;
   }
 
   applyHealth(player, MAX_HEALTH);
   patchAccount(player, { health: MAX_HEALTH });
-  tell(player, Color.info, "生命值已恢复。");
+  tell(player, Color.info, "生命值已恢复.");
 }
 
 function tell(player: Player, color: number, text: string): void {
@@ -218,6 +218,6 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, text);
     }
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }

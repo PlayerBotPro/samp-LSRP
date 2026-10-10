@@ -46,7 +46,7 @@ registerCommand("advokats", "在线律师列表", (player) => {
     }
 
     const name = playerChatName(other);
-    const phone = account.phone ? ` | 电话：${account.phone}` : "";
+    const phone = account.phone ? ` | 电话:${account.phone}` : "";
     const slot = playerId(other) ?? 0;
     list.push({
       name,
@@ -58,12 +58,12 @@ registerCommand("advokats", "在线律师列表", (player) => {
   list.sort((a, b) => a.name.localeCompare(b.name) || a.slot - b.slot);
 
   if (list.length === 0) {
-    player.sendClientMessage(Color.white, "当前没有律师在线。");
+    player.sendClientMessage(Color.white, "当前没有律师在线.");
     return;
   }
 
   const lines = list.map((row) => row.line);
-  const body = `在线人数：${list.length}\n\n${lines.join("\n")}`;
+  const body = `在线人数:${list.length}\n\n${lines.join("\n")}`;
 
   try {
     Dialog.show(

@@ -28,11 +28,11 @@ export const VEHICLE_RENT_CONFIRM_DIALOG_ID = 83;
 /** Sentinel. */
 const MODEL = 405;
 const COLOR = 93;
-/** 将重生时间设得较长，车辆只由本模块逻辑归还。 */
+/** 将重生时间设得较长,车辆只由本模块逻辑归还. */
 const RESPAWN_SEC = 999_999;
-/** 一次租车的费用（现金）。 */
+/** 一次租车的费用(现金). */
 const RENT_PRICE = 500;
-/** 玩家离车后等待其返回的时间。 */
+/** 玩家离车后等待其返回的时间. */
 const LEAVE_GRACE_MS = 5 * 60_000;
 const PLAYER_STATE_DRIVER = 2;
 const PLAYER_STATE_PASSENGER = 3;
@@ -41,7 +41,7 @@ const ANIM_SYNC_ALL = 1;
 const DOORS_LOCKED = 1;
 const DOORS_UNLOCKED = 0;
 
-/** seed 数据中的 businesses.id。 */
+/** seed 数据中的 businesses.id. */
 const BIZ_BEACH = 49;
 const BIZ_JEFFERSON = 50;
 
@@ -56,7 +56,7 @@ type RentalDef = {
 type RentalSlot = {
   businessId: number;
   vehicleId: number;
-  /** 实体指针，用于防止重用 vehicle ID 时产生错误。 */
+  /** 实体指针,用于防止重用 vehicle ID 时产生错误. */
   ptr: number;
   spawnX: number;
   spawnY: number;
@@ -90,12 +90,12 @@ const RENTAL_DEFS: readonly RentalDef[] = [
 const slotsByVehicle = new Map<number, RentalSlot>();
 /** userId → vehicleId */
 const vehicleByRenter = new Map<number, number>();
-/** player slot → vehicleId（disconnect 时账号可能已被清除，因此需要此映射）。 */
+/** player slot → vehicleId(disconnect 时账号可能已被清除,因此需要此映射). */
 const vehicleBySlot = new Map<number, number>();
 const pendingOffer = new Map<number, PendingOffer>();
 const paying = new Set<number>();
 
-/** 已出租（被占用）的车辆不会被 /respcar 处理。 */
+/** 已出租(被占用)的车辆不会被 /respcar 处理. */
 export function isActiveRentalVehicle(vehicleId: number): boolean {
   const slot = slotsByVehicle.get(vehicleId);
   return !!slot && slot.renterUserId !== null;
@@ -104,7 +104,7 @@ export function isActiveRentalVehicle(vehicleId: number): boolean {
 export function spawnRentalVehicles(): void {
   for (const def of RENTAL_DEFS) {
     if (!createRentalSlot(def)) {
-      omp.log(`[${SERVER_TAG}] 车辆租赁：无法创建企业 #${def.businessId} 的车辆`);
+      omp.log(`[${SERVER_TAG}] 车辆租赁:无法创建企业 #${def.businessId} 的车辆`);
     }
   }
 
@@ -113,7 +113,7 @@ export function spawnRentalVehicles(): void {
     endPlayerRental(player, "command");
   });
 
-  omp.log(`[${SERVER_TAG}] 车辆租赁：${slotsByVehicle.size} 辆车`);
+  omp.log(`[${SERVER_TAG}] 车辆租赁:${slotsByVehicle.size} 辆车`);
 }
 
 function createRentalSlot(def: RentalDef): boolean {
@@ -143,7 +143,7 @@ function createRentalSlot(def: RentalDef): boolean {
     return false;
   }
 
-  // destroy 后此 ID 可能残留无效槽位，直接覆盖。
+  // destroy 后此 ID 可能残留无效槽位,直接覆盖.
   const stale = slotsByVehicle.get(vehicleId);
   if (stale) {
     clearLeaveTimer(stale);
@@ -170,7 +170,7 @@ function createRentalSlot(def: RentalDef): boolean {
   return true;
 }
 
-/** 只有实体指针相同且车型为 Sentinel 时，才视为同一个租赁槽位。 */
+/** 只有实体指针相同且车型为 Sentinel 时,才视为同一个租赁槽位. */
 function resolveRentalSlot(vehicle: Vehicle): RentalSlot | null {
   const vehicleId = liveVehicleId(vehicle);
   if (vehicleId === null) {
@@ -209,7 +209,7 @@ function dropStaleRentalSlot(slot: RentalSlot): void {
   }
   slotsByVehicle.delete(slot.vehicleId);
 
-  // 使用新车辆恢复租赁点。
+  // 使用新车辆恢复租赁点.
   createRentalSlot({
     businessId: slot.businessId,
     x: slot.spawnX,
@@ -224,7 +224,7 @@ function bindRentalEvents(): void {
     applyRentalDoorLock(vehicle, player);
   });
 
-  // 租赁车辆被毁：结束租赁并将车辆归还到原位置（ID/指针不变）。
+  // 租赁车辆被毁:结束租赁并将车辆归还到原位置(ID/指针不变).
   omp.on("vehicleDeath", (vehicle) => {
     const slot = resolveRentalSlot(vehicle);
     if (!slot) {
@@ -273,7 +273,7 @@ function bindRentalEvents(): void {
     ) {
       const leaveSlotId = playerId(player);
       if (leaveSlotId !== null && pendingOffer.has(leaveSlotId)) {
-        // 玩家通过离开车辆关闭对话框，解除冻结。
+        // 玩家通过离开车辆关闭对话框,解除冻结.
         pendingOffer.delete(leaveSlotId);
         setControllable(player, true);
       }
@@ -303,7 +303,7 @@ function bindRentalEvents(): void {
       paying.delete(account.id);
     }
 
-    // 此时账号可能已被清除，因此按玩家槽位查找租赁车辆。
+    // 此时账号可能已被清除,因此按玩家槽位查找租赁车辆.
     endRentalOnDisconnect(player, slotId, account?.id ?? null);
   });
 }
@@ -333,40 +333,40 @@ function handleEnterRental(player: Player, asPassenger: boolean): void {
     return;
   }
 
-  // 已被其他玩家租用，不能上车。
+  // 已被其他玩家租用,不能上车.
   if (slot.renterUserId !== null && slot.renterUserId !== account.id) {
-    player.sendClientMessage(Color.error, "这辆车已经被租用了。");
+    player.sendClientMessage(Color.error, "这辆车已经被租用了.");
     eject(player);
     return;
   }
 
-  // 玩家返回自己的租赁车辆，重置计时器。
+  // 玩家返回自己的租赁车辆,重置计时器.
   if (slot.renterUserId === account.id) {
     clearLeaveTimer(slot);
     return;
   }
 
-  // 车辆空闲，但玩家已租用另一辆车。
+  // 车辆空闲,但玩家已租用另一辆车.
   const ownedVehicleId = vehicleByRenter.get(account.id);
   if (ownedVehicleId !== undefined) {
     player.sendClientMessage(
       Color.error,
-      "你已经租了一辆车。输入 /unrent 结束租车。"
+      "你已经租了一辆车.输入 /unrent 结束租车."
     );
     eject(player);
     return;
   }
 
-  // 乘客不能开始租车。
+  // 乘客不能开始租车.
   if (asPassenger) {
-    player.sendClientMessage(Color.error, "租车前请坐上驾驶位。");
+    player.sendClientMessage(Color.error, "租车前请坐上驾驶位.");
     eject(player);
     return;
   }
 
-  // 需要汽车驾照（重复校验以防绕过 access）。
+  // 需要汽车驾照(重复校验以防绕过 access).
   if (!account.licenses.car) {
-    player.sendClientMessage(Color.error, "你没有汽车执照。");
+    player.sendClientMessage(Color.error, "你没有汽车执照.");
     eject(player);
     return;
   }
@@ -385,7 +385,7 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
     businessId: slot.businessId,
   });
 
-  // 对话框打开期间不能免费开走车辆。
+  // 对话框打开期间不能免费开走车辆.
   setControllable(player, false);
 
   try {
@@ -395,12 +395,12 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
       DIALOG_STYLE_MSGBOX,
       "租车",
       [
-        "确定要租用这辆车吗？",
+        "确定要租用这辆车吗?",
         "",
-        `费用：${formatMoney(RENT_PRICE)}`,
-        "现金支付。",
+        `费用:${formatMoney(RENT_PRICE)}`,
+        "现金支付.",
         "",
-        "结束租赁：/unrent",
+        "结束租赁:/unrent",
       ].join("\n"),
       "租赁",
       "取消"
@@ -409,7 +409,7 @@ function showRentConfirm(player: Player, slot: RentalSlot): void {
     pendingOffer.delete(slotId);
     setControllable(player, true);
     eject(player);
-    player.sendClientMessage(Color.error, "无法打开租车窗口。");
+    player.sendClientMessage(Color.error, "无法打开租车窗口.");
   }
 }
 
@@ -446,7 +446,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
 
   if (!account.licenses.car) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "你没有汽车执照。");
+    player.sendClientMessage(Color.error, "你没有汽车执照.");
     eject(player);
     return;
   }
@@ -455,7 +455,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     setControllable(player, true);
     player.sendClientMessage(
       Color.error,
-      "你已经租了一辆车。输入 /unrent 结束租车。"
+      "你已经租了一辆车.输入 /unrent 结束租车."
     );
     eject(player);
     return;
@@ -464,15 +464,15 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   const slot = slotsByVehicle.get(pending.vehicleId);
   if (!slot || slot.renterUserId !== null) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "这辆车已经被租用了。");
+    player.sendClientMessage(Color.error, "这辆车已经被租用了.");
     eject(player);
     return;
   }
 
-  // 玩家必须仍在这辆车内。
+  // 玩家必须仍在这辆车内.
   if (!isDriverOf(player, pending.vehicleId)) {
     setControllable(player, true);
-    player.sendClientMessage(Color.error, "请上车后租用车辆。");
+    player.sendClientMessage(Color.error, "请上车后租用车辆.");
     return;
   }
 
@@ -480,7 +480,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     setControllable(player, true);
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(RENT_PRICE)}.`
+      `现金不足.需要 ${formatMoney(RENT_PRICE)}.`
     );
     eject(player);
     return;
@@ -492,7 +492,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     return;
   }
 
-  // 付款前先预留槽位，避免其他玩家抢占。
+  // 付款前先预留槽位,避免其他玩家抢占.
   assignRental(slot, account.id, slotId);
   clearLeaveTimer(slot);
   refreshDoorLocks(pending.vehicleId);
@@ -506,8 +506,8 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     releaseReservation(account.id, pending.vehicleId);
     setControllable(player, true);
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 企业 #${pending.businessId} 车辆租赁 (${account.name})：${message}`);
-    player.sendClientMessage(Color.error, "租车失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 企业 #${pending.businessId} 车辆租赁 (${account.name}):${message}`);
+    player.sendClientMessage(Color.error, "租车失败.请重试.");
     eject(player);
     return;
   }
@@ -519,10 +519,10 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(RENT_PRICE)}.`
+        `现金不足.需要 ${formatMoney(RENT_PRICE)}.`
       );
     } else {
-      player.sendClientMessage(Color.error, "租车失败。请重试。");
+      player.sendClientMessage(Color.error, "租车失败.请重试.");
     }
     eject(player);
     return;
@@ -530,7 +530,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
 
   setBusinessBalance(pending.businessId, result.balance);
 
-  // 玩家在付款期间退出，disconnect 处理时已结束租赁。
+  // 玩家在付款期间退出,disconnect 处理时已结束租赁.
   const liveSlot = slotsByVehicle.get(pending.vehicleId);
   if (!liveSlot || liveSlot.renterUserId !== account.id) {
     setControllable(player, true);
@@ -538,7 +538,7 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   }
 
   if (!isPlayerActive(player) || getAccount(player)?.id !== account.id) {
-    // 不保留 5 分钟的无效租赁，立即归还车辆。
+    // 不保留 5 分钟的无效租赁,立即归还车辆.
     forceEndRentalByUser(account.id, "disconnect");
     return;
   }
@@ -551,17 +551,17 @@ async function handleRentDialog(player: Player, accepted: boolean): Promise<void
   }
 
   if (!isDriverOf(player, pending.vehicleId)) {
-    // 玩家已付款但离开车辆，给予 5 分钟返回。
+    // 玩家已付款但离开车辆,给予 5 分钟返回.
     handleLeaveRental(player);
   }
 
   player.sendClientMessage(
     Color.tryOk,
-    `你已租下车辆，费用 ${formatMoney(result.amount)}. 输入 /unrent 结束租赁。`
+    `你已租下车辆,费用 ${formatMoney(result.amount)}. 输入 /unrent 结束租赁.`
   );
   player.sendClientMessage(
     Color.gray,
-    "下车后，你有 5 分钟返回车辆。"
+    "下车后,你有 5 分钟返回车辆."
   );
 }
 
@@ -611,7 +611,7 @@ function endRentalOnDisconnect(
     return;
   }
 
-  // 保险起见，仅按槽位清理。
+  // 保险起见,仅按槽位清理.
   if (slotId !== null) {
     vehicleBySlot.delete(slotId);
   }
@@ -623,7 +623,7 @@ function endRentalOnDisconnect(
   try {
     player.removeFromVehicle();
   } catch {
-    // 已不在车内。
+    // 已不在车内.
   }
   ejectOccupants(vehicleId);
   respawnRentalVehicle(vehicleId);
@@ -655,10 +655,10 @@ function handleLeaveRental(player: Player): void {
   try {
     player.sendClientMessage(
       Color.gray,
-      "你有 5 分钟返回租用的车辆。"
+      "你有 5 分钟返回租用的车辆."
     );
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -666,14 +666,14 @@ function endPlayerRental(player: Player, reason: "command" | "timeout" | "discon
   const account = getAccount(player);
   if (!account) {
     if (reason === "command") {
-      player.sendClientMessage(Color.error, "请先登录账号。");
+      player.sendClientMessage(Color.error, "请先登录账号.");
     }
     return;
   }
 
   if (!vehicleByRenter.has(account.id)) {
     if (reason === "command") {
-      player.sendClientMessage(Color.error, "你没有租用车辆。");
+      player.sendClientMessage(Color.error, "你没有租用车辆.");
     }
     return;
   }
@@ -688,14 +688,14 @@ function endPlayerRental(player: Player, reason: "command" | "timeout" | "discon
         }
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   }
 
   forceEndRentalByUser(account.id, reason);
 
   if (reason === "command" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, "车辆租赁已结束。");
+    player.sendClientMessage(Color.info, "车辆租赁已结束.");
   }
 }
 
@@ -721,13 +721,13 @@ function forceEndRentalByUser(
   slot.renterUserId = null;
   slot.renterSlotId = null;
 
-  // 如果他人或租车玩家仍在车内，将其移出车辆。
+  // 如果他人或租车玩家仍在车内,将其移出车辆.
   ejectOccupants(vehicleId);
   respawnRentalVehicle(vehicleId);
   refreshDoorLocks(vehicleId);
 
   if (reason === "timeout") {
-    notifyUser(userId, Color.error, "租赁时间已到：你没有及时返回车辆。");
+    notifyUser(userId, Color.error, "租赁时间已到:你没有及时返回车辆.");
   }
 }
 
@@ -740,7 +740,7 @@ function respawnRentalVehicle(vehicleId: number): void {
   try {
     vehicle.setToRespawn();
   } catch {
-    // 已被销毁。
+    // 已被销毁.
   }
 }
 
@@ -772,7 +772,7 @@ function applyRentalDoorLock(vehicle: Vehicle, player: Player): void {
   try {
     vehicle.setParamsForPlayer(player, 0, allowed ? DOORS_UNLOCKED : DOORS_LOCKED);
   } catch {
-    // 槽位或车辆已不在游戏世界中。
+    // 槽位或车辆已不在游戏世界中.
   }
 }
 
@@ -797,7 +797,7 @@ function ejectOccupants(vehicleId: number): void {
       }
       eject(player);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -818,7 +818,7 @@ function eject(player: Player): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.removeFromVehicle();
   } catch {
-    // 已不在车辆中。
+    // 已不在车辆中.
   }
 }
 
@@ -826,7 +826,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -851,7 +851,7 @@ function notifyUser(userId: number, color: number, text: string): void {
     try {
       player.sendClientMessage(color, text);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
   });
 }

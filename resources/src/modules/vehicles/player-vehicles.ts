@@ -1,7 +1,7 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { getPool } from "../../shared/database";
 
-/** 玩家拥有的个人车辆（不要与游戏世界中的 runtime vehicle ID 混淆）。 */
+/** 玩家拥有的个人车辆(不要与游戏世界中的 runtime vehicle ID 混淆). */
 const CREATE_PLAYER_VEHICLES_SQL = `
 CREATE TABLE IF NOT EXISTS player_vehicles (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ export const DEFAULT_BUY_COLOR = 1;
 export const MAX_TRUNK_METAL = 500;
 export const MAX_TRUNK_AMMO = 500;
 export const MAX_TRUNK_DRUGS = 500;
-/** 出售给政府时按 purchase_price 计算的退款比例。 */
+/** 出售给政府时按 purchase_price 计算的退款比例. */
 export const STATE_SELL_REFUND_RATE = 0.5;
 const MAX_MONEY = 2_147_483_647;
 
@@ -101,7 +101,7 @@ export async function ensurePlayerVehiclesTable(): Promise<void> {
   }
 }
 
-/** 出售给政府时的退款金额。 */
+/** 出售给政府时的退款金额. */
 export function stateSellRefund(purchasePrice: number): number {
   const price = Math.max(0, Math.floor(purchasePrice));
   return Math.max(0, Math.floor(price * STATE_SELL_REFUND_RATE));
@@ -237,7 +237,7 @@ function trunkCap(item: TrunkItem): number {
   return MAX_TRUNK_DRUGS;
 }
 
-/** 删除车主的个人车辆（不退款）。 */
+/** 删除车主的个人车辆(不退款). */
 export async function deletePlayerVehicle(
   vehicleId: number,
   ownerId: number
@@ -250,7 +250,7 @@ export async function deletePlayerVehicle(
 }
 
 /**
- * 出售给政府：删除车辆，并按 purchase_price 的 STATE_SELL_REFUND_RATE 比例退款。
+ * 出售给政府:删除车辆,并按 purchase_price 的 STATE_SELL_REFUND_RATE 比例退款.
  */
 export async function sellPlayerVehicleToState(
   vehicleId: number,
@@ -317,8 +317,8 @@ export async function sellPlayerVehicleToState(
 }
 
 /**
- * 出售给玩家：变更车主并转移现金。
- * 后备箱和其他字段保持不变。
+ * 出售给玩家:变更车主并转移现金.
+ * 后备箱和其他字段保持不变.
  */
 export async function transferPlayerVehicleSale(params: {
   vehicleId: number;
@@ -417,7 +417,7 @@ export async function transferPlayerVehicleSale(params: {
   }
 }
 
-/** 存入后备箱。false 表示空间不足或未找到车辆。 */
+/** 存入后备箱.false 表示空间不足或未找到车辆. */
 export async function addPlayerVehicleTrunk(
   vehicleId: number,
   item: TrunkItem,
@@ -439,7 +439,7 @@ export async function addPlayerVehicleTrunk(
   return result.affectedRows === 1;
 }
 
-/** 从后备箱取出。false 表示数量不足或未找到车辆。 */
+/** 从后备箱取出.false 表示数量不足或未找到车辆. */
 export async function takePlayerVehicleTrunk(
   vehicleId: number,
   item: TrunkItem,
@@ -460,7 +460,7 @@ export async function takePlayerVehicleTrunk(
   return result.affectedRows === 1;
 }
 
-/** 购买：扣除现金，将 80% 计入企业余额，并插入 player_vehicles。 */
+/** 购买:扣除现金,将 80% 计入企业余额,并插入 player_vehicles. */
 export async function purchasePlayerVehicle(params: {
   ownerId: number;
   businessId: number;

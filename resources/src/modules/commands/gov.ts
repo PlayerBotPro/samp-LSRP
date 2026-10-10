@@ -12,7 +12,7 @@ registerCommand("gov", "政府新闻", (player, args) => {
   if (!account || !membership || !membership.org.gov) {
     player.sendClientMessage(
       Color.error,
-      "你不属于政府组织。"
+      "你不属于政府组织."
     );
     return;
   }
@@ -20,7 +20,7 @@ registerCommand("gov", "政府新闻", (player, args) => {
   if (membership.rank.id !== MAX_ORG_RANK) {
     player.sendClientMessage(
       Color.error,
-      "政府新闻仅组织领导可发布。"
+      "政府新闻仅组织领导可发布."
     );
     return;
   }
@@ -41,7 +41,7 @@ registerCommand("gov", "政府新闻", (player, args) => {
     try {
       other.sendClientMessage(Color.govNews, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 });

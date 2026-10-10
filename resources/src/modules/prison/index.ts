@@ -22,7 +22,7 @@ const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const DENY =
-  "只有 LSPD、州警、FBI 警员和市政府律师可以开启。";
+  "只有 LSPD,州警,FBI 警员和市政府律师可以开启.";
 
 const POINT = {
   x: 1810.8636,
@@ -299,12 +299,12 @@ function tickPrison(): void {
 
       onPickup.delete(id);
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
 
-/** 入口/出口和警卫室：执法人员 + 市政府律师（等级规则同 /advokats）。 */
+/** 入口/出口和警卫室:执法人员 + 市政府律师(等级规则同 /advokats). */
 function canEnterPrisonStaffDoor(
   membership: NonNullable<ReturnType<typeof getMembership>>
 ): boolean {
@@ -325,7 +325,7 @@ function tryUse(player: Player, door: PrisonDoor): void {
   if (door.staffOnly) {
     const account = getAccount(player);
     if (account?.hospitalized) {
-      deny(player, "你需要接受治疗。请使用病床：/hospital。");
+      deny(player, "你需要接受治疗.请使用病床:/hospital.");
       return;
     }
 
@@ -336,9 +336,9 @@ function tryUse(player: Player, door: PrisonDoor): void {
     }
   }
 
-  // 院子关闭时任何人都不能进入，包括市政府人员（控制台仅供警察/FBI 使用）。
+  // 院子关闭时任何人都不能进入,包括市政府人员(控制台仅供警察/FBI 使用).
   if (door.dest.world === PRISON_YARD_WORLD && !isPrisonYardOpen()) {
-    deny(player, "院子已关闭。");
+    deny(player, "院子已关闭.");
     return;
   }
 
@@ -361,7 +361,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -383,7 +383,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -432,7 +432,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
     return;
   }
@@ -444,7 +444,7 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
   iconShown.delete(id);
 }

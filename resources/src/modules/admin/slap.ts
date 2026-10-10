@@ -18,7 +18,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -29,7 +29,7 @@ function slapPlayer(target: Player): boolean {
       target.removeFromVehicle();
     }
   } catch {
-    // 已经不在载具中。
+    // 已经不在载具中.
   }
 
   try {
@@ -43,7 +43,7 @@ function slapPlayer(target: Player): boolean {
   try {
     target.setVelocity(0, 0, SLAP_VELOCITY);
   } catch {
-    // 位置已向上移动。
+    // 位置已向上移动.
   }
 
   return true;
@@ -72,27 +72,27 @@ export function bindAdminSlap(): void {
 
       const target = omp.players.at(slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "未找到玩家。");
+          player.sendClientMessage(Color.error, "未找到玩家.");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (!slapPlayer(target)) {
-        player.sendClientMessage(Color.error, "无法击飞玩家。");
+        player.sendClientMessage(Color.error, "无法击飞玩家.");
         return;
       }
 
       broadcastAdmins(
-        `管理员 ${playerChatName(player)} 将 ${playerChatName(target)} 抛向空中。`
+        `管理员 ${playerChatName(player)} 将 ${playerChatName(target)} 抛向空中.`
       );
     },
     true

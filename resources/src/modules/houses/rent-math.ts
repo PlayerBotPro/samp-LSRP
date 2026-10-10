@@ -1,4 +1,4 @@
-/** 每日房屋价格比例（0.1%）。 */
+/** 每日房屋价格比例(0.1%). */
 export const HOUSE_RENT_RATE = 0.001;
 
 export function dailyHouseRent(price: number): number {
@@ -36,7 +36,7 @@ export function rentAmountForDays(price: number, days: number): number {
   return dailyHouseRent(price) * days;
 }
 
-/** 距离已付期限结束还剩的日历天数（0 表示今天是最后一天）。 */
+/** 距离已付期限结束还剩的日历天数(0 表示今天是最后一天). */
 export function rentDaysRemaining(paidUntil: string | null): number | null {
   if (!paidUntil) {
     return null;

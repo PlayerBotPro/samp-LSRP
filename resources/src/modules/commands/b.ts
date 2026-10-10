@@ -4,7 +4,7 @@ import { playerChatName } from "../../shared/player";
 import { hasAdminAccess } from "../admin/session";
 import { registerCommand } from "./registry";
 
-registerCommand("b", "附近的场外聊天（OOC）", (player, args) => {
+registerCommand("b", "附近的场外聊天(OOC)", (player, args) => {
   const text = sanitizeChatText(args.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
     player.sendClientMessage(Color.error, "用法: /b [文本]");

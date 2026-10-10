@@ -9,7 +9,7 @@ import { ORG_FBI_ID } from "./fbi";
 import { ORG_LSPD_ID } from "./lspd";
 import { getMembership } from "./membership";
 
-/** 共用军械库室内；VW = 仓库组织 ID（1 军队、4 警察、5 LSPD、6 FBI). */
+/** 共用军械库室内;VW = 仓库组织 ID(1 军队,4 警察,5 LSPD,6 FBI). */
 export const AMMUNATION_INTERIOR = 6;
 
 const PICKUP_MODEL = 19132;
@@ -40,7 +40,7 @@ type AmmoDoor = {
   pickup: { x: number; y: number; z: number; interior: number; world: number };
   dest: SpawnPoint;
   label: string;
-  /** null = 出口，无需检查组织 */
+  /** null = 出口,无需检查组织 */
   allowedOrgIds: readonly number[] | null;
   denyMessage: string;
 };
@@ -100,7 +100,7 @@ const DOORS: readonly AmmoDoor[] = [
       world: STREET_WORLD,
     },
     LSPD_ARMY_ALLOWED,
-    "仅 LSPD 和 FBI 员工可以进入。"
+    "仅 LSPD 和 FBI 员工可以进入."
   ),
   ...ammoBranch(
     ORG_ARMY_ID,
@@ -115,7 +115,7 @@ const DOORS: readonly AmmoDoor[] = [
       world: STREET_WORLD,
     },
     ARMY_ALLOWED,
-    "仅军队和 FBI 员工可以进入。"
+    "仅军队和 FBI 员工可以进入."
   ),
 ];
 
@@ -179,7 +179,7 @@ function tickAmmunationDoors(): void {
         }
       }
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -188,7 +188,7 @@ function tryUse(player: Player, door: AmmoDoor): void {
   if (door.allowedOrgIds) {
     const account = getAccount(player);
     if (account?.hospitalized) {
-      deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+      deny(player, "你需要治疗.请使用 /hospital 占用病床.");
       return;
     }
 
@@ -219,7 +219,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -241,7 +241,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

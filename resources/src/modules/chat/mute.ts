@@ -21,7 +21,7 @@ export const MUTED_CHAT_COMMANDS = new Set([
 ]);
 
 const BUBBLE_MS = 3500;
-const BUBBLE_TEXT = "试图说些什么……";
+const BUBBLE_TEXT = "试图说些什么......";
 const MUTE_RED = 0xff0000ff;
 
 type MuteTimer = {
@@ -54,14 +54,14 @@ export function notifyIfMuted(player: Player, options?: { bubble?: boolean }): b
 
   player.sendClientMessage(
     Color.error,
-    `你被禁止使用聊天。剩余时间: ${formatMuteLeft(left)}.`
+    `你被禁止使用聊天.剩余时间: ${formatMuteLeft(left)}.`
   );
 
   if (options?.bubble) {
     try {
       player.setChatBubble(BUBBLE_TEXT, MUTE_RED, CHAT_RADIUS, BUBBLE_MS);
     } catch {
-      // 聊天气泡不是必需的。
+      // 聊天气泡不是必需的.
     }
   }
 
@@ -130,11 +130,11 @@ function expireMute(player: Player, notify: boolean): void {
   clearMuteWatch(player);
   patchAccount(player, { mutedUntil: null });
   void saveUserMutedUntil(account.id, null).catch(() => {
-    // 禁言已到期；下次检查时会再次尝试清除。
+    // 禁言已到期;下次检查时会再次尝试清除.
   });
 
   if (notify && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, "你现在可以再次使用聊天了。");
+    player.sendClientMessage(Color.info, "你现在可以再次使用聊天了.");
   }
 }
 

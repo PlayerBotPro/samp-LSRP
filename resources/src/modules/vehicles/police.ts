@@ -4,7 +4,7 @@ import { registerOrgVehicle } from "./access";
 import { createServerVehicle } from "./spawn";
 
 const RESPAWN_SEC = 1800;
-const DENY = "你不属于州警察局。";
+const DENY = "你不属于州警察局.";
 
 const POLICE_VEHICLES: ReadonlyArray<{
   model: number;

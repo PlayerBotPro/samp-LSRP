@@ -45,7 +45,7 @@ export function showReportDialog(player: Player, error?: string): void {
   if (wait > 0 && !error) {
     player.sendClientMessage(
       Color.error,
-      `你可以在 ${formatWait(wait)} 后再次提交举报。`
+      `你可以在 ${formatWait(wait)} 后再次提交举报.`
     );
     return;
   }
@@ -57,12 +57,12 @@ export function showReportDialog(player: Player, error?: string): void {
       REPORT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "联系管理员",
-      `${prefix}请描述你的问题或投诉。`,
+      `${prefix}请描述你的问题或投诉.`,
       "发送",
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开举报窗口。");
+    player.sendClientMessage(Color.error, "无法打开举报窗口.");
   }
 }
 
@@ -76,21 +76,21 @@ function sendReport(player: Player, raw: string): void {
   if (wait > 0) {
     player.sendClientMessage(
       Color.error,
-      `你可以在 ${formatWait(wait)} 后再次提交举报。`
+      `你可以在 ${formatWait(wait)} 后再次提交举报.`
     );
     return;
   }
 
   const text = sanitizeChatText(raw.trim()).slice(0, CHAT_MAX_LENGTH);
   if (!text) {
-    showReportDialog(player, "请输入内容。");
+    showReportDialog(player, "请输入内容.");
     return;
   }
 
   const verb = byGender(account.gender, "提交了", "提交了");
   const authorId = playerId(player);
   const authorLine = clipClientMessage(`${playerChatName(player)}: ${text}`);
-  const adminLine = clipClientMessage(`玩家 ${playerChatName(player)} ${verb}：${text}`);
+  const adminLine = clipClientMessage(`玩家 ${playerChatName(player)} ${verb}:${text}`);
 
   try {
     player.sendClientMessage(Color.info, authorLine);
@@ -112,7 +112,7 @@ function sendReport(player: Player, raw: string): void {
     try {
       other.sendClientMessage(Color.info, adminLine);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

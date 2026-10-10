@@ -570,7 +570,7 @@ export async function ensureBusinessesTable(): Promise<void> {
   cachedBusinesses = await loadBusinesses();
 }
 
-/** 精确的室内和购买拾取点（启动时更新）。 */
+/** 精确的室内和购买拾取点(启动时更新). */
 async function migrateInteriorPickupCoords(): Promise<void> {
   const rows: Array<
     [number, number, number, number, number | null, number | null, number | null]
@@ -731,7 +731,7 @@ export async function payBusinessEntranceFee(
   }
 }
 
-/** 从现金中扣除租金；其中 80% 存入企业余额。 */
+/** 从现金中扣除租金;其中 80% 存入企业余额. */
 export async function payVehicleRental(
   businessId: number,
   payerId: number,
@@ -740,7 +740,7 @@ export async function payVehicleRental(
   return payBusinessCashShare(businessId, payerId, price, 0.8);
 }
 
-/** 现金 → 企业：`share`（0..1）的比例计入余额，其余作为“手续费”。 */
+/** 现金 → 企业:`share`(0..1)的比例计入余额,其余作为"手续费". */
 export async function payBusinessCashShare(
   businessId: number,
   payerId: number,
@@ -818,7 +818,7 @@ export async function payBusinessCashShare(
   }
 }
 
-/** 购买皮肤：现金和皮肤在同一事务中处理，`share` 的比例计入企业。 */
+/** 购买皮肤:现金和皮肤在同一事务中处理,`share` 的比例计入企业. */
 export async function payBusinessClothesPurchase(
   businessId: number,
   payerId: number,
@@ -910,8 +910,8 @@ function randomPhoneDigits(): string {
 }
 
 /**
- * 购买手机：扣除现金，80% 计入企业，并分配唯一的六位数号码。
- * 所有操作在同一事务中完成（失败时完整回滚）。
+ * 购买手机:扣除现金,80% 计入企业,并分配唯一的六位数号码.
+ * 所有操作在同一事务中完成(失败时完整回滚).
  */
 export async function payBusinessPhonePurchase(
   businessId: number,
@@ -973,7 +973,7 @@ export async function payBusinessPhonePurchase(
     );
     if (userUpdate.affectedRows !== 1) {
       await conn.rollback();
-      // 再次检查原因：手机可能已由并发请求发放。
+      // 再次检查原因:手机可能已由并发请求发放.
       const [again] = await conn.query<RowDataPacket[]>(
         "SELECT phone FROM users WHERE id = ? LIMIT 1",
         [payerId]

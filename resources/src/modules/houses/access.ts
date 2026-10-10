@@ -22,7 +22,7 @@ export function isNearHouseEntrance(
       return false;
     }
 
-    // 只能从街道进入或购买，不能从其他人的相同坐标 VW 内操作。
+    // 只能从街道进入或购买,不能从其他人的相同坐标 VW 内操作.
     if (
       player.getVirtualWorld() !== STREET_WORLD ||
       player.getInterior() !== 0

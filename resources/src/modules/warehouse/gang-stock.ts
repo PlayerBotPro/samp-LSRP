@@ -20,7 +20,7 @@ import { clearOrgStockVisit } from "./stock-visit";
 const LABEL_HEIGHT = 1.2;
 const LABEL_DRAW_DISTANCE = 12;
 const CHECKPOINT_RADIUS = 1.5;
-/** 离开标记点（半径稍大，避免在边界反复触发）。 */
+/** 离开标记点(半径稍大,避免在边界反复触发). */
 const LEAVE_RADIUS = 2.8;
 const SHOW_DISTANCE = 45;
 const TICK_MS = 400;
@@ -38,7 +38,7 @@ type GangStock = GangStockDef & {
   label: TextLabel;
 };
 
-/** 帮派出生点中的总部室内；仓库点单独设置。 */
+/** 帮派出生点中的总部室内;仓库点单独设置. */
 const GANG_STOCK_DEFS: readonly GangStockDef[] = [
   {
     orgId: ORG_AZTECAS_ID,
@@ -92,7 +92,7 @@ function stockLabelText(orgId: number): string {
   const metal = wh?.metal ?? 0;
   const drugs = wh?.drugs ?? 0;
   const status = wh && !wh.isLocked ? "仓库已开放" : "仓库已关闭";
-  return `子弹：${ammo}\n金属：${metal}\n毒品：${drugs}\n\n${status}`;
+  return `子弹:${ammo}\n金属:${metal}\n毒品:${drugs}\n\n${status}`;
 }
 
 export function startGangWarehouseDisplays(): void {
@@ -126,12 +126,12 @@ export function refreshGangWarehouseLabels(): void {
     try {
       stock.label.updateText(Color.info, stockLabelText(stock.orgId));
     } catch {
-      // 标签已销毁。
+      // 标签已销毁.
     }
   }
 }
 
-/** 玩家处于检查点范围内时的帮派仓库点。 */
+/** 玩家处于检查点范围内时的帮派仓库点. */
 export function findGangStockAtPlayer(player: Player): {
   orgId: number;
   x: number;
@@ -211,13 +211,13 @@ function updateCheckpointForPlayer(player: Player): void {
       }
       activeStockByPlayer.set(id, stock);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
     notifyOrgStockStanding(player, onCheckpoint);
     return;
   }
 
-  // 不是我们的仓库，不处理 pending/visit（否则黑手党的定时检查会影响帮派，反之亦然）。
+  // 不是我们的仓库,不处理 pending/visit(否则黑手党的定时检查会影响帮派,反之亦然).
   if (!checkpointShown.has(id)) {
     return;
   }
@@ -229,6 +229,6 @@ function updateCheckpointForPlayer(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }

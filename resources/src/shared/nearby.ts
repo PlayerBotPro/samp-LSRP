@@ -79,7 +79,7 @@ export function sendNearby(
 
       other.sendClientMessage(color, text);
     } catch {
-      // 玩家槽位为空，或玩家已经离线。
+      // 玩家槽位为空,或玩家已经离线.
     }
   });
 }

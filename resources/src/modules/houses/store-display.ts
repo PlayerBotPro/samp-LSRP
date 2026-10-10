@@ -11,7 +11,7 @@ import { houseVirtualWorld } from "./world";
 
 const LABEL_HEIGHT = 1.2;
 const LABEL_DRAW_DISTANCE = 12;
-/** /use 已安装储物柜的交互范围。 */
+/** /use 已安装储物柜的交互范围. */
 export const HOUSE_STORE_USE_RADIUS = 2;
 
 type HouseStoreLabel = {
@@ -24,10 +24,10 @@ const labels = new Map<number, HouseStoreLabel>();
 function storeLabelText(house: HouseRecord): string {
   return (
     `储物柜\n` +
-    `弹药： ${house.storeAmmo}\n` +
-    `金属： ${house.storeMetal}\n` +
-    `毒品： ${house.storeDrugs}\n` +
-    `金钱： ${formatMoney(house.storeMoney)}`
+    `弹药: ${house.storeAmmo}\n` +
+    `金属: ${house.storeMetal}\n` +
+    `毒品: ${house.storeDrugs}\n` +
+    `金钱: ${formatMoney(house.storeMoney)}`
   );
 }
 
@@ -51,7 +51,7 @@ export function ensureHouseStoreLabel(houseId: number): void {
     try {
       existing.label.destroy();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
     labels.delete(houseId);
   }
@@ -96,7 +96,7 @@ export function removeHouseStoreLabel(houseId: number): void {
   try {
     entry.label.destroy();
   } catch {
-    // 已销毁。
+    // 已销毁.
   }
 
   labels.delete(houseId);

@@ -10,17 +10,17 @@ import { isLawOfficer } from "../org/law";
 import { isJailed } from "../prison/sentence";
 import { registerCommand } from "./registry";
 
-const DENY = "仅警察和 FBI 成员可使用此命令。";
+const DENY = "仅警察和 FBI 成员可使用此命令.";
 const PLAYER_STATE_WASTED = 7;
 
-registerCommand("unmask", "摘下玩家的面具（警察 / FBI）", (player, args) => {
+registerCommand("unmask", "摘下玩家的面具(警察 / FBI)", (player, args) => {
   if (!isAuthenticated(player) || !isLawOfficer(player)) {
     player.sendClientMessage(Color.error, DENY);
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "在监狱里不能摘面具。");
+    player.sendClientMessage(Color.error, "在监狱里不能摘面具.");
     return;
   }
 
@@ -42,38 +42,38 @@ registerCommand("unmask", "摘下玩家的面具（警察 / FBI）", (player, ar
   }
 
   if (slot === officerId) {
-    player.sendClientMessage(Color.error, "不能摘掉自己的面具。");
+    player.sendClientMessage(Color.error, "不能摘掉自己的面具.");
     return;
   }
 
   const target = findPlayer(slot);
   if (!target) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   try {
     if (target.getState() === PLAYER_STATE_WASTED) {
-      player.sendClientMessage(Color.error, "玩家不在线。");
+      player.sendClientMessage(Color.error, "玩家不在线.");
       return;
     }
   } catch {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
   if (!isMasked(target)) {
-    player.sendClientMessage(Color.error, "该玩家没有戴面具。");
+    player.sendClientMessage(Color.error, "该玩家没有戴面具.");
     return;
   }
 
   if (!clearMask(target)) {
-    player.sendClientMessage(Color.error, "无法摘下面具。");
+    player.sendClientMessage(Color.error, "无法摘下面具.");
     return;
   }
 
@@ -90,16 +90,16 @@ registerCommand("unmask", "摘下玩家的面具（警察 / FBI）", (player, ar
     player,
     CHAT_RADIUS,
     Color.action,
-    `${officerName} 猛地摘下了 ${targetName} 的面具。`
+    `${officerName} 猛地摘下了 ${targetName} 的面具.`
   );
 
   try {
-    target.sendClientMessage(Color.error, "你的面具被摘掉了。");
+    target.sendClientMessage(Color.error, "你的面具被摘掉了.");
   } catch {
-    // 已离线。
+    // 已离线.
   }
 
-  player.sendClientMessage(Color.info, `你摘掉了 ${targetName} 的面具。`);
+  player.sendClientMessage(Color.info, `你摘掉了 ${targetName} 的面具.`);
 });
 
 function findPlayer(slot: number): Player | null {

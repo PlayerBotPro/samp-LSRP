@@ -75,28 +75,28 @@ export function bindAdminArang(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (isSamePlayer(player, target)) {
         player.sendClientMessage(
           Color.error,
-          "不能更改自己的管理员等级。"
+          "不能更改自己的管理员等级."
         );
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (account.adminLevel < MIN_TARGET_LEVEL) {
         player.sendClientMessage(
           Color.error,
-          "该玩家不是管理员。"
+          "该玩家不是管理员."
         );
         return;
       }
@@ -104,7 +104,7 @@ export function bindAdminArang(): void {
       if (account.adminLevel > MAX_TARGET_LEVEL) {
         player.sendClientMessage(
           Color.error,
-          "只能通过 /makeadmin 更改 7 级。"
+          "只能通过 /makeadmin 更改 7 级."
         );
         return;
       }
@@ -137,7 +137,7 @@ async function applyAdminRank(
   if (pending.has(account.id)) {
     admin.sendClientMessage(
       Color.error,
-      "该玩家的管理员等级正在被更改。请稍候。"
+      "该玩家的管理员等级正在被更改.请稍候."
     );
     return;
   }
@@ -149,7 +149,7 @@ async function applyAdminRank(
     if (!isPlayerActive(target) || getAccount(target)?.id !== account.id) {
       admin.sendClientMessage(
         Color.info,
-        `管理员等级已保存: ${nextLevel}. 玩家已离线。`
+        `管理员等级已保存: ${nextLevel}. 玩家已离线.`
       );
       return;
     }
@@ -168,7 +168,7 @@ async function applyAdminRank(
       `管理员 ${adminTag} 已将你的管理员等级设为: ${nextLevel}.`
     );
   } catch {
-    admin.sendClientMessage(Color.error, "无法保存管理员等级。");
+    admin.sendClientMessage(Color.error, "无法保存管理员等级.");
   } finally {
     pending.delete(account.id);
   }

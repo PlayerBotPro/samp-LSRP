@@ -110,7 +110,7 @@ function destroyPlayerDraws(id: number): void {
     try {
       draw.destroy();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
   }
 
@@ -136,7 +136,7 @@ function hideFor(player: Player, id: number): void {
     hud.status.hideForPlayer(player);
     background?.hideForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -147,7 +147,7 @@ function statusLine(
   locked: boolean | null,
   lowFuel: boolean
 ): string {
-  // 绿色 Open 表示已解锁；红色 Open 表示已锁定。其他玩家的车辆显示为白色。
+  // 绿色 Open 表示已解锁;红色 Open 表示已锁定.其他玩家的车辆显示为白色.
   const open =
     locked === null ? "~w~Open" : locked ? "~r~Open" : "~g~Open";
   const motor = engineOn ? "~g~M" : "~w~M";
@@ -209,7 +209,7 @@ function updateSpeed(player: Player, id: number): void {
         return;
       }
     } catch {
-      // 槽位已失效。
+      // 槽位已失效.
     }
     hideFor(player, id);
     return;
@@ -242,7 +242,7 @@ function updateSpeed(player: Player, id: number): void {
       )
     );
   } catch {
-    // Textdraw 已销毁。
+    // Textdraw 已销毁.
   }
 }
 
@@ -336,7 +336,7 @@ export function startSpeedo(): void {
         showFor(player, id);
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   }
 }

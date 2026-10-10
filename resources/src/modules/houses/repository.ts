@@ -77,7 +77,7 @@ export type HouseRecord = {
   isLocked: boolean;
   classId: number;
   rentPaidUntil: string | null;
-  /** null — 储物柜尚未安装。 */
+  /** null - 储物柜尚未安装. */
   storeX: number | null;
   storeY: number | null;
   storeZ: number | null;
@@ -263,7 +263,7 @@ export async function saveHouseStorePosition(
   return result.affectedRows === 1;
 }
 
-/** 储物柜内容上限（INT UNSIGNED / JavaScript 安全值）。 */
+/** 储物柜内容上限(INT UNSIGNED / JavaScript 安全值). */
 const MAX_STORE_AMOUNT = 2_147_483_647;
 
 export async function addHouseStoreItem(
@@ -278,7 +278,7 @@ export async function addHouseStoreItem(
   }
 
   const column = storeColumn(item);
-  // 避免 INT 溢出：仅当 column + value 不超出范围时才执行。
+  // 避免 INT 溢出:仅当 column + value 不超出范围时才执行.
   const result = await execute(
     `UPDATE houses
      SET ${column} = ${column} + ?
@@ -295,7 +295,7 @@ export async function addHouseStoreItem(
     return readStoreItem(house, item);
   }
 
-  // 数据库已更新，不将「null」回滚并视为完全失败。
+  // 数据库已更新,不将[null]回滚并视为完全失败.
   return value;
 }
 
@@ -792,7 +792,7 @@ async function migrateHousesTable(): Promise<void> {
         "ALTER TABLE houses ADD UNIQUE KEY uq_houses_owner_id (owner_id)"
       );
     } catch {
-      // owner_id 已存在重复值，管理员将手动添加索引。
+      // owner_id 已存在重复值,管理员将手动添加索引.
     }
   }
 }

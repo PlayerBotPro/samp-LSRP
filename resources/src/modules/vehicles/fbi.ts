@@ -5,7 +5,7 @@ import { createServerVehicle } from "./spawn";
 
 const RESPAWN_SEC = 1800;
 const BLACK = 0;
-const DENY = "你不属于 FBI。";
+const DENY = "你不属于 FBI.";
 
 const FBI_VEHICLES: ReadonlyArray<{
   model: number;

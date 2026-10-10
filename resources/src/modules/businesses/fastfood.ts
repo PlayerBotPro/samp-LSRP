@@ -33,7 +33,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const EAT_SOUND_ID = 32200;
 const ANIM_SYNC_ALL = 1;
 const EAT_ANIM_MS = 3000;
-/** 营业收入中计入商家账户的比例。 */
+/** 营业收入中计入商家账户的比例. */
 const BIZ_SHARE = 0.8;
 
 type FoodItem = {
@@ -42,7 +42,7 @@ type FoodItem = {
   hunger: number;
 };
 
-/** 比街头小摊更贵，也更能填饱肚子。 */
+/** 比街头小摊更贵,也更能填饱肚子. */
 const MENU: readonly FoodItem[] = [
   { name: "可乐", price: 80, hunger: 15 },
   { name: "薯条", price: 150, hunger: 30 },
@@ -92,7 +92,7 @@ export function startFastfoodShops(): void {
   const count = listBusinesses().filter(
     (b) => isFastfoodType(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 小吃店：销售点 ${count} 个`);
+  omp.log(`[${SERVER_TAG}] 小吃店:销售点 ${count} 个`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -195,7 +195,7 @@ function openMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "小吃店已关闭。");
+    player.sendClientMessage(Color.error, "小吃店已关闭.");
     return;
   }
 
@@ -219,7 +219,7 @@ function openMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开菜单。");
+    player.sendClientMessage(Color.error, "无法打开菜单.");
   }
 }
 
@@ -237,7 +237,7 @@ async function onMenuResponse(
   pendingMenu.delete(slotId);
 
   if (!ok || businessId === undefined) {
-    // 保留 standingOn，避免菜单再次弹出；玩家可以离开柜台。
+    // 保留 standingOn,避免菜单再次弹出;玩家可以离开柜台.
     return;
   }
 
@@ -247,7 +247,7 @@ async function onMenuResponse(
   }
 
   await buyFood(player, businessId, item);
-  // 购买后仍保留站位记录；再次点餐需先离开柜台，再返回。
+  // 购买后仍保留站位记录;再次点餐需先离开柜台,再返回.
 }
 
 async function buyFood(
@@ -267,24 +267,24 @@ async function buyFood(
 
   const business = getBusiness(businessId);
   if (!business || !isFastfoodType(business.typeId) || !hasBuyPickup(business)) {
-    player.sendClientMessage(Color.error, "小吃店暂不可用。");
+    player.sendClientMessage(Color.error, "小吃店暂不可用.");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "小吃店已关闭。");
+    player.sendClientMessage(Color.error, "小吃店已关闭.");
     return;
   }
 
   if (!isAtBuyPickup(player, business)) {
-    player.sendClientMessage(Color.error, "请靠近柜台。");
+    player.sendClientMessage(Color.error, "请靠近柜台.");
     return;
   }
 
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(item.price)}.`
+      `现金不足.需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -300,7 +300,7 @@ async function buyFood(
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     omp.log(`[${SERVER_TAG}] 小吃店 biz=${businessId} (${account.name}): ${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   } finally {
     buying.delete(account.id);
@@ -310,11 +310,11 @@ async function buyFood(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(item.price)}.`
+        `现金不足.需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -324,7 +324,7 @@ async function buyFood(
     return;
   }
 
-  // 等待期间玩家可能已离开；款项已扣除，仍须交付食物。
+  // 等待期间玩家可能已离开;款项已扣除,仍须交付食物.
   const liveAccount = getAccount(player);
   if (!liveAccount) {
     return;
@@ -344,21 +344,21 @@ async function buyFood(
   notifyHungerRestored(player, nextHunger);
 
   void saveUserHunger(account.id, nextHunger).catch(() => {
-    // 定期保存会处理此次更新。
+    // 定期保存会处理此次更新.
   });
 
   try {
     const pos = player.getPos();
     player.playGameSound(EAT_SOUND_ID, pos.x, pos.y, pos.z);
   } catch {
-    // 玩家槽位已空。
+    // 玩家槽位已空.
   }
 
   playEatAnimation(player);
 
   player.sendClientMessage(
     Color.tryOk,
-    `你已购买 ${item.name}，花费 ${formatMoney(item.price)}. 饱腹度: ${nextHunger}.`
+    `你已购买 ${item.name},花费 ${formatMoney(item.price)}. 饱腹度: ${nextHunger}.`
   );
 }
 
@@ -403,7 +403,7 @@ function preloadEatAnim(player: Player): void {
     );
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 购买时会加载动画。
+    // 购买时会加载动画.
   }
 }
 
@@ -444,7 +444,7 @@ function playEatAnimation(player: Player): void {
       try {
         player.clearAnimations(ANIM_SYNC_ALL);
       } catch {
-        // 玩家已离开。
+        // 玩家已离开.
       }
     }, EAT_ANIM_MS)
   );

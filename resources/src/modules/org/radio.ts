@@ -2,7 +2,7 @@ import { defineGovOrg, defineRanks } from "./define";
 import type { OrgGateDef } from "./types";
 
 export const ORG_RADIO_ID = 8;
-/** 广播中心自定义室内。街道和屋顶仍使用 VW 0。 */
+/** 广播中心自定义室内.街道和屋顶仍使用 VW 0. */
 export const RADIO_WORLD = 8;
 export const RADIO_INTERIOR = 0;
 
@@ -45,6 +45,6 @@ export const RADIO_GATES: OrgGateDef[] = [
     ryOpen: 0,
     rz: 11.4037,
     radius: 14,
-    denyMessage: "你不属于广播中心。",
+    denyMessage: "你不属于广播中心.",
   },
 ];

@@ -61,7 +61,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -86,18 +86,18 @@ export function bindAdminMute(): void {
 
       const target = findTarget(parsed.slot);
       if (!target) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const account = getAccount(target);
       if (!account) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       if (account.adminLevel >= 1) {
-        player.sendClientMessage(Color.error, "不能禁言管理员。");
+        player.sendClientMessage(Color.error, "不能禁言管理员.");
         return;
       }
 
@@ -131,14 +131,14 @@ async function applyMute(
       patchAccount(target, { mutedUntil: previous });
       watchMute(target);
     }
-    admin.sendClientMessage(Color.error, "无法保存禁言记录。");
+    admin.sendClientMessage(Color.error, "无法保存禁言记录.");
     return;
   }
 
   const adminTag = playerChatName(admin);
   const targetTag = playerChatName(target);
   const line = reason
-    ? `管理员 ${adminTag} 禁言了玩家 ${targetTag}。原因：${reason}。`
-    : `管理员 ${adminTag} 禁言了玩家 ${targetTag}。`;
+    ? `管理员 ${adminTag} 禁言了玩家 ${targetTag}.原因:${reason}.`
+    : `管理员 ${adminTag} 禁言了玩家 ${targetTag}.`;
   broadcastAll(Color.error, line);
 }

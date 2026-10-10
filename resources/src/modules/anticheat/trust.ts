@@ -60,7 +60,7 @@ export function trustWeapon(player: Player, weaponId: number, ammo: number): voi
   if (slot < 0 || slot >= WEAPON_SLOTS) return;
   const cur = state.weapons[slot];
   if (!cur) return;
-  // SA 中的 giveWeapon 会向武器槽添加弹药，而不是替换弹药。
+  // SA 中的 giveWeapon 会向武器槽添加弹药,而不是替换弹药.
   if (cur.id === weaponId) {
     cur.ammo = Math.max(0, cur.ammo + Math.floor(ammo));
   } else {
@@ -107,7 +107,7 @@ export function markSpawned(player: Player, spawned: boolean): void {
   if (spawned) {
     const now = nowMs();
     state.dead = false;
-    // 锚点 = 当前镜像（与实时位置同步后，trustPosition 会跟随更新）。
+    // 锚点 = 当前镜像(与实时位置同步后,trustPosition 会跟随更新).
     state.posTrustX = state.x;
     state.posTrustY = state.y;
     state.posTrustZ = state.z;
@@ -132,7 +132,7 @@ export function markSpectating(player: Player, spectating: boolean): void {
   }
 }
 
-/** 发放武器并标记为合法。`false` 表示发放失败。 */
+/** 发放武器并标记为合法.`false` 表示发放失败. */
 export function grantWeapon(player: Player, weaponId: number, ammo: number): boolean {
   try {
     player.giveWeapon(weaponId, ammo);
@@ -144,7 +144,7 @@ export function grantWeapon(player: Player, weaponId: number, ammo: number): boo
   return true;
 }
 
-/** 从武器槽移除武器并重置信任状态。 */
+/** 从武器槽移除武器并重置信任状态. */
 export function revokeWeapon(player: Player, weaponId: number): boolean {
   try {
     player.removeWeapon(weaponId);

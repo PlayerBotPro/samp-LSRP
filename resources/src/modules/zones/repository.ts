@@ -29,7 +29,7 @@ const COLUMN_MIGRATIONS = [
   { name: "max_y", sql: "max_y FLOAT NOT NULL DEFAULT 0 AFTER max_x" },
 ] as const;
 
-/** 转储中的旧 org_id（1–5）→ 当前帮派 9–13。 */
+/** 转储中的旧 org_id(1-5)→ 当前帮派 9-13. */
 const LEGACY_ORG_REMAP: ReadonlyArray<readonly [number, number]> = [
   [1, ORG_AZTECAS_ID],
   [2, ORG_BALLAS_ID],

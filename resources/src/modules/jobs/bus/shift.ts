@@ -43,10 +43,10 @@ const RACE_CP_FINISH = 1;
 const CP_VERIFY_RANGE = 16;
 const STOP_SEC = 15;
 const STOP_ANNOUNCE_RADIUS = 15;
-/** 用于站点提示的深绿色。 */
+/** 用于站点提示的深绿色. */
 const BUS_STOP_CHAT = 0x2e8b57ff;
 const RETURN_SEC = 30;
-/** 到达终点后先让乘客下车，再重生公交车。 */
+/** 到达终点后先让乘客下车,再重生公交车. */
 const FINISH_RESPAWN_DELAY_MS = 2000;
 const PAY_PER_CHECKPOINT = 80;
 const MIN_FARE = 1;
@@ -138,16 +138,16 @@ export function bindBusShifts(): void {
   });
 
   omp.on("vehicleDeath", (vehicle) => {
-    endShiftForVehicle(vehicle, "班次已中止：公交车被摧毁。");
+    endShiftForVehicle(vehicle, "班次已中止:公交车被摧毁.");
   });
 
-  // 班次期间公交车重生为空车，视为线路中断。
+  // 班次期间公交车重生为空车,视为线路中断.
   omp.on("vehicleSpawn", (vehicle) => {
     const vehicleId = liveVehicleId(vehicle);
     if (vehicleId === null || !shiftsByVehicle.has(vehicleId)) {
       return;
     }
-    endShiftForVehicle(vehicle, "班次已中止：公交车已重生。");
+    endShiftForVehicle(vehicle, "班次已中止:公交车已重生.");
   });
 }
 
@@ -175,7 +175,7 @@ function onBecameDriver(player: Player): void {
   const existing = shiftsByPlayer.get(slot);
   if (existing) {
     if (existing.vehicleId !== vehicleId) {
-      cancelShift(player, "班次已中止：你乘坐了其他车辆。");
+      cancelShift(player, "班次已中止:你乘坐了其他车辆.");
       return;
     }
 
@@ -187,7 +187,7 @@ function onBecameDriver(player: Player): void {
 
   const ownerSlot = shiftsByVehicle.get(vehicleId);
   if (ownerSlot !== undefined && ownerSlot !== slot) {
-    tell(player, Color.error, "这辆公交车已经在执行线路。");
+    tell(player, Color.error, "这辆公交车已经在执行线路.");
     eject(player);
     return;
   }
@@ -199,7 +199,7 @@ function onBecameDriver(player: Player): void {
       BUS_CONFIRM_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "{FFCC00}公交车司机",
-      "{FFFFFF}开始线路工作吗？",
+      "{FFFFFF}开始线路工作吗?",
       "是",
       "否"
     );
@@ -221,7 +221,7 @@ function resumeAfterReturn(player: Player, shift: BusShift): void {
 
   shift.phase = "drive";
   setRouteCheckpoint(player, shift);
-  tell(player, Color.info, "你已回到公交车上，请继续行驶。");
+  tell(player, Color.info, "你已回到公交车上,请继续行驶.");
 }
 
 function onLeftBusDuringShift(player: Player): void {
@@ -235,7 +235,7 @@ function onLeftBusDuringShift(player: Player): void {
     return;
   }
 
-  // 如果玩家在停站期间下车，则解除站点冻结状态。
+  // 如果玩家在停站期间下车,则解除站点冻结状态.
   if (shift.frozen) {
     setFrozen(player, false);
     shift.frozen = false;
@@ -246,7 +246,7 @@ function onLeftBusDuringShift(player: Player): void {
       clearTimeout(shift.stopTimer);
       shift.stopTimer = null;
     }
-    // 该站已计入路线；玩家返回后继续前往下一站。
+    // 该站已计入路线;玩家返回后继续前往下一站.
     shift.pointIndex += 1;
   }
 
@@ -263,7 +263,7 @@ function onLeftBusDuringShift(player: Player): void {
   tell(
     player,
     Color.error,
-    `你已离开公交车。请在 ${RETURN_SEC} 秒内回到驾驶座，否则班次将结束且不会获得检查点报酬。`
+    `你已离开公交车.请在 ${RETURN_SEC} 秒内回到驾驶座,否则班次将结束且不会获得检查点报酬.`
   );
 
   shift.awayTimer = setTimeout(() => {
@@ -279,7 +279,7 @@ function onLeftBusDuringShift(player: Player): void {
     if (current.phase !== "away") {
       return;
     }
-    // 确认玩家尚未回到驾驶座（槽位可能已被复用）。
+    // 确认玩家尚未回到驾驶座(槽位可能已被复用).
     try {
       if (
         live.getState() === PLAYER_STATE_DRIVER &&
@@ -288,11 +288,11 @@ function onLeftBusDuringShift(player: Player): void {
         return;
       }
     } catch {
-      // 按照“不在公交车内”处理。
+      // 按照"不在公交车内"处理.
     }
     cancelShift(
       live,
-      "班次已结束：你没有回到公交车上，未获得检查点报酬。"
+      "班次已结束:你没有回到公交车上,未获得检查点报酬."
     );
   }, RETURN_SEC * 1000);
 }
@@ -315,12 +315,12 @@ function onConfirmDialog(player: Player, ok: boolean): void {
   }
 
   if (!ok) {
-    rejectSetup(player, "你已取消班次。");
+    rejectSetup(player, "你已取消班次.");
     return;
   }
 
   if (!stillInPendingBus(player, pending)) {
-    rejectSetup(player, "请坐上工作公交车的驾驶座。");
+    rejectSetup(player, "请坐上工作公交车的驾驶座.");
     return;
   }
 
@@ -330,12 +330,12 @@ function onConfirmDialog(player: Player, ok: boolean): void {
       BUS_FARE_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "{FFCC00}车票价格",
-      `{FFFFFF}请输入车票价格（${MIN_FARE} 至 ${MAX_FARE}$）：`,
+      `{FFFFFF}请输入车票价格(${MIN_FARE} 至 ${MAX_FARE}$):`,
       "下一步",
       "取消"
     );
   } catch {
-    rejectSetup(player, "无法开始班次。");
+    rejectSetup(player, "无法开始班次.");
   }
 }
 
@@ -351,30 +351,30 @@ function onFareDialog(player: Player, ok: boolean, input: string): void {
   }
 
   if (!ok) {
-    rejectSetup(player, "班次已取消。");
+    rejectSetup(player, "班次已取消.");
     return;
   }
 
   if (!stillInPendingBus(player, pending)) {
-    rejectSetup(player, "请坐上工作公交车的驾驶座。");
+    rejectSetup(player, "请坐上工作公交车的驾驶座.");
     return;
   }
 
   const fare = Math.floor(Number(String(input).replace(/^\$/, "").trim()));
   if (!Number.isInteger(fare) || fare < MIN_FARE || fare > MAX_FARE) {
-    tell(player, Color.error, `车票价格必须为 ${MIN_FARE}–${MAX_FARE}$。`);
+    tell(player, Color.error, `车票价格必须为 ${MIN_FARE}-${MAX_FARE}$.`);
     try {
       Dialog.show(
         player,
         BUS_FARE_DIALOG_ID,
         DIALOG_STYLE_INPUT,
         "{FFCC00}车票价格",
-        `{FFFFFF}请输入车票价格（${MIN_FARE} 至 ${MAX_FARE}$）：`,
+        `{FFFFFF}请输入车票价格(${MIN_FARE} 至 ${MAX_FARE}$):`,
         "下一步",
         "取消"
       );
     } catch {
-      rejectSetup(player, "班次已取消。");
+      rejectSetup(player, "班次已取消.");
     }
     return;
   }
@@ -392,7 +392,7 @@ function onFareDialog(player: Player, ok: boolean, input: string): void {
       "取消"
     );
   } catch {
-    rejectSetup(player, "班次已取消。");
+    rejectSetup(player, "班次已取消.");
   }
 }
 
@@ -408,35 +408,35 @@ function onRouteDialog(player: Player, ok: boolean, listItem: number): void {
   }
 
   if (!ok) {
-    rejectSetup(player, "班次已取消。");
+    rejectSetup(player, "班次已取消.");
     return;
   }
 
   if (!stillInPendingBus(player, pending)) {
-    rejectSetup(player, "请坐上工作公交车的驾驶座。");
+    rejectSetup(player, "请坐上工作公交车的驾驶座.");
     return;
   }
 
   const route = BUS_ROUTES[listItem] ?? null;
   if (!route || pending.fare === undefined) {
-    rejectSetup(player, "无法选择线路。");
+    rejectSetup(player, "无法选择线路.");
     return;
   }
 
   const vehicle = driverBus(player);
   if (!vehicle) {
-    rejectSetup(player, "请坐上工作公交车的驾驶座。");
+    rejectSetup(player, "请坐上工作公交车的驾驶座.");
     return;
   }
 
   const spot = busSpawnSpot(vehicle);
   if (!spot) {
-    rejectSetup(player, "无法开始班次。");
+    rejectSetup(player, "无法开始班次.");
     return;
   }
 
   if (shiftsByVehicle.has(pending.vehicleId)) {
-    rejectSetup(player, "这辆公交车已经在执行线路。");
+    rejectSetup(player, "这辆公交车已经在执行线路.");
     return;
   }
 
@@ -455,7 +455,7 @@ function onRouteDialog(player: Player, ok: boolean, listItem: number): void {
     );
     label.attachToVehicle(vehicle, 0, 0, LABEL_OFFSET_Z);
   } catch {
-    rejectSetup(player, "无法开始班次。");
+    rejectSetup(player, "无法开始班次.");
     return;
   }
 
@@ -484,7 +484,7 @@ function onRouteDialog(player: Player, ok: boolean, listItem: number): void {
   tell(
     player,
     Color.info,
-    `线路「${route.name}」。车票价格：${formatMoney(pending.fare)}。请沿检查点行驶。`
+    `线路[${route.name}].车票价格:${formatMoney(pending.fare)}.请沿检查点行驶.`
   );
 }
 
@@ -545,7 +545,7 @@ function onRouteCheckpoint(player: Player): void {
 function beginStop(player: Player, shift: BusShift, vehicle: Vehicle): void {
   shift.phase = "stop";
 
-  // 停车期间不要设置 RaceCP，否则解除冻结后可能再次触发 Enter。
+  // 停车期间不要设置 RaceCP,否则解除冻结后可能再次触发 Enter.
   clearRouteCheckpoint(player);
   setVehicleEngine(vehicle, false, false);
   setFrozen(player, true);
@@ -555,9 +555,9 @@ function beginStop(player: Player, shift: BusShift, vehicle: Vehicle): void {
     player,
     STOP_ANNOUNCE_RADIUS,
     BUS_STOP_CHAT,
-    `线路 ${shift.route.name} 的公交车将在 ${STOP_SEC} 秒后发车。`
+    `线路 ${shift.route.name} 的公交车将在 ${STOP_SEC} 秒后发车.`
   );
-  tell(player, Color.info, `已到站，将于 ${STOP_SEC} 秒后发车。`);
+  tell(player, Color.info, `已到站,将于 ${STOP_SEC} 秒后发车.`);
 
   if (shift.stopTimer) {
     clearTimeout(shift.stopTimer);
@@ -583,7 +583,7 @@ function beginStop(player: Player, shift: BusShift, vehicle: Vehicle): void {
   }, STOP_SEC * 1000);
 }
 
-/** 先推进线路和检查点，再解除冻结，避免重复计入站点。 */
+/** 先推进线路和检查点,再解除冻结,避免重复计入站点. */
 function finishStop(player: Player, shift: BusShift): void {
   const bus = omp.vehicles.at(shift.vehicleId) ?? null;
 
@@ -608,7 +608,7 @@ function finishStop(player: Player, shift: BusShift): void {
     setVehicleEngine(bus, true, false);
   }
 
-  tell(player, Color.info, "公交车已发车，请前往下一个检查点。");
+  tell(player, Color.info, "公交车已发车,请前往下一个检查点.");
 }
 
 function completeShift(player: Player, shift: BusShift): void {
@@ -625,7 +625,7 @@ function completeShift(player: Player, shift: BusShift): void {
   clearShiftState(shift, true);
   clearRouteCheckpoint(player);
 
-  // 先让乘客下车，稍后再将公交车送回停车位。
+  // 先让乘客下车,稍后再将公交车送回停车位.
   if (vehicle) {
     ejectAllFromBus(vehicle);
     setVehicleEngine(vehicle, false, false);
@@ -649,20 +649,20 @@ function completeShift(player: Player, shift: BusShift): void {
         applyWallet(player, getAccount(player) ?? { ...account, money: next });
         void saveUserMoney(account.id, next, Math.max(0, Math.floor(account.bank))).catch(
           () => {
-            // 后续定时持久化会保存此更改。
+            // 后续定时持久化会保存此更改.
           }
         );
       }
       tell(
         player,
         Color.info,
-        `线路已完成。本班次收入：${formatMoney(credited)}。`
+        `线路已完成.本班次收入:${formatMoney(credited)}.`
       );
       return;
     }
   }
 
-  tell(player, Color.info, "线路已完成。");
+  tell(player, Color.info, "线路已完成.");
 }
 
 function cancelShift(player: Player, message: string | null): void {
@@ -741,7 +741,7 @@ function clearShiftState(shift: BusShift, destroyLabel: boolean): void {
     try {
       shift.label.destroy();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
   }
 }
@@ -760,7 +760,7 @@ function setRouteCheckpoint(player: Player, shift: BusShift): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // —
+    // -
   }
 
   try {
@@ -776,7 +776,7 @@ function setRouteCheckpoint(player: Player, shift: BusShift): void {
       RACE_CP_RADIUS
     );
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -784,12 +784,12 @@ function clearRouteCheckpoint(player: Player): void {
   try {
     RaceCheckpoint.disable(player);
   } catch {
-    // —
+    // -
   }
   try {
     Checkpoint.disable(player);
   } catch {
-    // —
+    // -
   }
 }
 
@@ -797,7 +797,7 @@ function setFrozen(player: Player, frozen: boolean): void {
   try {
     player.toggleControllable(!frozen);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -824,11 +824,11 @@ function ejectAllFromBus(vehicle: Vehicle): void {
       try {
         other.toggleControllable(true);
       } catch {
-        // —
+        // -
       }
       other.removeFromVehicle();
     } catch {
-      // —
+      // -
     }
   });
 }
@@ -846,7 +846,7 @@ function respawnBus(
     vehicle.setVirtualWorld(STREET_WORLD);
     setVehicleEngine(vehicle, false, false);
   } catch {
-    // 车辆已销毁。
+    // 车辆已销毁.
   }
 }
 
@@ -881,7 +881,7 @@ async function chargePassengerFare(player: Player): Promise<void> {
   }
 
   const shift = shiftsByPlayer.get(driverSlot);
-  // 司机离开公交车期间，不收取车费。
+  // 司机离开公交车期间,不收取车费.
   if (!shift || shift.fare <= 0 || shift.phase === "away") {
     return;
   }
@@ -902,13 +902,13 @@ async function chargePassengerFare(player: Player): Promise<void> {
   }
 
   if (passenger.money < shift.fare) {
-    tell(player, Color.error, `车票价格为 ${formatMoney(shift.fare)}。`);
+    tell(player, Color.error, `车票价格为 ${formatMoney(shift.fare)}.`);
     eject(player);
     return;
   }
 
   if (driverAccount.money > MAX_CASH - shift.fare) {
-    tell(player, Color.error, "司机目前无法收取车费。");
+    tell(player, Color.error, "司机目前无法收取车费.");
     eject(player);
     return;
   }
@@ -917,7 +917,7 @@ async function chargePassengerFare(player: Player): Promise<void> {
   try {
     const ok = await transferUserCash(passenger.id, driverAccount.id, shift.fare);
     if (!ok) {
-      tell(player, Color.error, "现金不足，无法支付车费。");
+      tell(player, Color.error, "现金不足,无法支付车费.");
       eject(player);
       return;
     }
@@ -930,12 +930,12 @@ async function chargePassengerFare(player: Player): Promise<void> {
       tell(
         driver,
         Color.info,
-        `已收取车费：${formatMoney(shift.fare)}。`
+        `已收取车费:${formatMoney(shift.fare)}.`
       );
     }
-    tell(player, Color.info, `你已支付车费：${formatMoney(shift.fare)}。`);
+    tell(player, Color.info, `你已支付车费:${formatMoney(shift.fare)}.`);
   } catch {
-    tell(player, Color.error, "无法支付车费。");
+    tell(player, Color.error, "无法支付车费.");
     eject(player);
   } finally {
     fareBusy.delete(slot);
@@ -986,7 +986,7 @@ function liveVehicleId(vehicle: Vehicle): number | null {
 }
 
 function labelText(routeName: string, fare: number): string {
-  return `{33CCFF}${routeName}\n{FFFFFF}车费：{66CC00}${formatMoney(fare)}`;
+  return `{33CCFF}${routeName}\n{FFFFFF}车费:{66CC00}${formatMoney(fare)}`;
 }
 
 function clearPending(player: Player): void {
@@ -1001,7 +1001,7 @@ function eject(player: Player): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.removeFromVehicle();
   } catch {
-    // 玩家已经下车。
+    // 玩家已经下车.
   }
 }
 
@@ -1012,6 +1012,6 @@ function tell(player: Player, color: number, text: string): void {
     }
     player.sendClientMessage(color, text);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }

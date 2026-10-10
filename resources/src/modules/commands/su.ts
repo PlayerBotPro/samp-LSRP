@@ -8,13 +8,13 @@ import { getMembership, isLawOfficer, notifyLawStaff } from "../org";
 import { isJailed } from "../prison/sentence";
 import { registerCommand } from "./registry";
 
-const USAGE = "用法： /su [id] [1-6] [原因]";
-const DENY = "仅警察和 FBI 成员可使用此命令。";
+const USAGE = "用法: /su [id] [1-6] [原因]";
+const DENY = "仅警察和 FBI 成员可使用此命令.";
 const MAX_WANTED = 6;
 
 registerCommand(
   "su",
-  "通缉玩家（警察 / FBI）",
+  "通缉玩家(警察 / FBI)",
   (player, args) => {
     if (!isAuthenticated(player) || !isLawOfficer(player)) {
       player.sendClientMessage(Color.error, DENY);
@@ -38,19 +38,19 @@ registerCommand(
 
     const target = resolveTarget(parsed.slot);
     if (!target) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (playerId(target) === playerId(player)) {
-      player.sendClientMessage(Color.error, "不能通缉自己。");
+      player.sendClientMessage(Color.error, "不能通缉自己.");
       return;
     }
 
     if (isLawOfficer(target)) {
       player.sendClientMessage(
         Color.error,
-        "不能通缉警察或 FBI 员工。"
+        "不能通缉警察或 FBI 员工."
       );
       return;
     }
@@ -58,21 +58,21 @@ registerCommand(
     if (isJailed(target)) {
       player.sendClientMessage(
         Color.error,
-        "不能通缉监狱里的玩家。"
+        "不能通缉监狱里的玩家."
       );
       return;
     }
 
     const targetAccount = getAccount(target);
     if (!targetAccount) {
-      player.sendClientMessage(Color.error, "未找到玩家。");
+      player.sendClientMessage(Color.error, "未找到玩家.");
       return;
     }
 
     if (targetAccount.wantedLevel >= MAX_WANTED) {
       player.sendClientMessage(
         Color.error,
-        "该玩家的通缉等级已达上限。"
+        "该玩家的通缉等级已达上限."
       );
       return;
     }
@@ -84,16 +84,16 @@ registerCommand(
 
     const rankTitle = officerMembership.rank.title;
     notifyLawStaff(
-      `调度：${rankTitle} ${playerChatName(player)} 通缉了 ${playerChatName(target)}（+${added}，合计 ${next}）。原因：${parsed.reason}`
+      `调度:${rankTitle} ${playerChatName(player)} 通缉了 ${playerChatName(target)}(+${added},合计 ${next}).原因:${parsed.reason}`
     );
 
     try {
       target.sendClientMessage(
         Color.error,
-        `你已被通缉 (+${added}, 共 ${next})。原因: ${parsed.reason}`
+        `你已被通缉 (+${added}, 共 ${next}).原因: ${parsed.reason}`
       );
     } catch {
-      // 已离线。
+      // 已离线.
     }
 
     player.sendClientMessage(

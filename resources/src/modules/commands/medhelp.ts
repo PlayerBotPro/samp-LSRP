@@ -48,12 +48,12 @@ type MedhelpOffer = {
   expiresAt: number;
 };
 
-/** 治疗提议：患者槽位 → 提议。 */
+/** 治疗提议:患者槽位 → 提议. */
 const pendingOffers = new Map<number, MedhelpOffer>();
 
 registerCommand(
   "medhelp",
-  "医院：向附近玩家提供治疗（需要仓库中的药品）",
+  "医院:向附近玩家提供治疗(需要仓库中的药品)",
   (player, args) => {
     tryMedhelp(player, args.trim());
   }
@@ -79,7 +79,7 @@ export function bindMedhelpOffers(): void {
 
     if (Date.now() > offer.expiresAt) {
       clearExpiredMedhelpOffer(slot);
-      player.sendClientMessage(Color.error, "治疗报价已过期。");
+      player.sendClientMessage(Color.error, "治疗报价已过期.");
       return;
     }
 
@@ -110,7 +110,7 @@ export function bindMedhelpOffers(): void {
         releaseYnOffer(targetSlot, "medhelp");
         const target = omp.players.at(targetSlot);
         if (target && isPlayerActive(target)) {
-          target.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
+          target.sendClientMessage(Color.error, "医生已退出游戏.治疗已取消.");
         }
       }
     }
@@ -129,19 +129,19 @@ function tryMedhelp(player: Player, raw: string): void {
 
   const membership = getMembership(account);
   if (!membership || membership.org.id !== ORG_HOSPITAL_ID) {
-    player.sendClientMessage(Color.error, "此命令仅供医院员工使用。");
+    player.sendClientMessage(Color.error, "此命令仅供医院员工使用.");
     return;
   }
 
   if (isJailed(player) || account.hospitalized) {
-    player.sendClientMessage(Color.error, "现在不能进行治疗。");
+    player.sendClientMessage(Color.error, "现在不能进行治疗.");
     return;
   }
 
   if (getCarriedHospitalMeds(player) < 1) {
     player.sendClientMessage(
       Color.error,
-      "没有药品。请到医院员工区的仓库领取药品包。"
+      "没有药品.请到医院员工区的仓库领取药品包."
     );
     return;
   }
@@ -149,7 +149,7 @@ function tryMedhelp(player: Player, raw: string): void {
   if (!canHealHere(player)) {
     player.sendClientMessage(
       Color.error,
-      "只能在医院或医院车辆内治疗。"
+      "只能在医院或医院车辆内治疗."
     );
     return;
   }
@@ -166,7 +166,7 @@ function tryMedhelp(player: Player, raw: string): void {
   const targetId = Number(parts[0]);
   const price = Math.floor(Number(parts[1]));
   if (!Number.isInteger(targetId) || targetId < 0) {
-    player.sendClientMessage(Color.error, "玩家 ID 无效。");
+    player.sendClientMessage(Color.error, "玩家 ID 无效.");
     return;
   }
 
@@ -178,21 +178,21 @@ function tryMedhelp(player: Player, raw: string): void {
   ) {
     player.sendClientMessage(
       Color.error,
-      `金额必须在 ${formatMoney(MIN_HEAL_PRICE)} 到 ${formatMoney(MAX_HEAL_PRICE)} 之间。`
+      `金额必须在 ${formatMoney(MIN_HEAL_PRICE)} 到 ${formatMoney(MAX_HEAL_PRICE)} 之间.`
     );
     return;
   }
 
   const target = omp.players.at(targetId);
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "玩家不在线。");
+    player.sendClientMessage(Color.error, "玩家不在线.");
     return;
   }
 
   const doctorSlot = playerId(player);
   const targetSlot = playerId(target);
   if (doctorSlot === null || targetSlot === null || doctorSlot === targetSlot) {
-    player.sendClientMessage(Color.error, "不能用此命令治疗自己。");
+    player.sendClientMessage(Color.error, "不能用此命令治疗自己.");
     return;
   }
 
@@ -202,19 +202,19 @@ function tryMedhelp(player: Player, raw: string): void {
   }
 
   if (isJailed(target)) {
-    player.sendClientMessage(Color.error, "玩家在监狱里。");
+    player.sendClientMessage(Color.error, "玩家在监狱里.");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "请靠近患者。");
+    player.sendClientMessage(Color.error, "请靠近患者.");
     return;
   }
 
   if (!canHealHere(target)) {
     player.sendClientMessage(
       Color.error,
-      "患者必须在医院或医院车辆内。"
+      "患者必须在医院或医院车辆内."
     );
     return;
   }
@@ -229,7 +229,7 @@ function tryMedhelp(player: Player, raw: string): void {
   if (!doctorInHospitalWorld && !sameHospitalVehicle(player, target)) {
     player.sendClientMessage(
       Color.error,
-      "患者必须和你在同一辆医院车辆内。"
+      "患者必须和你在同一辆医院车辆内."
     );
     return;
   }
@@ -242,14 +242,14 @@ function tryMedhelp(player: Player, raw: string): void {
   }
 
   if (targetHp >= MAX_HEALTH - 0.5) {
-    player.sendClientMessage(Color.error, "玩家已经健康。");
+    player.sendClientMessage(Color.error, "玩家已经健康.");
     return;
   }
 
   if (targetAccount.money < price) {
     player.sendClientMessage(
       Color.error,
-      `患者现金不足。需要 ${formatMoney(price)}.`
+      `患者现金不足.需要 ${formatMoney(price)}.`
     );
     return;
   }
@@ -257,7 +257,7 @@ function tryMedhelp(player: Player, raw: string): void {
   clearExpiredMedhelpOffer(targetSlot);
 
   if (pendingOffers.has(targetSlot) || !claimYnOffer(targetSlot, "medhelp")) {
-    player.sendClientMessage(Color.error, "该玩家已有有效报价。");
+    player.sendClientMessage(Color.error, "该玩家已有有效报价.");
     return;
   }
 
@@ -270,15 +270,15 @@ function tryMedhelp(player: Player, raw: string): void {
 
   player.sendClientMessage(
     Color.info,
-    `你向玩家 ${playerName(target)} 提议治疗，费用为 ${formatMoney(price)}.`
+    `你向玩家 ${playerName(target)} 提议治疗,费用为 ${formatMoney(price)}.`
   );
   target.sendClientMessage(
     Color.white,
-    `${playerName(player)} 提议为你治疗，费用为 ${formatMoney(price)}.`
+    `${playerName(player)} 提议为你治疗,费用为 ${formatMoney(price)}.`
   );
   target.sendClientMessage(
     Color.white,
-    "按 {00CC00}Y {FFFFFF}接受，或按 {FF6600}N {FFFFFF}拒绝"
+    "按 {00CC00}Y {FFFFFF}接受,或按 {FF6600}N {FFFFFF}拒绝"
   );
 }
 
@@ -293,40 +293,40 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
 
   const doctor = omp.players.at(offer.doctorId);
   if (!doctor || !isPlayerActive(doctor) || !isAuthenticated(doctor)) {
-    patient.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
+    patient.sendClientMessage(Color.error, "医生已退出游戏.治疗已取消.");
     return;
   }
 
   const doctorAccount = getAccount(doctor);
   if (!doctorAccount || doctorAccount.id !== offer.doctorUserId) {
-    patient.sendClientMessage(Color.error, "医生已退出游戏。治疗已取消。");
+    patient.sendClientMessage(Color.error, "医生已退出游戏.治疗已取消.");
     return;
   }
 
   const membership = getMembership(doctorAccount);
   if (!membership || membership.org.id !== ORG_HOSPITAL_ID) {
-    patient.sendClientMessage(Color.error, "治疗已取消。");
-    doctor.sendClientMessage(Color.error, "只有医院员工才能进行治疗。");
+    patient.sendClientMessage(Color.error, "治疗已取消.");
+    doctor.sendClientMessage(Color.error, "只有医院员工才能进行治疗.");
     return;
   }
 
   if (isJailed(doctor) || doctorAccount.hospitalized || isJailed(patient)) {
-    patient.sendClientMessage(Color.error, "治疗已取消。");
-    doctor.sendClientMessage(Color.error, "现在不能进行治疗。");
+    patient.sendClientMessage(Color.error, "治疗已取消.");
+    doctor.sendClientMessage(Color.error, "现在不能进行治疗.");
     return;
   }
 
   if (!arePlayersNearby(doctor, patient, WHISPER_RADIUS)) {
-    patient.sendClientMessage(Color.error, "医生距离太远。治疗已取消。");
-    doctor.sendClientMessage(Color.error, "患者距离太远。治疗已取消。");
+    patient.sendClientMessage(Color.error, "医生距离太远.治疗已取消.");
+    doctor.sendClientMessage(Color.error, "患者距离太远.治疗已取消.");
     return;
   }
 
   if (!canHealHere(doctor) || !canHealHere(patient)) {
-    patient.sendClientMessage(Color.error, "治疗已取消。");
+    patient.sendClientMessage(Color.error, "治疗已取消.");
     doctor.sendClientMessage(
       Color.error,
-      "只能在医院或医院车辆内治疗。"
+      "只能在医院或医院车辆内治疗."
     );
     return;
   }
@@ -339,10 +339,10 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   }
 
   if (!doctorInHospitalWorld && !sameHospitalVehicle(doctor, patient)) {
-    patient.sendClientMessage(Color.error, "治疗已取消。");
+    patient.sendClientMessage(Color.error, "治疗已取消.");
     doctor.sendClientMessage(
       Color.error,
-      "患者必须和你在同一辆医院车辆内。"
+      "患者必须和你在同一辆医院车辆内."
     );
     return;
   }
@@ -355,14 +355,14 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   }
 
   if (patientHp >= MAX_HEALTH - 0.5) {
-    patient.sendClientMessage(Color.error, "你已经健康。");
-    doctor.sendClientMessage(Color.error, "玩家已经健康。");
+    patient.sendClientMessage(Color.error, "你已经健康.");
+    doctor.sendClientMessage(Color.error, "玩家已经健康.");
     return;
   }
 
   if (getCarriedHospitalMeds(doctor) < 1) {
-    patient.sendClientMessage(Color.error, "医生没有药品。治疗已取消。");
-    doctor.sendClientMessage(Color.error, "没有药品。");
+    patient.sendClientMessage(Color.error, "医生没有药品.治疗已取消.");
+    doctor.sendClientMessage(Color.error, "没有药品.");
     return;
   }
 
@@ -370,7 +370,7 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   if (patientAccount.money < price) {
     patient.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(price)}.`
+      `现金不足.需要 ${formatMoney(price)}.`
     );
     doctor.sendClientMessage(
       Color.error,
@@ -388,7 +388,7 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
     liveDoctor.id !== doctorAccount.id ||
     livePatient.money < price
   ) {
-    patient.sendClientMessage(Color.error, "无法完成付款。");
+    patient.sendClientMessage(Color.error, "无法完成付款.");
     return;
   }
 
@@ -408,14 +408,14 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
     if (rollbackDoctor) {
       applyWallet(doctor, rollbackDoctor);
     }
-    patient.sendClientMessage(Color.error, "医生没有药品。治疗已取消。");
-    doctor.sendClientMessage(Color.error, "没有药品。");
+    patient.sendClientMessage(Color.error, "医生没有药品.治疗已取消.");
+    doctor.sendClientMessage(Color.error, "没有药品.");
     return;
   }
 
   patchAccount(patient, { health: MAX_HEALTH });
   applyHealth(patient, MAX_HEALTH);
-  // 否则 hospitalized 会一直为 true，满血患者也无法离开医院。
+  // 否则 hospitalized 会一直为 true,满血患者也无法离开医院.
   dischargeHospitalPatient(patient);
 
   const patientWallet = getAccount(patient);
@@ -433,11 +433,11 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
   const verb = byGender(doctorAccount.gender, "治疗了", "治疗了");
   doctor.sendClientMessage(
     Color.info,
-    `患者 ${playerName(patient)} 已治愈。+${formatMoney(price)}. 剩余药品: ${left}.`
+    `患者 ${playerName(patient)} 已治愈.+${formatMoney(price)}. 剩余药品: ${left}.`
   );
   patient.sendClientMessage(
     Color.info,
-    `${playerName(doctor)} ${verb}了你。已支付 ${formatMoney(price)}.`
+    `${playerName(doctor)} ${verb}了你.已支付 ${formatMoney(price)}.`
   );
 
   broadcastHospitalMed(membership.rank.title, doctor, patient, doctorAccount, price);
@@ -446,13 +446,13 @@ function acceptOffer(patient: Player, patientSlot: number, offer: MedhelpOffer):
 function refuseOffer(patient: Player, patientSlot: number, offer: MedhelpOffer): void {
   pendingOffers.delete(patientSlot);
   releaseYnOffer(patientSlot, "medhelp");
-  patient.sendClientMessage(Color.gray, "你拒绝了治疗。");
+  patient.sendClientMessage(Color.gray, "你拒绝了治疗.");
 
   const doctor = omp.players.at(offer.doctorId);
   if (doctor && isPlayerActive(doctor)) {
     doctor.sendClientMessage(
       Color.gray,
-      `${playerName(patient)} 拒绝了治疗。`
+      `${playerName(patient)} 拒绝了治疗.`
     );
   }
 }
@@ -483,7 +483,7 @@ function broadcastHospitalMed(
 ): void {
   const verb = byGender(doctorAccount.gender, "治疗了", "治疗了");
   const line = clipClientMessage(
-    `（MED）${rankTitle} ${playerChatName(doctor)} ${verb} 玩家 ${playerChatName(patient)}。费用：${formatMoney(price)}。`
+    `(MED)${rankTitle} ${playerChatName(doctor)} ${verb} 玩家 ${playerChatName(patient)}.费用:${formatMoney(price)}.`
   );
 
   omp.players.forEach((other) => {
@@ -508,7 +508,7 @@ function broadcastHospitalMed(
     try {
       other.sendClientMessage(Color.radio, line);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }

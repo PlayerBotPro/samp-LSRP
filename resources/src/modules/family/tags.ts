@@ -4,11 +4,11 @@ import { getAccount, isAuthenticated } from "../auth/session";
 import { getFamily } from "./catalog";
 import { getFamilyMembership } from "./membership";
 
-/** 柔和的灰紫色，不刺眼。 */
+/** 柔和的灰紫色,不刺眼. */
 const LABEL_COLOR = 0xa8a8c0ff;
-/** 略高于昵称。 */
+/** 略高于昵称. */
 const LABEL_OFFSET_Z = 1.15;
-/** 距离与昵称显示距离大致相同。 */
+/** 距离与昵称显示距离大致相同. */
 const LABEL_DRAW_DISTANCE = 20;
 const TICK_MS = 1000;
 
@@ -26,7 +26,7 @@ export function startFamilyTags(): void {
   setInterval(tickFamilyTags, TICK_MS);
 }
 
-/** 更新或移除玩家的家族标签。 */
+/** 更新或移除玩家的家族标签. */
 export function syncFamilyTag(player: Player): void {
   const id = playerId(player);
   if (id === null || !isPlayerActive(player) || !isAuthenticated(player)) {
@@ -78,7 +78,7 @@ export function clearFamilyTag(player: Player): void {
   clearFamilyTagById(id);
 }
 
-/** 家族改名后，更新所有在线成员的标签。 */
+/** 家族改名后,更新所有在线成员的标签. */
 export function refreshFamilyTags(familyId: number): void {
   const family = getFamily(familyId);
   if (!family) {
@@ -109,7 +109,7 @@ function clearFamilyTagById(id: number): void {
   try {
     label.destroy();
   } catch {
-    // 已销毁。
+    // 已销毁.
   }
 }
 

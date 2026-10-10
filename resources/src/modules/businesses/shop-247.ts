@@ -73,7 +73,7 @@ export function startShop247(): void {
   const count = listBusinesses().filter(
     (b) => isShop247Type(b.typeId) && hasBuyPickup(b)
   ).length;
-  omp.log(`[${SERVER_TAG}] 24/7：销售点数量 ${count}`);
+  omp.log(`[${SERVER_TAG}] 24/7:销售点数量 ${count}`);
 }
 
 function hasBuyPickup(business: BusinessRecord): boolean {
@@ -176,7 +176,7 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
   }
 
   if (shop.isLocked && shop.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     return;
   }
 
@@ -200,7 +200,7 @@ function openShopMenu(player: Player, shop: BusinessRecord): void {
   } catch {
     pendingMenu.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开商品展示柜。");
+    player.sendClientMessage(Color.error, "无法打开商品展示柜.");
   }
 }
 
@@ -226,7 +226,7 @@ async function onMenuResponse(
   }
 
   await buyShopItem(player, businessId, item);
-  // 保留 standingOn 状态以便离开；再次购买前需离开拾取点再回来。
+  // 保留 standingOn 状态以便离开;再次购买前需离开拾取点再回来.
 }
 
 async function buyShopItem(
@@ -246,12 +246,12 @@ async function buyShopItem(
 
   const business = getBusiness(businessId);
   if (!business || !isShop247Type(business.typeId)) {
-    player.sendClientMessage(Color.error, "商店暂不可用。");
+    player.sendClientMessage(Color.error, "商店暂不可用.");
     return;
   }
 
   if (business.isLocked && business.ownerId !== account.id) {
-    player.sendClientMessage(Color.error, "商店已关闭。");
+    player.sendClientMessage(Color.error, "商店已关闭.");
     return;
   }
 
@@ -269,7 +269,7 @@ async function buyShopItem(
       slotId
     );
     if (!near || near.id !== businessId) {
-      player.sendClientMessage(Color.error, "请靠近商店展示柜。");
+      player.sendClientMessage(Color.error, "请靠近商店展示柜.");
       return;
     }
   } catch {
@@ -279,7 +279,7 @@ async function buyShopItem(
   if (item.kind === "phone" && account.phone) {
     player.sendClientMessage(
       Color.error,
-      `你已经有手机了。号码: ${account.phone}.`
+      `你已经有手机了.号码: ${account.phone}.`
     );
     return;
   }
@@ -287,7 +287,7 @@ async function buyShopItem(
   if (account.money < item.price) {
     player.sendClientMessage(
       Color.error,
-      `现金不足。需要 ${formatMoney(item.price)}.`
+      `现金不足.需要 ${formatMoney(item.price)}.`
     );
     return;
   }
@@ -322,24 +322,24 @@ async function buyPhone(
     result = await payBusinessPhonePurchase(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 手机 企业=${businessId}（${userName}）：${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 24/7 手机 企业=${businessId}(${userName}):${message}`);
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
   if (!result.ok) {
     if (result.reason === "owned") {
-      player.sendClientMessage(Color.error, "你已经有手机了。");
+      player.sendClientMessage(Color.error, "你已经有手机了.");
       return;
     }
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(price)}.`
+        `现金不足.需要 ${formatMoney(price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -357,7 +357,7 @@ async function buyPhone(
 
   player.sendClientMessage(
     Color.tryOk,
-    `你已购买手机，花费 ${formatMoney(price)}. 你的号码: ${result.phone}.`
+    `你已购买手机,花费 ${formatMoney(price)}. 你的号码: ${result.phone}.`
   );
 }
 
@@ -373,8 +373,8 @@ async function buyCamera(
     result = await payBusinessCashShare(businessId, userId, item.price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 相机 企业=${businessId}（${userName}）：${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 24/7 相机 企业=${businessId}(${userName}):${message}`);
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -382,11 +382,11 @@ async function buyCamera(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(item.price)}.`
+        `现金不足.需要 ${formatMoney(item.price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -405,7 +405,7 @@ async function buyCamera(
   grantWeapon(player, item.weaponId, item.ammo);
   player.sendClientMessage(
     Color.tryOk,
-    `你已购买相机 (${item.ammo} 张照片)，花费 ${formatMoney(item.price)}.`
+    `你已购买相机 (${item.ammo} 张照片),花费 ${formatMoney(item.price)}.`
   );
 }
 
@@ -421,8 +421,8 @@ async function buyMask(
     result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 面具 企业=${businessId}（${userName}）：${message}`);
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    omp.log(`[${SERVER_TAG}] 24/7 面具 企业=${businessId}(${userName}):${message}`);
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -430,11 +430,11 @@ async function buyMask(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `现金不足。需要 ${formatMoney(price)}.`
+        `现金不足.需要 ${formatMoney(price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "购买失败。请重试。");
+    player.sendClientMessage(Color.error, "购买失败.请重试.");
     return;
   }
 
@@ -455,6 +455,6 @@ async function buyMask(
 
   player.sendClientMessage(
     Color.tryOk,
-    `你已购买面具，花费 ${formatMoney(price)}. 使用: /mask. 面具总数: ${nextMasks}.`
+    `你已购买面具,花费 ${formatMoney(price)}. 使用: /mask. 面具总数: ${nextMasks}.`
   );
 }

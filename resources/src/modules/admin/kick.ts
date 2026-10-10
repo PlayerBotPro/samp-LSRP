@@ -18,7 +18,7 @@ function broadcastAll(color: number, text: string): void {
     try {
       other.sendClientMessage(color, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -63,25 +63,25 @@ export function bindAdminKick(): void {
 
       const target = omp.players.at(slot);
       if (!target || !isPlayerActive(target)) {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       try {
         if (target.isNPC()) {
-          player.sendClientMessage(Color.error, "未找到玩家。");
+          player.sendClientMessage(Color.error, "未找到玩家.");
           return;
         }
       } catch {
-        player.sendClientMessage(Color.error, "未找到玩家。");
+        player.sendClientMessage(Color.error, "未找到玩家.");
         return;
       }
 
       const adminTag = playerChatName(player);
       const targetTag = playerChatName(target);
       const line = reason
-        ? `管理员 ${adminTag} 踢出了玩家 ${targetTag}。原因：${reason}。`
-        : `管理员 ${adminTag} 踢出了玩家 ${targetTag}。`;
+        ? `管理员 ${adminTag} 踢出了玩家 ${targetTag}.原因:${reason}.`
+        : `管理员 ${adminTag} 踢出了玩家 ${targetTag}.`;
       broadcastAll(Color.error, line);
       kickSoon(target);
     },

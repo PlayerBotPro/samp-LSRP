@@ -20,7 +20,7 @@ export function isHouseOwner(userId: number, house: HouseRecord): boolean {
   return house.ownerId === userId;
 }
 
-/** 房主和执法部门（LSPD / 地区警察 / FBI）始终可以进入；访客仅在房屋未上锁时可进入。 */
+/** 房主和执法部门(LSPD / 地区警察 / FBI)始终可以进入;访客仅在房屋未上锁时可进入. */
 export function canEnterHouse(player: Player, house: HouseRecord): boolean {
   if (house.ownerId === null) {
     return false;
@@ -77,32 +77,32 @@ export function tryEnterHouse(player: Player, houseId: number): void {
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "在监狱里不能进入房屋。");
+    player.sendClientMessage(Color.error, "在监狱里不能进入房屋.");
     return;
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "请先在医院完成治疗。");
+    player.sendClientMessage(Color.error, "请先在医院完成治疗.");
     return;
   }
 
   const house = getHouse(houseId);
   if (!house || house.ownerId === null) {
-    player.sendClientMessage(Color.error, "该房屋无人居住。");
+    player.sendClientMessage(Color.error, "该房屋无人居住.");
     return;
   }
 
   if (!isNearHouseEntrance(player, houseId)) {
-    player.sendClientMessage(Color.error, "请靠近房屋标记点。");
+    player.sendClientMessage(Color.error, "请靠近房屋标记点.");
     return;
   }
 
   if (!canEnterHouse(player, house)) {
-    player.sendClientMessage(Color.error, "房屋已锁。");
+    player.sendClientMessage(Color.error, "房屋已锁.");
     return;
   }
 
   if (!teleportToHouseInterior(player, house)) {
-    player.sendClientMessage(Color.error, "无法进入房屋。");
+    player.sendClientMessage(Color.error, "无法进入房屋.");
   }
 }

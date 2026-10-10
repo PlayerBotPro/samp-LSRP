@@ -1,6 +1,6 @@
-/** 房屋 VW 偏移范围：1000–1999（不与商店 2000+ 和家族 100000+ 重叠）。 */
+/** 房屋 VW 偏移范围:1000-1999(不与商店 2000+ 和家族 100000+ 重叠). */
 export const HOUSE_WORLD_OFFSET = 1000;
-/** 房屋 VW 范围上限（商店范围起点）。 */
+/** 房屋 VW 范围上限(商店范围起点). */
 const HOUSE_WORLD_END = 2000;
 
 export function houseVirtualWorld(houseId: number): number {

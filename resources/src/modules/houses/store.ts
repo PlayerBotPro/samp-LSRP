@@ -92,21 +92,21 @@ export function bindHouseStoreDialogs(): void {
   });
 }
 
-/** 在房屋被收回或出售时调用。 */
+/** 在房屋被收回或出售时调用. */
 export function onHouseStoreVacated(houseId: number): void {
   removeHouseStoreLabel(houseId);
 }
 
-/** 打开储物柜菜单（/use）。 */
+/** 打开储物柜菜单(/use). */
 export function tryOpenHouseStore(player: Player): void {
   if (!isAuthenticated(player)) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "必须步行。");
+      player.sendClientMessage(Color.error, "必须步行.");
       return;
     }
   } catch {
@@ -117,7 +117,7 @@ export function tryOpenHouseStore(player: Player): void {
   if (!house) {
     player.sendClientMessage(
       Color.error,
-      "只有房屋所有者才能在自己的房屋内使用衣柜。"
+      "只有房屋所有者才能在自己的房屋内使用衣柜."
     );
     return;
   }
@@ -131,13 +131,13 @@ export function tryOpenHouseStore(player: Player): void {
   }
 
   if (!isPlayerAtHouseStore(player, house)) {
-    player.sendClientMessage(Color.error, "请靠近衣柜。");
+    player.sendClientMessage(Color.error, "请靠近衣柜.");
     return;
   }
 
   const pid = playerId(player);
   if (pid !== null && (dialogBusy.has(pid) || transferBusy.has(pid))) {
-    player.sendClientMessage(Color.error, "请等待操作完成。");
+    player.sendClientMessage(Color.error, "请等待操作完成.");
     return;
   }
 
@@ -174,7 +174,7 @@ function showMenu(player: Player, houseId: number): void {
     );
   } catch {
     setDialogBusy(player, false);
-    player.sendClientMessage(Color.error, "无法打开衣柜菜单。");
+    player.sendClientMessage(Color.error, "无法打开衣柜菜单.");
   }
 }
 
@@ -186,7 +186,7 @@ function onMenuResponse(player: Player, accepted: boolean, listItem: number): vo
 
   const house = findOwnedHouseAtInterior(player);
   if (!house || !hasHouseStore(house) || !isPlayerAtHouseStore(player, house)) {
-    player.sendClientMessage(Color.error, "请靠近衣柜。");
+    player.sendClientMessage(Color.error, "请靠近衣柜.");
     return;
   }
 
@@ -248,8 +248,8 @@ function showAmountDialog(
   let playerHaveText: string;
   let stockHaveText: string;
   if (item === "money") {
-    playerHaveText = `您有： ${formatMoney(account.money)}`;
-    stockHaveText = `储物柜中： ${formatMoney(house.storeMoney)}`;
+    playerHaveText = `您有: ${formatMoney(account.money)}`;
+    stockHaveText = `储物柜中: ${formatMoney(house.storeMoney)}`;
   } else {
     const playerHave =
       item === "ammo" ? account.ammo : item === "metal" ? account.metal : account.drugs;
@@ -259,8 +259,8 @@ function showAmountDialog(
         : item === "metal"
           ? house.storeMetal
           : house.storeDrugs;
-    playerHaveText = `您有： ${playerHave} 件`;
-    stockHaveText = `储物柜中： ${stockHave} 件`;
+    playerHaveText = `您有: ${playerHave} 件`;
+    stockHaveText = `储物柜中: ${stockHave} 件`;
   }
 
   try {
@@ -270,9 +270,9 @@ function showAmountDialog(
       HOUSE_STORE_AMOUNT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "储物柜",
-      `要${verb}多少${ITEM_LABEL[item]}？\n` +
+      `要${verb}多少${ITEM_LABEL[item]}?\n` +
         `${playerHaveText}\n${stockHaveText}\n` +
-        `单次最多：${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
+        `单次最多:${item === "money" ? formatMoney(maxTransfer) : maxTransfer}`,
       "OK",
       "取消"
     );
@@ -295,7 +295,7 @@ async function onAmountResponse(
   const id = playerId(player);
   const pending = id !== null ? pendingByPlayer.get(id) : undefined;
   if (!pending) {
-    player.sendClientMessage(Color.error, "操作中断。请重新使用 /use.");
+    player.sendClientMessage(Color.error, "操作中断.请重新使用 /use.");
     return;
   }
 
@@ -306,14 +306,14 @@ async function onAmountResponse(
     !hasHouseStore(house) ||
     !isPlayerAtHouseStore(player, house)
   ) {
-    player.sendClientMessage(Color.error, "请靠近衣柜。");
+    player.sendClientMessage(Color.error, "请靠近衣柜.");
     clearPending(player);
     return;
   }
 
   const amount = Math.floor(Number(rawInput.trim().replace(",", ".")));
   if (!Number.isFinite(amount) || amount <= 0 || !Number.isSafeInteger(amount)) {
-    player.sendClientMessage(Color.error, "请输入大于 0 的整数。");
+    player.sendClientMessage(Color.error, "请输入大于 0 的整数.");
     showAmountDialog(player, pending.action, pending.item, pending.houseId);
     return;
   }
@@ -325,16 +325,16 @@ async function onAmountResponse(
       Color.error,
       pending.item === "money"
         ? `每次最多可存入 ${formatMoney(maxTransfer)}.`
-        : `每次最多可存入 ${maxTransfer} 件。`
+        : `每次最多可存入 ${maxTransfer} 件.`
     );
     showAmountDialog(player, pending.action, pending.item, pending.houseId);
     return;
   }
 
   if (id !== null && transferBusy.has(id)) {
-    // 不要让 dialogBusy=true 一直保持（pending 仍在进行）。
+    // 不要让 dialogBusy=true 一直保持(pending 仍在进行).
     setDialogBusy(player, false);
-    player.sendClientMessage(Color.error, "请等待操作完成。");
+    player.sendClientMessage(Color.error, "请等待操作完成.");
     return;
   }
 
@@ -383,7 +383,7 @@ async function applyPut(
 ): Promise<void> {
   const ctx = assertStoreOwner(player, houseId);
   if (!ctx) {
-    player.sendClientMessage(Color.error, "请靠近衣柜。");
+    player.sendClientMessage(Color.error, "请靠近衣柜.");
     clearPending(player);
     return;
   }
@@ -392,7 +392,7 @@ async function applyPut(
 
   if (item === "money") {
     if (account.money < amount) {
-      player.sendClientMessage(Color.error, "现金不足。");
+      player.sendClientMessage(Color.error, "现金不足.");
       showAmountDialog(player, "put", item, houseId);
       return;
     }
@@ -401,12 +401,12 @@ async function applyPut(
     try {
       await saveUserMoney(account.id, nextMoney, account.bank);
     } catch {
-      player.sendClientMessage(Color.error, "无法保存到数据库。");
+      player.sendClientMessage(Color.error, "无法保存到数据库.");
       clearPending(player);
       return;
     }
 
-    // 房屋可能在 saveUserMoney 和 add 之间被收回。
+    // 房屋可能在 saveUserMoney 和 add 之间被收回.
     if (!assertStoreOwner(player, houseId)) {
       await saveUserMoney(account.id, account.money, account.bank).catch(() => undefined);
       if (isPlayerActive(player) && getAccount(player)?.id === account.id) {
@@ -416,7 +416,7 @@ async function applyPut(
           applyWallet(player, live);
         }
       }
-      player.sendClientMessage(Color.error, "衣柜暂不可用。");
+      player.sendClientMessage(Color.error, "衣柜暂不可用.");
       clearPending(player);
       return;
     }
@@ -431,7 +431,7 @@ async function applyPut(
           applyWallet(player, live);
         }
       }
-      player.sendClientMessage(Color.error, "无法将资金存入衣柜。");
+      player.sendClientMessage(Color.error, "无法将资金存入衣柜.");
       clearPending(player);
       return;
     }
@@ -470,7 +470,7 @@ async function applyPut(
   try {
     await saveUserInventory(account.id, nextDrugs, nextAmmo, nextMetal);
   } catch {
-    player.sendClientMessage(Color.error, "无法保存到数据库。");
+    player.sendClientMessage(Color.error, "无法保存到数据库.");
     clearPending(player);
     return;
   }
@@ -489,7 +489,7 @@ async function applyPut(
         metal: account.metal,
       });
     }
-    player.sendClientMessage(Color.error, "衣柜暂不可用。");
+    player.sendClientMessage(Color.error, "衣柜暂不可用.");
     clearPending(player);
     return;
   }
@@ -509,7 +509,7 @@ async function applyPut(
         metal: account.metal,
       });
     }
-    player.sendClientMessage(Color.error, "无法存入衣柜。");
+    player.sendClientMessage(Color.error, "无法存入衣柜.");
     clearPending(player);
     return;
   }
@@ -523,7 +523,7 @@ async function applyPut(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你存入衣柜: ${ITEM_LABEL[item]} ${amount} 件。`
+      `你存入衣柜: ${ITEM_LABEL[item]} ${amount} 件.`
     );
   }
 }
@@ -536,7 +536,7 @@ async function applyTake(
 ): Promise<void> {
   const ctx = assertStoreOwner(player, houseId);
   if (!ctx) {
-    player.sendClientMessage(Color.error, "请靠近衣柜。");
+    player.sendClientMessage(Color.error, "请靠近衣柜.");
     clearPending(player);
     return;
   }
@@ -546,13 +546,13 @@ async function applyTake(
   if (item === "money") {
     const nextMoney = account.money + amount;
     if (!Number.isSafeInteger(nextMoney) || nextMoney > MAX_CASH) {
-      player.sendClientMessage(Color.error, "现金过多。");
+      player.sendClientMessage(Color.error, "现金过多.");
       clearPending(player);
       return;
     }
 
     if (!(await takeHouseStoreItem(houseId, account.id, "money", amount))) {
-      player.sendClientMessage(Color.error, "衣柜中的资金不足。");
+      player.sendClientMessage(Color.error, "衣柜中的资金不足.");
       showAmountDialog(player, "take", item, houseId);
       return;
     }
@@ -562,7 +562,7 @@ async function applyTake(
     } catch {
       await addHouseStoreItem(houseId, account.id, "money", amount);
       refreshHouseStoreLabel(houseId);
-      player.sendClientMessage(Color.error, "无法保存到数据库。");
+      player.sendClientMessage(Color.error, "无法保存到数据库.");
       clearPending(player);
       return;
     }
@@ -606,7 +606,7 @@ async function applyTake(
     !Number.isSafeInteger(nextAmmo) ||
     !Number.isSafeInteger(nextMetal)
   ) {
-    player.sendClientMessage(Color.error, "数量过多。");
+    player.sendClientMessage(Color.error, "数量过多.");
     clearPending(player);
     return;
   }
@@ -622,7 +622,7 @@ async function applyTake(
   } catch {
     await addHouseStoreItem(houseId, account.id, item, amount);
     refreshHouseStoreLabel(houseId);
-    player.sendClientMessage(Color.error, "无法保存到数据库。");
+    player.sendClientMessage(Color.error, "无法保存到数据库.");
     clearPending(player);
     return;
   }
@@ -636,7 +636,7 @@ async function applyTake(
   if (isPlayerActive(player)) {
     player.sendClientMessage(
       Color.info,
-      `你从衣柜取出: ${ITEM_LABEL[item]} ${amount} 件。`
+      `你从衣柜取出: ${ITEM_LABEL[item]} ${amount} 件.`
     );
   }
 }

@@ -76,7 +76,7 @@ export function isArmyFactoryOnShift(player: Player): boolean {
   return id !== null && jobs.has(id);
 }
 
-/** 结束工作班次并发放工资（离开工厂 / 更衣室）。 */
+/** 结束工作班次并发放工资(离开工厂 / 更衣室). */
 export function endArmyFactoryShift(player: Player): void {
   finishShift(player, { requireHirePoint: false, notifyExit: true });
 }
@@ -221,7 +221,7 @@ function tickFactory(): void {
       const inFactory =
         world === ARMY_FACTORY_WORLD && interior === ARMY_FACTORY_INTERIOR;
 
-      // /goto、/tpint 等命令：离开车间后不应继续保留工作班次。
+      // /goto,/tpint 等命令:离开车间后不应继续保留工作班次.
       if (job && !inFactory) {
         endArmyFactoryShift(player);
         standing.delete(id);
@@ -270,7 +270,7 @@ function tickFactory(): void {
           break;
       }
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -319,7 +319,7 @@ function onHirePickup(player: Player, job: Job | undefined): void {
   const account = getAccount(player);
   const membership = account ? getMembership(account) : null;
   if (membership?.org.id !== ORG_ARMY_ID) {
-    player.sendClientMessage(Color.error, "军队员工才能在车间工作。");
+    player.sendClientMessage(Color.error, "军队员工才能在车间工作.");
     return;
   }
 
@@ -328,12 +328,12 @@ function onHirePickup(player: Player, job: Job | undefined): void {
 
 function onBlankPickup(player: Player, job: Job | undefined): void {
   if (!job) {
-    player.sendClientMessage(Color.error, "请先在更衣室开始工作。");
+    player.sendClientMessage(Color.error, "请先在更衣室开始工作.");
     return;
   }
 
   if (job.phase === "blank") {
-    player.sendClientMessage(Color.error, "你已经有一份弹壳毛坯。");
+    player.sendClientMessage(Color.error, "你已经有一份弹壳毛坯.");
     return;
   }
 
@@ -341,8 +341,8 @@ function onBlankPickup(player: Player, job: Job | undefined): void {
     player.sendClientMessage(
       Color.error,
       job.phase === "product"
-        ? "请先将完成的子弹交到仓库。"
-        : "请等待组装完成。"
+        ? "请先将完成的子弹交到仓库."
+        : "请等待组装完成."
     );
     return;
   }
@@ -351,7 +351,7 @@ function onBlankPickup(player: Player, job: Job | undefined): void {
   giveCarry(player, BLANK_ATTACH_MODEL);
   player.sendClientMessage(
     Color.info,
-    "你拿起了弹壳毛坯。把它送到组装机。"
+    "你拿起了弹壳毛坯.把它送到组装机."
   );
 }
 
@@ -361,7 +361,7 @@ function onBenchPickup(
   benchIndex: number
 ): void {
   if (!job) {
-    player.sendClientMessage(Color.error, "请先在更衣室开始工作。");
+    player.sendClientMessage(Color.error, "请先在更衣室开始工作.");
     return;
   }
 
@@ -373,8 +373,8 @@ function onBenchPickup(
     player.sendClientMessage(
       Color.error,
       job.phase === "product"
-        ? "子弹已经组装完成——把它们送到仓库。"
-        : "去黄色标记处领取弹壳毛坯。"
+        ? "子弹已经组装完成--把它们送到仓库."
+        : "去黄色标记处领取弹壳毛坯."
     );
     return;
   }
@@ -389,7 +389,7 @@ function onBenchPickup(
 
 function onStockPickup(player: Player, job: Job | undefined): void {
   if (!job) {
-    player.sendClientMessage(Color.error, "请先在更衣室开始工作。");
+    player.sendClientMessage(Color.error, "请先在更衣室开始工作.");
     return;
   }
 
@@ -397,8 +397,8 @@ function onStockPickup(player: Player, job: Job | undefined): void {
     player.sendClientMessage(
       Color.error,
       job.phase === "blank"
-        ? "先在机器上组装子弹。"
-        : "你没有组装好的子弹。"
+        ? "先在机器上组装子弹."
+        : "你没有组装好的子弹."
     );
     return;
   }
@@ -477,11 +477,11 @@ function startCraft(
       0
     );
   } catch {
-    // 否则 phase=craft 会被冻结且没有计时器，导致永久卡住。
+    // 否则 phase=craft 会被冻结且没有计时器,导致永久卡住.
     cancelCraft(player, job, true);
     job.phase = "blank";
     giveCarry(player, BLANK_ATTACH_MODEL);
-    player.sendClientMessage(Color.error, "机器暂不可用，请重试。");
+    player.sendClientMessage(Color.error, "机器暂不可用,请重试.");
     return;
   }
 
@@ -513,7 +513,7 @@ function finishCraft(player: Player, expectedId: number): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.toggleControllable(true);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 
   if (!isPlayerActive(player)) {
@@ -526,7 +526,7 @@ function finishCraft(player: Player, expectedId: number): void {
     job.defects += 1;
     player.sendClientMessage(
       Color.error,
-      "次品: 弹壳出现裂纹。请领取新的毛坯。"
+      "次品: 弹壳出现裂纹.请领取新的毛坯."
     );
     return;
   }
@@ -535,7 +535,7 @@ function finishCraft(player: Player, expectedId: number): void {
   giveCarry(player, BLANK_ATTACH_MODEL);
   player.sendClientMessage(
     Color.info,
-    "子弹已组装完成。把箱子送到成品仓库。"
+    "子弹已组装完成.把箱子送到成品仓库."
   );
 }
 
@@ -555,33 +555,33 @@ function hire(player: Player): void {
   }
 
   if (account.hospitalized) {
-    player.sendClientMessage(Color.error, "请先完成治疗。");
+    player.sendClientMessage(Color.error, "请先完成治疗.");
     return;
   }
 
   if (isJailed(player)) {
-    player.sendClientMessage(Color.error, "不能在监狱里工作。");
+    player.sendClientMessage(Color.error, "不能在监狱里工作.");
     return;
   }
 
   if (isMinerOnShift(player) || isLoaderOnShift(player)) {
-    player.sendClientMessage(Color.error, "请先结束另一份工作。");
+    player.sendClientMessage(Color.error, "请先结束另一份工作.");
     return;
   }
 
   if (getExam(player)) {
-    player.sendClientMessage(Color.error, "请先完成驾校考试。");
+    player.sendClientMessage(Color.error, "请先完成驾校考试.");
     return;
   }
 
   const membership = getMembership(account);
   if (membership?.org.id !== ORG_ARMY_ID) {
-    player.sendClientMessage(Color.error, "军队员工才能在车间工作。");
+    player.sendClientMessage(Color.error, "军队员工才能在车间工作.");
     return;
   }
 
   if (!isInFactoryOnFoot(player) || !near(player.getPos(), HIRE_POINT, PICKUP_RADIUS + 0.8)) {
-    player.sendClientMessage(Color.error, "请靠近车间更衣室。");
+    player.sendClientMessage(Color.error, "请靠近车间更衣室.");
     return;
   }
 
@@ -604,11 +604,11 @@ function hire(player: Player): void {
 
   player.sendClientMessage(
     Color.info,
-    "子弹车间的工作班次已开始。领取弹壳毛坯并在机器上组装一批子弹。"
+    "子弹车间的工作班次已开始.领取弹壳毛坯并在机器上组装一批子弹."
   );
   player.sendClientMessage(
     Color.info,
-    "将组装好的子弹交到仓库。要结束班次，请回到更衣室。"
+    "将组装好的子弹交到仓库.要结束班次,请回到更衣室."
   );
 }
 
@@ -629,7 +629,7 @@ function finishShift(
         !isInFactoryOnFoot(player) ||
         !near(player.getPos(), HIRE_POINT, PICKUP_RADIUS + 0.8)
       ) {
-        player.sendClientMessage(Color.error, "请靠近车间更衣室。");
+        player.sendClientMessage(Color.error, "请靠近车间更衣室.");
         return;
       }
     } catch {
@@ -663,8 +663,8 @@ function finishShift(
     player.sendClientMessage(
       Color.info,
       salary > 0
-        ? `你已离开工厂。班次已结束。工资: $${salary}.`
-        : "你已离开工厂。班次已结束。"
+        ? `你已离开工厂.班次已结束.工资: $${salary}.`
+        : "你已离开工厂.班次已结束."
     );
     return;
   }
@@ -672,10 +672,10 @@ function finishShift(
   if (delivered > 0 || defects > 0) {
     player.sendClientMessage(
       Color.info,
-      `班次结束。完成批次: ${delivered}，次品: ${defects}. 工资: $${salary}.`
+      `班次结束.完成批次: ${delivered},次品: ${defects}. 工资: $${salary}.`
     );
   } else {
-    player.sendClientMessage(Color.info, "班次结束。你没有赚到钱。");
+    player.sendClientMessage(Color.info, "班次结束.你没有赚到钱.");
   }
 }
 
@@ -695,7 +695,7 @@ function abortShift(player: Player, notify: boolean): void {
   if (notify && isPlayerActive(player)) {
     player.sendClientMessage(
       Color.error,
-      "班次中断。未发放的工资已作废。"
+      "班次中断.未发放的工资已作废."
     );
   }
 }
@@ -714,7 +714,7 @@ function cancelCraft(player: Player, job: Job, unlock: boolean): void {
       player.toggleControllable(true);
       player.clearAnimations(ANIM_SYNC_ALL);
     } catch {
-      // 玩家已经离开。
+      // 玩家已经离开.
     }
   }
 }
@@ -727,7 +727,7 @@ function destroyCraftObject(job: Job): void {
   try {
     job.craftObject.destroy();
   } catch {
-    // 已经销毁。
+    // 已经销毁.
   }
 
   job.craftObject = null;
@@ -754,7 +754,7 @@ function giveCarry(player: Player, model: number): void {
     );
     player.setSpecialAction(SPECIAL_ACTION_CARRY);
   } catch {
-    // 槽位尚未准备好。
+    // 槽位尚未准备好.
   }
 }
 
@@ -764,7 +764,7 @@ function clearCarry(player: Player): void {
     player.setSpecialAction(SPECIAL_ACTION_NONE);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -772,7 +772,7 @@ function clearHandObject(player: Player): void {
   try {
     player.removeAttachedObject(SLOT_HAND);
   } catch {
-    // 槽位不存在。
+    // 槽位不存在.
   }
 }
 
@@ -790,7 +790,7 @@ function playPutdown(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // 稍后会加载动作库。
+    // 稍后会加载动作库.
   }
 }
 
@@ -800,7 +800,7 @@ function preloadAnims(player: Player): void {
     player.applyAnimation("CARRY", "PUTDWN", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 第一次组装时会加载。
+    // 第一次组装时会加载.
   }
 }
 
@@ -812,7 +812,7 @@ function restoreWorker(player: Player, skin: number | null): void {
       player.setSkin(skin);
     }
   } catch {
-    // 玩家已经离开。
+    // 玩家已经离开.
   }
 }
 
@@ -823,12 +823,12 @@ function showHireDialog(player: Player): void {
       ARMY_FACTORY_HIRE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "弹药车间",
-      "要换上制服并开始弹药车间的工作吗？",
+      "要换上制服并开始弹药车间的工作吗?",
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
@@ -840,12 +840,12 @@ function showQuitDialog(player: Player, job: Job): void {
       ARMY_FACTORY_QUIT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "弹药车间",
-      `要结束工作并领取工资吗？\n批次：${job.delivered}，次品：${job.defects}，应发工资：$${salary}`,
+      `要结束工作并领取工资吗?\n批次:${job.delivered},次品:${job.defects},应发工资:$${salary}`,
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 

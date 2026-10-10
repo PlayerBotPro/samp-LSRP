@@ -105,12 +105,12 @@ export function bindAdminTpcor(): void {
       }
 
       if (!canTeleport(player)) {
-        player.sendClientMessage(Color.error, "现在不能传送。");
+        player.sendClientMessage(Color.error, "现在不能传送.");
         return;
       }
 
       if (!teleportToCoords(player, parsed.x, parsed.y, parsed.z)) {
-        player.sendClientMessage(Color.error, "无法传送。");
+        player.sendClientMessage(Color.error, "无法传送.");
         return;
       }
 

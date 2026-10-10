@@ -51,7 +51,7 @@ export function kickSamePlayer(player: Player, delayMs = 120): void {
     try {
       player.kick();
     } catch {
-      // 玩家已经离线。
+      // 玩家已经离线.
     }
   }, delayMs);
 }

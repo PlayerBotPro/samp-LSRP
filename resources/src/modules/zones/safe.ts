@@ -18,7 +18,7 @@ type Rect = {
   maxY: number;
 };
 
-/** 不可见的安全区域：没有帮派区域、文字或图标。 */
+/** 不可见的安全区域:没有帮派区域,文字或图标. */
 const SAFE_ZONES: readonly Rect[] = [
   { minX: 1684, minY: -1954.5, maxX: 1816, maxY: -1819.5 },
   { minX: 1393, minY: -1763.5, maxX: 1565, maxY: -1721.5 },
@@ -155,7 +155,7 @@ function rememberVitals(player: Player): void {
       armor: Math.max(0, player.getArmor()),
     });
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -186,7 +186,7 @@ function restoreVitals(player: Player, amount: number): void {
       trustHealth(player, next);
     }
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -206,7 +206,7 @@ function playTired(player: Player): void {
   try {
     player.applyAnimation("FAT", "IDLE_tired", 4.1, false, false, false, false, 0, ANIM_SYNC_ALL);
   } catch {
-    // 动画未能播放。
+    // 动画未能播放.
   }
 }
 
@@ -215,6 +215,6 @@ function preloadTired(player: Player): void {
     player.applyAnimation("FAT", "IDLE_tired", 4.1, false, false, false, false, 1, ANIM_SYNC_ALL);
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 首次攻击时会自动加载。
+    // 首次攻击时会自动加载.
   }
 }

@@ -29,7 +29,7 @@ function broadcastAdmins(text: string): void {
     try {
       other.sendClientMessage(Color.gray, text);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -57,7 +57,7 @@ function leaveVehicle(player: Player): void {
       player.removeFromVehicle();
     }
   } catch {
-    // 已经下车。
+    // 已经下车.
   }
 }
 
@@ -78,13 +78,13 @@ function exitSpectate(player: Player): void {
   try {
     player.toggleSpectating(false);
   } catch {
-    // 已退出观察模式。
+    // 已退出观察模式.
   }
 
   try {
     player.toggleControllable(true);
   } catch {
-    // 控制状态会在 placeAt 后设置。
+    // 控制状态会在 placeAt 后设置.
   }
 }
 
@@ -126,14 +126,14 @@ function spawnToAccountPoint(target: Player): boolean {
   leaveVehicle(target);
   exitSpectate(target);
 
-  // 否则 OnPlayerSpawn 会在管理员重生后显示“你失去了意识……”。
+  // 否则 OnPlayerSpawn 会在管理员重生后显示"你失去了意识......".
   clearPendingHospitalSpawn(target);
 
   try {
     if (force) {
       writeSpawnInfo(target, skin, point);
       target.spawn();
-      // 等待 OnPlayerSpawn，否则 placeAt 可能被死亡/医院处理器覆盖。
+      // 等待 OnPlayerSpawn,否则 placeAt 可能被死亡/医院处理器覆盖.
       setTimeout(() => {
         if (!isPlayerActive(target) || playerId(target) !== targetSlot) {
           return;
@@ -180,18 +180,18 @@ export function bindAdminSpawn(): void {
 
         const found = findTarget(slot);
         if (!found || !isAuthenticated(found)) {
-          player.sendClientMessage(Color.error, "未找到玩家。");
+          player.sendClientMessage(Color.error, "未找到玩家.");
           return;
         }
 
         target = found;
       } else if (!isAuthenticated(player)) {
-        player.sendClientMessage(Color.error, "请先登录账号。");
+        player.sendClientMessage(Color.error, "请先登录账号.");
         return;
       }
 
       if (!spawnToAccountPoint(target)) {
-        player.sendClientMessage(Color.error, "无法使玩家重生。");
+        player.sendClientMessage(Color.error, "无法使玩家重生.");
         return;
       }
 
@@ -200,26 +200,26 @@ export function bindAdminSpawn(): void {
       const self = adminId !== null && adminId === targetId;
 
       if (self) {
-        player.sendClientMessage(Color.info, "你已重生。");
-        broadcastAdmins(`管理员 ${playerChatName(player)} 让自己重生。`);
+        player.sendClientMessage(Color.info, "你已重生.");
+        broadcastAdmins(`管理员 ${playerChatName(player)} 让自己重生.`);
         return;
       }
 
       player.sendClientMessage(
         Color.info,
-        `你已使玩家 ${playerChatName(target)} 重生。`
+        `你已使玩家 ${playerChatName(target)} 重生.`
       );
       try {
         target.sendClientMessage(
           Color.info,
-          `管理员 ${playerChatName(player)} 已使你重生。`
+          `管理员 ${playerChatName(player)} 已使你重生.`
         );
       } catch {
-        // 已离线。
+        // 已离线.
       }
 
       broadcastAdmins(
-        `管理员 ${playerChatName(player)} 让 ${playerChatName(target)} 重生。`
+        `管理员 ${playerChatName(player)} 让 ${playerChatName(target)} 重生.`
       );
     },
     true

@@ -15,7 +15,7 @@ registerCommand("s", "远距离大喊", (player, args) => {
     player,
     SHOUT_RADIUS,
     Color.shout,
-    `${playerChatName(player)} 大喊：${text}`
+    `${playerChatName(player)} 大喊:${text}`
   );
   playLocalSpeech(player, text, { radius: SHOUT_RADIUS, color: Color.shout });
 });

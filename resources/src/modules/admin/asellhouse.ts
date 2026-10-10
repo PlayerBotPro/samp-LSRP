@@ -27,7 +27,7 @@ function parseHouseId(args: string): number | null {
 export function bindAdminAsellhouse(): void {
   registerCommand(
     "asellhouse",
-    "收回房屋（出售给政府，不予补偿）",
+    "收回房屋(出售给政府,不予补偿)",
     (player, args) => {
       if (!hasAdminAccess(player, MIN_ADMIN_LEVEL)) {
         return;
@@ -40,7 +40,7 @@ export function bindAdminAsellhouse(): void {
       }
 
       if (!getHouse(houseId)) {
-        player.sendClientMessage(Color.error, "未找到该编号的房屋。");
+        player.sendClientMessage(Color.error, "未找到该编号的房屋.");
         return;
       }
 
@@ -61,17 +61,17 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
     result = await adminVacateHouse(houseId);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] asellhouse ${account.name} 房屋 ${houseId}：${message}`);
-    admin.sendClientMessage(Color.error, "无法腾空房屋。");
+    omp.log(`[${SERVER_TAG}] asellhouse ${account.name} 房屋 ${houseId}:${message}`);
+    admin.sendClientMessage(Color.error, "无法腾空房屋.");
     return;
   }
 
   if (!result.ok) {
     if (result.reason === "not_found") {
-      admin.sendClientMessage(Color.error, "未找到该编号的房屋。");
+      admin.sendClientMessage(Color.error, "未找到该编号的房屋.");
       return;
     }
-    admin.sendClientMessage(Color.error, "无法腾空房屋。");
+    admin.sendClientMessage(Color.error, "无法腾空房屋.");
     return;
   }
 
@@ -83,10 +83,10 @@ async function vacateHouse(admin: Player, houseId: number): Promise<void> {
   if (result.wasOccupied) {
     admin.sendClientMessage(
       Color.info,
-      `房屋 №${houseId} 已腾空。前任房主: id ${result.previousOwnerId}.`
+      `房屋 №${houseId} 已腾空.前任房主: id ${result.previousOwnerId}.`
     );
     return;
   }
 
-  admin.sendClientMessage(Color.info, `房屋 №${houseId} 已经空置。状态已更新。`);
+  admin.sendClientMessage(Color.info, `房屋 №${houseId} 已经空置.状态已更新.`);
 }

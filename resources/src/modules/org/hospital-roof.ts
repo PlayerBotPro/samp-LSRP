@@ -21,7 +21,7 @@ const PICKUP_RADIUS = 1.5;
 const TICK_MS = 200;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
-const DENY = "你不属于医院。";
+const DENY = "你不属于医院.";
 
 type StaffDoor = {
   pickup: { x: number; y: number; z: number; world: number };
@@ -144,7 +144,7 @@ function tickStaffDoors(): void {
         }
       }
     } catch {
-      // 槽位为空或玩家已离开。
+      // 槽位为空或玩家已离开.
     }
   });
 }
@@ -152,7 +152,7 @@ function tickStaffDoors(): void {
 function tryUse(player: Player, dest: SpawnPoint): void {
   const account = getAccount(player);
   if (account?.hospitalized) {
-    deny(player, "你需要治疗。请使用 /hospital 占用病床。");
+    deny(player, "你需要治疗.请使用 /hospital 占用病床.");
     return;
   }
 
@@ -181,7 +181,7 @@ function deny(player: Player, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -203,7 +203,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 

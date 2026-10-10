@@ -6,7 +6,7 @@ export const ORG_LCN_ID = 14;
 export const ORG_YAKUZA_ID = 15;
 export const ORG_RUSSIAN_MAFIA_ID = 16;
 
-/** 自定义总部 (`maps/mafia.txt`)：共用 interior 0，各家族使用不同 VW。 */
+/** 自定义总部 (`maps/mafia.txt`):共用 interior 0,各家族使用不同 VW. */
 export const MAFIA_INTERIOR = 0;
 export const LCN_WORLD = 14;
 export const YAKUZA_WORLD = 15;
@@ -139,7 +139,7 @@ export const LCN_GATES: OrgGateDef[] = [
     ry: 0,
     rz: 90,
     radius: 14,
-    denyMessage: "你不属于 La Cosa Nostra。",
+    denyMessage: "你不属于 La Cosa Nostra.",
   },
 ];
 
@@ -149,7 +149,7 @@ const YAKUZA_GATE = {
   rx: 0,
   ry: 0,
   radius: 14,
-  denyMessage: "你不属于 Yakuza。",
+  denyMessage: "你不属于 Yakuza.",
 } as const;
 
 export const YAKUZA_GATES: OrgGateDef[] = [
@@ -192,6 +192,6 @@ export const RUSSIAN_MAFIA_GATES: OrgGateDef[] = [
     ryOpen: 0,
     rz: 0.7162,
     radius: 14,
-    denyMessage: "你不属于俄罗斯黑手党。",
+    denyMessage: "你不属于俄罗斯黑手党.",
   },
 ];

@@ -69,7 +69,7 @@ function showWarehouseList(player: Player): void {
       "取消"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开仓库列表。");
+    player.sendClientMessage(Color.error, "无法打开仓库列表.");
   }
 }
 
@@ -105,7 +105,7 @@ function showWarehouseInfo(player: Player, orgId: number): void {
       ""
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开仓库。");
+    player.sendClientMessage(Color.error, "无法打开仓库.");
   }
 }
 
@@ -113,22 +113,22 @@ function formatWarehouseInfo(record: WarehouseRecord): string {
   const lines: string[] = [];
 
   if (record.orgId === WAREHOUSE_MINE_ID) {
-    lines.push(`金属：${record.metal}`);
+    lines.push(`金属:${record.metal}`);
   } else if (record.orgId === ORG_HOSPITAL_ID) {
-    lines.push(`医疗用品：${record.meds}`);
+    lines.push(`医疗用品:${record.meds}`);
   } else if (AMMO_ONLY_IDS.has(record.orgId)) {
-    lines.push(`弹药：${record.ammo}`);
+    lines.push(`弹药:${record.ammo}`);
   } else if (warehouseUsesLock(record.orgId)) {
-    lines.push(`弹药：${record.ammo}`);
-    lines.push(`金属：${record.metal}`);
-    lines.push(`毒品：${record.drugs}`);
+    lines.push(`弹药:${record.ammo}`);
+    lines.push(`金属:${record.metal}`);
+    lines.push(`毒品:${record.drugs}`);
     lines.push("");
     lines.push(record.isLocked ? "仓库已关闭" : "仓库已开启");
   } else {
-    lines.push(`弹药：${record.ammo}`);
-    lines.push(`医疗用品：${record.meds}`);
-    lines.push(`金属：${record.metal}`);
-    lines.push(`毒品：${record.drugs}`);
+    lines.push(`弹药:${record.ammo}`);
+    lines.push(`医疗用品:${record.meds}`);
+    lines.push(`金属:${record.metal}`);
+    lines.push(`毒品:${record.drugs}`);
   }
 
   return lines.join("\n");

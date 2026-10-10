@@ -45,7 +45,7 @@ function showLogo(player: Player): void {
     try {
       draw.showForPlayer(player);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
   }
 }
@@ -55,7 +55,7 @@ function hideLogo(player: Player): void {
     try {
       draw.hideForPlayer(player);
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
   }
 }

@@ -2,7 +2,7 @@ import type { Player, Vehicle } from "@omp-node/core";
 import { getAccount } from "../auth/session";
 import type { LicenseKey } from "../auth/licenses";
 
-/** 火车站的 Faggio 和 Pizzaboy 是踏板车，无需驾照。 */
+/** 火车站的 Faggio 和 Pizzaboy 是踏板车,无需驾照. */
 const SCOOTERS = new Set([448, 462]);
 const BICYCLES = new Set([481, 509, 510]);
 const MOTORCYCLES = new Set([
@@ -18,9 +18,9 @@ const NO_LICENSE = new Set([
 ]);
 
 const DENY: Record<"car" | "moto" | "fly", string> = {
-  car: "你没有汽车驾照。",
-  moto: "你没有摩托车驾照。",
-  fly: "你没有飞行执照。",
+  car: "你没有汽车驾照.",
+  moto: "你没有摩托车驾照.",
+  fly: "你没有飞行执照.",
 };
 
 export type DriveLicense = Extract<LicenseKey, "car" | "moto" | "fly">;
@@ -48,7 +48,7 @@ export function requiredDriveLicense(model: number): DriveLicense | null {
 export function driveLicenseDeny(player: Player, vehicle: Vehicle): string | null {
   const account = getAccount(player);
   if (!account) {
-    return "请先登录账号。";
+    return "请先登录账号.";
   }
 
   let model = 0;

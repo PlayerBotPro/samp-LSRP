@@ -10,8 +10,8 @@ const MIN_ADMIN_LEVEL = 5;
 
 function usageLines(): string[] {
   return [
-    "用法：/gzcolor [id]",
-    ...GANGS.map((gang) => `${gang.id} — ${gang.name}`),
+    "用法:/gzcolor [id]",
+    ...GANGS.map((gang) => `${gang.id} - ${gang.name}`),
   ];
 }
 
@@ -50,18 +50,18 @@ export function bindAdminGzcolor(): void {
       if (!turf) {
         player.sendClientMessage(
           Color.error,
-          "请站在你想更改的帮派地盘上。"
+          "请站在你想更改的帮派地盘上."
         );
         return;
       }
 
       if (turf.orgId === orgId) {
-        player.sendClientMessage(Color.error, "该地盘已属于这个帮派。");
+        player.sendClientMessage(Color.error, "该地盘已属于这个帮派.");
         return;
       }
 
       if (isZoneUnderCapture(turf.id)) {
-        player.sendClientMessage(Color.error, "占领战期间不能更换地盘所有者。");
+        player.sendClientMessage(Color.error, "占领战期间不能更换地盘所有者.");
         return;
       }
 
@@ -79,7 +79,7 @@ async function applyOwner(
 ): Promise<void> {
   const saved = await setGangZoneOwner(zoneId, orgId);
   if (!saved) {
-    admin.sendClientMessage(Color.error, "无法保存地盘所有者。");
+    admin.sendClientMessage(Color.error, "无法保存地盘所有者.");
     return;
   }
 

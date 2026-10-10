@@ -48,7 +48,7 @@ function stockLabelText(orgId: number): string {
   const metal = wh?.metal ?? 0;
   const drugs = wh?.drugs ?? 0;
   const status = wh && !wh.isLocked ? "仓库已开放" : "仓库已关闭";
-  return `子弹：${ammo}\n金属：${metal}\n毒品：${drugs}\n\n${status}`;
+  return `子弹:${ammo}\n金属:${metal}\n毒品:${drugs}\n\n${status}`;
 }
 
 export function startMafiaWarehouseDisplays(): void {
@@ -81,12 +81,12 @@ export function refreshMafiaWarehouseLabels(): void {
     try {
       stock.label.updateText(Color.info, stockLabelText(stock.orgId));
     } catch {
-      // 标签已销毁。
+      // 标签已销毁.
     }
   }
 }
 
-/** 玩家处于检查点范围内时的黑手党仓库点。 */
+/** 玩家处于检查点范围内时的黑手党仓库点. */
 export function findMafiaStockAtPlayer(player: Player): {
   orgId: number;
   x: number;
@@ -161,13 +161,13 @@ function updateCheckpointForPlayer(player: Player): void {
         checkpointShown.add(id);
       }
     } catch {
-      // 玩家已离开。
+      // 玩家已离开.
     }
     notifyOrgStockStanding(player, onCheckpoint);
     return;
   }
 
-  // 不是我们的仓库，不处理 pending/visit。
+  // 不是我们的仓库,不处理 pending/visit.
   if (!checkpointShown.has(id)) {
     return;
   }
@@ -178,6 +178,6 @@ function updateCheckpointForPlayer(player: Player): void {
   try {
     Checkpoint.disable(player);
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }

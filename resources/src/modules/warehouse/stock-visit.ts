@@ -1,9 +1,9 @@
 import type { Player } from "@omp-node/core";
 import { playerId } from "../../shared/player";
 
-/** 本次进入标记点时已显示菜单。 */
+/** 本次进入标记点时已显示菜单. */
 const stockVisitByPlayer = new Set<number>();
-/** 当前仓库对话框已打开，不要打断。 */
+/** 当前仓库对话框已打开,不要打断. */
 const stockDialogBusy = new Set<number>();
 
 export function isOrgStockDialogBusy(player: Player): boolean {
@@ -24,7 +24,7 @@ export function setOrgStockDialogBusy(player: Player, busy: boolean): void {
   }
 }
 
-/** @returns false — 本次进入标记点时已显示过菜单。 */
+/** @returns false - 本次进入标记点时已显示过菜单. */
 export function markOrgStockVisit(player: Player): boolean {
   const id = playerId(player);
   if (id === null) {
@@ -39,7 +39,7 @@ export function markOrgStockVisit(player: Player): boolean {
   return true;
 }
 
-/** 离开标记点后，下次进入时可以再次打开。 */
+/** 离开标记点后,下次进入时可以再次打开. */
 export function clearOrgStockVisit(player: Player): void {
   const id = playerId(player);
   if (id !== null) {

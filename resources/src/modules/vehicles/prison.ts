@@ -4,7 +4,7 @@ import { registerOrgVehicle } from "./access";
 import { createServerVehicle } from "./spawn";
 
 const RESPAWN_SEC = 1800;
-const DENY = "只有 LSPD、州警察局和 FBI 的工作人员可以驾驶。";
+const DENY = "只有 LSPD,州警察局和 FBI 的工作人员可以驾驶.";
 
 const PRISON_VEHICLES: ReadonlyArray<{
   model: number;

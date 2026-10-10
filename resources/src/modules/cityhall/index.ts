@@ -229,7 +229,7 @@ function tickCityHall(): void {
         tryGivePassport(player);
       }
     } catch {
-      // 槽位为空或玩家已退出。
+      // 槽位为空或玩家已退出.
     }
   });
 }
@@ -268,7 +268,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已退出。
+      // 玩家已退出.
     }
     return;
   }
@@ -280,7 +280,7 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
   iconShown.delete(id);
 }
@@ -318,7 +318,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已退出。
+    // 玩家已退出.
   }
 }
 
@@ -338,19 +338,19 @@ function tryGivePassport(player: Player): void {
   lastPassportMsgAt.set(id, now);
 
   if (account.passport) {
-    player.sendClientMessage(Color.gray, "你已经有护照了。");
+    player.sendClientMessage(Color.gray, "你已经有护照了.");
     return;
   }
 
   patchAccount(player, { passport: true });
   void saveUserPassport(account.id).catch((error: unknown) => {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的身份证：${message}`);
+    omp.log(`[${SERVER_TAG}] 无法保存 ${account.name} 的身份证:${message}`);
   });
 
-  player.sendClientMessage(Color.info, "你已获得洛圣都护照。");
+  player.sendClientMessage(Color.info, "你已获得洛圣都护照.");
   player.sendClientMessage(
     Color.gray,
-    "/pass — 查看护照，/pass [id] — 向他人出示。"
+    "/pass - 查看护照,/pass [id] - 向他人出示."
   );
 }

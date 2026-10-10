@@ -16,10 +16,10 @@ import {
   ORG_YAKUZA_ID,
 } from "../org";
 
-/** 矿场仓库：不是组织仓库，预留 org_id = 0。 */
+/** 矿场仓库:不是组织仓库,预留 org_id = 0. */
 export const WAREHOUSE_MINE_ID = 0;
 
-/** 所有仓库：矿场 (0) + 组织。 */
+/** 所有仓库:矿场 (0) + 组织. */
 export const WAREHOUSE_IDS: readonly number[] = [
   WAREHOUSE_MINE_ID,
   ORG_ARMY_ID,
@@ -37,7 +37,7 @@ export const WAREHOUSE_IDS: readonly number[] = [
   ORG_RUSSIAN_MAFIA_ID,
 ];
 
-/** 只有帮派和黑手党仓库有锁。 */
+/** 只有帮派和黑手党仓库有锁. */
 export const WAREHOUSE_LOCKABLE_IDS: ReadonlySet<number> = new Set([
   ORG_GROVE_ID,
   ORG_BALLAS_ID,
@@ -120,7 +120,7 @@ export function listWarehouses(): readonly WarehouseRecord[] {
   return [...cache.values()];
 }
 
-/** 向仓库添加金属（矿石 → 金属，1:1）。更新缓存和数据库。 */
+/** 向仓库添加金属(矿石 → 金属,1:1).更新缓存和数据库. */
 export function addWarehouseMetal(orgId: number, amount: number): number {
   const add = Math.max(0, Math.floor(amount));
   if (add <= 0) {
@@ -137,7 +137,7 @@ export function addMineMetal(amount: number): number {
   return addWarehouseMetal(WAREHOUSE_MINE_ID, amount);
 }
 
-/** 向仓库添加弹药。更新缓存和数据库。 */
+/** 向仓库添加弹药.更新缓存和数据库. */
 export function addWarehouseAmmo(orgId: number, amount: number): number {
   const add = Math.max(0, Math.floor(amount));
   if (add <= 0) {
@@ -150,7 +150,7 @@ export function addWarehouseAmmo(orgId: number, amount: number): number {
   return record.ammo;
 }
 
-/** 向仓库添加医疗用品。更新缓存和数据库。 */
+/** 向仓库添加医疗用品.更新缓存和数据库. */
 export function addWarehouseMeds(orgId: number, amount: number): number {
   const add = Math.max(0, Math.floor(amount));
   if (add <= 0) {
@@ -163,7 +163,7 @@ export function addWarehouseMeds(orgId: number, amount: number): number {
   return record.meds;
 }
 
-/** 向仓库添加毒品。更新缓存和数据库。 */
+/** 向仓库添加毒品.更新缓存和数据库. */
 export function addWarehouseDrugs(orgId: number, amount: number): number {
   const add = Math.max(0, Math.floor(amount));
   if (add <= 0) {
@@ -176,7 +176,7 @@ export function addWarehouseDrugs(orgId: number, amount: number): number {
   return record.drugs;
 }
 
-/** 从仓库扣除弹药。false — 仓库库存不足。 */
+/** 从仓库扣除弹药.false - 仓库库存不足. */
 export function takeWarehouseAmmo(orgId: number, amount: number): boolean {
   const take = Math.max(0, Math.floor(amount));
   if (take <= 0) {
@@ -193,7 +193,7 @@ export function takeWarehouseAmmo(orgId: number, amount: number): boolean {
   return true;
 }
 
-/** 从仓库扣除金属。false — 仓库库存不足。 */
+/** 从仓库扣除金属.false - 仓库库存不足. */
 export function takeWarehouseMetal(orgId: number, amount: number): boolean {
   const take = Math.max(0, Math.floor(amount));
   if (take <= 0) {
@@ -210,7 +210,7 @@ export function takeWarehouseMetal(orgId: number, amount: number): boolean {
   return true;
 }
 
-/** 从仓库扣除毒品。false — 仓库库存不足。 */
+/** 从仓库扣除毒品.false - 仓库库存不足. */
 export function takeWarehouseDrugs(orgId: number, amount: number): boolean {
   const take = Math.max(0, Math.floor(amount));
   if (take <= 0) {
@@ -227,7 +227,7 @@ export function takeWarehouseDrugs(orgId: number, amount: number): boolean {
   return true;
 }
 
-/** 从仓库扣除医疗用品。false — 仓库库存不足。 */
+/** 从仓库扣除医疗用品.false - 仓库库存不足. */
 export function takeWarehouseMeds(orgId: number, amount: number): boolean {
   const take = Math.max(0, Math.floor(amount));
   if (take <= 0) {
@@ -244,7 +244,7 @@ export function takeWarehouseMeds(orgId: number, amount: number): boolean {
   return true;
 }
 
-/** 打开/关闭帮派或黑手党的仓库。 */
+/** 打开/关闭帮派或黑手党的仓库. */
 export function setWarehouseLocked(orgId: number, locked: boolean): boolean {
   if (!warehouseUsesLock(orgId)) {
     return false;
@@ -297,7 +297,7 @@ async function persistMetalAdd(orgId: number, amount: number): Promise<void> {
       [orgId, amount, warehouseUsesLock(orgId) ? 1 : 0]
     );
   } catch {
-    // 缓存已更新；下次启动时可以核对。
+    // 缓存已更新;下次启动时可以核对.
   }
 }
 
@@ -312,7 +312,7 @@ async function persistMetalTake(orgId: number, amount: number): Promise<void> {
       [amount, orgId]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -337,7 +337,7 @@ async function persistAmmoAdd(orgId: number, amount: number): Promise<void> {
       [orgId, amount, warehouseUsesLock(orgId) ? 1 : 0]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -362,7 +362,7 @@ async function persistMedsAdd(orgId: number, amount: number): Promise<void> {
       [orgId, amount, warehouseUsesLock(orgId) ? 1 : 0]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -377,7 +377,7 @@ async function persistAmmoTake(orgId: number, amount: number): Promise<void> {
       [amount, orgId]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -392,7 +392,7 @@ async function persistMedsTake(orgId: number, amount: number): Promise<void> {
       [amount, orgId]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -417,7 +417,7 @@ async function persistDrugsAdd(orgId: number, amount: number): Promise<void> {
       [orgId, amount, warehouseUsesLock(orgId) ? 1 : 0]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -432,7 +432,7 @@ async function persistDrugsTake(orgId: number, amount: number): Promise<void> {
       [amount, orgId]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -457,7 +457,7 @@ async function persistLock(orgId: number, locked: boolean): Promise<void> {
       [orgId, locked ? 1 : 0]
     );
   } catch {
-    // 缓存已更新。
+    // 缓存已更新.
   }
 }
 
@@ -492,7 +492,7 @@ async function seedWarehouses(): Promise<void> {
   );
 }
 
-/** 政府/矿场仓库：不使用仓库锁，始终打开 (0)。 */
+/** 政府/矿场仓库:不使用仓库锁,始终打开 (0). */
 async function unlockNonLockableWarehouses(): Promise<void> {
   const openIds = WAREHOUSE_IDS.filter((id) => !warehouseUsesLock(id));
   if (openIds.length === 0) {

@@ -20,7 +20,7 @@ const DIALOG_STYLE_MSGBOX = 0;
 const LABEL_HEIGHT = 0.85;
 const LABEL_DRAW_DISTANCE = 12;
 const DENY_COOLDOWN_MS = 2500;
-/** 每级通缉对应的监禁分钟数（1★ = 10 分钟，6★ = 60 分钟). */
+/** 每级通缉对应的监禁分钟数(1★ = 10 分钟,6★ = 60 分钟). */
 const MINUTES_PER_WANTED = 10;
 
 const PICKUP = {
@@ -68,7 +68,7 @@ export function bindLspdSurrender(): void {
       return;
     }
 
-    // 仅处理当前打开的对话框响应。
+    // 仅处理当前打开的对话框响应.
     if (!pending.delete(slotId)) {
       return;
     }
@@ -147,12 +147,12 @@ function openSurrenderDialog(player: Player, slotId: number): void {
   }
 
   if (isJailed(player)) {
-    deny(player, slotId, "你已经在监狱里了。");
+    deny(player, slotId, "你已经在监狱里了.");
     return;
   }
 
   if (account.wantedLevel <= 0) {
-    deny(player, slotId, "你没有通缉等级，无需自首。");
+    deny(player, slotId, "你没有通缉等级,无需自首.");
     return;
   }
 
@@ -166,12 +166,12 @@ function openSurrenderDialog(player: Player, slotId: number): void {
       DIALOG_STYLE_MSGBOX,
       "{FFCC00}向警方自首",
       [
-        "{FFFFFF}确定要向警方自首吗？",
+        "{FFFFFF}确定要向警方自首吗?",
         "",
-        `通缉等级：{FF6347}${account.wantedLevel}`,
-        `监禁时间：{33CCFF}${minutes} 分钟`,
+        `通缉等级:{FF6347}${account.wantedLevel}`,
+        `监禁时间:{33CCFF}${minutes} 分钟`,
         "",
-        "{AAAAAA}通缉状态将被移除，你将被送入监狱。",
+        "{AAAAAA}通缉状态将被移除,你将被送入监狱.",
       ].join("\n"),
       "自首",
       "取消"
@@ -179,12 +179,12 @@ function openSurrenderDialog(player: Player, slotId: number): void {
   } catch {
     pending.delete(slotId);
     standingOn.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开对话框。");
+    player.sendClientMessage(Color.error, "无法打开对话框.");
   }
 }
 
 function deny(player: Player, slotId: number, message: string): void {
-  // 保留 standingOn，否则每 200 毫秒就会重复触发。
+  // 保留 standingOn,否则每 200 毫秒就会重复触发.
   const now = Date.now();
   const last = lastDenyAt.get(slotId) ?? 0;
   if (now - last < DENY_COOLDOWN_MS) {
@@ -195,7 +195,7 @@ function deny(player: Player, slotId: number, message: string): void {
   try {
     player.sendClientMessage(Color.error, message);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -216,12 +216,12 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
     }
 
     if (isJailed(player)) {
-      player.sendClientMessage(Color.error, "你已经在监狱里。");
+      player.sendClientMessage(Color.error, "你已经在监狱里.");
       return;
     }
 
     if (account.wantedLevel <= 0) {
-      player.sendClientMessage(Color.error, "你没有通缉等级。");
+      player.sendClientMessage(Color.error, "你没有通缉等级.");
       return;
     }
 
@@ -231,7 +231,7 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
         player.getVirtualWorld() !== PICKUP.world ||
         player.getInterior() !== PICKUP.interior
       ) {
-        player.sendClientMessage(Color.error, "请靠近自首柜台。");
+        player.sendClientMessage(Color.error, "请靠近自首柜台.");
         return;
       }
 
@@ -242,14 +242,14 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
         pos.z - PICKUP.z
       );
       if (dist > PICKUP_RADIUS * 2) {
-        player.sendClientMessage(Color.error, "请靠近自首柜台。");
+        player.sendClientMessage(Color.error, "请靠近自首柜台.");
         return;
       }
     } catch {
       return;
     }
 
-    // 以确认时的通缉等级计算刑期。
+    // 以确认时的通缉等级计算刑期.
     const wanted = account.wantedLevel;
     const minutes = surrenderMinutes(wanted);
 
@@ -257,18 +257,18 @@ async function confirmSurrender(player: Player, slotId: number): Promise<void> {
     if (!ok) {
       player.sendClientMessage(
         Color.error,
-        "无法办理自首。请重试。"
+        "无法办理自首.请重试."
       );
       return;
     }
 
-    // 成功入狱后才执行，否则会无故清除通缉。
+    // 成功入狱后才执行,否则会无故清除通缉.
     setPlayerWantedLevel(player, 0);
 
     const verb = byGender(account.gender, "自首了", "自首了");
     player.sendClientMessage(
       Color.info,
-      `你${verb}自首了。通缉已解除，刑期: ${minutes} 分钟。`
+      `你${verb}自首了.通缉已解除,刑期: ${minutes} 分钟.`
     );
 
     notifyLawStaff(

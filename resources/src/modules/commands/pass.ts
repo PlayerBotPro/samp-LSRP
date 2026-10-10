@@ -20,27 +20,27 @@ const VALUE = "{33CCFF}";
 registerDocShowHandler("pass", (viewer, owner) => {
   const account = getAccount(owner);
   if (!account?.passport) {
-    viewer.sendClientMessage(Color.error, "该玩家没有护照。");
+    viewer.sendClientMessage(Color.error, "该玩家没有护照.");
     return;
   }
 
   showPassport(viewer, account);
   const verb = byGender(account.gender, "出示了", "出示了");
   owner.sendClientMessage(Color.gray, `你${verb}了护照: ${playerName(viewer)}.`);
-  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的护照。`);
+  viewer.sendClientMessage(Color.gray, `${account.name} ${verb}了你的护照.`);
 });
 
 registerCommand("pass", "查看护照或按 ID 向他人出示", (player, args) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
   if (!account.passport) {
     player.sendClientMessage(
       Color.error,
-      "你没有护照。请前往市政厅办理。"
+      "你没有护照.请前往市政厅办理."
     );
     return;
   }
@@ -59,7 +59,7 @@ registerCommand("pass", "查看护照或按 ID 向他人出示", (player, args) 
 
   const target = omp.players.at(slot);
   if (!target || !isPlayerActive(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
@@ -69,12 +69,12 @@ registerCommand("pass", "查看护照或按 ID 向他人出示", (player, args) 
   }
 
   if (!getAccount(target)) {
-    player.sendClientMessage(Color.error, "未找到玩家。");
+    player.sendClientMessage(Color.error, "未找到玩家.");
     return;
   }
 
   if (!arePlayersNearby(player, target, WHISPER_RADIUS)) {
-    player.sendClientMessage(Color.error, "玩家距离太远。");
+    player.sendClientMessage(Color.error, "玩家距离太远.");
     return;
   }
 
@@ -110,6 +110,6 @@ function showPassport(viewer: Player, owner: Account): void {
       ""
     );
   } catch {
-    viewer.sendClientMessage(Color.error, "无法打开护照。");
+    viewer.sendClientMessage(Color.error, "无法打开护照.");
   }
 }

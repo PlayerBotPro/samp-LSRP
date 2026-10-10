@@ -14,7 +14,7 @@ const C_DESC = "{FFFFFF}";
 type HelpCategory = {
   key: string;
   label: string;
-  /** registry 中的命令名称（不含 /）。 */
+  /** registry 中的命令名称(不含 /). */
   commands: readonly string[];
 };
 
@@ -141,7 +141,7 @@ export function bindHelpDialogs(): void {
       return;
     }
 
-    // 命令列表: «返回» (1) / «关闭» (0)
+    // 命令列表: "返回" (1) / "关闭" (0)
     if (Number(response) === 0) {
       menuState.delete(slotId);
       return;
@@ -158,7 +158,7 @@ export function bindHelpDialogs(): void {
   });
 }
 
-/** 命令分类菜单（从 `/mn` →“命令列表”进入）。 */
+/** 命令分类菜单(从 `/mn` →"命令列表"进入). */
 export function showHelpMenu(player: Player): void {
   if (!isPlayerActive(player)) {
     return;
@@ -185,7 +185,7 @@ export function showHelpMenu(player: Player): void {
     );
   } catch {
     menuState.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开命令列表。");
+    player.sendClientMessage(Color.error, "无法打开命令列表.");
   }
 }
 
@@ -213,11 +213,11 @@ function showHelpCategory(player: Player, category: HelpCategory): void {
     if (!description) {
       continue;
     }
-    lines.push(`${C_CMD}/${name}${C_DESC} — ${description}`);
+    lines.push(`${C_CMD}/${name}${C_DESC} - ${description}`);
   }
 
   if (lines.length === 0) {
-    player.sendClientMessage(Color.error, "此分类中暂无命令。");
+    player.sendClientMessage(Color.error, "此分类中暂无命令.");
     showHelpMenu(player);
     return;
   }
@@ -234,6 +234,6 @@ function showHelpCategory(player: Player, category: HelpCategory): void {
     );
   } catch {
     menuState.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开命令分类。");
+    player.sendClientMessage(Color.error, "无法打开命令分类.");
   }
 }

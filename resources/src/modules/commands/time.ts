@@ -18,10 +18,10 @@ type WatchLabel = {
 
 const labels = new Map<number, WatchLabel>();
 
-registerCommand("time", "查看时间、禁言状态和刑期", (player) => {
+registerCommand("time", "查看时间,禁言状态和刑期", (player) => {
   const account = getAccount(player);
   if (!account) {
-    player.sendClientMessage(Color.error, "请先登录账号。");
+    player.sendClientMessage(Color.error, "请先登录账号.");
     return;
   }
 
@@ -31,7 +31,7 @@ registerCommand("time", "查看时间、禁言状态和刑期", (player) => {
   if (muteLeft !== null) {
     player.sendClientMessage(
       Color.error,
-      `你被禁言。剩余时间: ${formatMuteLeft(muteLeft)}.`
+      `你被禁言.剩余时间: ${formatMuteLeft(muteLeft)}.`
     );
   }
 
@@ -39,12 +39,12 @@ registerCommand("time", "查看时间、禁言状态和刑期", (player) => {
     const left = getAccount(player)?.jailSeconds ?? 0;
     player.sendClientMessage(
       Color.error,
-      `你在监狱里。剩余时间: ${formatMuteLeft(left * 1000)}.`
+      `你在监狱里.剩余时间: ${formatMuteLeft(left * 1000)}.`
     );
   }
 
   const verb = byGender(account.gender, "看了", "看了");
-  showWatchLabel(player, `${verb}手表。`);
+  showWatchLabel(player, `${verb}手表.`);
 });
 
 export function bindTimeLabels(): void {
@@ -88,7 +88,7 @@ function showWatchLabel(player: Player, text: string): void {
 
     labels.set(id, { label, timer });
   } catch {
-    // 槽位已失效。
+    // 槽位已失效.
   }
 }
 
@@ -112,6 +112,6 @@ function hideWatchLabelById(id: number): void {
   try {
     current.label.destroy();
   } catch {
-    // 已解除。
+    // 已解除.
   }
 }

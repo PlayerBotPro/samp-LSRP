@@ -7,7 +7,7 @@ import { isCuffed } from "../cuff";
 import { canLawSearchTarget, isLawOfficer } from "../org/law";
 import { isJailed } from "../prison/sentence";
 
-const DENY = "仅警察和 FBI 成员可使用此命令。";
+const DENY = "仅警察和 FBI 成员可使用此命令.";
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
@@ -15,7 +15,7 @@ export type LawTargetResult =
   | { ok: true; officer: Player; target: Player; officerId: number; targetId: number }
   | { ok: false };
 
-/** 为执法搜查、没收和手铐命令统一解析 `/cmd [id]`。 */
+/** 为执法搜查,没收和手铐命令统一解析 `/cmd [id]`. */
 export function resolveLawNearbyTarget(
   officer: Player,
   args: string,
@@ -27,12 +27,12 @@ export function resolveLawNearbyTarget(
   }
 
   if (isJailed(officer)) {
-    officer.sendClientMessage(Color.error, "在监狱里无法使用此命令。");
+    officer.sendClientMessage(Color.error, "在监狱里无法使用此命令.");
     return { ok: false };
   }
 
   if (isCuffed(officer)) {
-    officer.sendClientMessage(Color.error, "戴着手铐时无法使用此命令。");
+    officer.sendClientMessage(Color.error, "戴着手铐时无法使用此命令.");
     return { ok: false };
   }
 
@@ -54,13 +54,13 @@ export function resolveLawNearbyTarget(
   }
 
   if (slot === officerId) {
-    officer.sendClientMessage(Color.error, "不能对自己使用。");
+    officer.sendClientMessage(Color.error, "不能对自己使用.");
     return { ok: false };
   }
 
   const target = findPlayer(slot);
   if (!target) {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return { ok: false };
   }
 
@@ -70,7 +70,7 @@ export function resolveLawNearbyTarget(
       officerState === PLAYER_STATE_WASTED ||
       officerState === PLAYER_STATE_SPECTATING
     ) {
-      officer.sendClientMessage(Color.error, "当前无法使用此命令。");
+      officer.sendClientMessage(Color.error, "当前无法使用此命令.");
       return { ok: false };
     }
 
@@ -79,23 +79,23 @@ export function resolveLawNearbyTarget(
       targetState === PLAYER_STATE_WASTED ||
       targetState === PLAYER_STATE_SPECTATING
     ) {
-      officer.sendClientMessage(Color.error, "玩家不在线。");
+      officer.sendClientMessage(Color.error, "玩家不在线.");
       return { ok: false };
     }
   } catch {
-    officer.sendClientMessage(Color.error, "未找到玩家。");
+    officer.sendClientMessage(Color.error, "未找到玩家.");
     return { ok: false };
   }
 
   if (!arePlayersNearby(officer, target, WHISPER_RADIUS)) {
-    officer.sendClientMessage(Color.error, "玩家距离太远。");
+    officer.sendClientMessage(Color.error, "玩家距离太远.");
     return { ok: false };
   }
 
   if (!canLawSearchTarget(officer, target)) {
     officer.sendClientMessage(
       Color.error,
-      "警察只能对平民使用此命令。FBI 可以对任何人使用（包括警察）。"
+      "警察只能对平民使用此命令.FBI 可以对任何人使用(包括警察)."
     );
     return { ok: false };
   }

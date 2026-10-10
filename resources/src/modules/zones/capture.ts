@@ -65,7 +65,7 @@ function tell(player: Player, color: number, text: string): void {
       player.sendClientMessage(color, clipClientMessage(text));
     }
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 
@@ -197,7 +197,7 @@ function showCaptureIcon(player: Player, current: CaptureState): void {
       MAPICON_GLOBAL
     );
   } catch {
-    // 玩家已离开。
+    // 玩家已离开.
   }
 }
 
@@ -205,7 +205,7 @@ function hideCaptureIcon(player: Player): void {
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 没有图标。
+    // 没有图标.
   }
 }
 
@@ -213,7 +213,7 @@ function flashTurf(turf: LiveTurf, color: number): void {
   try {
     turf.zone.flashForAll(color);
   } catch {
-    // 区域已销毁。
+    // 区域已销毁.
   }
 }
 
@@ -222,7 +222,7 @@ function restoreTurf(turf: LiveTurf): void {
     turf.zone.stopFlashForAll();
     turf.zone.showForAll(turfColor(turf.orgId));
   } catch {
-    // 区域已销毁。
+    // 区域已销毁.
   }
 }
 
@@ -249,7 +249,7 @@ export function refreshCaptureView(player: Player): void {
       turf.zone.showForPlayer(player, turfColor(turf.orgId));
       turf.zone.flashForPlayer(player, turfColor(state.attackerId));
     } catch {
-      // 区域已销毁。
+      // 区域已销毁.
     }
   }
 
@@ -314,12 +314,12 @@ async function finishCapture(current: CaptureState): Promise<void> {
       sendToSides(
         current,
         NEWS_COLOR,
-        `${attackerName}试图夺取${defenderName}的领地，但失败了`
+        `${attackerName}试图夺取${defenderName}的领地,但失败了`
       );
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 领地战：${message}`);
+    omp.log(`[${SERVER_TAG}] 领地战:${message}`);
     if (!transferred && turf) {
       restoreTurf(turf);
     }
@@ -386,7 +386,7 @@ function beginCapture(
   sendToSides(
     current,
     GPS_HINT_COLOR,
-    "地点已标记在 GPS 上。前往那里支援你的帮派"
+    "地点已标记在 GPS 上.前往那里支援你的帮派"
   );
 }
 
@@ -402,12 +402,12 @@ export function tryStartCapture(player: Player): void {
   }
 
   if (membership.rank.id < CAPTURE_MIN_RANK) {
-    tell(player, 0xb4b5b7ff, "领地争夺从 8 级开始开放。");
+    tell(player, 0xb4b5b7ff, "领地争夺从 8 级开始开放.");
     return;
   }
 
   if (ending) {
-    tell(player, 0xb4b5b7ff, "已有区域正在争夺中，请等待结束！");
+    tell(player, 0xb4b5b7ff, "已有区域正在争夺中,请等待结束!");
     return;
   }
 
@@ -416,28 +416,28 @@ export function tryStartCapture(player: Player): void {
     tell(
       player,
       0xb4b5b7ff,
-      "你必须位于想要争夺的帮派领地内。"
+      "你必须位于想要争夺的帮派领地内."
     );
     return;
   }
 
   if (turf.orgId === membership.org.id) {
-    tell(player, 0xb4b5b7ff, "这片领地属于你的帮派。");
+    tell(player, 0xb4b5b7ff, "这片领地属于你的帮派.");
     return;
   }
 
   if (state) {
-    tell(player, 0xb4b5b7ff, "已有区域正在争夺中，请等待结束！");
+    tell(player, 0xb4b5b7ff, "已有区域正在争夺中,请等待结束!");
     return;
   }
 
   if (turf.spawnProtected) {
-    tell(player, 0xb4b5b7ff, "不能争夺帮派出生点领地！");
+    tell(player, 0xb4b5b7ff, "不能争夺帮派出生点领地!");
     return;
   }
 
   if (!isGangOrgId(turf.orgId)) {
-    tell(player, 0xb4b5b7ff, "这片领地不属于任何帮派。");
+    tell(player, 0xb4b5b7ff, "这片领地不属于任何帮派.");
     return;
   }
 
@@ -445,7 +445,7 @@ export function tryStartCapture(player: Player): void {
     tell(
       player,
       0xb4b5b7ff,
-      "拥有这片领地的帮派目前没有成员在线。"
+      "拥有这片领地的帮派目前没有成员在线."
     );
     return;
   }
@@ -478,7 +478,7 @@ function scoreCaptureKill(victim: Player, killer: Player): void {
   }
 }
 
-/** 在进攻帮派与防守帮派交战的活动区域中击杀。 */
+/** 在进攻帮派与防守帮派交战的活动区域中击杀. */
 export function isCaptureCombatKill(victim: Player, killer: Player): boolean {
   const current = state;
   if (!current || ending) {
@@ -510,7 +510,7 @@ export function isCaptureCombatKill(victim: Player, killer: Player): boolean {
   );
 }
 
-/** 处于争夺区域内的活动争夺参与者（进攻方/防守方）。 */
+/** 处于争夺区域内的活动争夺参与者(进攻方/防守方). */
 export function isCaptureParticipantOnTurf(player: Player): boolean {
   const current = state;
   if (!current || ending) {
