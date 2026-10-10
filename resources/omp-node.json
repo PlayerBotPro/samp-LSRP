@@ -1,4 +1,4 @@
 {
-  "name": "lsrp",
+  "name": "LsRp-Node",
   "entry": "dist/index.js"
 }
