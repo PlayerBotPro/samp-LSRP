@@ -104,7 +104,7 @@
     "pawn": {
         "legacy_plugins": [],
         "main_scripts": [
-            "lsrp 1"
+            "placeholder 1"
         ],
         "side_scripts": []
     },
