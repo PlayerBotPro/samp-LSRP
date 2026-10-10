@@ -54,5 +54,5 @@ if (MERIYA.ranks.length !== MAX_ORG_RANK) {
 }
 
 if (MERIYA.ranks[MERIYA_ADVOKAT_RANK - 1]?.title !== "律师") {
-  throw new Error("市政厅:MERIYA_ADVOKAT_RANK 必须指向"律师"等级");
+  throw new Error("市政厅:MERIYA_ADVOKAT_RANK 必须指向\"律师\"等级");
 }
