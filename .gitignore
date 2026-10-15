@@ -4,3 +4,4 @@ log.txt
 *.log
 .env
 .idea/
+omp_minidump.dmp
