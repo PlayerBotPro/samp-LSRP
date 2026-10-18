@@ -56,6 +56,13 @@ const TARGETS = {
     y: -1323.4761,
     z: 14.092,
   },
+  farm: {
+    key: "farm",
+    label: "Ферма льна",
+    x: 1948.9932,
+    y: 166.2849,
+    z: 37.2334,
+  },
   mine: {
     key: "mine",
     label: "矿场",
@@ -76,6 +83,13 @@ const TARGETS = {
     x: 1269.8052,
     y: -1840.6724,
     z: 13.3936,
+  },
+  church: {
+    key: "church",
+    label: "Церковь",
+    x: 2256.6848,
+    y: -36.4731,
+    z: 26.4844,
   },
   station: {
     key: "station",
@@ -188,7 +202,7 @@ const CATEGORIES: readonly GpsCategory[] = [
   {
     key: "public",
     label: "公共场所",
-    targets: [TARGETS.station, TARGETS.bank],
+    targets: [TARGETS.station, TARGETS.bank, TARGETS.church],
   },
   {
     key: "gov",
@@ -220,7 +234,7 @@ const CATEGORIES: readonly GpsCategory[] = [
   {
     key: "jobs",
     label: "工作地点",
-    targets: [TARGETS.mine, TARGETS.loader, TARGETS.busDriver],
+    targets: [TARGETS.farm, TARGETS.mine, TARGETS.loader, TARGETS.busDriver],
   },
 ];
 

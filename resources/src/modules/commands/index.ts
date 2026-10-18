@@ -34,6 +34,8 @@ import "./limit";
 import "./eject";
 import "./report";
 import "./ads";
+import "./sms";
+import "./call";
 import "./home";
 import "./heal";
 import "./sellhouse";
@@ -51,6 +53,9 @@ import "./arrest";
 import "./demote";
 import "./id";
 import "./anim";
+import "./donate";
+import "../firework";
+import "../flowers";
 import { bindMenuDialogs } from "./mn";
 import { bindGpsDialogs } from "../gps";
 import { bindReportDialogs } from "./report";
@@ -68,6 +73,8 @@ import { bindTakeDialogs } from "./take";
 import { bindSellGunOffers } from "./sellgun";
 import { bindSellDrugOffers } from "./selldrug";
 import { bindArrestCheckpoints } from "./arrest";
+import { bindDonateDialogs } from "./donate";
+import { bindPhoneCalls } from "./call";
 
 export const commandsModule: GameModule = {
   name: "commands",
@@ -90,5 +97,7 @@ export const commandsModule: GameModule = {
     bindSellGunOffers();
     bindSellDrugOffers();
     bindArrestCheckpoints();
+    bindDonateDialogs();
+    bindPhoneCalls();
   },
 };

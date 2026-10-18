@@ -12,11 +12,13 @@ import { vehiclesModule } from "./modules/vehicles";
 import { hospitalModule } from "./modules/hospital";
 import { cityHallModule } from "./modules/cityhall";
 import { bankModule } from "./modules/bank";
+import { churchModule } from "./modules/church";
 import { gpsModule } from "./modules/gps";
 import { prisonModule } from "./modules/prison";
 import { afkModule } from "./modules/afk";
 import { minerModule } from "./modules/miner";
 import { loaderModule } from "./modules/loader";
+import { farmModule } from "./modules/farm";
 import { jobsModule } from "./modules/jobs";
 import { armyFactoryModule } from "./modules/army-factory";
 import { paydayModule } from "./modules/payday";
@@ -26,6 +28,8 @@ import { hudModule } from "./modules/hud";
 import { adminModule } from "./modules/admin";
 import { orgModule } from "./modules/org";
 import { maskModule } from "./modules/mask";
+import { fireworkModule } from "./modules/firework";
+import { flowersModule } from "./modules/flowers";
 import { cuffModule } from "./modules/cuff";
 import { animModule } from "./modules/anim";
 import { autoschoolModule } from "./modules/autoschool";
@@ -46,6 +50,7 @@ const modules: GameModule[] = [
   hospitalModule,
   cityHallModule,
   bankModule,
+  churchModule,
   housesModule,
   businessesModule,
   warehouseModule,
@@ -53,6 +58,7 @@ const modules: GameModule[] = [
   ghettoModule,
   minerModule,
   loaderModule,
+  farmModule,
   armyFactoryModule,
   gpsModule,
   prisonModule,
@@ -63,6 +69,8 @@ const modules: GameModule[] = [
   hudModule,
   sessionModule,
   maskModule,
+  fireworkModule,
+  flowersModule,
   cuffModule,
   animModule,
   chatModule,

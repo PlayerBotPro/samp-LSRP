@@ -10,6 +10,11 @@ import {
   patchAccount,
 } from "../auth/session";
 import { addOwnedMasks } from "../mask";
+import { addOwnedFireworks } from "../firework";
+import { giveBouquet, hasBouquet } from "../flowers";
+import { holdBusinessCash, releaseBusinessCash } from "./cash-hold";
+import { execute } from "../../shared/database";
+import { queueSave } from "../persist";
 import {
   getBusiness,
   listBusinesses,
@@ -35,12 +40,16 @@ const CAMERA_AMMO = 36;
 type ShopItem =
   | { kind: "phone"; name: string; price: number }
   | { kind: "weapon"; name: string; price: number; weaponId: number; ammo: number }
-  | { kind: "mask"; name: string; price: number };
+  | { kind: "mask"; name: string; price: number }
+  | { kind: "firework"; name: string; price: number }
+  | { kind: "flowers"; name: string; price: number };
 
 const MENU: readonly ShopItem[] = [
   { kind: "phone", name: "手机", price: 2_000 },
   { kind: "weapon", name: "相机", price: 1_000, weaponId: WEAPON_CAMERA, ammo: CAMERA_AMMO },
   { kind: "mask", name: "面具", price: 500 },
+  { kind: "firework", name: "Фейерверк", price: 5_000 },
+  { kind: "flowers", name: "Букет цветов", price: 1_000 },
 ];
 
 const standingOn = new Map<number, number>();
@@ -275,6 +284,11 @@ async function buyShopItem(
     return;
   }
 
+  if (item.kind === "flowers" && hasBouquet(player)) {
+    player.sendClientMessage(Color.error, "У вас уже есть букет цветов.");
+    return;
+  }
+
   if (item.kind === "phone" && account.phone) {
     player.sendClientMessage(
       Color.error,
@@ -301,8 +315,12 @@ async function buyShopItem(
       await buyPhone(player, account.id, account.name, businessId, item.price);
     } else if (item.kind === "weapon") {
       await buyCamera(player, account.id, account.name, businessId, item);
-    } else {
+    } else if (item.kind === "mask") {
       await buyMask(player, account.id, account.name, businessId, item.price);
+    } else if (item.kind === "firework") {
+      await buyFirework(player, account.id, account.name, businessId, item.price);
+    } else {
+      await buyShopFlowers(player, account.id, account.name, businessId, item.price);
     }
   } finally {
     buying.delete(account.id);
@@ -456,4 +474,169 @@ async function buyMask(
     Color.tryOk,
     `你已购买面具,花费 ${formatMoney(price)}. 使用: /mask. 面具总数: ${nextMasks}.`
   );
+}
+
+async function buyFirework(
+  player: Player,
+  userId: number,
+  userName: string,
+  businessId: number,
+  price: number
+): Promise<void> {
+  const slotId = playerId(player);
+  if (slotId !== null) {
+    holdBusinessCash(slotId);
+  }
+  let bought = false;
+
+  try {
+    let result;
+    try {
+      result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      omp.log(`[${SERVER_TAG}] 24/7 фейерверк biz=${businessId} (${userName}): ${message}`);
+      player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+      return;
+    }
+
+    if (!result.ok) {
+      if (result.reason === "funds") {
+        player.sendClientMessage(
+          Color.error,
+          `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+        );
+        return;
+      }
+      player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+      return;
+    }
+
+    setBusinessBalance(businessId, result.balance);
+
+    if (!isPlayerActive(player) || getAccount(player)?.id !== userId) {
+      return;
+    }
+
+    const live = getAccount(player);
+    if (!live) {
+      return;
+    }
+
+    patchAccount(player, { money: Math.max(0, live.money - price) });
+    applyWallet(player, getAccount(player) ?? live);
+    const next = addOwnedFireworks(player, 1);
+    bought = true;
+
+    player.sendClientMessage(
+      Color.tryOk,
+      `Вы купили фейерверк за ${formatMoney(price)}. Запустить: /blow. Всего: ${next}.`
+    );
+    bought = true;
+  } finally {
+    if (slotId !== null) {
+      releaseBusinessCash(slotId);
+    }
+  }
+
+  if (bought) {
+    queueSave(player);
+  }
+}
+
+async function buyShopFlowers(
+  player: Player,
+  userId: number,
+  userName: string,
+  businessId: number,
+  price: number
+): Promise<void> {
+  if (hasBouquet(player)) {
+    player.sendClientMessage(Color.error, "У вас уже есть букет цветов.");
+    return;
+  }
+
+  let result;
+  try {
+    result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    omp.log(`[${SERVER_TAG}] 24/7 цветы biz=${businessId} (${userName}): ${message}`);
+    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    return;
+  }
+
+  if (!result.ok) {
+    if (result.reason === "funds") {
+      player.sendClientMessage(
+        Color.error,
+        `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+      );
+      return;
+    }
+    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    return;
+  }
+
+  setBusinessBalance(businessId, result.balance);
+
+  if (!isPlayerActive(player) || getAccount(player)?.id !== userId || hasBouquet(player)) {
+    await refundShopFlowers(player, userId, businessId, result);
+    if (isPlayerActive(player) && getAccount(player)?.id === userId) {
+      player.sendClientMessage(Color.error, "У вас уже есть букет цветов. Деньги возвращены.");
+    }
+    return;
+  }
+  if (!giveBouquet(player)) {
+    await refundShopFlowers(player, userId, businessId, result);
+    if (isPlayerActive(player)) {
+      player.sendClientMessage(Color.error, "Не удалось выдать букет. Деньги возвращены.");
+    }
+    return;
+  }
+
+  patchAccount(player, { money: result.cashLeft });
+  const live = getAccount(player);
+  if (live) {
+    applyWallet(player, live);
+  }
+
+  queueSave(player);
+  player.sendClientMessage(
+    Color.tryOk,
+    `Вы купили букет цветов за ${formatMoney(price)}. Подарить: /present [id].`
+  );
+}
+
+async function refundShopFlowers(
+  player: Player,
+  userId: number,
+  businessId: number,
+  paid: { cashLeft: number; balance: number; businessGain: number; amount: number }
+): Promise<void> {
+  const refund = paid.cashLeft + paid.amount;
+  setBusinessBalance(businessId, Math.max(0, paid.balance - paid.businessGain));
+
+  const online = isPlayerActive(player) && getAccount(player)?.id === userId;
+  if (online) {
+    patchAccount(player, { money: refund });
+    const live = getAccount(player);
+    if (live) {
+      applyWallet(player, live);
+    }
+    queueSave(player);
+  }
+
+  try {
+    if (!online) {
+      await execute("UPDATE users SET money = money + ? WHERE id = ?", [paid.amount, userId]);
+    }
+    await execute("UPDATE businesses SET balance = GREATEST(0, balance - ?) WHERE id = ?", [
+      paid.businessGain,
+      businessId,
+    ]);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    omp.log(`[${SERVER_TAG}] 24/7 цветы возврат user=${userId}: ${message}`);
+  }
 }
