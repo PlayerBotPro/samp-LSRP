@@ -5,7 +5,7 @@ import { STREET_WORLD } from "../spawn/point";
 import type { HouseRecord } from "./repository";
 import { listHouses } from "./repository";
 
-/** Слот 11 — церковь. 位置 50-99 已由商店标记占用. */
+/** 槽位 11 用于教堂。 位置 50-99 已由商店标记占用. */
 const MAP_ICON_SLOT_MIN = 12;
 const MAP_ICON_SLOT_MAX = 49;
 const ICON_FOR_SALE = 31;

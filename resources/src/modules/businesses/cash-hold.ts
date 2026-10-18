@@ -1,7 +1,7 @@
 import type { Player } from "@omp-node/core";
 import { playerId } from "../../shared/player";
 
-/** Пока покупка пишет наличные сама, периодический save не затирает их старым значением. */
+/** 购买流程自行写入现金期间，定期保存不会用旧值覆盖余额。 */
 const holds = new Set<number>();
 
 export function holdBusinessCash(slotId: number): void {

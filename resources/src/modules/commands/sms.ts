@@ -11,7 +11,7 @@ const BUBBLE_MS = 3_000;
 const SENDER_BUBBLE = "SMS >>";
 const RECEIVER_BUBBLE = ">>SMS";
 
-registerCommand("sms", "Отправить SMS по номеру телефона", (player, args) => {
+registerCommand("sms", "向电话号码发送短信", (player, args) => {
   sendSms(player, args);
 });
 
@@ -23,35 +23,35 @@ function sendSms(player: Player, args: string): void {
   }
 
   if (!account.phone) {
-    player.sendClientMessage(Color.error, "У вас нет мобильного телефона. Купите его в 24/7.");
+    player.sendClientMessage(Color.error, "你没有手机，请到 24/7 商店购买。");
     return;
   }
 
   const parsed = parseSms(args);
   if (!parsed) {
-    player.sendClientMessage(Color.error, "Использование: /sms [номер] [текст]");
+    player.sendClientMessage(Color.error, "用法：/sms [电话号码] [内容]");
     return;
   }
 
   if (parsed.phone === account.phone) {
-    player.sendClientMessage(Color.error, "Нельзя отправить сообщение самому себе.");
+    player.sendClientMessage(Color.error, "不能给自己发送短信。");
     return;
   }
 
   const target = findOnlineByPhone(parsed.phone);
   if (!target) {
-    player.sendClientMessage(Color.error, "Абонент не в сети.");
+    player.sendClientMessage(Color.error, "对方不在线。");
     return;
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount?.phone) {
-    player.sendClientMessage(Color.error, "Абонент не в сети.");
+    player.sendClientMessage(Color.error, "对方不在线。");
     return;
   }
 
-  const toSender = smsLine(parsed.text, `Получатель: ${targetAccount.name} [т. ${targetAccount.phone}]`);
-  const toTarget = smsLine(parsed.text, `Отправитель: ${account.name} [т. ${account.phone}]`);
+  const toSender = smsLine(parsed.text, `收件人： ${targetAccount.name} [电话：${targetAccount.phone}]`);
+  const toTarget = smsLine(parsed.text, `发件人： ${account.name} [电话：${account.phone}]`);
 
   player.sendClientMessage(SMS_YELLOW, toSender);
   target.sendClientMessage(SMS_YELLOW, toTarget);
@@ -110,6 +110,6 @@ function showBubble(player: Player, text: string): void {
   try {
     player.setChatBubble(text, SMS_YELLOW, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // Надпись над ником не обязательна для доставки SMS.
+    // 短信发送不依赖头顶文字。
   }
 }

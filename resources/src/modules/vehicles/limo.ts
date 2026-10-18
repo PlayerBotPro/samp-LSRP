@@ -33,7 +33,7 @@ type LimoSlot = {
   vehicleId: number;
   renterUserId: number | null;
   renterSlotId: number | null;
-  /** Арендатор сейчас сидит в лимузине. Выход из другой машины таймер не трогает. */
+  /** 租用者当前在礼宾车内；离开其他车辆时不影响计时器。 */
   seated: boolean;
   leaveTimer: ReturnType<typeof setTimeout> | null;
 };
@@ -42,7 +42,7 @@ const slotRef: { current: LimoSlot | null } = { current: null };
 const pendingOffer = new Set<number>();
 let eventsBound = false;
 
-/** Занятый лимузин не забирает /respcar, пока арендатор не вернулся. */
+/** 租用者尚未返回时，/respcar 不回收已租用的礼宾车。 */
 export function isActiveLimoRental(vehicleId: number): boolean {
   const slot = slotRef.current;
   return !!slot && slot.vehicleId === vehicleId && slot.renterUserId !== null;
@@ -61,7 +61,7 @@ export function spawnLimoRental(): void {
     world: STREET_WORLD,
   });
   if (!vehicle) {
-    omp.log(`[${SERVER_TAG}] лимузин: не удалось создать машину`);
+    omp.log(`礼宾车：无法创建车辆`);
     return;
   }
 
@@ -71,9 +71,9 @@ export function spawnLimoRental(): void {
     try {
       vehicle.destroy();
     } catch {
-      // Уже снята.
+      // 已移除。
     }
-    omp.log(`[${SERVER_TAG}] лимузин: машина без id`);
+    omp.log(`礼宾车：车辆没有 ID`);
     return;
   }
 
@@ -87,7 +87,7 @@ export function spawnLimoRental(): void {
   bindLimo();
 }
 
-/** Тюрьма, смерть и выход снимают аренду сразу. */
+/** 入狱、死亡或离线时立即结束租赁。 */
 export function endLimoRental(player: Player, reason: "jail" | "death" | "disconnect"): void {
   const offered = playerId(player);
   if (offered !== null && pendingOffer.has(offered)) {
@@ -111,10 +111,10 @@ export function endLimoRental(player: Player, reason: "jail" | "death" | "discon
 
   finishRental();
   if (reason === "jail" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.error, "Аренда лимузина завершена.");
+    player.sendClientMessage(Color.error, "礼宾车租赁已结束。");
   }
   if (reason === "death" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.error, "Аренда лимузина завершена.");
+    player.sendClientMessage(Color.error, "礼宾车租赁已结束。");
   }
 }
 
@@ -181,7 +181,7 @@ function bindLimo(): void {
     const userId = slot.renterUserId;
     finishRental(RESPAWN_AFTER_DEATH_MS);
     if (userId !== null) {
-      notify(userId, "Аренда лимузина завершена.");
+      notify(userId, "礼宾车租赁已结束。");
     }
   });
 }
@@ -210,7 +210,7 @@ function handleEnter(player: Player, asPassenger: boolean): void {
   }
 
   if (slot.renterUserId !== null && slot.renterUserId !== account.id) {
-    player.sendClientMessage(Color.error, "Этот лимузин уже арендован.");
+    player.sendClientMessage(Color.error, "这辆礼宾车已被租用。");
     eject(player);
     return;
   }
@@ -219,13 +219,13 @@ function handleEnter(player: Player, asPassenger: boolean): void {
     slot.seated = true;
     if (slot.leaveTimer) {
       clearLeaveTimer(slot);
-      player.sendClientMessage(Color.tryOk, "Вы вернулись в лимузин.");
+      player.sendClientMessage(Color.tryOk, "你已返回礼宾车。");
     }
     return;
   }
 
   if (asPassenger) {
-    player.sendClientMessage(Color.error, "Чтобы арендовать лимузин, сядьте за руль.");
+    player.sendClientMessage(Color.error, "请坐到驾驶位以租用礼宾车。");
     eject(player);
     return;
   }
@@ -242,10 +242,10 @@ function handleEnter(player: Player, asPassenger: boolean): void {
       player,
       LIMO_RENT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Аренда лимузина",
-      `{FFFFFF}Арендовать лимузин?\nСтоимость: {33CCFF}${formatMoney(RENT_PRICE)}\n\n{FFFFFF}Если выйти из машины, есть 30 секунд, чтобы вернуться.`,
-      "Арендовать",
-      "Отмена"
+      "礼宾车租赁",
+      `{FFFFFF}是否租用礼宾车？\n费用： {33CCFF}${formatMoney(RENT_PRICE)}\n\n{FFFFFF}下车后，你有 30 秒时间返回车辆。`,
+      "租用",
+      "取消"
     );
   } catch {
     pendingOffer.delete(slotId);
@@ -278,21 +278,21 @@ function handleDialog(player: Player, accepted: boolean): void {
     return;
   }
   if (!account.licenses.car) {
-    player.sendClientMessage(Color.error, "У вас нет лицензии на автомобили.");
+    player.sendClientMessage(Color.error, "你没有汽车驾驶执照。");
     eject(player);
     return;
   }
   if (slot.renterUserId !== null) {
-    player.sendClientMessage(Color.error, "Этот лимузин уже арендован.");
+    player.sendClientMessage(Color.error, "这辆礼宾车已被租用。");
     eject(player);
     return;
   }
   if (!isDriverOf(player, slot.vehicleId)) {
-    player.sendClientMessage(Color.error, "Сядьте за руль лимузина, чтобы арендовать его.");
+    player.sendClientMessage(Color.error, "请坐到礼宾车的驾驶位以租用车辆。");
     return;
   }
   if (account.money < RENT_PRICE) {
-    player.sendClientMessage(Color.error, `Недостаточно наличных. Нужно ${formatMoney(RENT_PRICE)}.`);
+    player.sendClientMessage(Color.error, `现金不足，需要 ${formatMoney(RENT_PRICE)}.`);
     eject(player);
     return;
   }
@@ -311,8 +311,8 @@ function handleDialog(player: Player, accepted: boolean): void {
   slot.renterSlotId = slotId;
   slot.seated = true;
   clearLeaveTimer(slot);
-  player.sendClientMessage(Color.tryOk, `Вы арендовали лимузин за ${formatMoney(RENT_PRICE)}.`);
-  player.sendClientMessage(Color.gray, "Если выйти из машины, у вас есть 30 секунд, чтобы вернуться.");
+  player.sendClientMessage(Color.tryOk, `你已租用礼宾车，花费 ${formatMoney(RENT_PRICE)}。`);
+  player.sendClientMessage(Color.gray, "下车后，你有 30 秒时间返回车辆。");
 }
 
 function handleLeave(player: Player): void {
@@ -339,13 +339,13 @@ function handleLeave(player: Player): void {
     }
     live.leaveTimer = null;
     finishRental();
-    notify(userId, "Аренда лимузина завершена: вы не вернулись в машину.");
+    notify(userId, "礼宾车租赁已结束：你未及时返回车辆。");
   }, LEAVE_GRACE_MS);
 
   try {
-    player.sendClientMessage(Color.gray, "У вас есть 30 секунд, чтобы вернуться в лимузин.");
+    player.sendClientMessage(Color.gray, "你有 30 秒时间返回礼宾车。");
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 }
 
@@ -378,7 +378,7 @@ function respawn(slot: LimoSlot, delayMs: number): void {
     try {
       vehicle.setToRespawn();
     } catch {
-      // Уже уничтожена.
+      // 已销毁。
     }
   };
 
@@ -400,7 +400,7 @@ function ejectOccupants(vehicleId: number): void {
       }
       eject(player);
     } catch {
-      // Слот пустой.
+      // 槽位为空。
     }
   });
 }
@@ -429,7 +429,7 @@ function eject(player: Player): void {
     }
     player.removeFromVehicle();
   } catch {
-    // Уже не в транспорте.
+    // 已不在车辆内。
   }
 }
 
@@ -437,7 +437,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }
 

@@ -72,7 +72,7 @@ type Plot = {
   y: number;
   z: number;
   score: number;
-  /** 0 — голая земля, 1 — всходы, 2 — можно собирать. */
+  /** 0：裸土；1：幼苗；2：可收获。 */
   status: 0 | 1 | 2;
   seconds: number;
   object: ObjectMp | null;
@@ -110,12 +110,12 @@ function spawnEmilio(): void {
     actor.setVirtualWorld(STREET_WORLD);
     actor.setInvulnerable(true);
   } catch (error) {
-    console.error("[farm] не удалось создать Эмилио", error);
+    console.error("[farm] 无法创建埃米利奥", error);
   }
 
   try {
     new TextLabel(
-      "{FFFFFF}Эмилио\n{73B461}Ферма льна\n{FFFFFF}Для взаимодействия нажмите ALT",
+      "{FFFFFF}埃米利奥\n{73B461}亚麻农场\n{FFFFFF}按 ALT 互动",
       LABEL_COLOR,
       EMILIO.x,
       EMILIO.y,
@@ -125,7 +125,7 @@ function spawnEmilio(): void {
       false
     );
   } catch (error) {
-    console.error("[farm] не удалось создать метку Эмилио", error);
+    console.error("[farm] 无法创建埃米利奥的文字标签", error);
   }
 }
 
@@ -147,7 +147,7 @@ function spawnPlots(): void {
     try {
       plot.label = new TextLabel(ripeText(plot.score), LABEL_COLOR, plot.x, plot.y, plot.z, LABEL_DRAW, STREET_WORLD, false);
     } catch (error) {
-      console.error("[farm] не удалось создать метку грядки", error);
+      console.error("[farm] 无法创建田垄文字标签", error);
     }
   }
 }
@@ -212,14 +212,14 @@ function openMenu(player: Player): void {
     player,
     FARM_MENU_DIALOG_ID,
     DIALOG_STYLE_LIST,
-    "Ферма льна",
+    "亚麻农场",
     [
-      "{FFFFFF}Устроиться",
-      "{FFFFFF}Уволиться",
-      `{FFFFFF}Продать лён {73B461}(${count} шт.)`,
+      "{FFFFFF}开始工作",
+      "{FFFFFF}辞职",
+      `{FFFFFF}出售亚麻 {73B461}(${count} 份)`,
     ].join("\n"),
-    "Выбрать",
-    "Закрыть"
+    "选择",
+    "关闭"
   );
 }
 
@@ -228,7 +228,7 @@ function onMenu(player: Player, listItem: number): void {
     return;
   }
   if (!insideField(player) || !near(player, EMILIO.x, EMILIO.y, EMILIO.z, BUY_RADIUS)) {
-    player.sendClientMessage(HINT, "Вы отошли от Эмилио.");
+    player.sendClientMessage(HINT, "你离埃米利奥太远了。");
     return;
   }
   if (listItem === 0) {
@@ -249,7 +249,7 @@ function hire(player: Player): void {
     return;
   }
   if (!near(player, EMILIO.x, EMILIO.y, EMILIO.z, BUY_RADIUS)) {
-    player.sendClientMessage(HINT, "Вы отошли от Эмилио.");
+    player.sendClientMessage(HINT, "你离埃米利奥太远了。");
     return;
   }
 
@@ -259,11 +259,11 @@ function hire(player: Player): void {
     return;
   }
   if (hasTool(player)) {
-    player.sendClientMessage(HINT, "Вы уже устроены на ферме льна.");
+    player.sendClientMessage(HINT, "你已在亚麻农场工作。");
     return;
   }
   if (account.money < TOOL_PRICE) {
-    player.sendClientMessage(HINT, "У вас недостаточно средств.");
+    player.sendClientMessage(HINT, "你的资金不足。");
     return;
   }
 
@@ -302,24 +302,24 @@ function hire(player: Player): void {
     if (restored) {
       applyWallet(player, restored);
     }
-    player.sendClientMessage(HINT, "Не удалось выдать инструмент. Деньги возвращены.");
+    player.sendClientMessage(HINT, "无法发放工具，款项已退还。");
     return;
   }
 
   tools.set(slot, { userId: account.id });
   queueSave(player);
-  player.sendClientMessage(INFO, `[Ферма льна] Вы устроились. За инструмент списано ${formatMoney(TOOL_PRICE)}.`);
-  player.sendClientMessage(HINT, "[Подсказка] Подойдите к созревшей грядке и зажмите ПРОБЕЛ до конца сбора.");
-  player.sendClientMessage(HINT, "[Подсказка] Уйдёте с поля — смена кончится и инструмент заберут. Лён останется, его можно продать Эмилио.");
+  player.sendClientMessage(INFO, `[亚麻农场] 你已开始工作，工具费用为 ${formatMoney(TOOL_PRICE)}。`);
+  player.sendClientMessage(HINT, "[提示] 靠近成熟的田垄，按住空格键直到收获完成。");
+  player.sendClientMessage(HINT, "[提示] 离开农田会结束工作并收回工具。亚麻会保留，可出售给埃米利奥。");
 }
 
 function quitJob(player: Player): void {
   const slot = playerId(player);
   if (slot === null || !hasTool(player)) {
-    player.sendClientMessage(HINT, "Вы не устроены на ферме льна.");
+    player.sendClientMessage(HINT, "你尚未在亚麻农场工作。");
     return;
   }
-  dropTool(player, slot, "[Ферма льна] Вы уволились. Инструмент сдан. Лён остался при вас.");
+  dropTool(player, slot, "[亚麻农场] 你已辞职，工具已归还，亚麻仍由你保留。");
 }
 
 function sellFlax(player: Player): void {
@@ -331,7 +331,7 @@ function sellFlax(player: Player): void {
 
   const count = flaxCount(player);
   if (count <= 0) {
-    player.sendClientMessage(HINT, "У вас нет льна на продажу.");
+    player.sendClientMessage(HINT, "你没有可出售的亚麻。");
     return;
   }
 
@@ -345,7 +345,7 @@ function sellFlax(player: Player): void {
   }
   applyWallet(player, paid);
   queueSave(player);
-  player.sendClientMessage(INFO, `[Ферма льна] Продано ${count} шт. льна за ${formatMoney(total)}.`);
+  player.sendClientMessage(INFO, `[亚麻农场] 已出售 ${count} 份亚麻，获得 ${formatMoney(total)}。`);
 }
 
 function beginHarvest(player: Player): void {
@@ -365,11 +365,11 @@ function beginHarvest(player: Player): void {
   }
 
   if (!hasTool(player)) {
-    player.sendClientMessage(HINT, "[Подсказка] Чтобы собирать лён, устройтесь у Эмилио.");
+    player.sendClientMessage(HINT, "[提示] 请先到埃米利奥处应聘，再收获亚麻。");
     return;
   }
   if (plot.status !== 2 || plot.timer) {
-    player.sendClientMessage(INFO, "[Ферма льна] Эта грядка ещё растёт.");
+    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄的亚麻尚未成熟。");
     return;
   }
   if (plot.score <= 0) {
@@ -379,7 +379,7 @@ function beginHarvest(player: Player): void {
   try {
     player.applyAnimation("BOMBER", "BOM_Plant", 4.1, true, true, true, true, 0, ANIM_SYNC_ALL);
   } catch {
-    player.sendClientMessage(INFO, "[Ферма льна] Не удалось начать сбор. Попробуйте ещё раз.");
+    player.sendClientMessage(INFO, "[亚麻农场] 无法开始收获，请重试。");
     return;
   }
 
@@ -404,7 +404,7 @@ function cancelHarvest(player: Player, tell: boolean, clearAnim = true): void {
     clearPlantAnim(player);
   }
   if (tell && isPlayerActive(player)) {
-    player.sendClientMessage(INFO, "[Ферма льна] Сбор прерван. Держите ПРОБЕЛ, пока лён не собран.");
+    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断，请按住空格键直到收获完成。");
   }
 }
 
@@ -444,15 +444,15 @@ function completeHarvest(player: Player, slot: number, userId: number, plotIndex
   }
   clearPlantAnim(player);
   if (!canWork(player) || !hasTool(player) || !insideField(player)) {
-    player.sendClientMessage(INFO, "[Ферма льна] Сбор прерван.");
+    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断。");
     return;
   }
   if (!near(player, plot.x, plot.y, plot.z, HARVEST_RADIUS)) {
-    player.sendClientMessage(INFO, "[Ферма льна] Вы отошли от грядки.");
+    player.sendClientMessage(INFO, "[亚麻农场] 你离田垄太远了。");
     return;
   }
   if (plot.status !== 2 || plot.timer || plot.score <= 0) {
-    player.sendClientMessage(INFO, "[Ферма льна] Урожай на этой грядке уже собрали.");
+    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄已被收获。");
     return;
   }
 
@@ -460,7 +460,7 @@ function completeHarvest(player: Player, slot: number, userId: number, plotIndex
   const bag = linen.get(slot);
   const count = (bag && bag.userId === userId ? bag.count : 0) + 1;
   linen.set(slot, { userId, count });
-  player.sendClientMessage(INFO, `[Ферма льна] Лён +1. Собрано: ${count}.`);
+  player.sendClientMessage(INFO, `[亚麻农场] 亚麻 +1，已收获：${count}。`);
 
   if (plot.score > 0) {
     setLabel(plot, ripeText(plot.score));
@@ -524,7 +524,7 @@ function tickField(): void {
       return;
     }
     if (!insideField(player)) {
-      dropTool(player, slot, "[Ферма льна] Вы покинули поле. Смена закончена, инструмент сдан. Лён остался при вас.");
+      dropTool(player, slot, "[亚麻农场] 你已离开农田，工作已结束，工具已归还，亚麻仍由你保留。");
     }
   });
 }
@@ -539,7 +539,7 @@ function dropTool(player: Player, slot: number, message: string | null): void {
     try {
       player.removeAttachedObject(TOOL_SLOT);
     } catch {
-      // Слот уже пуст.
+      // 槽位已为空。
     }
     if (message) {
       player.sendClientMessage(INFO, message);
@@ -552,7 +552,7 @@ function respawnPlant(plot: Plot, look: PlantLook): void {
     try {
       plot.object.destroy();
     } catch {
-      // Объект уже снят.
+      // 物体已移除。
     }
     plot.object = null;
   }
@@ -566,7 +566,7 @@ function respawnPlant(plot: Plot, look: PlantLook): void {
     }
     plot.object = object;
   } catch (error) {
-    console.error("[farm] не удалось обновить грядку", error);
+    console.error("[farm] 无法更新田垄", error);
   }
 }
 
@@ -577,16 +577,16 @@ function setLabel(plot: Plot, text: string): void {
   try {
     plot.label.updateText(LABEL_COLOR, text);
   } catch {
-    // Метка уже снята.
+    // 文字标签已移除。
   }
 }
 
 function ripeText(score: number): string {
-  return `Лён (${score} из ${RIPE_SCORE})\n{73B461}Для сбора урожая\n{FFFFFF}нажмите ПРОБЕЛ`;
+  return `亚麻 (${score}/${RIPE_SCORE})\n{73B461}收获作物请\n{FFFFFF}按空格键`;
 }
 
 function growText(seconds: number): string {
-  return `{73B461}Лён в процессе роста\nОсталось {FFFFFF}${formatGrowTime(seconds)}`;
+  return `{73B461}亚麻正在生长\n剩余时间： {FFFFFF}${formatGrowTime(seconds)}`;
 }
 
 function formatGrowTime(total: number): string {
@@ -631,7 +631,7 @@ function insideField(player: Player): boolean {
     }
     return pos.x >= ZONE.minX && pos.x <= ZONE.maxX && pos.y >= ZONE.minY && pos.y <= ZONE.maxY;
   } catch {
-    // Сбой чтения координат не должен снимать смену.
+    // 读取坐标失败不应结束工作。
     return true;
   }
 }
@@ -690,6 +690,6 @@ function clearPlantAnim(player: Player): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // Игрок уже вышел.
+    // 玩家已离线。
   }
 }

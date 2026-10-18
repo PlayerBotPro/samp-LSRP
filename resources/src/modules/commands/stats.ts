@@ -50,7 +50,7 @@ export function showStatsDialog(viewer: Player, target?: Player): void {
     statsRow("皮肤", String(resolvePlayerSkin(account))),
     statsRow("出生日期", formatBirthDate(account.birthDate)),
     statsRow("邮箱", account.email),
-    statsRow("Номер телефона", account.phone ?? "отсутствует"),
+    statsRow("电话号码", account.phone ?? "无"),
     statsRow("现金", formatMoney(account.money)),
     statsRow("银行", formatMoney(account.bank)),
     statsRow("捐赠账户", String(account.donate)),

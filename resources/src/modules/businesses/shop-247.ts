@@ -48,8 +48,8 @@ const MENU: readonly ShopItem[] = [
   { kind: "phone", name: "手机", price: 2_000 },
   { kind: "weapon", name: "相机", price: 1_000, weaponId: WEAPON_CAMERA, ammo: CAMERA_AMMO },
   { kind: "mask", name: "面具", price: 500 },
-  { kind: "firework", name: "Фейерверк", price: 5_000 },
-  { kind: "flowers", name: "Букет цветов", price: 1_000 },
+  { kind: "firework", name: "烟花", price: 5_000 },
+  { kind: "flowers", name: "鲜花花束", price: 1_000 },
 ];
 
 const standingOn = new Map<number, number>();
@@ -285,7 +285,7 @@ async function buyShopItem(
   }
 
   if (item.kind === "flowers" && hasBouquet(player)) {
-    player.sendClientMessage(Color.error, "У вас уже есть букет цветов.");
+    player.sendClientMessage(Color.error, "你已经有一束鲜花。");
     return;
   }
 
@@ -495,8 +495,8 @@ async function buyFirework(
       result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      omp.log(`[${SERVER_TAG}] 24/7 фейерверк biz=${businessId} (${userName}): ${message}`);
-      player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+      omp.log(`24/7 烟花 biz=${businessId} (${userName}): ${message}`);
+      player.sendClientMessage(Color.error, "购买失败，请重试。");
       return;
     }
 
@@ -504,11 +504,11 @@ async function buyFirework(
       if (result.reason === "funds") {
         player.sendClientMessage(
           Color.error,
-          `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+          `现金不足，需要 ${formatMoney(price)}.`
         );
         return;
       }
-      player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+      player.sendClientMessage(Color.error, "购买失败，请重试。");
       return;
     }
 
@@ -530,7 +530,7 @@ async function buyFirework(
 
     player.sendClientMessage(
       Color.tryOk,
-      `Вы купили фейерверк за ${formatMoney(price)}. Запустить: /blow. Всего: ${next}.`
+      `你购买了烟花，花费 ${formatMoney(price)}。燃放：/blow。总数：${next}。`
     );
     bought = true;
   } finally {
@@ -552,7 +552,7 @@ async function buyShopFlowers(
   price: number
 ): Promise<void> {
   if (hasBouquet(player)) {
-    player.sendClientMessage(Color.error, "У вас уже есть букет цветов.");
+    player.sendClientMessage(Color.error, "你已经有一束鲜花。");
     return;
   }
 
@@ -561,8 +561,8 @@ async function buyShopFlowers(
     result = await payBusinessCashShare(businessId, userId, price, BIZ_SHARE);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 цветы biz=${businessId} (${userName}): ${message}`);
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    omp.log(`24/7 鲜花 biz=${businessId} (${userName}): ${message}`);
+    player.sendClientMessage(Color.error, "购买失败，请重试。");
     return;
   }
 
@@ -570,11 +570,11 @@ async function buyShopFlowers(
     if (result.reason === "funds") {
       player.sendClientMessage(
         Color.error,
-        `Недостаточно наличных. Нужно ${formatMoney(price)}.`
+        `现金不足，需要 ${formatMoney(price)}.`
       );
       return;
     }
-    player.sendClientMessage(Color.error, "Покупка не прошла. Попробуйте ещё раз.");
+    player.sendClientMessage(Color.error, "购买失败，请重试。");
     return;
   }
 
@@ -583,14 +583,14 @@ async function buyShopFlowers(
   if (!isPlayerActive(player) || getAccount(player)?.id !== userId || hasBouquet(player)) {
     await refundShopFlowers(player, userId, businessId, result);
     if (isPlayerActive(player) && getAccount(player)?.id === userId) {
-      player.sendClientMessage(Color.error, "У вас уже есть букет цветов. Деньги возвращены.");
+      player.sendClientMessage(Color.error, "你已经有一束鲜花，款项已退还。");
     }
     return;
   }
   if (!giveBouquet(player)) {
     await refundShopFlowers(player, userId, businessId, result);
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "Не удалось выдать букет. Деньги возвращены.");
+      player.sendClientMessage(Color.error, "无法发放花束，款项已退还。");
     }
     return;
   }
@@ -604,7 +604,7 @@ async function buyShopFlowers(
   queueSave(player);
   player.sendClientMessage(
     Color.tryOk,
-    `Вы купили букет цветов за ${formatMoney(price)}. Подарить: /present [id].`
+    `你购买了一束鲜花，花费 ${formatMoney(price)}。赠送：/present [id]。`
   );
 }
 
@@ -637,6 +637,6 @@ async function refundShopFlowers(
     ]);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    omp.log(`[${SERVER_TAG}] 24/7 цветы возврат user=${userId}: ${message}`);
+    omp.log(`24/7 鲜花退款 user=${userId}: ${message}`);
   }
 }

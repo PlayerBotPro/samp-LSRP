@@ -32,7 +32,7 @@ const MAX_MONEY = 2_000_000_000;
 const LABEL_HEIGHT = 1.15;
 const LABEL_DRAW_DISTANCE = 30;
 
-const DENY = "Посты только для сотрудников Армии.";
+const DENY = "只有军队成员可以执勤。";
 
 type PostDef = {
   id: number;
@@ -45,28 +45,28 @@ type PostDef = {
 type Duty = {
   slotId: number;
   userId: number;
-  /** Имя на момент заступления, чтобы надпись не перескочила на новый слот. */
+  /** 记录开始执勤时的名字，避免文字错误地显示为复用该槽位的新玩家。 */
   labelName: string;
   since: number;
   paidTicks: number;
 };
 
 const POSTS: readonly PostDef[] = [
-  { id: 1, name: "КПП №1", x: 2722.1174, y: -2397.8513, z: 13.6328 },
-  { id: 2, name: "КПП №2", x: 2722.231, y: -2510.1531, z: 13.6641 },
-  { id: 3, name: "Вышка №1", x: 2726.1682, y: -2337.2815, z: 29.6514 },
-  { id: 4, name: "Вышка №2", x: 2804.6057, y: -2339.0967, z: 29.6514 },
-  { id: 5, name: "Вышка №3", x: 2730.1243, y: -2393.7451, z: 29.6514 },
-  { id: 6, name: "Вышка №4", x: 2726.9043, y: -2493.1953, z: 29.6514 },
-  { id: 7, name: "Вышка №5", x: 2734.9836, y: -2557.6306, z: 29.6514 },
-  { id: 8, name: "Лодочная", x: 2765.4998, y: -2563.3206, z: 13.6328 },
-  { id: 9, name: "Наблюдательный пункт", x: 2772.8916, y: -2447.1096, z: 13.6373 },
+  { id: 1, name: "检查站1", x: 2722.1174, y: -2397.8513, z: 13.6328 },
+  { id: 2, name: "检查站2", x: 2722.231, y: -2510.1531, z: 13.6641 },
+  { id: 3, name: "岗楼1", x: 2726.1682, y: -2337.2815, z: 29.6514 },
+  { id: 4, name: "岗楼2", x: 2804.6057, y: -2339.0967, z: 29.6514 },
+  { id: 5, name: "岗楼3", x: 2730.1243, y: -2393.7451, z: 29.6514 },
+  { id: 6, name: "岗楼4", x: 2726.9043, y: -2493.1953, z: 29.6514 },
+  { id: 7, name: "岗楼5", x: 2734.9836, y: -2557.6306, z: 29.6514 },
+  { id: 8, name: "船库", x: 2765.4998, y: -2563.3206, z: 13.6328 },
+  { id: 9, name: "观察哨", x: 2772.8916, y: -2447.1096, z: 13.6373 },
 ];
 
 const labels = new Map<number, TextLabel>();
 const dutyByPost = new Map<number, Duty>();
 const postBySlot = new Map<number, number>();
-/** Слот стоит в радиусе пикапа и может заступить. */
+/** 玩家处于拾取点范围内，可以开始执勤。 */
 const nearPost = new Map<number, number>();
 
 let started = false;
@@ -95,7 +95,7 @@ export function bindArmyPosts(): void {
     );
   }
 
-  registerCommand("post", "Посты армии", (player) => {
+  registerCommand("post", "军队岗哨", (player) => {
     showPostList(player);
   });
 
@@ -140,7 +140,7 @@ function showPostList(player: Player): void {
 
   const lines = POSTS.map((post) => {
     const duty = dutyByPost.get(post.id);
-    const who = duty ? duty.labelName : "свободен";
+    const who = duty ? duty.labelName : "空缺";
     return `${post.name} — ${who}`;
   });
 
@@ -149,13 +149,13 @@ function showPostList(player: Player): void {
       player,
       ARMY_POST_LIST_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
-      "Посты армии",
+      "军队岗哨",
       lines.join("\n"),
-      "Закрыть",
-      "Ок"
+      "关闭",
+      "确定"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть список постов.");
+    player.sendClientMessage(Color.error, "无法打开岗哨列表。");
   }
 }
 
@@ -205,18 +205,18 @@ function onAlt(player: Player): void {
   }
 
   if (!account || account.jailSeconds > 0 || account.hospitalized) {
-    player.sendClientMessage(Color.error, "Сейчас заступить на пост нельзя.");
+    player.sendClientMessage(Color.error, "当前无法开始执勤。");
     return;
   }
 
   if (isCuffed(player)) {
-    player.sendClientMessage(Color.error, "В наручниках на пост не заступить.");
+    player.sendClientMessage(Color.error, "戴着手铐时无法开始执勤。");
     return;
   }
 
   const taken = dutyByPost.get(post.id);
   if (taken) {
-    player.sendClientMessage(Color.error, `Пост занят: ${taken.labelName}.`);
+    player.sendClientMessage(Color.error, `岗哨已有人执勤： ${taken.labelName}.`);
     return;
   }
 
@@ -230,12 +230,12 @@ function askLeave(player: Player, post: PostDef): void {
       ARMY_POST_LEAVE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       post.name,
-      `Покинуть пост ${post.name}?`,
-      "Да",
-      "Нет"
+      `是否离开岗哨 ${post.name}？`,
+      "是",
+      "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "Не удалось открыть подтверждение.");
+    player.sendClientMessage(Color.error, "无法打开确认窗口。");
   }
 }
 
@@ -258,7 +258,7 @@ function takePost(player: Player, post: PostDef): void {
   paint(post);
   player.sendClientMessage(
     Color.info,
-    `Вы заступили на пост ${post.name}. Не отходите дальше ${LEAVE_RADIUS} метров.`
+    `你已在 ${post.name} 开始执勤，请勿离开超过 ${LEAVE_RADIUS} 米。`
   );
 }
 
@@ -278,11 +278,11 @@ function confirmLeave(player: Player): void {
   const post = postById(postId as number);
   freePost(postId as number);
   if (post && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, `Вы покинули пост ${post.name}.`);
+    player.sendClientMessage(Color.info, `你已离开岗哨 ${post.name}。`);
   }
 }
 
-/** Смерть и выход: снять пост этого игрока, чужой пост не трогать. */
+/** 死亡或离线时，仅解除该玩家的执勤，不影响他人的岗哨。 */
 function releaseHolder(player: Player): void {
   const slotId = playerId(player);
   const account = getAccount(player);
@@ -319,7 +319,7 @@ function tickPosts(): void {
 
     const post = postById(postId);
     if (!post || !canKeepDuty(holder, duty)) {
-      const name = post?.name ?? "пост";
+      const name = post?.name ?? "岗哨";
       freePost(postId);
       const text = post ? dutyLeaveText(holder, duty, name) : "";
       if (text) {
@@ -330,7 +330,7 @@ function tickPosts(): void {
 
     if (distanceTo(holder, post) > LEAVE_RADIUS) {
       freePost(postId);
-      holder.sendClientMessage(Color.info, `Вы отошли от поста ${post.name}.`);
+      holder.sendClientMessage(Color.info, `你已远离岗哨 ${post.name}。`);
       continue;
     }
 
@@ -379,7 +379,7 @@ function payDuty(player: Player, post: PostDef, duty: Duty, now: number): void {
   const payout = due * PAY_AMOUNT;
   if (account.money > MAX_MONEY - payout) {
     duty.paidTicks = ticks;
-    player.sendClientMessage(Color.error, "Слишком много наличных, выплата за пост не начислена.");
+    player.sendClientMessage(Color.error, "现金已达上限，未能发放执勤报酬。");
     return;
   }
 
@@ -395,7 +395,7 @@ function payDuty(player: Player, post: PostDef, duty: Duty, now: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `Пост ${post.name}: ${formatMoney(payout)}.`
+    `岗哨 ${post.name}：执勤报酬 ${formatMoney(payout)}。`
   );
 }
 
@@ -405,18 +405,18 @@ function dutyLeaveText(player: Player, duty: Duty, name: string): string {
     return "";
   }
   if (account.jailSeconds > 0) {
-    return `Вас посадили, пост ${name} оставлен.`;
+    return `你已入狱，已解除岗哨 ${name} 的执勤。`;
   }
   if (account.hospitalized) {
-    return `Вы в больнице, пост ${name} оставлен.`;
+    return `你已住院，已解除岗哨 ${name} 的执勤。`;
   }
   if (!isArmy(player)) {
-    return `Вы больше не в Армии и сняты с поста ${name}.`;
+    return `你已不再属于军队，已解除岗哨 ${name} 的执勤。`;
   }
   if (isCuffed(player)) {
-    return `В наручниках пост ${name} оставлен.`;
+    return `你已被戴上手铐，已解除岗哨 ${name} 的执勤。`;
   }
-  return `Вы сняты с поста ${name}.`;
+  return `已解除你在岗哨 ${name} 的执勤。`;
 }
 
 function canKeepDuty(player: Player, duty: Duty): boolean {
@@ -494,10 +494,10 @@ function postById(id: number): PostDef | null {
 
 function labelText(post: PostDef, duty: Duty | null): string {
   if (!duty) {
-    return `${post.name}\nСвободен`;
+    return `${post.name}\n空缺`;
   }
   const stood = formatDuty(Date.now() - duty.since);
-  return `${post.name}\n${duty.labelName}\nна посту ${stood}`;
+  return `${post.name}\n${duty.labelName}\n已执勤 ${stood}`;
 }
 
 function formatDuty(ms: number): string {
@@ -506,12 +506,12 @@ function formatDuty(ms: number): string {
   const minutes = Math.floor((total % 3600) / 60);
   const seconds = total % 60;
   if (hours > 0) {
-    return `${hours} ч ${minutes} мин`;
+    return `${hours} 小时 ${minutes} 分钟`;
   }
   if (minutes > 0) {
-    return `${minutes} мин ${seconds} сек`;
+    return `${minutes} 分钟 ${seconds} 秒`;
   }
-  return `${seconds} сек`;
+  return `${seconds} 秒`;
 }
 
 function paint(post: PostDef): void {
@@ -523,6 +523,6 @@ function paint(post: PostDef): void {
   try {
     label.updateText(duty ? Color.info : Color.tryOk, labelText(post, duty));
   } catch {
-    // Лейбл уже уничтожен.
+    // 文字标签已销毁。
   }
 }

@@ -28,7 +28,7 @@ const GRAVE = {
   z: 26.4992,
 } as const;
 
-/** 1 букет на игрока, только на сессию. */
+/** 每名玩家最多一束鲜花，仅在本次会话内有效。 */
 const owned = new Set<number>();
 
 type GiftOffer = {
@@ -50,7 +50,7 @@ export function hasBouquet(player: Player): boolean {
   return id !== null && owned.has(id);
 }
 
-/** Выдать один букет. false — уже есть или слот пустой. */
+/** 发放一束鲜花；false 表示已有花束或槽位为空。 */
 export function giveBouquet(player: Player): boolean {
   const id = playerId(player);
   if (id === null || owned.has(id)) {
@@ -65,7 +65,7 @@ export function giveBouquet(player: Player): boolean {
   return true;
 }
 
-/** Забрать букет и оружие «цветы». */
+/** 移除花束及“鲜花”武器。 */
 export function takeBouquet(player: Player): boolean {
   const id = playerId(player);
   if (id === null || !owned.has(id)) {
@@ -77,7 +77,7 @@ export function takeBouquet(player: Player): boolean {
   return true;
 }
 
-registerCommand("present", "Подарить букет цветов игроку", (player, args) => {
+registerCommand("present", "向玩家赠送花束", (player, args) => {
   offerBouquet(player, args);
 });
 
@@ -91,7 +91,7 @@ export const flowersModule: GameModule = {
 
     new Pickup(19135, PICKUP_TYPE, GRAVE.x, GRAVE.y, GRAVE.z, STREET_WORLD);
     new TextLabel(
-      "Могила\nВозложить цветы",
+      "墓地\n献花",
       Color.white,
       GRAVE.x,
       GRAVE.y,
@@ -118,7 +118,7 @@ export const flowersModule: GameModule = {
       }
       owned.delete(id);
       graveNoted.delete(id);
-      cancelGift(id, "Игрок вышел. Предложение букета отменено.");
+      cancelGift(id, "玩家已离线，赠送花束的请求已取消。");
     });
 
     omp.on("playerConnect", (player) => {
@@ -128,13 +128,13 @@ export const flowersModule: GameModule = {
       }
       owned.delete(id);
       graveNoted.delete(id);
-      cancelGift(id, "Предложение букета отменено.");
+      cancelGift(id, "赠送花束的请求已取消。");
     });
 
     omp.on("playerDeath", (player) => {
       const id = playerId(player);
       if (id !== null) {
-        cancelGift(id, "Предложение букета отменено.");
+        cancelGift(id, "赠送花束的请求已取消。");
       }
     });
   },
@@ -147,40 +147,40 @@ function offerBouquet(player: Player, args: string): void {
 
   const raw = args.trim();
   if (!/^\d+$/.test(raw)) {
-    player.sendClientMessage(Color.error, "Использование: /present [id]");
+    player.sendClientMessage(Color.error, "用法：/present [id]");
     return;
   }
 
   const targetSlot = Number(raw);
   const fromSlot = playerId(player);
   if (fromSlot === null || !Number.isInteger(targetSlot) || targetSlot < 0) {
-    player.sendClientMessage(Color.error, "Использование: /present [id]");
+    player.sendClientMessage(Color.error, "用法：/present [id]");
     return;
   }
   if (targetSlot === fromSlot) {
-    player.sendClientMessage(Color.error, "Нельзя подарить букет самому себе.");
+    player.sendClientMessage(Color.error, "不能给自己赠送花束。");
     return;
   }
   if (!hasBouquet(player)) {
-    player.sendClientMessage(Color.error, "У вас нет букета цветов.");
+    player.sendClientMessage(Color.error, "你没有花束。");
     return;
   }
   if (blocked(player)) {
-    player.sendClientMessage(Color.error, "Сейчас подарить букет нельзя.");
+    player.sendClientMessage(Color.error, "当前无法赠送花束。");
     return;
   }
 
   const target = omp.players.at(targetSlot);
   if (!target || !isPlayerActive(target) || !isAuthenticated(target)) {
-    player.sendClientMessage(Color.error, "Игрок не в сети.");
+    player.sendClientMessage(Color.error, "玩家不在线。");
     return;
   }
   if (hasBouquet(target)) {
-    player.sendClientMessage(Color.error, "У игрока уже есть букет цветов.");
+    player.sendClientMessage(Color.error, "对方已经有一束鲜花。");
     return;
   }
   if (blocked(target)) {
-    player.sendClientMessage(Color.error, "Этому игроку сейчас нельзя подарить букет.");
+    player.sendClientMessage(Color.error, "当前无法向该玩家赠送花束。");
     return;
   }
 
@@ -190,15 +190,15 @@ function offerBouquet(player: Player, args: string): void {
     return;
   }
   if (getYnOfferKind(targetSlot) !== undefined || offerByTarget.has(targetSlot)) {
-    player.sendClientMessage(Color.error, "У игрока уже есть активное предложение.");
+    player.sendClientMessage(Color.error, "该玩家已有待处理的请求。");
     return;
   }
   if (!claimYnOffer(targetSlot, "present")) {
-    player.sendClientMessage(Color.error, "У игрока уже есть активное предложение.");
+    player.sendClientMessage(Color.error, "该玩家已有待处理的请求。");
     return;
   }
 
-  cancelFromGiver(fromSlot, "Предложение букета отменено.");
+  cancelFromGiver(fromSlot, "赠送花束的请求已取消。");
 
   const offer: GiftOffer = {
     fromSlot,
@@ -211,10 +211,10 @@ function offerBouquet(player: Player, args: string): void {
   offerByTarget.set(targetSlot, offer);
   targetByGiver.set(fromSlot, targetSlot);
 
-  player.sendClientMessage(Color.info, `Вы предложили букет цветов игроку ${playerChatName(target)}.`);
+  player.sendClientMessage(Color.info, `你向 ${playerChatName(target)} 发出了赠送花束的请求。`);
   target.sendClientMessage(
     Color.info,
-    `${playerChatName(player)} хочет подарить вам букет цветов. Нажмите Y — принять, N — отказаться.`
+    `${playerChatName(player)} 想送你一束鲜花。按 Y 接受，按 N 拒绝。`
   );
 }
 
@@ -239,24 +239,24 @@ function onGiftKey(player: Player, accepted: boolean): void {
   const receiverOk = getAccount(player)?.id === offer.toUserId;
 
   if (!accepted) {
-    tell(player, Color.info, "Вы отказались от букета.");
+    tell(player, Color.info, "你拒绝了花束。");
     if (giver) {
-      const verb = byGender(getAccount(player)?.gender ?? null, "отказался", "отказалась");
-      tell(giver, Color.info, `${playerChatName(player)} ${verb} от букета.`);
+      const verb = byGender(getAccount(player)?.gender ?? null, "拒绝了", "拒绝了");
+      tell(giver, Color.info, `${playerChatName(player)} ${verb}花束。`);
     }
     return;
   }
 
   if (!receiverOk || !giver || !hasBouquet(giver)) {
-    tell(player, Color.error, "Предложение уже неактуально.");
+    tell(player, Color.error, "该请求已失效。");
     if (giver) {
-      tell(giver, Color.error, "Предложение уже неактуально.");
+      tell(giver, Color.error, "该请求已失效。");
     }
     return;
   }
   if (hasBouquet(player)) {
-    tell(player, Color.error, "У вас уже есть букет цветов.");
-    tell(giver, Color.error, "У игрока уже есть букет цветов.");
+    tell(player, Color.error, "你已经有一束鲜花。");
+    tell(giver, Color.error, "对方已经有一束鲜花。");
     return;
   }
 
@@ -265,14 +265,14 @@ function onGiftKey(player: Player, accepted: boolean): void {
     if (taken) {
       giveBouquet(giver);
     }
-    tell(player, Color.error, "Не удалось передать букет.");
-    tell(giver, Color.error, "Не удалось передать букет.");
+    tell(player, Color.error, "无法转交花束。");
+    tell(giver, Color.error, "无法转交花束。");
     return;
   }
 
-  const verb = byGender(getAccount(giver)?.gender ?? null, "подарил", "подарила");
-  tell(giver, Color.tryOk, `Вы подарили букет цветов игроку ${playerChatName(player)}.`);
-  tell(player, Color.tryOk, `${playerChatName(giver)} ${verb} вам букет цветов.`);
+  const verb = byGender(getAccount(giver)?.gender ?? null, "赠送了", "赠送了");
+  tell(giver, Color.tryOk, `你向 ${playerChatName(player)} 赠送了一束鲜花。`);
+  tell(player, Color.tryOk, `${playerChatName(giver)} 向你${verb}一束鲜花。`);
 }
 
 function tickGrave(): void {
@@ -313,11 +313,11 @@ function tickGrave(): void {
     graveNoted.add(slot);
 
     if (blocked(player)) {
-      player.sendClientMessage(Color.error, "Сейчас возложить цветы нельзя.");
+      player.sendClientMessage(Color.error, "当前无法献花。");
       return;
     }
     if (!hasBouquet(player)) {
-      player.sendClientMessage(Color.error, "У вас нет букета цветов.");
+      player.sendClientMessage(Color.error, "你没有花束。");
       return;
     }
     if (!takeBouquet(player)) {
@@ -337,9 +337,9 @@ function tickGrave(): void {
         ANIM_SYNC_ALL
       );
     } catch {
-      // Цветы уже отданы, анимация не обязательна для списания.
+      // 鲜花已交出，扣除花束不依赖动画。
     }
-    player.sendClientMessage(Color.tryOk, "Вы возложили букет цветов на могилу.");
+    player.sendClientMessage(Color.tryOk, "你在墓前献上了一束鲜花。");
   });
 }
 
@@ -352,8 +352,8 @@ function expireGift(toSlot: number): void {
   clearGift(offer);
   const giver = livePlayer(offer.fromSlot, offer.fromUserId);
   const target = livePlayer(offer.toSlot, offer.toUserId);
-  tell(target, Color.gray, "Время предложения букета истекло.");
-  tell(giver, Color.gray, "Время предложения букета истекло.");
+  tell(target, Color.gray, "赠送花束的请求已超时。");
+  tell(giver, Color.gray, "赠送花束的请求已超时。");
 }
 
 function cancelGift(slot: number, text: string): void {
@@ -420,6 +420,6 @@ function tell(player: Player | null, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // Слот пустой.
+    // 槽位为空。
   }
 }

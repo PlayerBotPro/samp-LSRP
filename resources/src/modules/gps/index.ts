@@ -58,7 +58,7 @@ const TARGETS = {
   },
   farm: {
     key: "farm",
-    label: "Ферма льна",
+    label: "亚麻农场",
     x: 1948.9932,
     y: 166.2849,
     z: 37.2334,
@@ -86,7 +86,7 @@ const TARGETS = {
   },
   church: {
     key: "church",
-    label: "Церковь",
+    label: "教堂",
     x: 2256.6848,
     y: -36.4731,
     z: 26.4844,
