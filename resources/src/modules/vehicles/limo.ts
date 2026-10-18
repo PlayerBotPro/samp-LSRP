@@ -32,7 +32,7 @@ type LimoSlot = {
   vehicleId: number;
   renterUserId: number | null;
   renterSlotId: number | null;
-  /** 租用者当前在礼宾车内；离开其他车辆时不影响计时器。 */
+  /** 租用者当前在礼宾车内;离开其他车辆时不影响计时器. */
   seated: boolean;
   leaveTimer: ReturnType<typeof setTimeout> | null;
 };
@@ -41,7 +41,7 @@ const slotRef: { current: LimoSlot | null } = { current: null };
 const pendingOffer = new Set<number>();
 let eventsBound = false;
 
-/** 租用者尚未返回时，/respcar 不回收已租用的礼宾车。 */
+/** 租用者尚未返回时,/respcar 不回收已租用的礼宾车. */
 export function isActiveLimoRental(vehicleId: number): boolean {
   const slot = slotRef.current;
   return !!slot && slot.vehicleId === vehicleId && slot.renterUserId !== null;
@@ -60,7 +60,7 @@ export function spawnLimoRental(): void {
     world: STREET_WORLD,
   });
   if (!vehicle) {
-    omp.log(`礼宾车：无法创建车辆`);
+    omp.log(`礼宾车:无法创建车辆`);
     return;
   }
 
@@ -70,9 +70,9 @@ export function spawnLimoRental(): void {
     try {
       vehicle.destroy();
     } catch {
-      // 已移除。
+      // 已移除.
     }
-    omp.log(`礼宾车：车辆没有 ID`);
+    omp.log(`礼宾车:车辆没有 ID`);
     return;
   }
 
@@ -86,7 +86,7 @@ export function spawnLimoRental(): void {
   bindLimo();
 }
 
-/** 入狱、死亡或离线时立即结束租赁。 */
+/** 入狱,死亡或离线时立即结束租赁. */
 export function endLimoRental(player: Player, reason: "jail" | "death" | "disconnect"): void {
   const offered = playerId(player);
   if (offered !== null && pendingOffer.has(offered)) {
@@ -110,10 +110,10 @@ export function endLimoRental(player: Player, reason: "jail" | "death" | "discon
 
   finishRental();
   if (reason === "jail" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.error, "礼宾车租赁已结束。");
+    player.sendClientMessage(Color.error, "礼宾车租赁已结束.");
   }
   if (reason === "death" && isPlayerActive(player)) {
-    player.sendClientMessage(Color.error, "礼宾车租赁已结束。");
+    player.sendClientMessage(Color.error, "礼宾车租赁已结束.");
   }
 }
 
@@ -180,7 +180,7 @@ function bindLimo(): void {
     const userId = slot.renterUserId;
     finishRental(RESPAWN_AFTER_DEATH_MS);
     if (userId !== null) {
-      notify(userId, "礼宾车租赁已结束。");
+      notify(userId, "礼宾车租赁已结束.");
     }
   });
 }
@@ -209,7 +209,7 @@ function handleEnter(player: Player, asPassenger: boolean): void {
   }
 
   if (slot.renterUserId !== null && slot.renterUserId !== account.id) {
-    player.sendClientMessage(Color.error, "这辆礼宾车已被租用。");
+    player.sendClientMessage(Color.error, "这辆礼宾车已被租用.");
     eject(player);
     return;
   }
@@ -218,13 +218,13 @@ function handleEnter(player: Player, asPassenger: boolean): void {
     slot.seated = true;
     if (slot.leaveTimer) {
       clearLeaveTimer(slot);
-      player.sendClientMessage(Color.tryOk, "你已返回礼宾车。");
+      player.sendClientMessage(Color.tryOk, "你已返回礼宾车.");
     }
     return;
   }
 
   if (asPassenger) {
-    player.sendClientMessage(Color.error, "请坐到驾驶位以租用礼宾车。");
+    player.sendClientMessage(Color.error, "请坐到驾驶位以租用礼宾车.");
     eject(player);
     return;
   }
@@ -242,7 +242,7 @@ function handleEnter(player: Player, asPassenger: boolean): void {
       LIMO_RENT_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "礼宾车租赁",
-      `{FFFFFF}是否租用礼宾车？\n费用： {33CCFF}${formatMoney(RENT_PRICE)}\n\n{FFFFFF}下车后，你有 30 秒时间返回车辆。`,
+      `{FFFFFF}是否租用礼宾车?\n费用: {33CCFF}${formatMoney(RENT_PRICE)}\n\n{FFFFFF}下车后,你有 30 秒时间返回车辆.`,
       "租用",
       "取消"
     );
@@ -277,21 +277,21 @@ function handleDialog(player: Player, accepted: boolean): void {
     return;
   }
   if (!account.licenses.car) {
-    player.sendClientMessage(Color.error, "你没有汽车驾驶执照。");
+    player.sendClientMessage(Color.error, "你没有汽车驾驶执照.");
     eject(player);
     return;
   }
   if (slot.renterUserId !== null) {
-    player.sendClientMessage(Color.error, "这辆礼宾车已被租用。");
+    player.sendClientMessage(Color.error, "这辆礼宾车已被租用.");
     eject(player);
     return;
   }
   if (!isDriverOf(player, slot.vehicleId)) {
-    player.sendClientMessage(Color.error, "请坐到礼宾车的驾驶位以租用车辆。");
+    player.sendClientMessage(Color.error, "请坐到礼宾车的驾驶位以租用车辆.");
     return;
   }
   if (account.money < RENT_PRICE) {
-    player.sendClientMessage(Color.error, `现金不足，需要 ${formatMoney(RENT_PRICE)}.`);
+    player.sendClientMessage(Color.error, `现金不足,需要 ${formatMoney(RENT_PRICE)}.`);
     eject(player);
     return;
   }
@@ -310,8 +310,8 @@ function handleDialog(player: Player, accepted: boolean): void {
   slot.renterSlotId = slotId;
   slot.seated = true;
   clearLeaveTimer(slot);
-  player.sendClientMessage(Color.tryOk, `你已租用礼宾车，花费 ${formatMoney(RENT_PRICE)}。`);
-  player.sendClientMessage(Color.gray, "下车后，你有 30 秒时间返回车辆。");
+  player.sendClientMessage(Color.tryOk, `你已租用礼宾车,花费 ${formatMoney(RENT_PRICE)}.`);
+  player.sendClientMessage(Color.gray, "下车后,你有 30 秒时间返回车辆.");
 }
 
 function handleLeave(player: Player): void {
@@ -338,13 +338,13 @@ function handleLeave(player: Player): void {
     }
     live.leaveTimer = null;
     finishRental();
-    notify(userId, "礼宾车租赁已结束：你未及时返回车辆。");
+    notify(userId, "礼宾车租赁已结束:你未及时返回车辆.");
   }, LEAVE_GRACE_MS);
 
   try {
-    player.sendClientMessage(Color.gray, "你有 30 秒时间返回礼宾车。");
+    player.sendClientMessage(Color.gray, "你有 30 秒时间返回礼宾车.");
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }
 
@@ -377,7 +377,7 @@ function respawn(slot: LimoSlot, delayMs: number): void {
     try {
       vehicle.setToRespawn();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
   };
 
@@ -399,7 +399,7 @@ function ejectOccupants(vehicleId: number): void {
       }
       eject(player);
     } catch {
-      // 槽位为空。
+      // 槽位为空.
     }
   });
 }
@@ -428,7 +428,7 @@ function eject(player: Player): void {
     }
     player.removeFromVehicle();
   } catch {
-    // 已不在车辆内。
+    // 已不在车辆内.
   }
 }
 
@@ -436,7 +436,7 @@ function setControllable(player: Player, enabled: boolean): void {
   try {
     player.toggleControllable(enabled);
   } catch {
-    // 槽位为空。
+    // 槽位为空.
   }
 }
 

@@ -23,35 +23,35 @@ function sendSms(player: Player, args: string): void {
   }
 
   if (!account.phone) {
-    player.sendClientMessage(Color.error, "你没有手机，请到 24/7 商店购买。");
+    player.sendClientMessage(Color.error, "你没有手机,请到 24/7 商店购买.");
     return;
   }
 
   const parsed = parseSms(args);
   if (!parsed) {
-    player.sendClientMessage(Color.error, "用法：/sms [电话号码] [内容]");
+    player.sendClientMessage(Color.error, "用法:/sms [电话号码] [内容]");
     return;
   }
 
   if (parsed.phone === account.phone) {
-    player.sendClientMessage(Color.error, "不能给自己发送短信。");
+    player.sendClientMessage(Color.error, "不能给自己发送短信.");
     return;
   }
 
   const target = findOnlineByPhone(parsed.phone);
   if (!target) {
-    player.sendClientMessage(Color.error, "对方不在线。");
+    player.sendClientMessage(Color.error, "对方不在线.");
     return;
   }
 
   const targetAccount = getAccount(target);
   if (!targetAccount?.phone) {
-    player.sendClientMessage(Color.error, "对方不在线。");
+    player.sendClientMessage(Color.error, "对方不在线.");
     return;
   }
 
-  const toSender = smsLine(parsed.text, `收件人： ${targetAccount.name} [电话：${targetAccount.phone}]`);
-  const toTarget = smsLine(parsed.text, `发件人： ${account.name} [电话：${account.phone}]`);
+  const toSender = smsLine(parsed.text, `收件人: ${targetAccount.name} [电话:${targetAccount.phone}]`);
+  const toTarget = smsLine(parsed.text, `发件人: ${account.name} [电话:${account.phone}]`);
 
   player.sendClientMessage(SMS_YELLOW, toSender);
   target.sendClientMessage(SMS_YELLOW, toTarget);
@@ -110,6 +110,6 @@ function showBubble(player: Player, text: string): void {
   try {
     player.setChatBubble(text, SMS_YELLOW, CHAT_RADIUS, BUBBLE_MS);
   } catch {
-    // 短信发送不依赖头顶文字。
+    // 短信发送不依赖头顶文字.
   }
 }

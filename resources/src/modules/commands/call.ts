@@ -20,7 +20,7 @@ const RING_BUBBLE_MS = 3_000;
 const RING_BUBBLE = "手机正在响铃";
 const ANIM_SYNC_ALL = 1;
 const SPECIAL_ACTION_NONE = 0;
-/** 内置手机动作：phone_talk，允许行走。 */
+/** 内置手机动作:phone_talk,允许行走. */
 const SPECIAL_ACTION_USECELLPHONE = 11;
 
 const phoneHolding = new Set<number>();
@@ -75,7 +75,7 @@ export function bindPhoneCalls(): void {
   });
 }
 
-/** 通话期间，普通聊天发送给通话对象，而非附近玩家。 */
+/** 通话期间,普通聊天发送给通话对象,而非附近玩家. */
 export function routePhoneChat(player: Player, text: string): boolean {
   const slot = playerId(player);
   const account = getAccount(player);
@@ -109,23 +109,23 @@ function startCall(player: Player, args: string): void {
   }
 
   if (!account.phone) {
-    player.sendClientMessage(Color.error, "你没有手机，请到 24/7 商店购买。");
+    player.sendClientMessage(Color.error, "你没有手机,请到 24/7 商店购买.");
     return;
   }
 
   const phone = normalizePhone(args.trim().split(/\s+/)[0] ?? "");
   if (!phone) {
-    player.sendClientMessage(Color.error, "用法：/call [电话号码]");
+    player.sendClientMessage(Color.error, "用法:/call [电话号码]");
     return;
   }
 
   if (phone === account.phone) {
-    player.sendClientMessage(Color.error, "不能给自己打电话。");
+    player.sendClientMessage(Color.error, "不能给自己打电话.");
     return;
   }
 
   if (busyOnLine(slotId, account.id)) {
-    player.sendClientMessage(Color.error, "你已在通话中，挂断请使用 /h。");
+    player.sendClientMessage(Color.error, "你已在通话中,挂断请使用 /h.");
     return;
   }
 
@@ -133,12 +133,12 @@ function startCall(player: Player, args: string): void {
   const targetAccount = target ? getAccount(target) : null;
   const targetSlot = target ? playerId(target) : null;
   if (!target || !targetAccount?.phone || targetSlot === null) {
-    player.sendClientMessage(Color.error, "对方不在线。");
+    player.sendClientMessage(Color.error, "对方不在线.");
     return;
   }
 
   if (busyOnLine(targetSlot, targetAccount.id)) {
-    player.sendClientMessage(Color.error, "对方忙线中。");
+    player.sendClientMessage(Color.error, "对方忙线中.");
     return;
   }
 
@@ -162,25 +162,25 @@ function startCall(player: Player, args: string): void {
   player.sendClientMessage(
     COLOR_OUT,
     clipClientMessage(
-      `拨出电话 | 号码： ${phone} {FFCD00}| 等待 ${targetAccount.name} 接听……`
+      `拨出电话 | 号码: ${phone} {FFCD00}| 等待 ${targetAccount.name} 接听...`
     )
   );
 
   try {
     target.setChatBubble(RING_BUBBLE, Color.action, CHAT_RADIUS, RING_BUBBLE_MS);
   } catch {
-    // 头顶文字并非必需。
+    // 头顶文字并非必需.
   }
 
   target.sendClientMessage(
     COLOR_IN,
     clipClientMessage(
-      `来电 | 号码： ${account.phone} | 来电者： ${account.name}`
+      `来电 | 号码: ${account.phone} | 来电者: ${account.name}`
     )
   );
   target.sendClientMessage(
     Color.white,
-    "使用 {00CC00}/p {FFFFFF}接听，或使用 {FF6600}/h {FFFFFF}拒接来电。"
+    "使用 {00CC00}/p {FFFFFF}接听,或使用 {FF6600}/h {FFFFFF}拒接来电."
   );
   playRing(target);
 }
@@ -194,7 +194,7 @@ function answerCall(player: Player): void {
 
   const call = bySlot.get(slot);
   if (!call || call.phase !== "ringing" || call.calleeSlot !== slot || call.calleeUserId !== account.id) {
-    player.sendClientMessage(Color.error, "当前没有来电。");
+    player.sendClientMessage(Color.error, "当前没有来电.");
     return;
   }
 
@@ -206,8 +206,8 @@ function answerCall(player: Player): void {
 
   call.phase = "active";
   holdPhoneAnim(player);
-  player.sendClientMessage(Color.action, "你已接听电话。");
-  caller.sendClientMessage(Color.action, `${account.name} 接听了你的电话。`);
+  player.sendClientMessage(Color.action, "你已接听电话.");
+  caller.sendClientMessage(Color.action, `${account.name} 接听了你的电话.`);
 }
 
 function hangUp(player: Player): void {
@@ -219,7 +219,7 @@ function hangUp(player: Player): void {
 
   const call = bySlot.get(slot);
   if (!call || userIdOf(call, slot) !== account.id) {
-    player.sendClientMessage(Color.error, "你当前没有在通话。");
+    player.sendClientMessage(Color.error, "你当前没有在通话.");
     return;
   }
 
@@ -293,7 +293,7 @@ function tell(slot: number, userId: number, color: number, text: string): void {
   try {
     player.sendClientMessage(color, text);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -358,7 +358,7 @@ function holdPhoneAnim(player: Player): void {
       restore = current;
     }
   } catch {
-    // 通话结束后恢复普通站姿。
+    // 通话结束后恢复普通站姿.
   }
 
   previousAction.set(slot, restore);
@@ -367,7 +367,7 @@ function holdPhoneAnim(player: Player): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.setSpecialAction(SPECIAL_ACTION_USECELLPHONE);
   } catch {
-    // 通话不依赖动画。
+    // 通话不依赖动画.
   }
 }
 
@@ -387,7 +387,7 @@ function releasePhoneAnim(slot: number, userId: number): void {
     player.clearAnimations(ANIM_SYNC_ALL);
     player.setSpecialAction(restore);
   } catch {
-    // 已离线。
+    // 已离线.
   }
 }
 
@@ -399,7 +399,7 @@ function playRing(player: Player): void {
     try {
       player.playGameSound(RING_SOUND, 0, 0, 0);
     } catch {
-      // 来电提示不依赖铃声。
+      // 来电提示不依赖铃声.
     }
   }
 }

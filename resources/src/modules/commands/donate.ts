@@ -56,7 +56,7 @@ const DIALOG_STYLE_TABLIST_HEADERS = 5;
 const PLAYER_STATE_WASTED = 7;
 const PLAYER_STATE_SPECTATING = 9;
 
-/** 1 捐赠点。 */
+/** 1 捐赠点. */
 const CASH_PER_DONATE = 2500;
 const MAX_MONEY = 2_000_000_000;
 
@@ -125,10 +125,10 @@ const MENU: readonly { action: MenuAction; label: string; price: string }[] = [
   { action: "phone", label: "更换电话号码", price: String(PRICE_PHONE) },
 ];
 
-/** 记录该玩家当前打开列表中的皮肤。 */
+/** 记录该玩家当前打开列表中的皮肤. */
 const skinOffer = new Map<number, readonly SkinOption[]>();
 
-registerCommand("donate", "捐赠点：兑换与服务", (player) => {
+registerCommand("donate", "捐赠点:兑换与服务", (player) => {
   showDonateMenu(player);
 });
 
@@ -181,12 +181,12 @@ function showDonateMenu(player: Player): void {
   }
 
   if (isDonateBusy(player)) {
-    player.sendClientMessage(Color.error, "请稍候，上一次购买尚未完成。");
+    player.sendClientMessage(Color.error, "请稍候,上一次购买尚未完成.");
     return;
   }
 
   if (isSkinPicking(player)) {
-    player.sendClientMessage(Color.error, "请先完成皮肤选择。");
+    player.sendClientMessage(Color.error, "请先完成皮肤选择.");
     return;
   }
 
@@ -197,13 +197,13 @@ function showDonateMenu(player: Player): void {
       player,
       DONATE_MENU_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `捐赠点： ${account.donate}`,
+      `捐赠点: ${account.donate}`,
       body,
       "选择",
       "关闭"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开捐赠商城。");
+    player.sendClientMessage(Color.error, "无法打开捐赠商城.");
   }
 }
 
@@ -279,12 +279,12 @@ function showConvert(player: Player): void {
       DONATE_CONVERT_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "兑换现金",
-      `兑换比例：1 捐赠点 = ${formatMoney(CASH_PER_DONATE)}\n余额： ${account.donate}\n\n请输入要兑换的捐赠点数量：`,
+      `兑换比例:1 捐赠点 = ${formatMoney(CASH_PER_DONATE)}\n余额: ${account.donate}\n\n请输入要兑换的捐赠点数量:`,
       "兑换",
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开兑换窗口。");
+    player.sendClientMessage(Color.error, "无法打开兑换窗口.");
   }
 }
 
@@ -312,13 +312,13 @@ async function exchangeDonate(player: Player, input: string): Promise<void> {
 
   const amount = Number(input.trim());
   if (!Number.isSafeInteger(amount) || amount < 1) {
-    player.sendClientMessage(Color.error, "请输入大于零的整数。");
+    player.sendClientMessage(Color.error, "请输入大于零的整数.");
     showConvert(player);
     return;
   }
 
   if (amount > account.donate) {
-    player.sendClientMessage(Color.error, "捐赠点不足。");
+    player.sendClientMessage(Color.error, "捐赠点不足.");
     showConvert(player);
     return;
   }
@@ -326,7 +326,7 @@ async function exchangeDonate(player: Player, input: string): Promise<void> {
   const cash = amount * CASH_PER_DONATE;
   const money = account.money + cash;
   if (!Number.isSafeInteger(cash) || !Number.isSafeInteger(money) || money > MAX_MONEY) {
-    player.sendClientMessage(Color.error, "现金已达上限，无法兑换。");
+    player.sendClientMessage(Color.error, "现金已达上限,无法兑换.");
     return;
   }
 
@@ -336,14 +336,14 @@ async function exchangeDonate(player: Player, input: string): Promise<void> {
     spent = await convertDonateToCash(userId, amount, cash, MAX_MONEY);
   } catch {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "捐赠点兑换失败。");
+      player.sendClientMessage(Color.error, "捐赠点兑换失败.");
     }
     return;
   }
 
   if (!spent) {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "捐赠点不足或现金超出上限。");
+      player.sendClientMessage(Color.error, "捐赠点不足或现金超出上限.");
     }
     return;
   }
@@ -359,7 +359,7 @@ async function exchangeDonate(player: Player, input: string): Promise<void> {
   applyWallet(player, { ...live, money: nextMoney, donate });
   player.sendClientMessage(
     Color.info,
-    `你用 ${amount} 捐赠点兑换了 ${formatMoney(cash)}，剩余 ${donate} 捐赠点。`
+    `你用 ${amount} 捐赠点兑换了 ${formatMoney(cash)},剩余 ${donate} 捐赠点.`
   );
 }
 
@@ -377,12 +377,12 @@ function showPhone(player: Player): void {
       DONATE_PHONE_DIALOG_ID,
       DIALOG_STYLE_INPUT,
       "电话号码",
-      `必须为 ${PHONE_DIGITS} 位数字，例如 000000。\n当前号码：${current}\n价格：${PRICE_PHONE}\n\n新号码：`,
+      `必须为 ${PHONE_DIGITS} 位数字,例如 000000.\n当前号码:${current}\n价格:${PRICE_PHONE}\n\n新号码:`,
       "更改",
       "返回"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开更换号码窗口。");
+    player.sendClientMessage(Color.error, "无法打开更换号码窗口.");
   }
 }
 
@@ -405,13 +405,13 @@ async function buyPhone(player: Player, input: string): Promise<void> {
 
   const phone = parsePhone(input);
   if (!phone) {
-    player.sendClientMessage(Color.error, `号码必须为 ${PHONE_DIGITS} 位数字，不能包含空格。`);
+    player.sendClientMessage(Color.error, `号码必须为 ${PHONE_DIGITS} 位数字,不能包含空格.`);
     showPhone(player);
     return;
   }
 
   if (account.phone === phone) {
-    player.sendClientMessage(Color.error, "这已经是你的号码。");
+    player.sendClientMessage(Color.error, "这已经是你的号码.");
     showPhone(player);
     return;
   }
@@ -430,7 +430,7 @@ async function buyPhone(player: Player, input: string): Promise<void> {
   }
 
   if (result === "taken") {
-    await refund(player, userId, PRICE_PHONE, "该号码已被使用，捐赠点已退还。");
+    await refund(player, userId, PRICE_PHONE, "该号码已被使用,捐赠点已退还.");
     return;
   }
 
@@ -441,7 +441,7 @@ async function buyPhone(player: Player, input: string): Promise<void> {
 
   remember(player, userId, { phone });
   if (samePlayer(player, userId)) {
-    player.sendClientMessage(Color.info, `电话号码已更改为 ${phone}，扣除 ${PRICE_PHONE} 捐赠点。`);
+    player.sendClientMessage(Color.info, `电话号码已更改为 ${phone},扣除 ${PRICE_PHONE} 捐赠点.`);
   }
 }
 
@@ -453,12 +453,12 @@ async function buyLeaveOrg(player: Player): Promise<void> {
 
   const membership = getMembership(account);
   if (!membership && account.orgId === ORG_NONE) {
-    player.sendClientMessage(Color.error, "你尚未加入任何组织。");
+    player.sendClientMessage(Color.error, "你尚未加入任何组织.");
     return;
   }
 
   if (membership && membership.rank.id === MAX_ORG_RANK) {
-    player.sendClientMessage(Color.error, "组织首领无法通过捐赠商城退出组织。");
+    player.sendClientMessage(Color.error, "组织首领无法通过捐赠商城退出组织.");
     return;
   }
 
@@ -472,11 +472,11 @@ async function buyLeaveOrg(player: Player): Promise<void> {
   if (after && after.id === userId) {
     const now = getMembership(after);
     if (now && now.rank.id === MAX_ORG_RANK) {
-      await refund(player, userId, PRICE_LEAVE_ORG, "你已成为组织首领，捐赠点已退还。");
+      await refund(player, userId, PRICE_LEAVE_ORG, "你已成为组织首领,捐赠点已退还.");
       return;
     }
     if (!now && after.orgId === ORG_NONE) {
-      await refund(player, userId, PRICE_LEAVE_ORG, "你已不在该组织中，捐赠点已退还。");
+      await refund(player, userId, PRICE_LEAVE_ORG, "你已不在该组织中,捐赠点已退还.");
       return;
     }
   }
@@ -500,7 +500,7 @@ async function buyLeaveOrg(player: Player): Promise<void> {
   refreshCaptureView(player);
   player.sendClientMessage(
     Color.info,
-    `你已退出组织 ${orgName}，扣除 ${PRICE_LEAVE_ORG} 捐赠点。`
+    `你已退出组织 ${orgName},扣除 ${PRICE_LEAVE_ORG} 捐赠点.`
   );
 }
 
@@ -532,14 +532,14 @@ function showSkins(player: Player): void {
       player,
       DONATE_SKIN_DIALOG_ID,
       DIALOG_STYLE_TABLIST_HEADERS,
-      `皮肤： ${genderLabel(account.gender)}`,
+      `皮肤: ${genderLabel(account.gender)}`,
       body,
       "购买",
       "返回"
     );
   } catch {
     skinOffer.delete(slotId);
-    player.sendClientMessage(Color.error, "无法打开皮肤列表。");
+    player.sendClientMessage(Color.error, "无法打开皮肤列表.");
   }
 }
 
@@ -569,13 +569,13 @@ async function buySkin(player: Player, skin: SkinOption): Promise<void> {
   const account = liveAccount(player);
   if (!account || !hasSkin(account.gender, skin.id)) {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "此皮肤不可用。");
+      player.sendClientMessage(Color.error, "此皮肤不可用.");
     }
     return;
   }
 
   if (account.skin === skin.id) {
-    player.sendClientMessage(Color.error, "你已购买此皮肤。");
+    player.sendClientMessage(Color.error, "你已购买此皮肤.");
     showSkins(player);
     return;
   }
@@ -588,7 +588,7 @@ async function buySkin(player: Player, skin: SkinOption): Promise<void> {
 
   const charged = getAccount(player);
   if (charged && charged.id === userId && charged.skin === skin.id) {
-    await refund(player, userId, price, "你已购买此皮肤，捐赠点已退还。");
+    await refund(player, userId, price, "你已购买此皮肤,捐赠点已退还.");
     return;
   }
 
@@ -615,8 +615,8 @@ async function buySkin(player: Player, skin: SkinOption): Promise<void> {
   player.sendClientMessage(
     Color.info,
     worn
-      ? `你已更换为皮肤 ${skin.label}，扣除 ${price} 捐赠点。`
-      : `皮肤 ${skin.label} 已保存。你当前穿着其他制服，扣除 ${price} 捐赠点。`
+      ? `你已更换为皮肤 ${skin.label},扣除 ${price} 捐赠点.`
+      : `皮肤 ${skin.label} 已保存.你当前穿着其他制服,扣除 ${price} 捐赠点.`
   );
 }
 
@@ -653,7 +653,7 @@ async function buyGender(player: Player): Promise<void> {
   const label = SKINS[next].find((option) => option.id === skin)?.label ?? String(skin);
   player.sendClientMessage(
     Color.info,
-    `性别已更改为${genderLabel(next).toLowerCase()}，皮肤：${label}，扣除 ${PRICE_GENDER} 捐赠点。`
+    `性别已更改为${genderLabel(next).toLowerCase()},皮肤:${label},扣除 ${PRICE_GENDER} 捐赠点.`
   );
 }
 
@@ -664,7 +664,7 @@ async function buyLicenses(player: Player): Promise<void> {
   }
 
   if (LICENSE_ROWS.every((row) => account.licenses[row.key])) {
-    player.sendClientMessage(Color.error, "你已拥有全部执照。");
+    player.sendClientMessage(Color.error, "你已拥有全部执照.");
     return;
   }
 
@@ -675,7 +675,7 @@ async function buyLicenses(player: Player): Promise<void> {
 
   const after = getAccount(player);
   if (after && after.id === userId && LICENSE_ROWS.every((row) => after.licenses[row.key])) {
-    await refund(player, userId, PRICE_LICENSES, "你已拥有全部执照，捐赠点已退还。");
+    await refund(player, userId, PRICE_LICENSES, "你已拥有全部执照,捐赠点已退还.");
     return;
   }
 
@@ -696,7 +696,7 @@ async function buyLicenses(player: Player): Promise<void> {
 
   remember(player, userId, { licenses });
   if (isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, `已发放全部执照，扣除 ${PRICE_LICENSES} 捐赠点。`);
+    player.sendClientMessage(Color.info, `已发放全部执照,扣除 ${PRICE_LICENSES} 捐赠点.`);
   }
 }
 
@@ -707,7 +707,7 @@ async function buyMedcard(player: Player): Promise<void> {
   }
 
   if (account.medcard) {
-    player.sendClientMessage(Color.error, "你已拥有医疗卡。");
+    player.sendClientMessage(Color.error, "你已拥有医疗卡.");
     return;
   }
 
@@ -718,7 +718,7 @@ async function buyMedcard(player: Player): Promise<void> {
 
   const after = getAccount(player);
   if (after && after.id === userId && after.medcard) {
-    await refund(player, userId, PRICE_MEDCARD, "你已拥有医疗卡，捐赠点已退还。");
+    await refund(player, userId, PRICE_MEDCARD, "你已拥有医疗卡,捐赠点已退还.");
     return;
   }
 
@@ -731,7 +731,7 @@ async function buyMedcard(player: Player): Promise<void> {
 
   remember(player, userId, { medcard: true });
   if (isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, `已购买医疗卡，扣除 ${PRICE_MEDCARD} 捐赠点。`);
+    player.sendClientMessage(Color.info, `已购买医疗卡,扣除 ${PRICE_MEDCARD} 捐赠点.`);
   }
 }
 
@@ -742,7 +742,7 @@ async function buyMilitary(player: Player): Promise<void> {
   }
 
   if (account.militaryId) {
-    player.sendClientMessage(Color.error, "你已拥有军人证。");
+    player.sendClientMessage(Color.error, "你已拥有军人证.");
     return;
   }
 
@@ -753,7 +753,7 @@ async function buyMilitary(player: Player): Promise<void> {
 
   const after = getAccount(player);
   if (after && after.id === userId && after.militaryId) {
-    await refund(player, userId, PRICE_MILITARY, "你已拥有军人证，捐赠点已退还。");
+    await refund(player, userId, PRICE_MILITARY, "你已拥有军人证,捐赠点已退还.");
     return;
   }
 
@@ -766,7 +766,7 @@ async function buyMilitary(player: Player): Promise<void> {
 
   remember(player, userId, { militaryId: true });
   if (isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, `已购买军人证，扣除 ${PRICE_MILITARY} 捐赠点。`);
+    player.sendClientMessage(Color.info, `已购买军人证,扣除 ${PRICE_MILITARY} 捐赠点.`);
   }
 }
 
@@ -777,7 +777,7 @@ async function buyWanted(player: Player): Promise<void> {
   }
 
   if (account.wantedLevel <= 0) {
-    player.sendClientMessage(Color.error, "你没有被通缉。");
+    player.sendClientMessage(Color.error, "你没有被通缉.");
     return;
   }
 
@@ -798,7 +798,7 @@ async function buyWanted(player: Player): Promise<void> {
   }
 
   if (live.wantedLevel <= 0) {
-    await refund(player, userId, PRICE_WANTED, "你已不再被通缉，捐赠点已退还。");
+    await refund(player, userId, PRICE_WANTED, "你已不再被通缉,捐赠点已退还.");
     return;
   }
 
@@ -816,7 +816,7 @@ async function buyWanted(player: Player): Promise<void> {
   }
 
   setPlayerWantedLevel(player, next);
-  player.sendClientMessage(Color.info, `通缉等级已降至 ${next}，扣除 ${PRICE_WANTED} 捐赠点。`);
+  player.sendClientMessage(Color.info, `通缉等级已降至 ${next},扣除 ${PRICE_WANTED} 捐赠点.`);
 }
 
 async function buyLaw(player: Player): Promise<void> {
@@ -826,7 +826,7 @@ async function buyLaw(player: Player): Promise<void> {
   }
 
   if (account.lawfulness >= MAX_LAWFULNESS) {
-    player.sendClientMessage(Color.error, "守法值已达上限。");
+    player.sendClientMessage(Color.error, "守法值已达上限.");
     return;
   }
 
@@ -844,7 +844,7 @@ async function buyLaw(player: Player): Promise<void> {
   }
 
   if (!granted) {
-    await refund(player, userId, PRICE_LAW, "守法值已达上限，捐赠点已退还。");
+    await refund(player, userId, PRICE_LAW, "守法值已达上限,捐赠点已退还.");
     return;
   }
 
@@ -853,7 +853,7 @@ async function buyLaw(player: Player): Promise<void> {
   const next = normalizeLawfulness(base + LAW_GAIN);
   remember(player, userId, { lawfulness: next });
   if (samePlayer(player, userId)) {
-    player.sendClientMessage(Color.info, `守法值：${next}，扣除 ${PRICE_LAW} 捐赠点。`);
+    player.sendClientMessage(Color.info, `守法值:${next},扣除 ${PRICE_LAW} 捐赠点.`);
   }
 }
 
@@ -901,7 +901,7 @@ async function runLocked(player: Player, task: (slotId: number) => Promise<void>
   const slotId = lockDonate(player);
   if (slotId === null) {
     if (isPlayerActive(player) && isDonateBusy(player)) {
-      player.sendClientMessage(Color.error, "请稍候，上一次购买尚未完成。");
+      player.sendClientMessage(Color.error, "请稍候,上一次购买尚未完成.");
     }
     return;
   }
@@ -920,7 +920,7 @@ async function charge(player: Player, userId: number, price: number): Promise<bo
   }
 
   if (before.donate < price) {
-    player.sendClientMessage(Color.error, "捐赠点不足。");
+    player.sendClientMessage(Color.error, "捐赠点不足.");
     return false;
   }
 
@@ -929,14 +929,14 @@ async function charge(player: Player, userId: number, price: number): Promise<bo
     spent = await spendUserDonate(userId, price);
   } catch {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "无法扣除捐赠点。");
+      player.sendClientMessage(Color.error, "无法扣除捐赠点.");
     }
     return false;
   }
 
   if (!spent) {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "捐赠点不足。");
+      player.sendClientMessage(Color.error, "捐赠点不足.");
     }
     return false;
   }
@@ -952,13 +952,13 @@ async function refund(
   player: Player,
   userId: number,
   price: number,
-  message = "无法提供服务，捐赠点已退还。"
+  message = "无法提供服务,捐赠点已退还."
 ): Promise<void> {
   try {
     await refundUserDonate(userId, price);
   } catch {
     if (isPlayerActive(player)) {
-      player.sendClientMessage(Color.error, "付款成功，但无法保存服务结果。");
+      player.sendClientMessage(Color.error, "付款成功,但无法保存服务结果.");
     }
     return;
   }

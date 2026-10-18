@@ -646,7 +646,7 @@ export async function saveUserPhone(
   ]);
 }
 
-/** 设置电话号码；`taken` 表示号码已被其他玩家使用。 */
+/** 设置电话号码;`taken` 表示号码已被其他玩家使用. */
 export async function claimUserPhone(
   userId: number,
   phone: string
@@ -795,7 +795,7 @@ export async function saveUserLawfulness(userId: number, lawfulness: number): Pr
   ]);
 }
 
-/** 守法值增加 N，不超过上限；false 表示已达上限或找不到玩家。 */
+/** 守法值增加 N,不超过上限;false 表示已达上限或找不到玩家. */
 export async function grantUserLawfulness(userId: number, gain: number): Promise<boolean> {
   const delta = Math.floor(gain);
   if (!Number.isFinite(delta) || delta < 1) {
@@ -809,7 +809,7 @@ export async function grantUserLawfulness(userId: number, gain: number): Promise
   return Number(result.affectedRows) === 1;
 }
 
-/** 扣除捐赠点；false 表示余额不足。 */
+/** 扣除捐赠点;false 表示余额不足. */
 export async function spendUserDonate(userId: number, amount: number): Promise<boolean> {
   const value = Math.floor(amount);
   if (!Number.isFinite(value) || value < 1) {
@@ -823,7 +823,7 @@ export async function spendUserDonate(userId: number, amount: number): Promise<b
   return Number(result.affectedRows) === 1;
 }
 
-/** 通过一次 UPDATE 扣除捐赠点并增加现金。 */
+/** 通过一次 UPDATE 扣除捐赠点并增加现金. */
 export async function convertDonateToCash(
   userId: number,
   donateAmount: number,
@@ -851,7 +851,7 @@ export async function convertDonateToCash(
   return Number(result.affectedRows) === 1;
 }
 
-/** 扣款后若无法保存服务结果，则退还捐赠点。 */
+/** 扣款后若无法保存服务结果,则退还捐赠点. */
 export async function refundUserDonate(userId: number, amount: number): Promise<void> {
   const value = Math.floor(amount);
   if (!Number.isFinite(value) || value < 1) {

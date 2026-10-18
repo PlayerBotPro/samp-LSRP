@@ -72,7 +72,7 @@ type Plot = {
   y: number;
   z: number;
   score: number;
-  /** 0：裸土；1：幼苗；2：可收获。 */
+  /** 0:裸土;1:幼苗;2:可收获. */
   status: 0 | 1 | 2;
   seconds: number;
   object: ObjectMp | null;
@@ -228,7 +228,7 @@ function onMenu(player: Player, listItem: number): void {
     return;
   }
   if (!insideField(player) || !near(player, EMILIO.x, EMILIO.y, EMILIO.z, BUY_RADIUS)) {
-    player.sendClientMessage(HINT, "你离埃米利奥太远了。");
+    player.sendClientMessage(HINT, "你离埃米利奥太远了.");
     return;
   }
   if (listItem === 0) {
@@ -249,7 +249,7 @@ function hire(player: Player): void {
     return;
   }
   if (!near(player, EMILIO.x, EMILIO.y, EMILIO.z, BUY_RADIUS)) {
-    player.sendClientMessage(HINT, "你离埃米利奥太远了。");
+    player.sendClientMessage(HINT, "你离埃米利奥太远了.");
     return;
   }
 
@@ -259,11 +259,11 @@ function hire(player: Player): void {
     return;
   }
   if (hasTool(player)) {
-    player.sendClientMessage(HINT, "你已在亚麻农场工作。");
+    player.sendClientMessage(HINT, "你已在亚麻农场工作.");
     return;
   }
   if (account.money < TOOL_PRICE) {
-    player.sendClientMessage(HINT, "你的资金不足。");
+    player.sendClientMessage(HINT, "你的资金不足.");
     return;
   }
 
@@ -302,24 +302,24 @@ function hire(player: Player): void {
     if (restored) {
       applyWallet(player, restored);
     }
-    player.sendClientMessage(HINT, "无法发放工具，款项已退还。");
+    player.sendClientMessage(HINT, "无法发放工具,款项已退还.");
     return;
   }
 
   tools.set(slot, { userId: account.id });
   queueSave(player);
-  player.sendClientMessage(INFO, `[亚麻农场] 你已开始工作，工具费用为 ${formatMoney(TOOL_PRICE)}。`);
-  player.sendClientMessage(HINT, "[提示] 靠近成熟的田垄，按住空格键直到收获完成。");
-  player.sendClientMessage(HINT, "[提示] 离开农田会结束工作并收回工具。亚麻会保留，可出售给埃米利奥。");
+  player.sendClientMessage(INFO, `[亚麻农场] 你已开始工作,工具费用为 ${formatMoney(TOOL_PRICE)}.`);
+  player.sendClientMessage(HINT, "[提示] 靠近成熟的田垄,按住空格键直到收获完成.");
+  player.sendClientMessage(HINT, "[提示] 离开农田会结束工作并收回工具.亚麻会保留,可出售给埃米利奥.");
 }
 
 function quitJob(player: Player): void {
   const slot = playerId(player);
   if (slot === null || !hasTool(player)) {
-    player.sendClientMessage(HINT, "你尚未在亚麻农场工作。");
+    player.sendClientMessage(HINT, "你尚未在亚麻农场工作.");
     return;
   }
-  dropTool(player, slot, "[亚麻农场] 你已辞职，工具已归还，亚麻仍由你保留。");
+  dropTool(player, slot, "[亚麻农场] 你已辞职,工具已归还,亚麻仍由你保留.");
 }
 
 function sellFlax(player: Player): void {
@@ -331,7 +331,7 @@ function sellFlax(player: Player): void {
 
   const count = flaxCount(player);
   if (count <= 0) {
-    player.sendClientMessage(HINT, "你没有可出售的亚麻。");
+    player.sendClientMessage(HINT, "你没有可出售的亚麻.");
     return;
   }
 
@@ -345,7 +345,7 @@ function sellFlax(player: Player): void {
   }
   applyWallet(player, paid);
   queueSave(player);
-  player.sendClientMessage(INFO, `[亚麻农场] 已出售 ${count} 份亚麻，获得 ${formatMoney(total)}。`);
+  player.sendClientMessage(INFO, `[亚麻农场] 已出售 ${count} 份亚麻,获得 ${formatMoney(total)}.`);
 }
 
 function beginHarvest(player: Player): void {
@@ -365,11 +365,11 @@ function beginHarvest(player: Player): void {
   }
 
   if (!hasTool(player)) {
-    player.sendClientMessage(HINT, "[提示] 请先到埃米利奥处应聘，再收获亚麻。");
+    player.sendClientMessage(HINT, "[提示] 请先到埃米利奥处应聘,再收获亚麻.");
     return;
   }
   if (plot.status !== 2 || plot.timer) {
-    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄的亚麻尚未成熟。");
+    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄的亚麻尚未成熟.");
     return;
   }
   if (plot.score <= 0) {
@@ -379,7 +379,7 @@ function beginHarvest(player: Player): void {
   try {
     player.applyAnimation("BOMBER", "BOM_Plant", 4.1, true, true, true, true, 0, ANIM_SYNC_ALL);
   } catch {
-    player.sendClientMessage(INFO, "[亚麻农场] 无法开始收获，请重试。");
+    player.sendClientMessage(INFO, "[亚麻农场] 无法开始收获,请重试.");
     return;
   }
 
@@ -404,7 +404,7 @@ function cancelHarvest(player: Player, tell: boolean, clearAnim = true): void {
     clearPlantAnim(player);
   }
   if (tell && isPlayerActive(player)) {
-    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断，请按住空格键直到收获完成。");
+    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断,请按住空格键直到收获完成.");
   }
 }
 
@@ -444,15 +444,15 @@ function completeHarvest(player: Player, slot: number, userId: number, plotIndex
   }
   clearPlantAnim(player);
   if (!canWork(player) || !hasTool(player) || !insideField(player)) {
-    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断。");
+    player.sendClientMessage(INFO, "[亚麻农场] 收获已中断.");
     return;
   }
   if (!near(player, plot.x, plot.y, plot.z, HARVEST_RADIUS)) {
-    player.sendClientMessage(INFO, "[亚麻农场] 你离田垄太远了。");
+    player.sendClientMessage(INFO, "[亚麻农场] 你离田垄太远了.");
     return;
   }
   if (plot.status !== 2 || plot.timer || plot.score <= 0) {
-    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄已被收获。");
+    player.sendClientMessage(INFO, "[亚麻农场] 这块田垄已被收获.");
     return;
   }
 
@@ -460,7 +460,7 @@ function completeHarvest(player: Player, slot: number, userId: number, plotIndex
   const bag = linen.get(slot);
   const count = (bag && bag.userId === userId ? bag.count : 0) + 1;
   linen.set(slot, { userId, count });
-  player.sendClientMessage(INFO, `[亚麻农场] 亚麻 +1，已收获：${count}。`);
+  player.sendClientMessage(INFO, `[亚麻农场] 亚麻 +1,已收获:${count}.`);
 
   if (plot.score > 0) {
     setLabel(plot, ripeText(plot.score));
@@ -524,7 +524,7 @@ function tickField(): void {
       return;
     }
     if (!insideField(player)) {
-      dropTool(player, slot, "[亚麻农场] 你已离开农田，工作已结束，工具已归还，亚麻仍由你保留。");
+      dropTool(player, slot, "[亚麻农场] 你已离开农田,工作已结束,工具已归还,亚麻仍由你保留.");
     }
   });
 }
@@ -539,7 +539,7 @@ function dropTool(player: Player, slot: number, message: string | null): void {
     try {
       player.removeAttachedObject(TOOL_SLOT);
     } catch {
-      // 槽位已为空。
+      // 槽位已为空.
     }
     if (message) {
       player.sendClientMessage(INFO, message);
@@ -552,7 +552,7 @@ function respawnPlant(plot: Plot, look: PlantLook): void {
     try {
       plot.object.destroy();
     } catch {
-      // 物体已移除。
+      // 物体已移除.
     }
     plot.object = null;
   }
@@ -577,7 +577,7 @@ function setLabel(plot: Plot, text: string): void {
   try {
     plot.label.updateText(LABEL_COLOR, text);
   } catch {
-    // 文字标签已移除。
+    // 文字标签已移除.
   }
 }
 
@@ -586,7 +586,7 @@ function ripeText(score: number): string {
 }
 
 function growText(seconds: number): string {
-  return `{73B461}亚麻正在生长\n剩余时间： {FFFFFF}${formatGrowTime(seconds)}`;
+  return `{73B461}亚麻正在生长\n剩余时间: {FFFFFF}${formatGrowTime(seconds)}`;
 }
 
 function formatGrowTime(total: number): string {
@@ -631,7 +631,7 @@ function insideField(player: Player): boolean {
     }
     return pos.x >= ZONE.minX && pos.x <= ZONE.maxX && pos.y >= ZONE.minY && pos.y <= ZONE.maxY;
   } catch {
-    // 读取坐标失败不应结束工作。
+    // 读取坐标失败不应结束工作.
     return true;
   }
 }
@@ -690,6 +690,6 @@ function clearPlantAnim(player: Player): void {
   try {
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }

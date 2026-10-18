@@ -71,10 +71,10 @@ const MEMORIAL = {
 } as const;
 
 const MEMORIAL_TEXT = [
-  "{C4A574}—",
-  "{F6F1E7}死亡并非生命的对立面。",
-  "{E4D3BE}而是生命在他人记忆中的延续。",
-  "{E8C872}只要仍有人记得你，你便依然活着。",
+  "{C4A574}-",
+  "{F6F1E7}死亡并非生命的对立面.",
+  "{E4D3BE}而是生命在他人记忆中的延续.",
+  "{E8C872}只要仍有人记得你,你便依然活着.",
 ].join("\n");
 
 const FROM_INTERIOR: SpawnPoint = {
@@ -173,7 +173,7 @@ export const churchModule: GameModule = {
       if (!isFlowersPickup(pickup) || !isPlayerActive(player)) {
         return;
       }
-      // 如果引擎仍因模型 325 自动发放了武器，则只保留已付款的花束。
+      // 如果引擎仍因模型 325 自动发放了武器,则只保留已付款的花束.
       restorePaidFlowers(player);
       const slot = playerId(player);
       if (slot !== null && !flowersOffered.has(slot)) {
@@ -258,7 +258,7 @@ function tickChurch(): void {
         teleport(player, FROM_INTERIOR);
       }
     } catch {
-      // 槽位为空或玩家已离线。
+      // 槽位为空或玩家已离线.
     }
   });
 }
@@ -297,7 +297,7 @@ function updateIcon(
       );
       iconShown.add(id);
     } catch {
-      // 玩家已离线。
+      // 玩家已离线.
     }
     return;
   }
@@ -309,14 +309,14 @@ function updateIcon(
   try {
     player.removeMapIcon(MAP_ICON_SLOT);
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
   iconShown.delete(id);
 }
 
 function offerFlowers(player: Player): void {
   if (hasBouquet(player)) {
-    player.sendClientMessage(Color.error, "你已经有一束鲜花。");
+    player.sendClientMessage(Color.error, "你已经有一束鲜花.");
     return;
   }
 
@@ -326,7 +326,7 @@ function offerFlowers(player: Player): void {
       CHURCH_FLOWERS_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       "鲜花花束",
-      `{FFFFFF}是否购买一束鲜花？\n费用： {33CCFF}${formatMoney(FLOWERS_PRICE)}`,
+      `{FFFFFF}是否购买一束鲜花?\n费用: {33CCFF}${formatMoney(FLOWERS_PRICE)}`,
       "购买",
       "取消"
     );
@@ -348,11 +348,11 @@ function buyFlowers(player: Player): void {
     return;
   }
   if (hasBouquet(player)) {
-    player.sendClientMessage(Color.error, "你已经有一束鲜花。");
+    player.sendClientMessage(Color.error, "你已经有一束鲜花.");
     return;
   }
   if (account.money < FLOWERS_PRICE) {
-    player.sendClientMessage(Color.error, `现金不足，需要 ${formatMoney(FLOWERS_PRICE)}.`);
+    player.sendClientMessage(Color.error, `现金不足,需要 ${formatMoney(FLOWERS_PRICE)}.`);
     return;
   }
 
@@ -373,8 +373,8 @@ function buyFlowers(player: Player): void {
     player.sendClientMessage(
       Color.error,
       hasBouquet(player)
-        ? "你已经有一束鲜花，款项已退还。"
-        : "无法发放花束，款项已退还。"
+        ? "你已经有一束鲜花,款项已退还."
+        : "无法发放花束,款项已退还."
     );
     return;
   }
@@ -382,7 +382,7 @@ function buyFlowers(player: Player): void {
   queueSave(player);
   player.sendClientMessage(
     Color.tryOk,
-    `你购买了一束鲜花，花费 ${formatMoney(FLOWERS_PRICE)}。赠送：/present [id]。`
+    `你购买了一束鲜花,花费 ${formatMoney(FLOWERS_PRICE)}.赠送:/present [id].`
   );
 }
 
@@ -437,7 +437,7 @@ function teleport(player: Player, point: SpawnPoint): void {
     placeAt(player, point);
     refreshStreamForPlayer(player);
   } catch {
-    // 玩家已离线。
+    // 玩家已离线.
   }
 }
 

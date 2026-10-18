@@ -32,7 +32,7 @@ const MAX_MONEY = 2_000_000_000;
 const LABEL_HEIGHT = 1.15;
 const LABEL_DRAW_DISTANCE = 30;
 
-const DENY = "只有军队成员可以执勤。";
+const DENY = "只有军队成员可以执勤.";
 
 type PostDef = {
   id: number;
@@ -45,7 +45,7 @@ type PostDef = {
 type Duty = {
   slotId: number;
   userId: number;
-  /** 记录开始执勤时的名字，避免文字错误地显示为复用该槽位的新玩家。 */
+  /** 记录开始执勤时的名字,避免文字错误地显示为复用该槽位的新玩家. */
   labelName: string;
   since: number;
   paidTicks: number;
@@ -66,7 +66,7 @@ const POSTS: readonly PostDef[] = [
 const labels = new Map<number, TextLabel>();
 const dutyByPost = new Map<number, Duty>();
 const postBySlot = new Map<number, number>();
-/** 玩家处于拾取点范围内，可以开始执勤。 */
+/** 玩家处于拾取点范围内,可以开始执勤. */
 const nearPost = new Map<number, number>();
 
 let started = false;
@@ -141,7 +141,7 @@ function showPostList(player: Player): void {
   const lines = POSTS.map((post) => {
     const duty = dutyByPost.get(post.id);
     const who = duty ? duty.labelName : "空缺";
-    return `${post.name} — ${who}`;
+    return `${post.name} - ${who}`;
   });
 
   try {
@@ -155,7 +155,7 @@ function showPostList(player: Player): void {
       "确定"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开岗哨列表。");
+    player.sendClientMessage(Color.error, "无法打开岗哨列表.");
   }
 }
 
@@ -205,18 +205,18 @@ function onAlt(player: Player): void {
   }
 
   if (!account || account.jailSeconds > 0 || account.hospitalized) {
-    player.sendClientMessage(Color.error, "当前无法开始执勤。");
+    player.sendClientMessage(Color.error, "当前无法开始执勤.");
     return;
   }
 
   if (isCuffed(player)) {
-    player.sendClientMessage(Color.error, "戴着手铐时无法开始执勤。");
+    player.sendClientMessage(Color.error, "戴着手铐时无法开始执勤.");
     return;
   }
 
   const taken = dutyByPost.get(post.id);
   if (taken) {
-    player.sendClientMessage(Color.error, `岗哨已有人执勤： ${taken.labelName}.`);
+    player.sendClientMessage(Color.error, `岗哨已有人执勤: ${taken.labelName}.`);
     return;
   }
 
@@ -230,12 +230,12 @@ function askLeave(player: Player, post: PostDef): void {
       ARMY_POST_LEAVE_DIALOG_ID,
       DIALOG_STYLE_MSGBOX,
       post.name,
-      `是否离开岗哨 ${post.name}？`,
+      `是否离开岗哨 ${post.name}?`,
       "是",
       "否"
     );
   } catch {
-    player.sendClientMessage(Color.error, "无法打开确认窗口。");
+    player.sendClientMessage(Color.error, "无法打开确认窗口.");
   }
 }
 
@@ -258,7 +258,7 @@ function takePost(player: Player, post: PostDef): void {
   paint(post);
   player.sendClientMessage(
     Color.info,
-    `你已在 ${post.name} 开始执勤，请勿离开超过 ${LEAVE_RADIUS} 米。`
+    `你已在 ${post.name} 开始执勤,请勿离开超过 ${LEAVE_RADIUS} 米.`
   );
 }
 
@@ -278,11 +278,11 @@ function confirmLeave(player: Player): void {
   const post = postById(postId as number);
   freePost(postId as number);
   if (post && isPlayerActive(player)) {
-    player.sendClientMessage(Color.info, `你已离开岗哨 ${post.name}。`);
+    player.sendClientMessage(Color.info, `你已离开岗哨 ${post.name}.`);
   }
 }
 
-/** 死亡或离线时，仅解除该玩家的执勤，不影响他人的岗哨。 */
+/** 死亡或离线时,仅解除该玩家的执勤,不影响他人的岗哨. */
 function releaseHolder(player: Player): void {
   const slotId = playerId(player);
   const account = getAccount(player);
@@ -330,7 +330,7 @@ function tickPosts(): void {
 
     if (distanceTo(holder, post) > LEAVE_RADIUS) {
       freePost(postId);
-      holder.sendClientMessage(Color.info, `你已远离岗哨 ${post.name}。`);
+      holder.sendClientMessage(Color.info, `你已远离岗哨 ${post.name}.`);
       continue;
     }
 
@@ -379,7 +379,7 @@ function payDuty(player: Player, post: PostDef, duty: Duty, now: number): void {
   const payout = due * PAY_AMOUNT;
   if (account.money > MAX_MONEY - payout) {
     duty.paidTicks = ticks;
-    player.sendClientMessage(Color.error, "现金已达上限，未能发放执勤报酬。");
+    player.sendClientMessage(Color.error, "现金已达上限,未能发放执勤报酬.");
     return;
   }
 
@@ -395,7 +395,7 @@ function payDuty(player: Player, post: PostDef, duty: Duty, now: number): void {
 
   player.sendClientMessage(
     Color.info,
-    `岗哨 ${post.name}：执勤报酬 ${formatMoney(payout)}。`
+    `岗哨 ${post.name}:执勤报酬 ${formatMoney(payout)}.`
   );
 }
 
@@ -405,18 +405,18 @@ function dutyLeaveText(player: Player, duty: Duty, name: string): string {
     return "";
   }
   if (account.jailSeconds > 0) {
-    return `你已入狱，已解除岗哨 ${name} 的执勤。`;
+    return `你已入狱,已解除岗哨 ${name} 的执勤.`;
   }
   if (account.hospitalized) {
-    return `你已住院，已解除岗哨 ${name} 的执勤。`;
+    return `你已住院,已解除岗哨 ${name} 的执勤.`;
   }
   if (!isArmy(player)) {
-    return `你已不再属于军队，已解除岗哨 ${name} 的执勤。`;
+    return `你已不再属于军队,已解除岗哨 ${name} 的执勤.`;
   }
   if (isCuffed(player)) {
-    return `你已被戴上手铐，已解除岗哨 ${name} 的执勤。`;
+    return `你已被戴上手铐,已解除岗哨 ${name} 的执勤.`;
   }
-  return `已解除你在岗哨 ${name} 的执勤。`;
+  return `已解除你在岗哨 ${name} 的执勤.`;
 }
 
 function canKeepDuty(player: Player, duty: Duty): boolean {
@@ -523,6 +523,6 @@ function paint(post: PostDef): void {
   try {
     label.updateText(duty ? Color.info : Color.tryOk, labelText(post, duty));
   } catch {
-    // 文字标签已销毁。
+    // 文字标签已销毁.
   }
 }

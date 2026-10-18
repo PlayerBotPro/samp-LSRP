@@ -7,7 +7,7 @@ import { registerCommand } from "../commands/registry";
 import { STREET_WORLD } from "../spawn/point";
 import type { GameModule } from "../types";
 
-/** 与示例一致：循环 `0 .. 23` 每轮 24 枚烟花，共 20 轮。 */
+/** 与示例一致:循环 `0 .. 23` 每轮 24 枚烟花,共 20 轮. */
 const PER_WAVE = 24;
 const WAVE_COUNT = 20;
 const MODEL_BASE = 19121;
@@ -17,19 +17,19 @@ const EXPLOSION_RADIUS = 0.5;
 const DRAW_DISTANCE = 300;
 const WAVE_TIMEOUT_MS = 10_000;
 const LAUNCH_Z = 2;
-/** 放置烟花后等待一段时间，再开始第一轮燃放。 */
+/** 放置烟花后等待一段时间,再开始第一轮燃放. */
 const FUSE_MS = 5_000;
-/** 播放一次 BOM_Plant 后重置；SA-MP 中 time=0 会使动画无限循环。 */
+/** 播放一次 BOM_Plant 后重置;SA-MP 中 time=0 会使动画无限循环. */
 const PLANT_MS = 2_200;
 
 const ANIM_SYNC_ALL = 1;
 const PLAYER_STATE_ONFOOT = 1;
-/** 忽略过早的到达回调：这是 Create/Destroy 的回调残留，并非飞行结束。 */
+/** 忽略过早的到达回调:这是 Create/Destroy 的回调残留,并非飞行结束. */
 const MIN_FLIGHT_MS = 300;
-/** 若烟花未能发射，不应在同一帧内执行完全部 20 轮。 */
+/** 若烟花未能发射,不应在同一帧内执行完全部 20 轮. */
 const FAILED_WAVE_GAP_MS = 1_200;
 
-/** 购买的烟花仅在本次会话内有效，不存入数据库。 */
+/** 购买的烟花仅在本次会话内有效,不存入数据库. */
 const owned = new Map<number, number>();
 
 type Rocket = {
@@ -62,7 +62,7 @@ export function getOwnedFireworks(player: Player): number {
   return owned.get(id) ?? 0;
 }
 
-/** 向本次会话的物品栏增加 N 个烟花。 */
+/** 向本次会话的物品栏增加 N 个烟花. */
 export function addOwnedFireworks(player: Player, amount = 1): number {
   const id = playerId(player);
   if (id === null) {
@@ -119,7 +119,7 @@ function launchFirework(player: Player): void {
   }
 
   if (running) {
-    player.sendClientMessage(Color.error, "请稍后重试。");
+    player.sendClientMessage(Color.error, "请稍后重试.");
     return;
   }
 
@@ -130,17 +130,17 @@ function launchFirework(player: Player): void {
   }
 
   if (account.jailSeconds > 0 || account.hospitalized || isCuffed(player)) {
-    player.sendClientMessage(Color.error, "当前无法燃放烟花。");
+    player.sendClientMessage(Color.error, "当前无法燃放烟花.");
     return;
   }
 
   try {
     if (player.getState() !== PLAYER_STATE_ONFOOT) {
-      player.sendClientMessage(Color.error, "请下车后燃放烟花。");
+      player.sendClientMessage(Color.error, "请下车后燃放烟花.");
       return;
     }
     if (player.getInterior() !== 0 || player.getVirtualWorld() !== STREET_WORLD) {
-      player.sendClientMessage(Color.error, "请在室外燃放烟花。");
+      player.sendClientMessage(Color.error, "请在室外燃放烟花.");
       return;
     }
   } catch {
@@ -149,7 +149,7 @@ function launchFirework(player: Player): void {
 
   const have = owned.get(slotId) ?? 0;
   if (have < 1) {
-    player.sendClientMessage(Color.error, "你没有烟花，请到 24/7 商店购买。");
+    player.sendClientMessage(Color.error, "你没有烟花,请到 24/7 商店购买.");
     return;
   }
 
@@ -168,8 +168,8 @@ function launchFirework(player: Player): void {
   player.sendClientMessage(
     Color.info,
     left > 0
-      ? `你已放置烟花，将在 5 秒后燃放。剩余烟花：${left}。`
-      : "你已放置烟花，将在 5 秒后燃放。"
+      ? `你已放置烟花,将在 5 秒后燃放.剩余烟花:${left}.`
+      : "你已放置烟花,将在 5 秒后燃放."
   );
 }
 
@@ -194,9 +194,9 @@ function armShow(player: Player, slotId: number, x: number, y: number, z: number
     }
     owned.set(slotId, (owned.get(slotId) ?? 0) + 1);
     try {
-      player.sendClientMessage(Color.error, "无法燃放烟花。");
+      player.sendClientMessage(Color.error, "无法燃放烟花.");
     } catch {
-      // 玩家已离线。
+      // 玩家已离线.
     }
   }, FUSE_MS);
 }
@@ -250,7 +250,7 @@ function launchWave(): boolean {
         try {
           object.destroy();
         } catch {
-          // 已销毁。
+          // 已销毁.
         }
       }
     }
@@ -357,7 +357,7 @@ function burst(rocket: Rocket): void {
       z = pos.z;
     }
   } catch {
-    // 在烟花的预定落点生成闪光。
+    // 在烟花的预定落点生成闪光.
   }
 
   explode(rocket.object, x, y, z);
@@ -367,13 +367,13 @@ function explode(object: ObjectMp, x: number, y: number, z: number): void {
   try {
     object.destroy();
   } catch {
-    // 已销毁。
+    // 已销毁.
   }
 
   try {
     All.createExplosion(x, y, z, EXPLOSION_TYPE, EXPLOSION_RADIUS);
   } catch {
-    // 闪光失败不影响下一枚烟花。
+    // 闪光失败不影响下一枚烟花.
   }
 }
 
@@ -412,7 +412,7 @@ function destroyPending(): void {
     try {
       rocket.object.destroy();
     } catch {
-      // 已销毁。
+      // 已销毁.
     }
   }
   pending.clear();
@@ -445,7 +445,7 @@ function preloadPlantAnim(player: Player): void {
     );
     player.clearAnimations(ANIM_SYNC_ALL);
   } catch {
-    // 执行 /blow 时会加载动画库。
+    // 执行 /blow 时会加载动画库.
   }
 }
 
@@ -464,7 +464,7 @@ function playPlantAnim(player: Player): void {
       ANIM_SYNC_ALL
     );
   } catch {
-    // 燃放不依赖动画。
+    // 燃放不依赖动画.
   }
 
   if (plantTimer) {
@@ -478,7 +478,7 @@ function playPlantAnim(player: Player): void {
     try {
       player.clearAnimations(ANIM_SYNC_ALL);
     } catch {
-      // 玩家已切换动画或离线。
+      // 玩家已切换动画或离线.
     }
   }, PLANT_MS);
 }

@@ -59,7 +59,7 @@ function stopTalkAnim(player: Player): void {
   }
 }
 
-/** 取消普通说话的计时器，保留当前动画。 */
+/** 取消普通说话的计时器,保留当前动画. */
 export function cancelTalkTimer(player: Player): void {
   const id = playerId(player);
   if (id === null) {
@@ -89,7 +89,7 @@ export function clearTalk(player: Player): void {
 export type SpeechOptions = {
   radius?: number;
   color?: number;
-  /** false 表示仅显示头顶文字，不播放说话动画。 */
+  /** false 表示仅显示头顶文字,不播放说话动画. */
   anim?: boolean;
 };
 
